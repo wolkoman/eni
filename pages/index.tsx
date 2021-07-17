@@ -6,12 +6,14 @@ import Site from '../components/Site';
 import {Cockpit, CockpitArticles} from '../util/cockpit';
 import Button from '../components/Button';
 import Link from 'next/link';
+import {InstagramFeed} from '../components/InstagramFeed';
 
 export default function HomePage(props: { calendarGroups: CalendarEvents, articles: CockpitArticles }) {
   return <Site>
     <Articles articles={props.articles}/>
     <Parishes/>
     <Calendar/>
+    <InstagramFeed/>
     <div className="flex flex-col md:flex-row my-14">
       <Info title="Newsletter" image="./info-01.svg">
         <div className="mb-4">
@@ -75,25 +77,21 @@ const Info = ({title, image, children}: { title: string, image: string, children
   </div>
 }
 
-const CalenderPeek = ({
-                        calendarGroups,
-                        calendar,
-                        label
-                      }: { calendarGroups: CalendarEvents, calendar: string, label: string }) => {
+const CalenderPeek = (props: { calendarGroups: CalendarEvents, calendar: string, label: string }) => {
   const borderColor = ({
     'emmaus': 'border-primary1',
     'inzersdorf': 'border-primary2',
     'neustift': 'border-primary3'
-  } as any)[calendar];
+  } as any)[props.calendar];
   const textColor = ({
     'emmaus': 'text-primary1',
     'inzersdorf': 'text-primary2',
     'neustift': 'text-primary3'
-  } as any)[calendar];
+  } as any)[props.calendar];
   return <div className={`rounded border-l-4 ${borderColor} p-2 overflow-hidden border ${borderColor}`}>
-    <div className={`${textColor} font-bold uppercase`}>Pfarre {label}</div>
-    {Object.entries(calendarGroups)
-      ?.map(([date, events]) => ([date, events.filter(event => event.calendar === calendar)] as [string, CalendarEvent[]]))
+    <div className={`${textColor} font-bold uppercase`}>Pfarre {props.label}</div>
+    {Object.entries(props.calendarGroups)
+      ?.map(([date, events]) => ([date, events.filter(event => event.calendar === props.calendar)] as [string, CalendarEvent[]]))
       .filter(([_, events]) => events.length > 0)
       .slice(0, 1)
       .map(([date, events]) =>

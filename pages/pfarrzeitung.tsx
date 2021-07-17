@@ -18,7 +18,7 @@ export default function HomePage(props: { calendarGroups: CalendarEvents, articl
       </Link>
       <Link href="https://www.pfarresanktnikolaus.at/wp/?page_id=89">
         <div className="border-4 border-primary2 p-10 rounded-xl cursor-pointer">
-          Der Blickpunkt
+          Blickpunkt
         </div>
       </Link>
       <Link href="https://www.erzdioezese-wien.at/pages/pfarren/9233/pfarrblatt">
