@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
 
+
 export function Calendar({}) {
   const [filter, setFilter] = useState<CalendarType | null>(null);
   const [calendar, calendarLoaded, calendarLoad] = useCalendarStore(state => [state.items, state.loaded, state.load]);
@@ -41,7 +42,7 @@ export function Calendar({}) {
           .map(([date, events]) => <div key={date}>
             <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
             {events.map(event => <div className="flex text-lg font-semibold" key={event.id}>
-              <div className="w-10">{event.start.dateTime?.substring(11, 16)}</div>
+              <div className="w-10"><EventTime date={new Date(event.start.dateTime)}/></div>
               <div>
                 <div className={`${bgColor(event.calendar)} w-3 h-3 mx-3 rounded-xl mt-2`}/>
               </div>
@@ -87,4 +88,10 @@ export const EventDate = ({date}: { date: Date }) => {
     {['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day]},{' '}
     {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}
   </div>;
+}
+
+export const EventTime = (props: { date: Date }) => {
+  const hour = props.date.getHours();
+  const minutes = props.date.getMinutes();
+  return <>{('0'+hour).slice(-2)}:{('0'+minutes).slice(-2)}</>;
 }
