@@ -9,12 +9,32 @@ export enum Permission {
 }
 
 
+interface ArticleStore {
+  items: any[];
+  loading: boolean;
+  loaded: boolean;
+  load: () => void;
+}
+
 interface CalendarStore {
   items: CalendarEvents;
   loading: boolean;
   loaded: boolean;
   load: (token?: string) => void;
 }
+
+export const useArticleStore = create<ArticleStore>((set, get) => ({
+  items: [],
+  loaded: false,
+  loading: false,
+  load: () => {
+    if (get().loading || get().loaded) return;
+    set(state => ({...state, loading: true}));
+    fetch('/api/articles')
+        .then(response => response.json())
+        .then(data => set(state => ({...state, items: data, loaded: true, loading: false})));
+  }
+}));
 
 export const useCalendarStore = create<CalendarStore>((set, get) => ({
   items: {},

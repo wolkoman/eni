@@ -8,9 +8,9 @@ import Button from '../components/Button';
 import Link from 'next/link';
 import {InstagramFeed} from '../components/InstagramFeed';
 
-export default function HomePage(props: { calendarGroups: CalendarEvents, articles: CockpitArticles }) {
+export default function HomePage() {
   return <Site>
-    <Articles articles={props.articles}/>
+    <Articles/>
     <Parishes/>
     <Calendar/>
     <InstagramFeed/>
@@ -75,44 +75,4 @@ const Info = ({title, image, children}: { title: string, image: string, children
     </div>
     {children}
   </div>
-}
-
-const CalenderPeek = (props: { calendarGroups: CalendarEvents, calendar: string, label: string }) => {
-  const borderColor = ({
-    'emmaus': 'border-primary1',
-    'inzersdorf': 'border-primary2',
-    'neustift': 'border-primary3'
-  } as any)[props.calendar];
-  const textColor = ({
-    'emmaus': 'text-primary1',
-    'inzersdorf': 'text-primary2',
-    'neustift': 'text-primary3'
-  } as any)[props.calendar];
-  return <div className={`rounded border-l-4 ${borderColor} p-2 overflow-hidden border ${borderColor}`}>
-    <div className={`${textColor} font-bold uppercase`}>Pfarre {props.label}</div>
-    {Object.entries(props.calendarGroups)
-      ?.map(([date, events]) => ([date, events.filter(event => event.calendar === props.calendar)] as [string, CalendarEvent[]]))
-      .filter(([_, events]) => events.length > 0)
-      .slice(0, 1)
-      .map(([date, events]) =>
-        <div key={date} className="flex flex-col py-4 px-2">
-          <div className="underline mb-2"><EventDate date={new Date(date)}/></div>
-          <div className="text-lg">{events.map(event =>
-            <div className="">
-              <div className="inline mr-2">{new Date(event.start.dateTime).toLocaleTimeString().slice(0, 5)}</div>
-              <div className="inline leading-6">{event.summary}</div>
-            </div>)}
-          </div>
-        </div>)
-    }
-  </div>;
-};
-
-
-export async function getServerSideProps() {
-  return {
-    props: {
-      articles: await Cockpit.article({'platform': 'eni'}, {'_o': '1'})
-    }
-  }
 }

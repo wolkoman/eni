@@ -4,6 +4,8 @@ import {CockpitArticle, CockpitArticles} from '../util/cockpit';
 import Button from './Button';
 import {useRouter} from 'next/router';
 import {cockpit} from '../util/cockpit-sdk';
+import {useArticleStore, useCalendarStore} from "../util/store";
+import {useEffect} from "react";
 
 export function getArticlePreviewImageUrl(article: CockpitArticle){
   const url = article.preview_image.path;
@@ -14,11 +16,43 @@ export function getArticleLink(article: CockpitArticle) {
   return article.external_url || `/artikel/${article._id}`;
 }
 
-export default function Articles({articles}: { articles: CockpitArticles }) {
+const ArticleShadow = () => <>
+  <div className="pt-12 grid md:grid-cols-2">
+    <div className="h-80 rounded-sm bg-gray-100"/>
+    <div className="md:pl-8 flex flex-col">
+      <div className="uppercase text-primary1 font-bold mb-1 mt-3">
+        <div className="bg-gray-100 h-6 w-20"></div>
+      </div>
+      <div className="text-4xl font-bold">
+        <div className="bg-gray-100 h-12 w-56"></div>
+      </div>
+      <div className="text-lg leading-7 mt-2">
+        <div className="bg-gray-100 h-36"></div>
+      </div>
+    </div>
+  </div>
+  <div className="flex pt-6 items-stretch">
+    <div className="flex flex-col md:grid md:grid-cols-3 md:gap-4 w-full">
+      {Array(3).fill(0).map(article =>
+        <div
+            className="flex flex-col lg:flex-row p-2">
+          <div className="flex flex-col overflow-hidden">
+            <div className="text-md uppercase text-primary1 font-bold"><div className="bg-gray-100 h-4 w-20 mb-2"></div></div>
+            <div className="text-lg font-semibold truncate"><div className="bg-gray-100 h-6 w-36"></div></div>
+          </div>
+        </div>)}
+    </div>
+  </div>
+</>;
+
+export default function Articles() {
+  const [articles, articleLoaded, articleLoad] = useArticleStore(state => [state.items, state.loaded, state.load]);
+  useEffect(() => articleLoad(), []);
   const articleMax = 300;
   const router = useRouter();
+  const loading = articles.length < 4;
 
-  return <div>
+  return loading ? <ArticleShadow/> : <>
     <div className="pt-12 grid md:grid-cols-2">
       <div className="h-80 rounded-sm" style={{
         backgroundImage: `url(${getArticlePreviewImageUrl(articles[0])})`,
@@ -52,6 +86,5 @@ export default function Articles({articles}: { articles: CockpitArticles }) {
         </div>
       </Link>
     </div>
-
-  </div>;
+  </>;
 }
