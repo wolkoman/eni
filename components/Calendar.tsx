@@ -25,7 +25,7 @@ export function Calendar({}) {
   return <div>
     {permission[Permission.PrivateCalendarAccess] ? <div className="text-center italic bg-gray-200 text-sm">Private Kalenderansicht</div> : null}
     <div className="flex flex-col md:flex-row bg-gray-100">
-      <div className="flex md:flex-col flex-row p-6 text-lg md:w-52 justify-around md:justify-start flex-shrink-0">
+      <div className="flex md:flex-col flex-row p-2 lg:p-6 text-lg md:w-52 justify-around md:justify-start flex-shrink-0">
         {[
           {label: 'Alle', action: () => setFilter(null)},
           {label: 'Emmaus', action: () => setFilter('emmaus')},
@@ -34,7 +34,7 @@ export function Calendar({}) {
         ].map(parish => <div className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={parish.label}
                              onClick={parish.action}>{parish.label}</div>)}
       </div>
-      <div className="h-3xl overflow-y-auto flex-grow events py-4">
+      <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
         {calendarLoaded || <LoadingEvents/>}
         {Object.entries(calendar)
           ?.map(([date, events]) => [date, events.filter(event => event.calendar === filter || filter === null)] as [string, CalendarEvent[]])

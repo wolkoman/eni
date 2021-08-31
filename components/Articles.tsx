@@ -35,7 +35,7 @@ export default function Articles({articles}: { articles: CockpitArticles }) {
       </div>
     </div>
     <div className="flex pt-6 items-stretch">
-      <div className="flex flex-col md:grid md:grid-cols-3 md:gap-4">
+      <div className="flex flex-col md:grid md:grid-cols-3 md:gap-4 w-full">
         {articles.slice(1, 4).map(article => <Link href={getArticleLink(article)} key={article._id}>
           <div
             className="flex flex-col lg:flex-row hover:bg-gray-100 p-2 cursor-pointer hover:bg-gray-200">
