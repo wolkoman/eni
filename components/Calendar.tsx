@@ -42,7 +42,7 @@ export function Calendar({}) {
           .map(([date, events]) => <div key={date}>
             <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
             {events.map(event => <div className="flex text-lg font-semibold" key={event.id}>
-              <div className="w-10"><EventTime date={new Date(event.start.dateTime)}/></div>
+              <div className="w-10">{event.start.dateTime ? <EventTime date={new Date(event.start.dateTime)}/> : null}</div>
               <div>
                 <div className={`${bgColor(event.calendar)} w-3 h-3 mx-3 rounded-xl mt-2`}/>
               </div>

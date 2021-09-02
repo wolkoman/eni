@@ -1,12 +1,18 @@
 import Link from 'next/link';
 import React from 'react';
 
+function Stripes() {
+  return <>
+    <div className="bg-primary1" style={{height: 5.7}}/>
+    <div className="bg-primary2" style={{height: 5.7}}/>
+    <div className="bg-primary3" style={{height: 5.7}}/>
+  </>;
+}
+
 export default function Navbar() {
   return <>
     <div className="fixed top-0 left-0 w-full">
-      <div className="bg-primary1" style={{height: 5.7}}/>
-      <div className="bg-primary2" style={{height: 5.7}}/>
-      <div className="bg-primary3" style={{height: 5.7}}/>
+      <Stripes/>
     </div>
     <div className="pt-4 mb-4 bg-white z-10 relative">
       <div className="flex flex-row items-end">
@@ -37,9 +43,7 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-          <div className="bg-primary1" style={{height: 5.7}}/>
-          <div className="bg-primary2" style={{height: 5.7}}/>
-          <div className="bg-primary3" style={{height: 5.7}}/>
+          <Stripes/>
         </div>
         <img src="/logos-24.svg" className="w-48"/>
         <div className="w-2 md:w-12"/>
