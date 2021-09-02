@@ -68,7 +68,7 @@ function Parishes() {
 }
 
 const Info = ({title, image, children}: { title: string, image: string, children: any }) => {
-  return <div className="px-3 text-lg">
+  return <div className="px-3 text-lg mb-8">
     <div className="flex flex-row items-end mb-2">
       <img src={image} className="w-16"/>
       <div className="text-3xl ml-2 font-bold">{title}</div>
