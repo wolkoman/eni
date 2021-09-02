@@ -61,7 +61,7 @@ function Parishes() {
       },
     ].map(parish => <div key={parish.name}>
       <img src={parish.image} className="pb-2" alt={parish.name}/>
-      <div className="md:hidden font-bold">{parish.name}</div>
+      <div className="md:hidden leading-4 text-center font-bold">{parish.name}</div>
       <div className="hidden md:block">{parish.description(parish.name)}</div>
     </div>)}
   </div>;

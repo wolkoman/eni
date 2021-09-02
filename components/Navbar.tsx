@@ -15,9 +15,21 @@ export default function Navbar() {
             </div>
           </div>
           <Link href="/">
-          <div className="font-bold text-3xl pb-2 ml-6 cursor-pointer">
-            eni.wien
-          </div></Link>
+            <div className="font-bold text-3xl pb-2 ml-6 cursor-pointer">
+              eni.wien
+            </div>
+          </Link>
+          <div className="flex-grow justify-end pr-2 hidden">
+            <div className="font-bold pb-1 cursor-pointer self-end text-gray-600 px-3">
+              Kalender
+            </div>
+            <div className="font-bold pb-1 cursor-pointer self-end text-gray-600 px-3">
+              Team
+            </div>
+            <div className="font-bold pb-1 cursor-pointer self-end text-gray-600 px-3">
+              Newsletter
+            </div>
+          </div>
         </div>
         <div className="bg-primary1" style={{height: 5.7}}/>
         <div className="bg-primary2" style={{height: 5.7}}/>
