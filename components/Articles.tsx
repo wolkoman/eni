@@ -33,8 +33,8 @@ const ArticleShadow = () => <>
     </div>
     <div className="flex pt-6 items-stretch">
         <div className="flex flex-col md:grid md:grid-cols-3 md:gap-4 w-full">
-            {Array(3).fill(0).map(article =>
-                <div
+            {Array(3).fill(0).map((article, index) =>
+                <div key={index}
                     className="flex flex-col lg:flex-row p-2">
                     <div className="flex flex-col overflow-hidden">
                         <div className="text-md uppercase text-primary1 font-bold">

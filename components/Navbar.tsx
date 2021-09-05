@@ -18,11 +18,11 @@ export default function Navbar() {
       <div className="flex flex-row items-end">
         <div className="flex flex-col flex-grow">
           <div className="flex">
-            <div className="flex flex-col pb-2 leading-4 hidden md:block opacity-80">
-              <div className="text-md md:ml-24">
+            <div className="flex flex-col justify-center items-center pb-2 leading-4 hidden md:block opacity-80">
+              <div className="text-md md:ml-24 md:mt-3.5">
                 kanzlei@eni.wien
               </div>
-              <div className="text-md md:ml-24">
+              <div className="text-md md:ml-24 hidden">
                 +1 616 4340
               </div>
             </div>

@@ -10,7 +10,10 @@ export default function Footer(props: {}) {
     <div className="py-6 text-gray-600 mt-24">
       <Responsive>
         <div className="flex justify-between">
-          <div>Pfarre Emmaus am Wienerberg, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift</div>
+          <div className="flex flex-col">
+            <div>Pfarre Emmaus am Wienerberg, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift</div>
+            <Link href="impressum"><div className="cursor-pointer underline hover:no-underline">Impressum</div></Link>
+          </div>
           {isLoggedIn
             ? <>
             <Link href="/intern"><div className="cursor-pointer underline hover:no-underline">Zum Mitgliedsbereich</div></Link>

@@ -10,7 +10,7 @@ export default function HomePage(props: { calendarGroups: CalendarEvents, articl
       Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr
       finden Sie in den Pfarrzeitungen der Pfarren.
     </div>
-    <div className="grid grid-cols-3 gap-4 my-4 h-80 text-3xl font-serif">
+    <div className="grid md:grid-cols-3 gap-4 my-4 h-80 text-3xl font-serif">
       <Link href="https://tesarekplatz.at/aktuell/emmausbote">
         <div className="border-4 border-primary1 p-10 rounded-xl cursor-pointer">
           Der Emmausbote
