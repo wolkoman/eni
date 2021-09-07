@@ -5,9 +5,9 @@ import {useRouter} from 'next/router';
 export enum Permission {
   Articles,
   ReaderPlanning,
-  PrivateCalendarAccess
+  PrivateCalendarAccess,
+  OrganBooking
 }
-
 
 interface ArticleStore {
   items: any[];
@@ -21,6 +21,16 @@ interface CalendarStore {
   loading: boolean;
   loaded: boolean;
   load: (token?: string) => void;
+}
+
+interface UserStore {
+  user: { active: boolean, api_key: string, email: string, name: string, group: string } | null,
+  permissions: Record<Permission, boolean>,
+  load: () => void,
+  login: (data: { username: string, password: string }) => void,
+  loaded: boolean,
+  loading: boolean,
+  updatePermission: () => void
 }
 
 export const useArticleStore = create<ArticleStore>((set, get) => ({
@@ -49,16 +59,6 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   }
 }));
 
-interface UserStore {
-  user: { active: boolean, api_key: string, email: string, name: string, group: string } | null,
-  permissions: Record<Permission, boolean>,
-  load: () => void,
-  login: (data: { username: string, password: string }) => void,
-  loaded: boolean,
-  loading: boolean,
-  updatePermission: () => void
-}
-
 export const useUserStore = create<UserStore>((set, get) => ({
   user: null,
   loaded: false,
@@ -66,7 +66,8 @@ export const useUserStore = create<UserStore>((set, get) => ({
   permissions: {
     [Permission.Articles]: false,
     [Permission.ReaderPlanning]: false,
-    [Permission.PrivateCalendarAccess]: false
+    [Permission.PrivateCalendarAccess]: false,
+    [Permission.OrganBooking]: false
   },
   login: (data) => {
     if (get().loading) return;
@@ -91,8 +92,9 @@ export const useUserStore = create<UserStore>((set, get) => ({
       ...state, user, loaded: true, permissions: {
         [Permission.Articles]: ['admin'].includes(user?.group ?? ''),
         [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'admin'].includes(user?.group ?? ''),
-        [Permission.ReaderPlanning]: ['admin'].includes(user?.group ?? '')
+        [Permission.ReaderPlanning]: ['admin'].includes(user?.group ?? ''),
+        [Permission.OrganBooking]: ['admin', 'OrganAccess'].includes(user?.group ?? '')
       }
     }));
   }
-}))
+}));
