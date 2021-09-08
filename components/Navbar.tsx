@@ -14,7 +14,7 @@ export default function Navbar() {
     <div className="fixed top-0 left-0 w-full">
       <Stripes/>
     </div>
-    <div className="pt-4 mb-4 bg-white z-10 relative">
+    <div className="pt-4 mb-4 bg-white z-10 relative" data-testid="navbar">
       <div className="flex flex-row items-end">
         <div className="flex flex-col flex-grow">
           <div className="flex">
@@ -27,7 +27,7 @@ export default function Navbar() {
               </div>
             </div>
             <Link href="/">
-              <div className="font-bold text-3xl pb-2 ml-6 cursor-pointer">
+              <div className="font-bold text-3xl pb-2 ml-6 cursor-pointer" data-testid="title">
                 eni.wien
               </div>
             </Link>
