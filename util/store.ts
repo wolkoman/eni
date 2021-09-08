@@ -20,6 +20,7 @@ interface CalendarStore {
   items: CalendarEvents;
   loading: boolean;
   loaded: boolean;
+  error: boolean;
   load: (token?: string) => void;
 }
 
@@ -40,12 +41,14 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   items: {},
   loaded: false,
   loading: false,
+  error: false,
   load: (token?: string) => {
     if (get().loading || get().loaded) return;
     set(state => ({...state, loading: true}));
     fetch('/api/calendar' + (token ? `?token=${token}` : ''))
       .then(response => response.json())
-      .then(data => set(state => ({...state, items: data, loaded: true, loading: false})));
+      .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))
+      .catch(() => set(state => ({...state, items: {}, loaded: true, loading: false, error: true})));
   }
 }));
 
