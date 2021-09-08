@@ -1,7 +1,7 @@
 import {google} from 'googleapis';
 import {cockpit} from './cockpit-sdk';
 
-const calendarIds = {
+export const calendarIds = {
   'all': 'admin@tesarekplatz.at',
   'emmaus': 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',
   'inzersdorf': '4fgiuth4nbbi5uqfa35tidnl84@group.calendar.google.com',

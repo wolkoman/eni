@@ -11,6 +11,7 @@
     "bufferutil": "^4.0.3",
     "cockpit-sdk": "^0.15.1",
     "googleapis": "^39.2.0",
+    "msw": "^0.35.0",
     "next": "^11.0.0",
     "node-fetch": "^2.6.1",
     "node-sass": "^4.14.1",
@@ -32,6 +33,7 @@
   "scripts": {
     "dev": "next dev",
     "test": "playwright test",
+    "test:skipbuild": "SKIP_BUILD=1 playwright test",
     "test:headed": "playwright test --headed",
     "build": "next build",
     "start": "next start"

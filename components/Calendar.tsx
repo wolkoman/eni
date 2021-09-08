@@ -22,11 +22,11 @@ export function Calendar({}) {
     'neustift': 'bg-primary3'
   })[calendar];
 
-  return <div>
+  return <div data-testid="calendar">
     {calendar.error && <div>Beim Laden der Termine ist ein Fehler aufgetreten.</div>}
     {permission[Permission.PrivateCalendarAccess] ? <div className="text-center italic bg-gray-200 text-sm">Private Kalenderansicht</div> : null}
     {calendar.error || <div className="flex flex-col md:flex-row bg-gray-100">
-      <div className="flex md:flex-col flex-row p-2 lg:p-6 text-lg md:w-52 justify-around md:justify-start flex-shrink-0">
+      <div className="flex md:flex-col flex-row p-2 lg:p-6 text-lg md:w-52 justify-around md:justify-start flex-shrink-0" data-testid="parish-selector">
         {[
           {label: 'Alle', action: () => setFilter(null)},
           {label: 'Emmaus', action: () => setFilter('emmaus')},
@@ -47,7 +47,7 @@ export function Calendar({}) {
               <div>
                 <div className={`${bgColor(event.calendar)} w-3 h-3 mx-3 rounded-xl mt-2`}/>
               </div>
-              <div className="mb-2">
+              <div className="mb-2" data-testid="event">
                 <div>{event.summary} {event.visibility === 'private' ? ' (privat)' : ''}</div>
                 {event.calendar !== 'all' && filter === null ?
                   <div className="font-normal text-sm leading-4 italic">in {({

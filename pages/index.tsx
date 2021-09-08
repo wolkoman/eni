@@ -1,9 +1,7 @@
 import React from 'react';
-import {Calendar, EventDate} from '../components/Calendar';
-import {CalendarEvent, CalendarEvents} from '../util/calendarEvents';
+import {Calendar} from '../components/Calendar';
 import Articles from '../components/Articles';
 import Site from '../components/Site';
-import {Cockpit, CockpitArticles} from '../util/cockpit';
 import Button from '../components/Button';
 import Link from 'next/link';
 import {InstagramFeed} from '../components/InstagramFeed';
