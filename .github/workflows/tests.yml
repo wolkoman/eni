@@ -1,0 +1,47 @@
+name: Tests
+on: [push]
+jobs:
+  Integration-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_KEY: ${{ secrets.CLIENT_KEY }}
+          COCKPIT_TOKEN: ${{ secrets.COCKPIT_TOKEN }}
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+        run: npm run build
+      - name: Run
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_KEY: ${{ secrets.CLIENT_KEY }}
+          COCKPIT_TOKEN: ${{ secrets.COCKPIT_TOKEN }}
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+        run: npm run start &
+      - name: Download browsers
+        run: npx playwright install
+      - name: Test application
+        run: npm run test
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Deploy
+        if: github.ref == 'ref/head/next'
+        run: curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_HOOK }}

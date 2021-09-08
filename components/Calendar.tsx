@@ -6,12 +6,12 @@ import {SanitizeHTML} from './SanitizeHtml';
 
 export function Calendar({}) {
   const [filter, setFilter] = useState<CalendarType | null>(null);
-  const [calendar, calendarLoaded, calendarLoad] = useCalendarStore(state => [state.items, state.loaded, state.load]);
+  const calendar = useCalendarStore(state => state);
   const [permission, user, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.user, state.loaded, state.load]);
   useEffect(() => userLoad(), []);
   useEffect(() => {
     if (userLoaded) {
-      calendarLoad(permission[Permission.PrivateCalendarAccess] ? user?.api_key : undefined);
+      calendar.load(permission[Permission.PrivateCalendarAccess] ? user?.api_key : undefined);
     }
   }, [userLoaded]);
 
@@ -23,8 +23,9 @@ export function Calendar({}) {
   })[calendar];
 
   return <div>
+    {calendar.error && <div>Beim Laden der Termine ist ein Fehler aufgetreten.</div>}
     {permission[Permission.PrivateCalendarAccess] ? <div className="text-center italic bg-gray-200 text-sm">Private Kalenderansicht</div> : null}
-    <div className="flex flex-col md:flex-row bg-gray-100">
+    {calendar.error || <div className="flex flex-col md:flex-row bg-gray-100">
       <div className="flex md:flex-col flex-row p-2 lg:p-6 text-lg md:w-52 justify-around md:justify-start flex-shrink-0">
         {[
           {label: 'Alle', action: () => setFilter(null)},
@@ -35,8 +36,8 @@ export function Calendar({}) {
                              onClick={parish.action}>{parish.label}</div>)}
       </div>
       <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
-        {calendarLoaded || <LoadingEvents/>}
-        {Object.entries(calendar)
+        {calendar.loaded || <LoadingEvents/>}
+        {Object.entries(calendar.items)
           ?.map(([date, events]) => [date, events.filter(event => event.calendar === filter || filter === null)] as [string, CalendarEvent[]])
           .filter(([_, events]) => events.length > 0)
           .map(([date, events]) => <div key={date}>
@@ -63,7 +64,7 @@ export function Calendar({}) {
             </div>)}
           </div>)}
       </div>
-    </div>
+    </div>}
   </div>;
 }
 

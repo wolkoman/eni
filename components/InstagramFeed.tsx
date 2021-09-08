@@ -17,7 +17,7 @@ export function InstagramFeed() {
     <div className="text-xl font-bold my-2">Instagram</div>
     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
       {feed.filter(item => item.media_type !== "VIDEO").slice(0,4).map((item, index) =>
-      <div className={`pb-4 ${index === 3 ? "md:hidden" : ""}`}>
+      <div className={`pb-4 ${index === 3 ? "md:hidden" : ""}`} key={item.id}>
         <div className="rounded overflow-hidden" style={{ backgroundImage: `url(${item.media_url})`, backgroundSize: 'cover', height: 250 }}>
           <div className="bg-gray-200 inline-block px-1 rounded-br-lg text-gray-600">{new Date(item.timestamp).toLocaleDateString()}</div>
         </div>
