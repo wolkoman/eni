@@ -25,7 +25,7 @@ interface CalendarStore {
 }
 
 interface UserStore {
-  user: { active: boolean, api_key: string, email: string, name: string, group: string } | null,
+  user: { active: boolean, api_key: string, email: string, name: string, group: string, _id: string } | null,
   permissions: Record<Permission, boolean>,
   load: () => void,
   login: (data: { username: string, password: string }) => void,

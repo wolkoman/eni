@@ -6,6 +6,7 @@ export const calendarIds = {
   'emmaus': 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',
   'inzersdorf': '4fgiuth4nbbi5uqfa35tidnl84@group.calendar.google.com',
   'neustift': 'occ77f3f7sderl9e3b4jdnr5ek@group.calendar.google.com',
+  'inzersdorf-organ': '3i1uurj6bgl1q91l1peejmfa80@group.calendar.google.com'
 };
 export type Calendar = keyof typeof calendarIds;
 
@@ -23,17 +24,20 @@ export interface CalendarEvent {
 
 export type CalendarEvents = Record<string, CalendarEvent[]>;
 
-async function getEventsFromCalendar(calendarId: string, calendarName: string, isPublic: boolean): Promise<CalendarEvent[]> {
+export async function getEventsFromCalendar(calendarId: string, calendarName: string, isPublic: boolean, timeMin?: Date, timeMax?: Date): Promise<CalendarEvent[]> {
   const oauth2Client = await getCachedGoogleAuthClient();
   const calendar = google.calendar('v3');
   const todayDate = new Date();
   todayDate.setHours(0);
-  const today = todayDate.getTime();
+  let start = todayDate.getTime();
+  let end = start + 3600000 * 24 * 30 * (isPublic ? 1 : 6);
+  if(timeMin) start = timeMin.getTime();
+  if(timeMax) end = timeMax.getTime();
   const eventsList = await calendar.events.list({
     calendarId,
     auth: oauth2Client,
-    timeMin: new Date(today).toISOString(),
-    timeMax: new Date(today + 3600000 * 24 * 30 * (isPublic ? 1 : 6)).toISOString(),
+    timeMin: new Date(start).toISOString(),
+    timeMax: new Date(end).toISOString(),
     singleEvents: true,
     timeZone: 'Europa/Vienna',
     orderBy: 'startTime'
@@ -59,7 +63,7 @@ async function getEventsFromCalendar(calendarId: string, calendarName: string, i
 
 let oauth2Client: any;
 
-async function getCachedGoogleAuthClient() {
+export async function getCachedGoogleAuthClient() {
   if (oauth2Client) return oauth2Client;
   const configResponse = await cockpit.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});
   const config = configResponse.entries[0].data;
