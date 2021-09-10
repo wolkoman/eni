@@ -23,3 +23,10 @@ body {
 .custom-html p{
   margin: 12px 0;
 }
+
+* > .on-parent-hover{
+  opacity: 0;
+}
+*:hover > .on-parent-hover{
+  opacity: 100;
+}

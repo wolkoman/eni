@@ -2,8 +2,9 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {calendarIds, getCachedGoogleAuthClient, getEventsFromCalendar} from '../../../util/calendarEvents';
 import {cockpit} from '../../../util/cockpit-sdk';
 import {google} from 'googleapis';
+import {getAvailableOrganSlotsForDate} from './check';
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 
   const organBookingAccess =
     req.query.token && await fetch(`${cockpit.host}/api/singletons/get/OrganBookingAccess?token=${req.query.token}`)
@@ -22,8 +23,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  const startDateTime = new Date(req.query.dateTime as string);
-  const endDateTime = new Date(req.query.dateTime as string);
+
+  const slots = await getAvailableOrganSlotsForDate(req.query.date);
+  if (!slots.includes(req.query.hour)) {
+    res.status(400).json({errorMessage: 'Slot not available'});
+    return;
+  }
+
+  const startDateTime = new Date(`${req.query.date} ${req.query.hour}`);
+  const endDateTime = new Date(`${req.query.date} ${req.query.hour}`);
   endDateTime.setMinutes(endDateTime.getMinutes() + 50);
 
   const oauth2Client = await getCachedGoogleAuthClient();

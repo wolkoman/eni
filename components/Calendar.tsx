@@ -19,7 +19,8 @@ export function Calendar({}) {
     'all': 'bg-white',
     'emmaus': 'bg-primary1',
     'inzersdorf': 'bg-primary2',
-    'neustift': 'bg-primary3'
+    'neustift': 'bg-primary3',
+    'inzersdorf-organ': 'bg-primary3',
   })[calendar];
 
   return <div data-testid="calendar">
@@ -76,11 +77,11 @@ const LoadingEvents = () => <>
   <ShadowEventDate/>
   {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width}/>)}
 </>
-const ShadowEventDate = () => <div className="w-32 h-4 bg-black opacity-20 mb-3 mt-6"/>
+const ShadowEventDate = () => <div className="w-32 h-4 bg-gray-200 mb-3 mt-6"/>
 const ShadowEvent = ({width}: { width: number }) => <div className="flex items-center mb-3">
-  <div className="w-11 h-5 bg-black opacity-30 mr-2"/>
-  <div className="w-3 h-3 bg-black opacity-30 mr-2 rounded-3xl"/>
-  <div className="h-5 bg-black opacity-30 mr-2" style={{width}}/>
+  <div className="w-11 h-5 bg-gray-200 mr-2"/>
+  <div className="w-3 h-3 bg-gray-200 mr-2 rounded-3xl"/>
+  <div className="h-5 bg-gray-200 mr-2" style={{width}}/>
 </div>
 
 export const EventDate = ({date}: { date: Date }) => {
