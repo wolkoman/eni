@@ -1,7 +1,7 @@
 import {expect} from '@playwright/test';
 import test from './next-fixture'
 import {CalendarEventBuilder} from './builders/calendar-event.builder';
-import {calendarIds} from '../util/calendarEvents';
+import {calendarIds} from '../util/calendar-events';
 
 const googleCalendarApiUrl = (calendarId: string) => `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`;
 

@@ -1,6 +1,5 @@
 import create from 'zustand'
-import {CalendarEvents} from './calendarEvents';
-import {useRouter} from 'next/router';
+import {CalendarEvents} from './calendar-events';
 
 export enum Permission {
   Articles,

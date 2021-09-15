@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {useUserStore} from '../../util/store';
-import {CalendarEvent} from '../../util/calendarEvents';
+import {CalendarEvent} from '../../util/calendar-events';
 import Modal from '../../components/Modal';
 import Button from '../../components/Button';
 

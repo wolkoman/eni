@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient, getEventsFromCalendar} from '../../../util/calendarEvents';
+import {calendarIds, getCachedGoogleAuthClient, getEventsFromCalendar} from '../../../util/calendar-events';
 import {cockpit} from '../../../util/cockpit-sdk';
 import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';

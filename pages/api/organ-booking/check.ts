@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getEventsFromCalendar} from '../../../util/calendarEvents';
+import {calendarIds, getEventsFromCalendar} from '../../../util/calendar-events';
 import {cockpit} from '../../../util/cockpit-sdk';
 
 const isContained = (check: Date, from: Date, to: Date) => (check.getTime() < to.getTime() && check.getTime() >= from.getTime());

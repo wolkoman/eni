@@ -1,10 +1,10 @@
 import React from 'react';
-import {CalendarEvents} from '../util/calendarEvents';
+import {CalendarEvents} from '../util/calendar-events';
 import Site from '../components/Site';
 import {Cockpit, CockpitArticles} from '../util/cockpit';
 import Link from 'next/link';
 
-export default function HomePage(props: { calendarGroups: CalendarEvents, articles: CockpitArticles }) {
+export default function HomePage() {
   return <Site title="Pfarrzeitungen">
     <div>
       Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr
@@ -28,12 +28,4 @@ export default function HomePage(props: { calendarGroups: CalendarEvents, articl
       </Link>
     </div>
   </Site>
-}
-
-export async function getServerSideProps() {
-  return {
-    props: {
-      articles: await Cockpit.article({'platform': 'eni'}, {'_o': '1'})
-    }
-  }
 }

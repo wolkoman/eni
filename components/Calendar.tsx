@@ -1,4 +1,4 @@
-import {Calendar as CalendarType, CalendarEvent} from '../util/calendarEvents';
+import {Calendar as CalendarType, CalendarEvent} from '../util/calendar-events';
 import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';

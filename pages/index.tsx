@@ -4,14 +4,14 @@ import Articles from '../components/Articles';
 import Site from '../components/Site';
 import Button from '../components/Button';
 import Link from 'next/link';
-import {InstagramFeed} from '../components/InstagramFeed';
+import {Instagram} from '../components/Instagram';
 
 export default function HomePage() {
   return <Site>
     <Articles/>
     <Parishes/>
     <Calendar/>
-    <InstagramFeed/>
+    <Instagram/>
     <div className="flex flex-col md:flex-row my-14">
       <Info title="Newsletter" image="./info-01.svg">
         <div className="mb-4">

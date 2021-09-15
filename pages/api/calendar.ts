@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {cockpit} from '../../util/cockpit-sdk';
-import {getEvents} from '../../util/calendarEvents';
+import {getEvents} from '../../util/calendar-events';
 
 export default async function (req: NextApiRequest, res: NextApiResponse){
 

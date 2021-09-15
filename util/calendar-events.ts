@@ -31,8 +31,8 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
   todayDate.setHours(0);
   let start = todayDate.getTime();
   let end = start + 3600000 * 24 * 30 * (isPublic ? 1 : 6);
-  if(timeMin) start = timeMin.getTime();
-  if(timeMax) end = timeMax.getTime();
+  if (timeMin) start = timeMin.getTime();
+  if (timeMax) end = timeMax.getTime();
   const eventsList = await calendar.events.list({
     calendarId,
     auth: oauth2Client,
@@ -79,7 +79,12 @@ export async function getEvents(props: { public: boolean }): Promise<CalendarEve
 
   const getTimeOfEvent = (event: any) => new Date(event!.start?.date ?? event!.start?.dateTime!).getTime();
   const allEvents = (await Promise.all(
-    Object.entries(calendarIds).map(([name, calendarId]) => getEventsFromCalendar(calendarId, name, props.public))
+    Object.entries(calendarIds).filter(([name, calendarId]) => [
+      calendarIds.all,
+      calendarIds.emmaus,
+      calendarIds.inzersdorf,
+      calendarIds.neustift
+    ].includes(calendarId)).map(([name, calendarId]) => getEventsFromCalendar(calendarId, name, props.public))
   ))
     .flat()
     .filter(event => !!event);
