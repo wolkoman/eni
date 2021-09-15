@@ -1,7 +1,5 @@
 import React from 'react';
-import {CalendarEvents} from '../util/calendar-events';
 import Site from '../components/Site';
-import {Cockpit, CockpitArticles} from '../util/cockpit';
 import Link from 'next/link';
 
 export default function HomePage() {
