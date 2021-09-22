@@ -2,12 +2,21 @@ import {Calendar as CalendarType, CalendarEvent} from '../util/calendar-events';
 import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
+import {Calendar} from '../util/calendar-events';
+
+const personWords = {
+  brezovski: ['Brezovski', 'Zvonko'],
+  thomas: ['Thomas', 'Gil'],
+  campos: ['David', 'Campos'],
+  wojciech: ['Wojciech', 'Marcin']
+}
+type Person = keyof typeof personWords;
 
 
-export function Calendar({}) {
-  const [filter, setFilter] = useState<CalendarType | null>(null);
+export function CalendarPage({}) {
+  const [filter, setFilter] = useState<{ filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null>(null);
   const calendar = useCalendarStore(state => state);
-  const [permission, user, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.user, state.loaded, state.load]);
+  const [permission, user, userLoaded, userLoad, userPermissions] = useUserStore(state => [state.permissions, state.user, state.loaded, state.load, state.permissions]);
   useEffect(() => userLoad(), []);
   useEffect(() => {
     if (userLoaded) {
@@ -25,32 +34,52 @@ export function Calendar({}) {
 
   return <div data-testid="calendar">
     {calendar.error && <div>Beim Laden der Termine ist ein Fehler aufgetreten.</div>}
-    {permission[Permission.PrivateCalendarAccess] ? <div className="text-center italic bg-gray-200 text-sm">Private Kalenderansicht</div> : null}
+    {permission[Permission.PrivateCalendarAccess] ?
+      <div className="text-center italic bg-gray-200 text-sm">Private Kalenderansicht</div> : null}
     {calendar.error || <div className="flex flex-col md:flex-row bg-gray-100">
-      <div className="flex md:flex-col flex-row p-2 lg:p-6 text-lg md:w-52 justify-around md:justify-start flex-shrink-0" data-testid="parish-selector">
-        {[
-          {label: 'Alle', action: () => setFilter(null)},
-          {label: 'Emmaus', action: () => setFilter('emmaus')},
-          {label: 'St. Nikolaus', action: () => setFilter('inzersdorf')},
-          {label: 'Neustift', action: () => setFilter('neustift')},
-        ].map(parish => <div className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={parish.label}
-                             onClick={parish.action}>{parish.label}</div>)}
+      <div className="flex flex-col p-2 lg:p-6 text-lg md:w-52 ">
+        <div
+          className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+          data-testid="parish-selector">
+          {[
+            {label: 'Alle', action: () => setFilter(null)},
+            {label: 'Emmaus', action: () => setFilter({filterType: 'PARISH', parish: 'emmaus'})},
+            {label: 'St. Nikolaus', action: () => setFilter({filterType: 'PARISH', parish: 'inzersdorf'})},
+            {label: 'Neustift', action: () => setFilter({filterType: 'PARISH', parish: 'neustift'})},
+          ].map(filt => <div
+            className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+            onClick={filt.action}>{filt.label}</div>)}
+        </div>
+        <div
+          className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+          data-testid="parish-selector">
+          {[
+            {label: 'Zvonko', action: () => setFilter({filterType: 'PERSON', person: 'brezovski'})},
+            {label: 'David', action: () => setFilter({filterType: 'PERSON', person: 'campos'})},
+            {label: 'Gil', action: () => setFilter({filterType: 'PERSON', person: 'thomas'})},
+            {label: 'Marcin', action: () => setFilter({filterType: 'PERSON', person: 'wojciech'})},
+          ].filter(filt => userPermissions[Permission.PrivateCalendarAccess]).map(filt => <div
+            className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+            onClick={filt.action}>{filt.label}</div>)}
+        </div>
       </div>
       <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
         {calendar.loaded || <LoadingEvents/>}
         {Object.entries(calendar.items)
-          ?.map(([date, events]) => [date, events.filter(event => event.calendar === filter || filter === null)] as [string, CalendarEvent[]])
+          ?.map(([date, events]) => [date, events
+            .filter(event => (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.summary.match(word))) || (filter?.filterType === 'PARISH' && event.calendar === filter.parish) || filter === null)] as [string, CalendarEvent[]])
           .filter(([_, events]) => events.length > 0)
           .map(([date, events]) => <div key={date}>
             <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
             {events.map(event => <div className="flex text-lg font-semibold" key={event.id}>
-              <div className="w-10">{event.start.dateTime ? <EventTime date={new Date(event.start.dateTime)}/> : null}</div>
+              <div className="w-10">{event.start.dateTime ?
+                <EventTime date={new Date(event.start.dateTime)}/> : null}</div>
               <div>
                 <div className={`${bgColor(event.calendar)} w-3 h-3 mx-3 rounded-xl mt-2`}/>
               </div>
               <div className="mb-2" data-testid="event">
                 <div>{event.summary} {event.visibility === 'private' ? ' (privat)' : ''}</div>
-                {event.calendar !== 'all' && filter === null ?
+                {event.calendar !== 'all' && (filter === null || filter.filterType === 'PERSON') ?
                   <div className="font-normal text-sm leading-4 italic">in {({
                     emmaus: 'Emmaus',
                     inzersdorf: 'St. Nikolaus',
@@ -95,5 +124,5 @@ export const EventDate = ({date}: { date: Date }) => {
 export const EventTime = (props: { date: Date }) => {
   const hour = props.date.getHours();
   const minutes = props.date.getMinutes();
-  return <>{('0'+hour).slice(-2)}:{('0'+minutes).slice(-2)}</>;
+  return <>{('0' + hour).slice(-2)}:{('0' + minutes).slice(-2)}</>;
 }
