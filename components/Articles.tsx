@@ -72,8 +72,8 @@ export default function Articles() {
           {articles[0].content.substring(0, articleMax)}{articles[0].content.length > articleMax ? '...' : ''}
         </div>
         <div className="flex justify-end hidden md:block">
-          <Link href={getArticleLink(articles[0])}><>
-            <Button label="Weiterlesen"/></>
+          <Link href={getArticleLink(articles[0])}><a>
+            <Button label="Weiterlesen"/></a>
           </Link>
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function Articles() {
             </div>
           </div>
         </Link>)}
-      </div>e
+      </div>
       <Link href="/artikel">
         <div className="p-2 flex items-center cursor-pointer hover:bg-gray-200">
           <img src="./logos-28.svg" className="w-8"/>
