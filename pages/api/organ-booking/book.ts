@@ -36,12 +36,7 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
 
   const oauth2Client = await getCachedGoogleAuthClient();
   const calendar = google.calendar('v3');
-  console.log({
-    summary: user.name,
-    description: `Gebucht: ${new Date().toISOString()}`,
-    start: {dateTime: startDateTime.toISOString()},
-    end: {dateTime: endDateTime.toISOString()},
-  });
+
   calendar.events.insert({
     auth: oauth2Client,
     calendarId: calendarIds['inzersdorf-organ'],
@@ -51,8 +46,8 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
       start: {dateTime: startDateTime.toISOString()},
       end: {dateTime: endDateTime.toISOString()},
     }
-  }).then(() => {
-    res.status(200).json({});
+  }).then((event) => {
+    res.status(200).json(event.data);
   }).catch((err) => {
     res.status(500).json({err});
   });

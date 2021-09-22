@@ -1,5 +1,6 @@
 import create from 'zustand'
 import {CalendarEvents} from './calendar-events';
+import {fetchJson} from './fetch-util';
 
 export enum Permission {
   Articles,
@@ -27,7 +28,8 @@ interface UserStore {
   user: { active: boolean, api_key: string, email: string, name: string, group: string, _id: string } | null,
   permissions: Record<Permission, boolean>,
   load: () => void,
-  login: (data: { username: string, password: string }) => void,
+  login: (data: { username: string, password: string }) => Promise<any>,
+  logout: () => void,
   loaded: boolean,
   loading: boolean,
   updatePermission: () => void
@@ -72,16 +74,22 @@ export const useUserStore = create<UserStore>((set, get) => ({
     [Permission.OrganBooking]: false
   },
   login: (data) => {
-    if (get().loading) return;
+    if (get().loading) return Promise.resolve();
     set(state => ({...state, loading: true}));
-    fetch('/api/login', {body: JSON.stringify(data), method: 'POST'})
-      .then(response => response.json())
+    return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
       .then(user => {
         sessionStorage.setItem('user', JSON.stringify(user));
-        set(state => ({...state, loading: false, loaded: true, user}));
+        set(state => ({...state, user, loaded: true}));
         get().updatePermission();
-        location.replace('/intern');
+      }).catch(() => {
+        set(state => ({...state, loading: false}));
+        throw new Error();
       })
+  },
+  logout: () => {
+    sessionStorage.removeItem('user');
+    set(state => ({...state, user: null, loaded: false}));
+    get().updatePermission();
   },
   load: () => {
     if (get().loaded) return;

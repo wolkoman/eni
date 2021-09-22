@@ -1,54 +1,74 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Site from '../../components/Site';
 import {useUserStore} from '../../util/store';
 import {CalendarEvent} from '../../util/calendar-events';
 import Modal from '../../components/Modal';
 import Button from '../../components/Button';
+import {toast} from 'react-toastify';
+import {fetchJson} from '../../util/fetch-util';
+import {useState} from '../../util/use-state-util';
 
 export default function Orgel() {
   const user = useUserStore(state => state.user)
-  const [modal, setModal] = useState({active: false, date: '', hour: '', loading: false, error: false});
-  const [data, setData] = useState<{ date: string, hours: string[], myBookings: CalendarEvent[] }>({
+  const [data, setData, setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], loading: boolean }>({
     date: '',
-    hours: [],
-    myBookings: []
+    slots: [],
+    availableSlots: [],
+    myBookings: [],
+    loading: false
   });
+
+
   useEffect(() => {
-    if (user && !modal.active)
-      fetch(`/api/organ-booking/my?token=${user?.api_key}&userId=${user?._id}`).then(x => x.json()).then(myBookings => setData(data => ({
-        ...data,
-        myBookings
-      })));
-  }, [user, modal.active]);
+    if (user)
+      loadMyBooking();
+  }, [user]);
+
+  function loadMyBooking() {
+    fetchJson(`/api/organ-booking/my?token=${user?.api_key}&userId=${user?._id}`)
+      .then(myBookings => setPartialData({myBookings}));
+  }
+
+  function loadAvailableHours(value: string) {
+    setPartialData({date: value, slots: []});
+    fetchJson(`/api/organ-booking/check?token=${user?.api_key}&date=${value}`)
+      .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots}));
+  }
+
+  function bookHour(hour: string) {
+    setPartialData(data => ({availableSlots: data.availableSlots.filter(h => h !== hour)}))
+    fetchJson(`/api/organ-booking/book?token=${user?.api_key}&date=${data.date}&hour=${hour}&userId=${user?._id}`, {},
+      {pending: 'Buche Orgel...', success: 'Buchung erfolgreich', error: 'Buchung war nicht erfolgreich'})
+      .then((booking) => setPartialData(data => ({
+        availableSlots: data.availableSlots.filter(h => h !== hour),
+        myBookings: [...data.myBookings, booking]
+      })))
+      .catch(() => setPartialData(data => ({availableSlots: [...data.availableSlots, hour]})));
+  }
+
+  function setMyBookingStatus(booking: CalendarEvent, enabled: boolean) {
+    setPartialData({
+      myBookings: data.myBookings.map(b => ({
+        ...b,
+        description: b.id === booking.id ? (enabled ? '' : 'NO') : b.description
+      }))
+    });
+  }
+
+  function unbookHour(booking: CalendarEvent) {
+    setMyBookingStatus(booking, false);
+    fetchJson(`/api/organ-booking/delete?token=${user?.api_key}&id=${booking.id}`, {},
+      {pending: 'Lösche Buchung', success: 'Buchung gelöscht', error: 'Fehler ist aufgetreten'})
+      .then(() => {
+        setPartialData({myBookings: data.myBookings.filter(b => b.id !== booking.id)});
+        if(data.date === booking.start.dateTime.substring(0, 10)){
+          setPartialData(data => ({availableSlots: [...data.availableSlots, booking.start.dateTime.substring(11,16)]}));
+        }
+      })
+      .catch(() => setMyBookingStatus(booking, true));
+  }
 
   return <Site title="Orgel">
-
-    {modal.active && <Modal
-      title="Orgel Buchung"
-      button=
-        {!modal.error ?
-          <div className="flex">
-            <Button
-              label="Abbrechen"
-              secondary={true}
-              onClick={() => setModal(x => ({...x, active: false}))}
-              className="mr-2"
-            />
-            <Button label="Bestätigen" onClick={() => {
-              setModal(x => ({...x, loading: true}));
-              fetch(`/api/organ-booking/book?token=${user?.api_key}&date=${modal.date}&hour=${modal.hour}&userId=${user?._id}`)
-                .then((response) => setModal(x => (response.ok ? {...x, active: false} : {...x, error: true})));
-            }}/>
-          </div> :
-          <Button
-            label="Okay"
-            onClick={() => setModal(x => ({...x, active: false}))}
-          />}
-      content={!modal.error
-        ? <>Wollen Sie die Orgel am {modal.date} um {modal.hour} Uhr buchen ?</>
-        : <>Die Orgel kann zu dieser Zeit nicht gebucht werden.</>
-      }
-    />}
 
     <div className="flex flex-col md:flex-row">
 
@@ -56,7 +76,7 @@ export default function Orgel() {
         <div className="text-lg mb-3">Meine Buchungen</div>
         <div>
           {data.myBookings.map(booking => <div
-            className={`flex bg-gray-200 mb-2 px-2 py-1 justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
+            className={`flex bg-gray-200 mb-2 px-3 py-2 justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
             <div className="flex">
               <div className="w-20 font-bold">
                 {new Date(booking.start.dateTime).toLocaleDateString()}
@@ -66,21 +86,11 @@ export default function Orgel() {
                 {new Date(booking.end.dateTime).toLocaleTimeString().substring(0, 5)} Uhr
               </div>
             </div>
-            <div className="on-parent-hover cursor-pointer" onClick={() => {
-              setData(data => ({
-                ...data,
-                myBookings: data.myBookings.map(b => ({...b, description: b.id === booking.id ? 'NO' : b.description}))
-              }))
-              fetch(`/api/organ-booking/delete?token=${user?.api_key}&id=${booking.id}`).then(response => {
-                if (response.ok) {
-                  setData(data => ({
-                    ...data,
-                    myBookings: data.myBookings.filter(b => b.id !== booking.id)
-                  }))
-                }
-              });
+            <div className="on-parent-hovers cursor-pointer relative w-2 hover:opacity-80" onClick={() => {
+              unbookHour(booking);
             }}>
-              X
+              <div className="absolute top-3 left-0 w-3 h-0.5 bg-black transform rotate-45"/>
+              <div className="absolute top-3 left-0 w-3 h-0.5 bg-black transform -rotate-45"/>
             </div>
           </div>)}
         </div>
@@ -89,22 +99,21 @@ export default function Orgel() {
       <div className="md:pl-4">
         <div className="text-lg">Buchung erstellen</div>
         <div className="mt-3 mb-1 text-sm">Datum</div>
-        <input type="date" className="bg-gray-200 px-3 py-1" onChange={(event) => {
-          setData(data => ({...data, date: event.target.value, hours: []}));
-          fetch(`/api/organ-booking/check?token=${user?.api_key}&date=${event.target.value}`)
-            .then(x => x.json())
-            .then(hours => setData(data => ({...data, hours})));
-        }}/>
+        <input type="date" className="bg-gray-200 px-3 py-1" onChange={(e) => loadAvailableHours(e.target.value)}/>
         <div className="mt-3 mb-1 text-sm">Verfügbare Zeitslots</div>
         <div className="mb-2 flex flex-wrap">
-          {data.hours.map(hour => <div
-            key={hour}
-            className="px-3 py-1 mr-2 mb-2 bg-gray-200 hover:bg-primary1 hover:text-white cursor-pointer"
-            onClick={() => setModal({active: true, date: data.date, hour, loading: false, error: false})}>{hour}</div>)}
+          {
+            data.slots.map(hour => {
+              const unavailable = !data.availableSlots.includes(hour);
+              return <div
+                key={hour}
+                className={`px-3 py-1 mr-2 mb-2 ${unavailable ? 'bg-red-800 text-white' : 'cursor-pointer hover:bg-primary1 hover:text-white bg-gray-200'}`}
+                onClick={() => unavailable ? null : bookHour(hour)}>{hour}</div>;
+            })
+          }
         </div>
       </div>
 
     </div>
-
   </Site>
 }
