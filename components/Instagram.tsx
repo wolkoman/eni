@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {fetchJson} from '../util/fetch-util';
 
 interface InstagramFeedItem {
   id: string,
@@ -10,12 +11,12 @@ interface InstagramFeedItem {
 }
 
 export function Instagram() {
-  const [feed, setFeed] = useState<InstagramFeedItem[]>([]);
+  const [feed, setFeed] = useState<InstagramFeedItem[] | null>([]);
   useEffect(() => {
-    fetch('/api/instagram').then(response => response.json()).then(response => setFeed(response));
+    fetchJson('/api/instagram').then(response => setFeed(response)).catch(() => setFeed(null));
   }, [])
 
-  return <div className="my-10" data-testid="instagram">
+  return feed && <div className="my-10" data-testid="instagram">
     <div className="text-xl font-bold my-2">Instagram</div>
     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
       {feed

@@ -30,7 +30,7 @@ export default function HomePage() {
           Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr
           finden Sie in den Pfarrzeitungen der Pfarren.
         </div>
-        <Link href="/pfarrzeitung"><Button label="Pfarrzeitungen ansehen"/></Link>
+        <Link href="/pfarrzeitung"><a><Button label="Pfarrzeitungen ansehen"/></a></Link>
       </Info>
     </div>
   </Site>

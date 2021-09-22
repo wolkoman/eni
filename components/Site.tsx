@@ -2,13 +2,14 @@ import Navbar from './Navbar';
 import Responsive from './Responsive';
 import React from 'react';
 import Footer from './Footer';
+import Head from 'next/head';
 
 export default function Site({ children, responsive = true, narrow = false, navbar = true, footer = true, title }:{title?: string, children: React.ReactNode, responsive?: boolean , narrow?: boolean, navbar?: boolean, footer?: boolean}){
   return <>
-    <head>
+    <Head>
       <title>eni.wien</title>
       <script type="text/javascript" src="https://app.mailjet.com/statics/js/widget.modal.js"/>
-    </head>
+    </Head>
     <div className="min-h-screen">
     {navbar ? <Navbar/> : null }
     {responsive ?  <Responsive narrow={narrow}>

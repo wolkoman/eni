@@ -35,7 +35,7 @@ export function CalendarPage({}) {
   return <div data-testid="calendar">
     {calendar.error && <div>Beim Laden der Termine ist ein Fehler aufgetreten.</div>}
     {permission[Permission.PrivateCalendarAccess] ?
-      <div className="text-center italic bg-gray-200 text-sm">Private Kalenderansicht</div> : null}
+      <div className="text-center italic bg-gray-200 text-sm py-2">Private Kalenderansicht</div> : null}
     {calendar.error || <div className="flex flex-col md:flex-row bg-gray-100">
       <div className="flex flex-col p-2 lg:p-6 text-lg md:w-52 ">
         <div
