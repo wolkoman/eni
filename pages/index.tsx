@@ -18,12 +18,7 @@ export default function HomePage() {
           In unserem monatlichen Newsletter informieren wir kurz und prägnant über zukünftige, aktuelle und vergangene
           Geschehnisse in unseren drei Pfarren.
         </div>
-        <data id="mj-w-res-data" data-token="8f1b2140d89962bbed083c4c06b6edd4" className="mj-w-data"
-              data-apikey="6LsO" data-w-id="J4h" data-lang="de_DE" data-base="https://app.mailjet.com"
-              data-width="640" data-height="328" data-statics="statics"/>
-        <div className="mj-w-button mj-w-btn" data-token="8f1b2140d89962bbed083c4c06b6edd4">
-          <Button label="Newsletter abonnieren"/>
-        </div>
+        <Link href="/newsletter"><a><Button label="Newsletter abonnieren"/></a></Link>
       </Info>
       <Info title="Pfarrzeitung" image="./info-02.svg">
         <div className="mb-4">
