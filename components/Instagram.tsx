@@ -38,7 +38,7 @@ export function Instagram() {
     {feed?.length === 0 && <div className="my-10" data-testid="instagram">
       <div className="text-xl font-bold my-2">Instagram</div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {Array(3).fill(0)
+        {Array(4).fill(0)
             .map((_, index) =>
                 <div className={`pb-4 ${index === 3 ? 'md:hidden' : ''}`} key={index} data-testid="instagram-item">
                   <div className="relative h-64 bg-gray-100">

@@ -11,7 +11,7 @@ function Stripes() {
 
 export default function Navbar() {
   return <>
-    <div className="fixed top-0 left-0 w-full">
+    <div className="fixed top-0 left-0 w-full z-10">
       <Stripes/>
     </div>
     <div className="pt-4 mb-4 bg-white z-10 relative" data-testid="navbar">

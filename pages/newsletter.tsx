@@ -5,8 +5,7 @@ import Link from 'next/link';
 export default function NewsletterPage() {
     return <Site title="Newsletter">
         <div>
-            Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr
-            finden Sie in den Pfarrzeitungen der Pfarren.
+            In unserem monatlichen Newsletter informieren wir kurz und prägnant über zukünftige, aktuelle und vergangene Geschehnisse in unseren drei Pfarren.
         </div>
         <iframe className="mj-w-res-iframe" frameBorder="0" scrolling="no"
                 src="https://app.mailjet.com/widget/iframe/6LsO/KHM" width="100%" height="600px"/>

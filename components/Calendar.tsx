@@ -1,8 +1,7 @@
-import {Calendar as CalendarType, CalendarEvent} from '../util/calendar-events';
+import {Calendar as CalendarType, Calendar, CalendarEvent} from '../util/calendar-events';
 import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
-import {Calendar} from '../util/calendar-events';
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -13,16 +12,18 @@ const personWords = {
 type Person = keyof typeof personWords;
 
 
-export function CalendarPage({}) {
-  const [filter, setFilter] = useState<{ filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null>(null);
-  const calendar = useCalendarStore(state => state);
-  const [permission, user, userLoaded, userLoad, userPermissions] = useUserStore(state => [state.permissions, state.user, state.loaded, state.load, state.permissions]);
-  useEffect(() => userLoad(), []);
-  useEffect(() => {
-    if (userLoaded) {
-      calendar.load(permission[Permission.PrivateCalendarAccess] ? user?.api_key : undefined);
-    }
-  }, [userLoaded]);
+function PrivateCalendarNotice() {
+  return <div className="text-center italic bg-gray-200 text-sm py-2">Private Kalenderansicht</div>;
+}
+
+function CalendarErrorNotice() {
+  return <div className="bg-red-100 p-4 px-8">
+    Beim Laden der Termine ist ein Fehler aufgetreten. <br/>
+    Für Informationen zu den Terminen kontaktieren Sie die Kanzlei.
+  </div>;
+}
+
+function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
 
   const bgColor = (calendar: CalendarType) => ({
     'all': 'bg-white',
@@ -32,69 +33,93 @@ export function CalendarPage({}) {
     'inzersdorf-organ': 'bg-primary3',
   })[calendar];
 
+  const showCalendar = event.calendar !== 'all' && (filter === null || filter.filterType === 'PERSON');
+  return <div className="flex text-lg font-semibold">
+    <div className="w-10">{event.start.dateTime ?
+      <EventTime date={new Date(event.start.dateTime)}/> : null}</div>
+    <div>
+      <div className={`${bgColor(event.calendar)} w-3 h-3 mx-3 rounded-xl mt-2`}/>
+    </div>
+    <div className="mb-2" data-testid="event">
+      <div>{event.summary} {event.visibility === 'private' ? ' (privat)' : ''}</div>
+      {showCalendar &&
+        <div className="font-normal text-sm leading-4 italic">in {({
+          emmaus: 'Emmaus',
+          inzersdorf: 'St. Nikolaus',
+          neustift: 'Neustift'
+        } as any)[event.calendar]}</div>}
+      <div className="font-normal text-sm leading-4">
+        {event.description && <SanitizeHTML html={event.description?.replace(/\n/g, '<br/>')}/>}
+      </div>
+    </div>
+  </div>;
+}
+
+type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
+
+function applyFilter(events: CalendarEvent[], filter: FilterType) {
+  return events
+     .filter(event =>
+       (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.summary.match(word)))
+       || (filter?.filterType === 'PARISH' && event.calendar === filter.parish)
+       || filter === null)
+
+}
+
+export function CalendarPage({}) {
+  const [filter, setFilter] = useState<FilterType>(null);
+  const calendar = useCalendarStore(state => state);
+  const [permission, user, userLoaded, userLoad, userPermissions] = useUserStore(state => [state.permissions, state.user, state.loaded, state.load, state.permissions]);
+  useEffect(() => userLoad(), []);
+  useEffect(() => {
+    if (userLoaded) {
+      calendar.load(permission[Permission.PrivateCalendarAccess] ? user?.api_key : undefined);
+    }
+  }, [userLoaded]);
+
   return <div data-testid="calendar">
-    {calendar.error && <div>Beim Laden der Termine ist ein Fehler aufgetreten.</div>}
-    {permission[Permission.PrivateCalendarAccess] ?
-      <div className="text-center italic bg-gray-200 text-sm py-2">Private Kalenderansicht</div> : null}
-    {calendar.error || <div className="flex flex-col md:flex-row bg-gray-100">
-      <div className="flex flex-col p-2 lg:p-6 text-lg md:w-52 ">
-        <div
-          className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
-          data-testid="parish-selector">
-          {[
-            {label: 'Alle', action: () => setFilter(null)},
-            {label: 'Emmaus', action: () => setFilter({filterType: 'PARISH', parish: 'emmaus'})},
-            {label: 'St. Nikolaus', action: () => setFilter({filterType: 'PARISH', parish: 'inzersdorf'})},
-            {label: 'Neustift', action: () => setFilter({filterType: 'PARISH', parish: 'neustift'})},
-          ].map(filt => <div
-            className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
-            onClick={filt.action}>{filt.label}</div>)}
+    {calendar.error && <CalendarErrorNotice/>}
+    {calendar.error || <>
+      {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
+      <div className="flex flex-col md:flex-row bg-gray-100">
+        <div className="flex flex-col p-2 lg:p-6 text-lg md:w-52 ">
+          <div
+            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+            data-testid="parish-selector">
+            {[
+              {label: 'Alle', action: () => setFilter(null)},
+              {label: 'Emmaus', action: () => setFilter({filterType: 'PARISH', parish: 'emmaus'})},
+              {label: 'St. Nikolaus', action: () => setFilter({filterType: 'PARISH', parish: 'inzersdorf'})},
+              {label: 'Neustift', action: () => setFilter({filterType: 'PARISH', parish: 'neustift'})},
+            ].map(filt => <div
+              className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+              onClick={filt.action}>{filt.label}</div>)}
+          </div>
+          <div
+            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+            data-testid="person-selector">
+            {[
+              {label: 'Zvonko', action: () => setFilter({filterType: 'PERSON', person: 'brezovski'})},
+              {label: 'David', action: () => setFilter({filterType: 'PERSON', person: 'campos'})},
+              {label: 'Gil', action: () => setFilter({filterType: 'PERSON', person: 'thomas'})},
+              {label: 'Marcin', action: () => setFilter({filterType: 'PERSON', person: 'wojciech'})},
+            ].filter(filt => userPermissions[Permission.PrivateCalendarAccess]).map(filt => <div
+              className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+              onClick={filt.action}>{filt.label}</div>)}
+          </div>
         </div>
-        <div
-          className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
-          data-testid="parish-selector">
-          {[
-            {label: 'Zvonko', action: () => setFilter({filterType: 'PERSON', person: 'brezovski'})},
-            {label: 'David', action: () => setFilter({filterType: 'PERSON', person: 'campos'})},
-            {label: 'Gil', action: () => setFilter({filterType: 'PERSON', person: 'thomas'})},
-            {label: 'Marcin', action: () => setFilter({filterType: 'PERSON', person: 'wojciech'})},
-          ].filter(filt => userPermissions[Permission.PrivateCalendarAccess]).map(filt => <div
-            className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
-            onClick={filt.action}>{filt.label}</div>)}
-        </div>
-      </div>
-      <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
-        {calendar.loaded || <LoadingEvents/>}
-        {Object.entries(calendar.items)
-          ?.map(([date, events]) => [date, events
-            .filter(event => (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.summary.match(word))) || (filter?.filterType === 'PARISH' && event.calendar === filter.parish) || filter === null)] as [string, CalendarEvent[]])
-          .filter(([_, events]) => events.length > 0)
-          .map(([date, events]) => <div key={date}>
-            <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
-            {events.map(event => <div className="flex text-lg font-semibold" key={event.id}>
-              <div className="w-10">{event.start.dateTime ?
-                <EventTime date={new Date(event.start.dateTime)}/> : null}</div>
-              <div>
-                <div className={`${bgColor(event.calendar)} w-3 h-3 mx-3 rounded-xl mt-2`}/>
-              </div>
-              <div className="mb-2" data-testid="event">
-                <div>{event.summary} {event.visibility === 'private' ? ' (privat)' : ''}</div>
-                {event.calendar !== 'all' && (filter === null || filter.filterType === 'PERSON') ?
-                  <div className="font-normal text-sm leading-4 italic">in {({
-                    emmaus: 'Emmaus',
-                    inzersdorf: 'St. Nikolaus',
-                    neustift: 'Neustift'
-                  } as any)[event.calendar]}</div> : null}
-                <div className="font-normal text-sm leading-4">
-                  {event.description
-                    ? <SanitizeHTML html={event.description?.replace(/\n/g, '<br/>')}/>
-                    : null}
-                </div>
-              </div>
+        <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
+          {calendar.loaded || <LoadingEvents/>}
+          {Object.entries(calendar.items)
+            ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
+            .filter(([_, events]) => events.length > 0)
+            .map(([date, events]) => <div key={date}>
+              <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
+              {events.map(event => (<Event key={event.id} event={event} filter={filter}/>))}
             </div>)}
-          </div>)}
+        </div>
       </div>
-    </div>}
+    </>}
   </div>;
 }
 
