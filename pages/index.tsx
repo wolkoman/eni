@@ -35,27 +35,37 @@ function Parishes() {
   return <div className="grid grid-cols-3 gap-4 md:gap-16 py-12">
     {[
       {
-        image: '/emmaus.png',
+        image: '/logos_Emmaus Stroke.svg',
+        imageColor: '/logos_Emmaus Fade.svg',
         name: 'Pfarre Emmaus am Wienerberg',
         description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik
-          errichtet.</>
+          errichtet.</>,
+        address: 'Tesarekplatz 2, 1100 Wien'
       },
       {
-        image: '/inzersdorf.png',
+        image: '/logos_Inzersdorf Stroke.svg',
+        imageColor: '/logos_Inzersdorf Fade.svg',
         name: 'Pfarre Inzersdorf - St. Nikolaus',
         description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der
-          Erzdiözese Wien.</>
+          Erzdiözese Wien.</>,
+        address: 'Inzersdorf Kirchenplatz 1, 1230 Wien'
       },
       {
-        image: '/neustift.png',
+        image: '/logos_Neustift Stroke.svg',
+        imageColor: '/logos_Neustift Fade.svg',
         name: 'Pfarre Inzersdorf - Neustift',
         description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde
-          Maria, Hilfe der Christen geweiht.</>
+          Maria, Hilfe der Christen geweiht.</>,
+        address: 'Don-Bosco-Gasse 14, 1230 Wien'
       },
     ].map(parish => <div key={parish.name}>
-      <img src={parish.image} className="pb-2" alt={parish.name}/>
-      <div className="md:hidden leading-4 text-center font-bold">{parish.name}</div>
+      <div className="flex justify-center">
+        <img src={parish.imageColor} className="pb-2 h-48 relative -top-4" alt={parish.name}/>
+        <img src={parish.image} className="pb-2 h-44 absolute hidden md:block" alt={parish.name}/>
+      </div>
+      <div className="md:hidden leading-4 text-center font-semibold relative -top-8 text-lg">{parish.name}</div>
       <div className="hidden md:block">{parish.description(parish.name)}</div>
+      <div className="leading-4 text-center relative -top-4 md:top-2 md:italic md:text-left">{parish.address}</div>
     </div>)}
   </div>;
 }
