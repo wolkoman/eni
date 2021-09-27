@@ -35,6 +35,13 @@ interface UserStore {
   updatePermission: () => void
 }
 
+interface OverlayStore {
+  display: (component: React.ReactNode, position: {x: number, y: number}) => void,
+  hide: () => void,
+  registerHide: (hide: (() => void)) => void;
+  registerDisplay: (display: ((component: React.ReactNode, position: {x: number, y: number}) => void)) => void,
+}
+
 export const useArticleStore = create<ArticleStore>((set, get) => ({
   items: [],
   loaded: false,
@@ -107,4 +114,19 @@ export const useUserStore = create<UserStore>((set, get) => ({
       }
     }));
   }
+}));
+
+export const useOverlayStore = create<OverlayStore>((set, get) => ({
+  display: (component: React.ReactNode, position: {x: number, y: number}) => {
+    console.log("display not set");
+  },
+  hide: () => {
+    console.log("hide not set");
+  },
+  registerDisplay: (display: ((component: React.ReactNode, position: {x: number, y: number}) => void)) => {
+    set(state => ({...state, display}));
+  },
+  registerHide: (hide: (() => void)) => {
+    set(state => ({...state, hide}));
+  },
 }));
