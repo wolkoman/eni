@@ -16,7 +16,6 @@
     "node-fetch": "^2.6.1",
     "node-sass": "^4.14.1",
     "react": "^17.0.2",
-    "react-anime": "^3.0.3",
     "react-dom": "^17.0.2",
     "react-icons": "^3.11.0",
     "react-markdown": "^4.3.1",
@@ -37,7 +36,8 @@
     "test:skipbuild": "SKIP_BUILD=1 playwright test",
     "test:headed": "playwright test --headed",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "refresh-google": "node scripts/google-refresh-token.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -58,6 +58,7 @@
   "devDependencies": {
     "@playwright/test": "^1.14.1",
     "autoprefixer": "^10.2.4",
+    "dotenv": "^10.0.0",
     "postcss": "^8.2.6",
     "tailwindcss": "^2.0.3"
   }

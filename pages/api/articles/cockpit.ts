@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(401).json({error: "missing item"});
     return;
   }
-  console.log(data.item.title.trim().toUpperCase());
+
   const entry = await cockpit.collectionSave("article", {
     title: data.item.title.trim(),
     preview_image: {path: await loadVaticanImage(data.item.link)},
