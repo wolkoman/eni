@@ -1,10 +1,17 @@
 import Navbar from './Navbar';
 import Responsive from './Responsive';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Footer from './Footer';
 import Head from 'next/head';
 
 export default function Site({ children, responsive = true, narrow = false, navbar = true, footer = true, title }:{title?: string, children: React.ReactNode, responsive?: boolean , narrow?: boolean, navbar?: boolean, footer?: boolean}){
+
+  useEffect(() => {
+    if(window.location.href.includes("next.eni.wien")){
+      window.location.replace("https://eni.wien/redirect");
+    }
+  })
+
   return <>
     <Head>
       <title>eni.wien</title>
