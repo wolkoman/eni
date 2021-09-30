@@ -20,8 +20,22 @@ body {
   background-color: #909090;
 }
 
-.custom-html p{
-  margin: 12px 0;
+.custom-html{
+  p {
+    margin: 12px 0;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  h3 {
+    font-size: 18px;
+    text-decoration: underline;
+  }
 }
 
 * > .on-parent-hover{

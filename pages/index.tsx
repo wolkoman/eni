@@ -32,7 +32,7 @@ export default function HomePage() {
 }
 
 function Parishes() {
-  return <div className="grid grid-cols-3 gap-4 md:gap-16 py-12">
+  return <div className="grid grid-cols-3 gap-4 md:gap-16 py-6 pb-12 md:py-12">
     {[
       {
         image: '/logos_Emmaus Stroke.svg',
@@ -60,12 +60,12 @@ function Parishes() {
       },
     ].map(parish => <div key={parish.name}>
       <div className="flex justify-center">
-        <img src={parish.imageColor} className="pb-2 h-48 relative -top-4" alt={parish.name}/>
-        <img src={parish.image} className="pb-2 h-44 absolute hidden md:block" alt={parish.name}/>
+        <img src={parish.imageColor} className="pb-2 md:h-48 h-32" alt={parish.name}/>
+        <img src={parish.image} className="mt-2 h-44 absolute hidden md:block" alt={parish.name}/>
       </div>
-      <div className="md:hidden leading-4 text-center font-semibold relative -top-8 text-lg">{parish.name}</div>
+      <div className="md:hidden leading-4 text-center font-semibold text-lg">{parish.name}</div>
       <div className="hidden md:block">{parish.description(parish.name)}</div>
-      <div className="leading-4 text-center relative -top-4 md:top-2 md:italic md:text-left">{parish.address}</div>
+      <div className="leading-4 text-center mt-2 md:italic md:text-left">{parish.address}</div>
     </div>)}
   </div>;
 }

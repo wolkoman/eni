@@ -34,7 +34,7 @@ export function CalendarPage({}) {
     {calendar.error || <>
       {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
       <div className="flex flex-col md:flex-row bg-gray-100">
-        <div className="flex flex-col p-2 lg:p-6 text-lg md:w-52 ">
+        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0 shadow">
           <div
             className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
             data-testid="parish-selector">
