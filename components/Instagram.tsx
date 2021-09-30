@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {fetchJson} from '../util/fetch-util';
+import {SectionHeader} from './SectionHeader';
 
 interface InstagramFeedItem {
   id: string,
@@ -17,7 +18,7 @@ export function Instagram() {
   }, [])
 
   return <>{feed.length > 0 && <div className="my-10" data-testid="instagram">
-    <div className="text-xl font-bold my-2">Instagram</div>
+    <SectionHeader>Instagram</SectionHeader>
     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
       {feed
         .filter(item => item.media_type !== 'VIDEO')

@@ -2,6 +2,7 @@ import {Calendar as CalendarType, Calendar, CalendarEvent} from '../util/calenda
 import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
+import {SectionHeader} from './SectionHeader';
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -30,6 +31,7 @@ export function CalendarPage({}) {
     {label: 'Neustift', parish: 'neustift'},
   ];
   return <div data-testid="calendar">
+    <SectionHeader>Kalender</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
       {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
