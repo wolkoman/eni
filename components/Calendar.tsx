@@ -36,7 +36,7 @@ export function CalendarPage({}) {
     {calendar.error || <>
       {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
       <div className="flex flex-col md:flex-row bg-gray-100">
-        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0 shadow">
+        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0">
           <div
             className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
             data-testid="parish-selector">
@@ -68,7 +68,7 @@ export function CalendarPage({}) {
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
             .filter(([_, events]) => events.length > 0)
             .map(([date, events]) => <div key={date}>
-              <div className="mt-5 leading-5"><EventDate date={new Date(date)}/></div>
+              <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
               {events.map(event => (<Event key={event.id} event={event} filter={filter}/>))}
             </div>)}
         </div>
@@ -102,7 +102,7 @@ function ParishTag(props: { calendar: Calendar }) {
     onMouseEnter={(e) => {
       return;
       const position = (e.target as HTMLDivElement).getBoundingClientRect();
-      displayOverlay(<div className="bg-white rounded shadow p-3" onMouseLeave={() => hideOverlay()}>
+      displayOverlay(<div className="bg-white rounded p-3" onMouseLeave={() => hideOverlay()}>
         <DumbParishTag calendar={props.calendar}/>
         <div>Pfarre Emmaus</div>
       </div>, {x: position.x - 10, y: position.y - 10});
@@ -121,19 +121,20 @@ function DumbParishTag(props: { calendar: Calendar }) {
 
 function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
 
-  const showCalendar = event.calendar !== 'all' && (filter === null || filter.filterType === 'PERSON') || true;
+  const displaySummary = event.summary.split("/", 2)[0];
+  const displayPersonen = event.summary.split("/", 2)?.[1];
+
   return <div className="flex text-lg mb-1">
     <div className="w-10 flex-shrink-0 font-semibold">
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
     </div>
-    <div className="mx-2">
-      {showCalendar && <ParishTag calendar={event.calendar}/>}
-    </div>
+    <div className="mx-2"><ParishTag calendar={event.calendar}/></div>
     <div className="mb-2 leading-5" data-testid="event">
       <div className="mt-1 font-semibold">
-        {event.visibility === 'private' && '🔒'} {event.summary}
+        {event.visibility === 'private' && '🔒'} {displaySummary}
       </div>
       <div className="font-normal text-sm leading-4">
+        {displayPersonen && <div>mit {displayPersonen}</div>}
         {event.description && <SanitizeHTML html={event.description?.replace(/\n/g, '<br/>')}/>}
       </div>
     </div>

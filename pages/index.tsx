@@ -5,7 +5,6 @@ import Site from '../components/Site';
 import Button from '../components/Button';
 import Link from 'next/link';
 import {Instagram} from '../components/Instagram';
-import {SectionHeader} from '../components/SectionHeader';
 
 export default function HomePage() {
   return <Site>
@@ -34,7 +33,6 @@ export default function HomePage() {
 
 function Parishes() {
   return <div className=" py-6 pb-12 md:py-12">
-    <SectionHeader>Unsere Pfarren</SectionHeader>
     <div className="grid grid-cols-3 gap-4 md:gap-16">
       {[
         {

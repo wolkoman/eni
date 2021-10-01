@@ -18,7 +18,7 @@ export function getArticleLink(article: CockpitArticle) {
 
 const ArticleShadow = () => <>
   <div className="pt-12 grid grid-cols-2">
-    <div className="h-40 md:h-80 mr-4 rounded-sm bg-gray-200 shadow"/>
+    <div className="h-40 md:h-80 mr-4 rounded-sm bg-gray-200"/>
     <div className="md:pl-8 flex flex-col">
       <div className="uppercase text-primary1 font-bold mb-1 md:mt-3">
         <div className="bg-gray-200 h-6 w-20"/>
