@@ -18,16 +18,16 @@ export function getArticleLink(article: CockpitArticle) {
 
 const ArticleShadow = () => <>
   <div className="pt-12 grid grid-cols-2">
-    <div className="h-40 md:h-80 mr-4 rounded-sm bg-gray-200"/>
+    <div className="h-40 md:h-80 mr-4 rounded-sm shimmer"/>
     <div className="md:pl-8 flex flex-col">
       <div className="uppercase text-primary1 font-bold mb-1 md:mt-3">
-        <div className="bg-gray-200 h-6 w-20"/>
+        <div className="shimmer h-6 w-20"/>
       </div>
       <div className="text-4xl font-bold">
-        <div className="bg-gray-200 h-12 w-56"/>
+        <div className="shimmer h-12 w-56"/>
       </div>
       <div className="text-lg leading-7 mt-2">
-        <div className="bg-gray-200 h-36"/>
+        <div className="shimmer h-36"/>
       </div>
     </div>
   </div>
@@ -38,10 +38,10 @@ const ArticleShadow = () => <>
              className="flex flex-col lg:flex-row p-2">
           <div className="flex flex-col overflow-hidden">
             <div className="text-md uppercase text-primary1 font-bold">
-              <div className="bg-gray-200 h-4 w-20 mb-2"/>
+              <div className="shimmer h-4 w-20 mb-2"/>
             </div>
             <div className="text-lg font-semibold truncate">
-              <div className="bg-gray-200 h-6 w-36"/>
+              <div className="shimmer h-6 w-36"/>
             </div>
           </div>
         </div>)}
