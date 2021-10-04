@@ -1,6 +1,7 @@
 import create from 'zustand'
 import {CalendarEvents} from './calendar-events';
 import {fetchJson} from './fetch-util';
+import {toast} from 'react-toastify';
 
 export enum Permission {
   Articles,
@@ -49,9 +50,9 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
   load: () => {
     if (get().loading || get().loaded) return;
     set(state => ({...state, loading: true}));
-    fetch('/api/articles')
-        .then(response => response.json())
-        .then(data => set(state => ({...state, items: data, loaded: true, loading: false})));
+    fetchJson('/api/articles')
+      .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))
+      .catch(() => toast("Beiträge konnten nicht geladen werden!"));
   }
 }));
 

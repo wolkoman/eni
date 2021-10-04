@@ -34,9 +34,9 @@ export function CalendarPage({}) {
     <SectionHeader>Kalender</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
-      {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
       <div className="flex flex-col md:flex-row bg-gray-100">
-        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0 shadow">
+        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0">
+          {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
           <div
             className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
             data-testid="parish-selector">
@@ -68,7 +68,7 @@ export function CalendarPage({}) {
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
             .filter(([_, events]) => events.length > 0)
             .map(([date, events]) => <div key={date}>
-              <div className="mt-5 leading-5"><EventDate date={new Date(date)}/></div>
+              <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
               {events.map(event => (<Event key={event.id} event={event} filter={filter}/>))}
             </div>)}
         </div>
@@ -78,7 +78,10 @@ export function CalendarPage({}) {
 }
 
 function PrivateCalendarNotice() {
-  return <div className="text-center italic bg-gray-200 text-sm py-2">Private Kalenderansicht</div>;
+  return <div className="px-3 py-1 text-sm pb-4 text-gray-500">
+    <div className="font-bold">Private Kalenderansicht</div>
+    Geben Sie vertrauliche Daten nicht weiter!
+  </div>;
 }
 
 function CalendarErrorNotice() {
@@ -102,7 +105,7 @@ function ParishTag(props: { calendar: Calendar }) {
     onMouseEnter={(e) => {
       return;
       const position = (e.target as HTMLDivElement).getBoundingClientRect();
-      displayOverlay(<div className="bg-white rounded shadow p-3" onMouseLeave={() => hideOverlay()}>
+      displayOverlay(<div className="bg-white rounded p-3" onMouseLeave={() => hideOverlay()}>
         <DumbParishTag calendar={props.calendar}/>
         <div>Pfarre Emmaus</div>
       </div>, {x: position.x - 10, y: position.y - 10});
@@ -121,19 +124,20 @@ function DumbParishTag(props: { calendar: Calendar }) {
 
 function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
 
-  const showCalendar = event.calendar !== 'all' && (filter === null || filter.filterType === 'PERSON') || true;
+  const displaySummary = event.summary.split("/", 2)[0];
+  const displayPersonen = event.summary.split("/", 2)?.[1];
+
   return <div className="flex text-lg mb-1">
     <div className="w-10 flex-shrink-0 font-semibold">
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
     </div>
-    <div className="mx-2">
-      {showCalendar && <ParishTag calendar={event.calendar}/>}
-    </div>
+    <div className="mx-2"><ParishTag calendar={event.calendar}/></div>
     <div className="mb-2 leading-5" data-testid="event">
       <div className="mt-1 font-semibold">
-        {event.visibility === 'private' && '🔒'} {event.summary}
+        {event.visibility === 'private' && '🔒'} {displaySummary}
       </div>
       <div className="font-normal text-sm leading-4">
+        {displayPersonen && <div>mit {displayPersonen}</div>}
         {event.description && <SanitizeHTML html={event.description?.replace(/\n/g, '<br/>')}/>}
       </div>
     </div>
@@ -153,17 +157,21 @@ function applyFilter(events: CalendarEvent[], filter: FilterType) {
 
 const LoadingEvents = () => <>
   <ShadowEventDate/>
-  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width}/>)}
+  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===0}/>)}
   <ShadowEventDate/>
-  {[180, 120].map((width, index) => <ShadowEvent key={index} width={width}/>)}
+  {[180, 120].map((width, index) => <ShadowEvent key={index} width={width} description={index===2}/>)}
   <ShadowEventDate/>
-  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width}/>)}
+  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===1}/>)}
 </>
-const ShadowEventDate = () => <div className="w-32 h-4 bg-gray-200 mb-3 mt-6"/>
-const ShadowEvent = ({width}: { width: number }) => <div className="flex items-center mb-3">
-  <div className="w-11 h-5 bg-gray-200 mr-2"/>
-  <div className="w-3 h-3 bg-gray-200 mr-2 rounded-3xl"/>
-  <div className="h-5 bg-gray-200 mr-2" style={{width}}/>
+const ShadowEventDate = () => <div className="w-32 h-3 mb-3 mt-6 shimmer"/>
+const ShadowEvent = ({width, description}: { width: number, description: boolean }) => <div className="flex mb-3">
+  <div className="w-10 h-4 shimmer mr-3"/>
+  <div className="w-12 h-3 mt-0.5 shimmer mr-2 rounded-sm"/>
+  <div>
+    <div className="h-4 shimmer mr-2" style={{width}}/>
+    <div className="h-2 shimmer mt-1" style={{width, display: description ? '':'none'}}/>
+    <div className="h-2 shimmer mt-1" style={{width, display: description ? '':'none'}}/>
+  </div>
 </div>
 
 export const EventDate = ({date}: { date: Date }) => {

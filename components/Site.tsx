@@ -17,12 +17,14 @@ export default function Site({ children, responsive = true, narrow = false, navb
       <title>eni.wien</title>
       <script type="text/javascript" src="https://app.mailjet.com/statics/js/widget.modal.js"/>
     </Head>
-    <div className="min-h-screen">
-    {navbar ? <Navbar/> : null }
+    <div style={{minHeight: "100vh"}} className="flex flex-col justify-between">
+      <div>
+    {navbar && <Navbar/>}
     {responsive ?  <Responsive narrow={narrow}>
       {title ? <div className="font-bold text-2xl my-4">{title}</div> : null}
       {children}
     </Responsive>: children}
-    {navbar ? <Footer /> : null }
+      </div>
+    {navbar && <Footer />}
   </div></>;
 }

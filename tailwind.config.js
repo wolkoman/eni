@@ -22,6 +22,7 @@ module.exports = {
         gray: {
           100: "#f8f8f8",
           200: "#f4f4f4",
+          300: "#dddddd",
         },
         secondary: { default: "#cd309a" },
         primary1: "#2a6266",
