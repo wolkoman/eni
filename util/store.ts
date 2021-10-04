@@ -63,8 +63,7 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   load: (token?: string) => {
     if (get().loading || get().loaded) return;
     set(state => ({...state, loading: true}));
-    fetch('/api/calendar' + (token ? `?token=${token}` : ''))
-      .then(response => response.json())
+    fetchJson('/api/calendar' + (token ? `?token=${token}` : ''))
       .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))
       .catch(() => set(state => ({...state, items: {}, loaded: true, loading: false, error: true})));
   }
