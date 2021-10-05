@@ -58,7 +58,7 @@ export default function Articles() {
 
   return loading ? <ArticleShadow/> : <>
     <div className="pt-12 grid grid-cols-2 break-words">
-      <div className="h-40 md:h-80 mr-4 rounded-sm shadow" style={{
+      <div className="h-40 md:h-80 mr-4 rounded-sm" style={{
         backgroundImage: `url(${getArticlePreviewImageUrl(articles[0])})`,
         backgroundSize: 'cover',
         backgroundPosition: '50% 50%'

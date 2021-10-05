@@ -37,10 +37,10 @@ export default function Events() {
   return <Site navbar={false} responsive={false}>
     <div className="w-full h-screen relative flex flex-col justify-center items-center bg-gray-100">
       <div className={`z-10 bg-white border border-gray-200 shadow-lg ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
-        <div className="h-1 bg-primary1 w-full"/>
-        <div className="h-1 bg-primary2 w-full"/>
-        <div className="h-1 bg-primary3 w-full"/>
-        <div className="px-8 py-4 flex flex-col items-center">
+        <div className="h-2 bg-primary1 w-full"/>
+        <div className="h-2 bg-primary2 w-full"/>
+        <div className="h-2 bg-primary3 w-full"/>
+        <div className="p-8 flex flex-col items-center">
           <div className="font-bold text-2xl my-3">eni.wien</div>
           <input placeholder="Benutzername" className="my-1 py-1 px-3" value={data.username}
                  onChange={(event) => setData({...data, username: (event as any).target.value})}/>
