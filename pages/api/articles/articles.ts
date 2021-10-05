@@ -6,6 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const urls = {
     inzersdorf: "https://www.pfarresanktnikolaus.at/wp/?feed=rss2",
     vatican: "https://www.vaticannews.va/de.rss.xml",
+    edw: "https://www.erzdioezese-wien.at/backend/rss/atom?channel=news",
   }
 
   // @ts-ignore

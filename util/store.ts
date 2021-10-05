@@ -7,7 +7,8 @@ export enum Permission {
   Articles,
   ReaderPlanning,
   PrivateCalendarAccess,
-  OrganBooking
+  OrganBooking,
+  ExperimentalAccess
 }
 
 interface ArticleStore {
@@ -78,6 +79,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     [Permission.Articles]: false,
     [Permission.ReaderPlanning]: false,
     [Permission.PrivateCalendarAccess]: false,
+    [Permission.ExperimentalAccess]: false,
     [Permission.OrganBooking]: false
   },
   login: (data) => {
@@ -110,6 +112,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         [Permission.Articles]: ['admin'].includes(user?.group ?? ''),
         [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'admin'].includes(user?.group ?? ''),
         [Permission.ReaderPlanning]: ['admin'].includes(user?.group ?? ''),
+        [Permission.ExperimentalAccess]: ['admin'].includes(user?.group ?? ''),
         [Permission.OrganBooking]: ['admin', 'OrganAccess'].includes(user?.group ?? '')
       }
     }));

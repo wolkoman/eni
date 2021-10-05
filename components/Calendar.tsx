@@ -91,12 +91,19 @@ function CalendarErrorNotice() {
   </div>;
 }
 
-const bgColor = (calendar: CalendarType) => ({
+export const bgColor = (calendar: CalendarType) => ({
   'all': 'bg-white',
   'emmaus': 'bg-primary1 text-white',
   'inzersdorf': 'bg-primary2 text-white',
   'neustift': 'bg-primary3',
   'inzersdorf-organ': 'bg-primary3',
+})[calendar];
+export const parishName = (calendar: CalendarType) => ({
+  'all': 'Generell',
+  'emmaus': 'Pfarre Emmaus am Wienerberg',
+  'inzersdorf': 'Pfarre Inzersdorf (St. Nikolaus)',
+  'neustift': 'Pfarre Inzersdorf-Neustift',
+  'inzersdorf-organ': 'Orgel St. Nikolaus',
 })[calendar];
 
 function ParishTag(props: { calendar: Calendar }) {
@@ -122,26 +129,29 @@ function DumbParishTag(props: { calendar: Calendar }) {
   }[props.calendar as 'emmaus'|'inzersdorf'|'neustift']}</div>
 }
 
-function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
-
-  const displaySummary = event.summary.split("/", 2)[0];
-  const displayPersonen = event.summary.split("/", 2)?.[1];
-
+export function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
   return <div className="flex text-lg mb-1">
     <div className="w-10 flex-shrink-0 font-semibold">
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
     </div>
     <div className="mx-2"><ParishTag calendar={event.calendar}/></div>
     <div className="mb-2 leading-5" data-testid="event">
-      <div className="mt-1 font-semibold">
-        {event.visibility === 'private' && '🔒'} {displaySummary}
-      </div>
-      <div className="font-normal text-sm leading-4">
-        {displayPersonen && <div>mit {displayPersonen}</div>}
-        {event.description && <SanitizeHTML html={event.description?.replace(/\n/g, '<br/>')}/>}
-      </div>
+      <div className="mt-1 font-semibold"><EventSummary event={event}/></div>
+      <div className="font-normal text-sm leading-4"><EventDescription event={event}/></div>
     </div>
   </div>;
+}
+
+export function EventSummary(props: {event: CalendarEvent}){
+  const displaySummary = props.event.summary.split("/", 2)[0];
+  return <>{props.event.visibility === 'private' && '🔒'} {displaySummary}</>;
+}
+export function EventDescription(props: {event: CalendarEvent}){
+  const displayPersonen = props.event.summary.split("/", 2)?.[1];
+  return <>
+    {displayPersonen && <div>mit {displayPersonen}</div>}
+    {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
+  </>;
 }
 
 type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
@@ -176,10 +186,10 @@ const ShadowEvent = ({width, description}: { width: number, description: boolean
 
 export const EventDate = ({date}: { date: Date }) => {
   const day = date.getDay();
-  return <div className={`${day ? '' : 'underline'}`}>
+  return <span className={`${day ? '' : 'underline'}`}>
     {['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day]},{' '}
     {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}
-  </div>;
+  </span>;
 }
 
 export const EventTime = (props: { date: Date }) => {

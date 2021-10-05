@@ -5,11 +5,13 @@ import Site from '../components/Site';
 import Button from '../components/Button';
 import Link from 'next/link';
 import {Instagram} from '../components/Instagram';
+import {ComingUpComponent} from "../components/ComingUp";
 
 export default function HomePage() {
   return <Site>
     <Articles/>
     <Parishes/>
+    <ComingUpComponent/>
     <CalendarPage/>
     <Instagram/>
     <div className="flex flex-col md:flex-row my-14">
