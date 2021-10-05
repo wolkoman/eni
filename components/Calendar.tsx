@@ -1,8 +1,9 @@
-import {Calendar as CalendarType, Calendar, CalendarEvent} from '../util/calendar-events';
+import {Calendar, CalendarEvent} from '../util/calendar-events';
 import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
 import {SectionHeader} from './SectionHeader';
+import {getCalendarInfo} from "../util/calendar-info";
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -46,7 +47,7 @@ export function CalendarPage({}) {
               {filt.label}
               {filt.parish &&
               <div
-                className={`absolute bottom-0 left-0 h-0.5 transition-all ${bgColor(filt?.parish)} ${filter?.filterType === 'PARISH' && filter.parish === filt.parish ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>}
+                className={`absolute bottom-0 left-0 h-0.5 transition-all ${getCalendarInfo(filt?.parish).className} ${filter?.filterType === 'PARISH' && filter.parish === filt.parish ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>}
             </div>)}
           </div>
           <div
@@ -91,21 +92,6 @@ function CalendarErrorNotice() {
   </div>;
 }
 
-export const bgColor = (calendar: CalendarType) => ({
-  'all': 'bg-white',
-  'emmaus': 'bg-primary1 text-white',
-  'inzersdorf': 'bg-primary2 text-white',
-  'neustift': 'bg-primary3',
-  'inzersdorf-organ': 'bg-primary3',
-})[calendar];
-export const parishName = (calendar: CalendarType) => ({
-  'all': 'Generell',
-  'emmaus': 'Pfarre Emmaus am Wienerberg',
-  'inzersdorf': 'Pfarre Inzersdorf (St. Nikolaus)',
-  'neustift': 'Pfarre Inzersdorf-Neustift',
-  'inzersdorf-organ': 'Orgel St. Nikolaus',
-})[calendar];
-
 function ParishTag(props: { calendar: Calendar }) {
   const [displayOverlay, hideOverlay] = useOverlayStore(state => [state.display, state.hide]);
   return <div
@@ -122,7 +108,7 @@ function ParishTag(props: { calendar: Calendar }) {
 }
 function DumbParishTag(props: { calendar: Calendar }) {
   return <div
-    className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded ${bgColor(props.calendar)}`}>{{
+    className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded ${getCalendarInfo(props.calendar).className}`}>{{
     emmaus: 'Emmaus',
     inzersdorf: 'Nikolaus',
     neustift: 'Neustift',
