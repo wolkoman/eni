@@ -5,8 +5,8 @@ import Site from '../components/Site';
 import Button from '../components/Button';
 import Link from 'next/link';
 import {Instagram} from '../components/Instagram';
-import {ComingUpComponent} from "../components/ComingUp";
-import {Parishes} from "../components/parishes";
+import {ComingUpComponent} from '../components/ComingUp';
+import {Parishes} from '../components/parishes';
 
 export default function HomePage() {
   return <Site>
