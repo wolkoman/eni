@@ -40,25 +40,23 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
 
   const organEvents = await getEventsFromCalendar(calendarIds['inzersdorf-organ'], 'Orgel', false, dayStart, dayEnd);
   const inzersdorfEvents = (await getEventsFromCalendar(calendarIds['inzersdorf'], 'Orgel', false, dayStart, dayEnd))
-    .filter(event => event.summary.match(/(Messe|Taufe|Gottesdienst)/gi));
+    .filter(event => event.summary.match(/(Messe|Taufe|Gottesdienst|Taufe|Chor|Kirche)/gi));
   const events = [...organEvents, ...inzersdorfEvents];
 
   if (events.some(event => event.wholeday)) {
     return [];
   }
-
   return slots(dayStart).filter(getHour => events.length === 0 || events.every(event => !dateRangeOverlaps(
     new Date(event.start.dateTime).getTime(),
     new Date(event.end.dateTime).getTime(),
-    new Date(getHour(0).toInstant().epochSeconds).getTime(),
-    new Date(getHour(1).toInstant().epochSeconds).getTime(),
+    new Date(getHour(0).toInstant().epochMilliseconds).getTime(),
+    new Date(getHour(1).toInstant().epochMilliseconds).getTime(),
   ))).map(getHour => getHour(0).toInstant().toString());
 }
 
 function dateRangeOverlaps(a_start: number, a_end: number, b_start: number, b_end: number) {
-  console.log(new Date(a_start), new Date(a_end), new Date(b_start), new Date(b_end));
-  if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
-  if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+  if (a_start <= b_start && b_start < a_end) return true; // b starts in a
+  if (a_start < b_end && b_end <= a_end) return true; // b ends in a
   if (b_start < a_start && a_end < b_end) return true; // a in b
   return false;
 }

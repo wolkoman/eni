@@ -27,13 +27,17 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
   const date = () => new Date(req.query.slot as string);
   const slots = await getAvailableOrganSlotsForDate(date());
   if (!slots.includes(req.query.slot as string)) {
-    res.status(400).json({errorMessage: 'Slot not available'});
+    res.status(400).json({errorMessage: 'Slot nicht verfügbar'});
+    return;
+  }
+  if (date().getTime() < new Date().getTime()) {
+    res.status(400).json({errorMessage: 'Slot liegt in der Vergangenheit'});
     return;
   }
 
   const startDateTime = date();
   const endDateTime = date();
-  endDateTime.setMinutes(endDateTime.getMinutes() + 50);
+  endDateTime.setMinutes(endDateTime.getMinutes() + 60);
 
   const oauth2Client = await getCachedGoogleAuthClient();
   const calendar = google.calendar('v3');

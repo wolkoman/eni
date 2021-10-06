@@ -30,13 +30,15 @@ export default function Orgel() {
   }
 
   function loadAvailableHours(value: string) {
-    setPartialData({date: value, slots: []});
+    setPartialData({date: value, slots: [], loading: true});
     fetchJson(`/api/organ-booking/check?token=${user?.api_key}&date=${value}`)
-      .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots}));
+      .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots, loading: false}));
   }
 
   function bookHour(hour: string) {
     setPartialData(data => ({availableSlots: data.availableSlots.filter(h => h !== hour)}))
+    //toast.promise(new Promise((res,rej) => setTimeout(rej, 1000)), {error: 'error', success: '', pending: 'p'});
+    //return;
     fetchJson(`/api/organ-booking/book?token=${user?.api_key}&slot=${hour}&userId=${user?._id}`, {},
       {pending: 'Buche Orgel...', success: 'Buchung erfolgreich', error: 'Buchung war nicht erfolgreich'})
       .then((booking) => setPartialData(data => ({
@@ -60,9 +62,12 @@ export default function Orgel() {
     fetchJson(`/api/organ-booking/delete?token=${user?.api_key}&id=${booking.id}`, {},
       {pending: 'Lösche Buchung', success: 'Buchung gelöscht', error: 'Fehler ist aufgetreten'})
       .then(() => {
-        setPartialData({myBookings: data.myBookings.filter(b => b.id !== booking.id)});
+        const myBookings = data.myBookings.filter(b => b.id !== booking.id);
         if(data.date === booking.start.dateTime.substring(0, 10)){
-          setPartialData(data => ({availableSlots: [...data.availableSlots, booking.start.dateTime.substring(11,16)]}));
+          console.log([...data.availableSlots, new Date(booking.start.dateTime).toISOString()]);
+          setPartialData(data => ({myBookings, availableSlots: [...data.availableSlots, new Date(booking.start.dateTime).toISOString()]}));
+        }else{
+          setPartialData({myBookings});
         }
       })
       .catch(() => setMyBookingStatus(booking, true));
@@ -72,10 +77,11 @@ export default function Orgel() {
 
     <div className="flex flex-col md:flex-row">
 
-      <div className="mb-8 md:w-72 md:border-r md:pr-4">
+      <div className="mb-8 md:w-72 md:border-r md:pr-4 flex-shrink-0">
         <div className="text-lg mb-3">Meine Buchungen</div>
         <div>
           {data.myBookings.map(booking => <div
+            key={booking.id}
             className={`flex bg-gray-200 mb-2 px-3 py-2 justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
             <div className="flex">
               <div className="w-20 font-bold">
@@ -103,12 +109,17 @@ export default function Orgel() {
         <div className="mt-3 mb-1 text-sm">Verfügbare Zeitslots</div>
         <div className="mb-2 flex flex-wrap">
           {
-            data.slots.map(hour => {
-              const unavailable = !data.availableSlots.includes(hour);
+            data.loading && Array(10).fill(0).map((_,index) => <div key={index} className={`w-24 h-14 mr-2 mb-2 shimmer`}/>)
+          }
+          {
+            data.slots.map(slot => {
+              const unavailable = !data.availableSlots.includes(slot);
               return <div
-                key={hour}
-                className={`px-3 py-1 mr-2 mb-2 ${unavailable ? 'bg-red-800 text-white' : 'cursor-pointer hover:bg-primary1 hover:text-white bg-gray-200'}`}
-                onClick={() => unavailable ? null : bookHour(hour)}>{hour}</div>;
+                key={slot}
+                className={`w-24 h-14 text-center mr-2 mb-2 flex justify-center items-center ${unavailable ? 'cursor-default opacity-50' : 'cursor-pointer hover:bg-primary1 hover:text-white bg-gray-200'}`}
+                onClick={() => unavailable ? null : bookHour(slot)}>
+                <div>{new Date(slot).toLocaleTimeString().substring(0,5)}</div>
+              </div>;
             })
           }
         </div>
