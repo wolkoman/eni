@@ -1,7 +1,7 @@
 import {Calendar} from "./calendar-events";
 import React from "react";
 
-interface CalendarInfo {
+export interface CalendarInfo {
   className: string,
   fullName: string,
   shortName: string,

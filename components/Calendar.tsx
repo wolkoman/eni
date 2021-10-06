@@ -3,7 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {Permission, useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
 import {SectionHeader} from './SectionHeader';
-import {getCalendarInfo} from "../util/calendar-info";
+import {CalendarInfo, getCalendarInfo} from "../util/calendar-info";
+import calendar from "../pages/api/calendar";
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -25,12 +26,6 @@ export function CalendarPage({}) {
     }
   }, [userLoaded]);
 
-  let parishFilters: { label: string, parish?: Calendar }[] = [
-    {label: 'Alle'},
-    {label: 'Emmaus', parish: 'emmaus'},
-    {label: 'St. Nikolaus', parish: 'inzersdorf'},
-    {label: 'Neustift', parish: 'neustift'},
-  ];
   return <div data-testid="calendar">
     <SectionHeader>Kalender</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
@@ -38,30 +33,7 @@ export function CalendarPage({}) {
       <div className="flex flex-col md:flex-row bg-gray-100">
         <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0">
           {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
-          <div
-            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
-            data-testid="parish-selector">
-            {parishFilters.map(filt => <div
-              className={`px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer relative`} key={filt.label}
-              onClick={() => setFilter(filt.parish ? {filterType: 'PARISH', parish: filt.parish} : null)}>
-              {filt.label}
-              {filt.parish &&
-              <div
-                className={`absolute bottom-0 left-0 h-0.5 transition-all ${getCalendarInfo(filt?.parish).className} ${filter?.filterType === 'PARISH' && filter.parish === filt.parish ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>}
-            </div>)}
-          </div>
-          <div
-            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
-            data-testid="person-selector">
-            {[
-              {label: 'Zvonko', action: () => setFilter({filterType: 'PERSON', person: 'brezovski'})},
-              {label: 'David', action: () => setFilter({filterType: 'PERSON', person: 'campos'})},
-              {label: 'Gil', action: () => setFilter({filterType: 'PERSON', person: 'thomas'})},
-              {label: 'Marcin', action: () => setFilter({filterType: 'PERSON', person: 'wojciech'})},
-            ].filter(filt => userPermissions[Permission.PrivateCalendarAccess]).map(filt => <div
-              className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
-              onClick={filt.action}>{filt.label}</div>)}
-          </div>
+          <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={userPermissions}/>
         </div>
         <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
           {calendar.loaded || <LoadingEvents/>}
@@ -78,6 +50,48 @@ export function CalendarPage({}) {
   </div>;
 }
 
+function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Record<Permission, boolean>}) {
+  const parishFilters: {label: string, parish: Calendar}[] = [
+    {label: 'Emmaus', parish: 'emmaus'},
+    {label: 'St. Nikolaus', parish: 'inzersdorf'},
+    {label: 'Neustift', parish: 'neustift'},
+  ];
+  const personFilters: {label: string, person: Person}[] = [
+    {label: "Zvonko", person: 'brezovski'},
+    {label: "David", person: 'campos'},
+    {label: "Gil", person: 'thomas'},
+    {label: "Marcin", person: 'wojciech'},
+  ];
+  return <>
+    <div className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0">
+      <div
+        className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer"
+        onClick={() => props.setFilter(null)}>Alle</div>
+    </div>
+    <div
+      className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+      data-testid="parish-selector">
+      {parishFilters.map(filt => <div
+          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+          onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.parish})}>
+          {filt.label}
+          {filt.parish && <div className={`absolute bottom-0 left-0 h-0.5 transition-all ${getCalendarInfo(filt?.parish).className} ${props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>}
+        </div>
+      )}
+    </div>
+    {props.userPermissions[Permission.PrivateCalendarAccess] && <div
+      className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+      data-testid="parish-selector">
+      {personFilters.map(filt => <div
+          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+          onClick={() => props.setFilter({filterType: 'PERSON', person: filt.person})}>
+          {filt.label}
+        </div>
+      )}
+    </div>}
+  </>;
+}
+
 function PrivateCalendarNotice() {
   return <div className="px-3 py-1 text-sm pb-4 text-gray-500">
     <div className="font-bold">Private Kalenderansicht</div>
@@ -92,23 +106,32 @@ function CalendarErrorNotice() {
   </div>;
 }
 
+function ParishTagOverlay(props: {onMouseLeave: () => void, calendar: Calendar }) {
+  const calendarInfo = getCalendarInfo(props.calendar);
+  return <div className={`bg-white rounded p-3 shadow-xl flex ${calendarInfo.className}`} onMouseLeave={props.onMouseLeave} onScroll={() => console.log("SCROLL")}>
+    <div>
+      <DumbParishTag calendar={props.calendar}/>
+    </div>
+    <div className="px-4">
+      <div className="font-bold">{calendarInfo.fullName}</div>
+      <div className="text-sm">{calendarInfo.address}</div>
+    </div>
+  </div>;
+}
+
 function ParishTag(props: { calendar: Calendar }) {
   const [displayOverlay, hideOverlay] = useOverlayStore(state => [state.display, state.hide]);
   return <div
     onMouseEnter={(e) => {
-      return;
       const position = (e.target as HTMLDivElement).getBoundingClientRect();
-      displayOverlay(<div className="bg-white rounded p-3" onMouseLeave={() => hideOverlay()}>
-        <DumbParishTag calendar={props.calendar}/>
-        <div>Pfarre Emmaus</div>
-      </div>, {x: position.x - 10, y: position.y - 10});
+      displayOverlay(<ParishTagOverlay onMouseLeave={() => hideOverlay()} calendar={props.calendar}/>, {x: position.x - 10, y: position.y - 10});
     }}>
     <DumbParishTag calendar={props.calendar}/>
   </div>;
 }
 function DumbParishTag(props: { calendar: Calendar }) {
   return <div
-    className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded ${getCalendarInfo(props.calendar).className}`}>{{
+    className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${getCalendarInfo(props.calendar).className}`}>{{
     emmaus: 'Emmaus',
     inzersdorf: 'Nikolaus',
     neustift: 'Neustift',
