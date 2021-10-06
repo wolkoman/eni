@@ -52,5 +52,4 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
   }).catch((err) => {
     res.status(500).json({err});
   });
-
 }
