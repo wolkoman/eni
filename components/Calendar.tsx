@@ -72,7 +72,7 @@ function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterT
       className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
       data-testid="parish-selector">
       {parishFilters.map(filt => <div
-          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer relative" key={filt.label}
           onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.parish})}>
           {filt.label}
           {filt.parish && <div className={`absolute bottom-0 left-0 h-0.5 transition-all ${getCalendarInfo(filt?.parish).className} ${props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>}
@@ -83,7 +83,7 @@ function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterT
       className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
       data-testid="parish-selector">
       {personFilters.map(filt => <div
-          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer" key={filt.label}
+          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer relative" key={filt.label}
           onClick={() => props.setFilter({filterType: 'PERSON', person: filt.person})}>
           {filt.label}
         </div>
@@ -108,9 +108,11 @@ function CalendarErrorNotice() {
 
 function ParishTagOverlay(props: {onMouseLeave: () => void, calendar: Calendar }) {
   const calendarInfo = getCalendarInfo(props.calendar);
-  return <div className={`bg-white rounded p-3 shadow-xl flex ${calendarInfo.className}`} onMouseLeave={props.onMouseLeave} onScroll={() => console.log("SCROLL")}>
+  return <div className={`bg-white rounded p-3 shadow-xl flex ${calendarInfo.className}`} onScroll={() => console.log("SCROLL")}>
     <div>
-      <DumbParishTag calendar={props.calendar}/>
+      <div onMouseLeave={props.onMouseLeave}>
+        <DumbParishTag calendar={props.calendar} colorless={true}/>
+      </div>
     </div>
     <div className="px-4">
       <div className="font-bold">{calendarInfo.fullName}</div>
@@ -129,13 +131,9 @@ function ParishTag(props: { calendar: Calendar }) {
     <DumbParishTag calendar={props.calendar}/>
   </div>;
 }
-function DumbParishTag(props: { calendar: Calendar }) {
-  return <div
-    className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${getCalendarInfo(props.calendar).className}`}>{{
-    emmaus: 'Emmaus',
-    inzersdorf: 'Nikolaus',
-    neustift: 'Neustift',
-  }[props.calendar as 'emmaus'|'inzersdorf'|'neustift']}</div>
+function DumbParishTag(props: { calendar: Calendar, colorless?: boolean }) {
+  const info = getCalendarInfo(props.calendar);
+  return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless ? 'bg-white text-black' : info.className}`}>{info.tagName}</div>
 }
 
 export function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
