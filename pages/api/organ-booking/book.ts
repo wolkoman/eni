@@ -3,7 +3,6 @@ import {calendarIds, getCachedGoogleAuthClient, getEventsFromCalendar} from '../
 import {cockpit} from '../../../util/cockpit-sdk';
 import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';
-import {Temporal} from '@js-temporal/polyfill';
 
 export default async function (req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 
@@ -24,15 +23,15 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
     return;
   }
 
-  const date = () => new Date(req.query.slot as string);
-  const slots = await getAvailableOrganSlotsForDate(date());
-  if (!slots.includes(req.query.slot as string)) {
+
+  const slots = await getAvailableOrganSlotsForDate(req.query.date);
+  if (!slots.includes(req.query.hour)) {
     res.status(400).json({errorMessage: 'Slot not available'});
     return;
   }
 
-  const startDateTime = date();
-  const endDateTime = date();
+  const startDateTime = new Date(`${req.query.date} ${req.query.hour}`);
+  const endDateTime = new Date(`${req.query.date} ${req.query.hour}`);
   endDateTime.setMinutes(endDateTime.getMinutes() + 50);
 
   const oauth2Client = await getCachedGoogleAuthClient();
@@ -52,4 +51,5 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
   }).catch((err) => {
     res.status(500).json({err});
   });
+
 }

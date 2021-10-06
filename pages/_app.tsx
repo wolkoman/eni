@@ -29,10 +29,7 @@ function OverlayContainer() {
     });
     registerHide(() => {
       setComponent(undefined);
-    });
-    window.addEventListener('scroll', (event) => {
-      setComponent(undefined);
-    });
+    })
   }, []);
   return component ? <div className="fixed" style={{top: position?.y, left: position?.x}}>{component}</div> : <div/>;
 }
