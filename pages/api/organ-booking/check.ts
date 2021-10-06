@@ -1,6 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {calendarIds, getEventsFromCalendar} from '../../../util/calendar-events';
 import {cockpit} from '../../../util/cockpit-sdk';
+import {Temporal} from '@js-temporal/polyfill';
 
 const isContained = (check: Date, from: Date, to: Date) => (check.getTime() < to.getTime() && check.getTime() >= from.getTime());
 
@@ -16,14 +17,24 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  res.json({slots , availableSlots: await getAvailableOrganSlotsForDate(req.query.date as string)});
+  const date: Date = new Date(req.query.date as string);
+
+  res.json({slots: slots(date).map(getHour => getHour(0).toInstant().toString()), availableSlots: await getAvailableOrganSlotsForDate(date)});
 }
 
-const slots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-export async function getAvailableOrganSlotsForDate(date: string): Promise<string[]> {
+const slots = (day: Date) => [9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(hour => (addedHour: number) => Temporal.ZonedDateTime.from({
+  timeZone: 'Europe/Vienna',
+  hour: hour + addedHour,
+  day: day.getDate(),
+  month: day.getMonth()+1,
+  year: day.getFullYear(),
+}));
+const slotDuration = 1;
 
-  const dayStart = new Date(date as string);
-  const dayEnd = new Date(date as string);
+export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[]> {
+
+  const dayStart = new Date(date.toISOString());
+  const dayEnd = new Date(date.toISOString());
   dayStart.setHours(0);
   dayEnd.setHours(24);
 
@@ -32,31 +43,17 @@ export async function getAvailableOrganSlotsForDate(date: string): Promise<strin
     .filter(event => event.summary.match(/(Messe|Taufe|Gottesdienst)/gi));
   const events = [...organEvents, ...inzersdorfEvents];
 
-
   if (events.some(event => event.wholeday)) {
     return [];
   }
 
-  return slots.filter(hour => {
-    const slotStart = new Date(`${date}T${hour}:00.000Z`);
-    const slotEnd = new Date(`${date}T${hour}:00.000Z`);
-    let timezoneOffset = new Date(date as string).getTime() < new Date('2021-10-31T03:00:00.000Z').getTime() ? 2 : 1;
-    slotStart.setHours(slotStart.getHours() - timezoneOffset);
-    slotEnd.setMinutes(50);
-    slotEnd.setHours(slotEnd.getHours() - timezoneOffset);
-
-    return events.length === 0 || events.every(event => {
-      const overlaps = dateRangeOverlaps(
-        new Date(event.start.dateTime).getTime(),
-        new Date(event.end.dateTime).getTime(),
-        slotStart.getTime(),
-        slotEnd.getTime()
-      );
-      return !overlaps;
-    });
-  });
+  return slots(dayStart).filter(getHour => events.length === 0 || events.every(event => !dateRangeOverlaps(
+    new Date(event.start.dateTime).getTime(),
+    new Date(event.end.dateTime).getTime(),
+    new Date(getHour(0).toInstant().epochSeconds).getTime(),
+    new Date(getHour(1).toInstant().epochSeconds).getTime(),
+  ))).map(getHour => getHour(0).toInstant().toString());
 }
-
 
 function dateRangeOverlaps(a_start: number, a_end: number, b_start: number, b_end: number) {
   console.log(new Date(a_start), new Date(a_end), new Date(b_start), new Date(b_end));

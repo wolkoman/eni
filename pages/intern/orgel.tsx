@@ -37,7 +37,7 @@ export default function Orgel() {
 
   function bookHour(hour: string) {
     setPartialData(data => ({availableSlots: data.availableSlots.filter(h => h !== hour)}))
-    fetchJson(`/api/organ-booking/book?token=${user?.api_key}&date=${data.date}&hour=${hour}&userId=${user?._id}`, {},
+    fetchJson(`/api/organ-booking/book?token=${user?.api_key}&slot=${hour}&userId=${user?._id}`, {},
       {pending: 'Buche Orgel...', success: 'Buchung erfolgreich', error: 'Buchung war nicht erfolgreich'})
       .then((booking) => setPartialData(data => ({
         availableSlots: data.availableSlots.filter(h => h !== hour),
