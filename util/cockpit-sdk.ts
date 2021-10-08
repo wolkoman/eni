@@ -1,4 +1,3 @@
-// @ts-ignore
 import CockpitSDK from "cockpit-sdk";
 
 export const cockpit = new CockpitSDK({

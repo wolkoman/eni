@@ -4,11 +4,13 @@ import {useUserStore} from '../util/store';
 import Button from '../components/Button';
 import {toast} from 'react-toastify';
 import {useState} from '../util/use-state-util';
+import {useRouter} from 'next/router';
 
 export default function Events() {
   const [data, setData, setPartialData] = useState({username: '', password: ''});
   const [disabled, setDisabled] = useState(false);
   const [user, _login, loading] = useUserStore(state => [state.user, state.login, state.loading])
+  const router = useRouter();
 
   useEffect(() => {
     if (!user?.active) {
@@ -23,10 +25,9 @@ export default function Events() {
       success: 'Anmeldung erfolgreich'
     }).then(() => {
       setDisabled(true);
-      location.replace('/intern');
+      router.push('/intern');
     }).catch(() => {
       setPartialData({password: ''});
-      console.log(data);
     });
   }
 

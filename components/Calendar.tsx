@@ -1,10 +1,10 @@
 import {Calendar, CalendarEvent} from '../util/calendar-events';
 import React, {useEffect, useState} from 'react';
-import {Permission, useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
+import {useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
 import {SectionHeader} from './SectionHeader';
-import {CalendarInfo, getCalendarInfo} from "../util/calendar-info";
-import calendar from "../pages/api/calendar";
+import {getCalendarInfo} from '../util/calendar-info';
+import {Permission, Permissions} from '../util/verify';
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -18,11 +18,11 @@ type Person = keyof typeof personWords;
 export function CalendarPage({}) {
   const [filter, setFilter] = useState<FilterType>(null);
   const calendar = useCalendarStore(state => state);
-  const [permission, user, userLoaded, userLoad, userPermissions] = useUserStore(state => [state.permissions, state.user, state.loaded, state.load, state.permissions]);
+  const [permissions, jwt, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.loaded, state.load]);
   useEffect(() => userLoad(), []);
   useEffect(() => {
     if (userLoaded) {
-      calendar.load(permission[Permission.PrivateCalendarAccess] ? user?.api_key : undefined);
+      calendar.load(jwt);
     }
   }, [userLoaded]);
 
@@ -32,8 +32,8 @@ export function CalendarPage({}) {
     {calendar.error || <>
       <div className="flex flex-col md:flex-row bg-gray-100">
         <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0">
-          {permission[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
-          <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={userPermissions}/>
+          {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
+          <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
         </div>
         <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
           {calendar.loaded || <LoadingEvents/>}
@@ -50,7 +50,7 @@ export function CalendarPage({}) {
   </div>;
 }
 
-function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Record<Permission, boolean>}) {
+function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions}) {
   const parishFilters: {label: string, parish: Calendar}[] = [
     {label: 'Emmaus', parish: 'emmaus'},
     {label: 'St. Nikolaus', parish: 'inzersdorf'},
@@ -108,7 +108,7 @@ function CalendarErrorNotice() {
 
 function ParishTagOverlay(props: {onMouseLeave: () => void, calendar: Calendar }) {
   const calendarInfo = getCalendarInfo(props.calendar);
-  return <div className={`bg-white rounded p-3 shadow-xl flex ${calendarInfo.className}`} onScroll={() => console.log("SCROLL")}>
+  return <div className={`bg-white rounded p-3 shadow-xl flex ${calendarInfo.className}`}>
     <div>
       <div onMouseLeave={props.onMouseLeave}>
         <DumbParishTag calendar={props.calendar} colorless={true}/>

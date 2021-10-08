@@ -1,18 +1,13 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {calendarIds, getEventsFromCalendar} from '../../../util/calendar-events';
-import {cockpit} from '../../../util/cockpit-sdk';
 import {Temporal} from '@js-temporal/polyfill';
-
-const isContained = (check: Date, from: Date, to: Date) => (check.getTime() < to.getTime() && check.getTime() >= from.getTime());
+import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 
-  const organBookingAccess =
-    req.query.token && await fetch(`${cockpit.host}/api/singletons/get/OrganBookingAccess?token=${req.query.token}`)
-      .then(x => x.text())
-      .then(x => x === '');
+  const user = resolveUserFromRequest(req);
 
-  if (!organBookingAccess) {
+  if (user === undefined ||!user.permissions[Permission.OrganBooking]) {
     res.status(401).json({});
     return;
   }
@@ -40,7 +35,7 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
 
   const organEvents = await getEventsFromCalendar(calendarIds['inzersdorf-organ'], 'Orgel', false, dayStart, dayEnd);
   const inzersdorfEvents = (await getEventsFromCalendar(calendarIds['inzersdorf'], 'Orgel', false, dayStart, dayEnd))
-    .filter(event => event.summary.match(/(Messe|Taufe|Gottesdienst|Taufe|Chor|Kirche)/gi));
+    .filter(event => (event.summary+event.description).match(/(Messe|Taufe|Gottesdienst|Taufe|Chor|Kirche)/gi));
   const events = [...organEvents, ...inzersdorfEvents];
 
   if (events.some(event => event.wholeday)) {

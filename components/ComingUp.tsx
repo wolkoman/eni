@@ -1,8 +1,9 @@
 import React from 'react';
-import {Permission, useCalendarStore, useUserStore} from '../util/store';
+import {useCalendarStore, useUserStore} from '../util/store';
 import {SectionHeader} from './SectionHeader';
 import {EventDate, EventDescription, EventSummary, EventTime} from "./Calendar";
 import {getCalendarInfo} from "../util/calendar-info";
+import {Permission} from '../util/verify';
 
 export function ComingUpComponent({}) {
   const calendar = useCalendarStore(state => state);

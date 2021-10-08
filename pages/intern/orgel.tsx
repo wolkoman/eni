@@ -9,7 +9,7 @@ import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
 
 export default function Orgel() {
-  const user = useUserStore(state => state.user)
+  const jwt = useUserStore(state => state.jwt)
   const [data, setData, setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], loading: boolean }>({
     date: '',
     slots: [],
@@ -20,18 +20,19 @@ export default function Orgel() {
 
 
   useEffect(() => {
-    if (user)
+    if (jwt)
       loadMyBooking();
-  }, [user]);
+  }, [jwt]);
 
   function loadMyBooking() {
-    fetchJson(`/api/organ-booking/my?token=${user?.api_key}&userId=${user?._id}`)
-      .then(myBookings => setPartialData({myBookings}));
+    fetchJson(`/api/organ-booking/my`, {jwt})
+      .then(myBookings => setPartialData({myBookings}))
+      .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}));
   }
 
   function loadAvailableHours(value: string) {
     setPartialData({date: value, slots: [], loading: true});
-    fetchJson(`/api/organ-booking/check?token=${user?.api_key}&date=${value}`)
+    fetchJson(`/api/organ-booking/check?date=${value}`, {jwt})
       .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots, loading: false}));
   }
 
@@ -39,7 +40,7 @@ export default function Orgel() {
     setPartialData(data => ({availableSlots: data.availableSlots.filter(h => h !== hour)}))
     //toast.promise(new Promise((res,rej) => setTimeout(rej, 1000)), {error: 'error', success: '', pending: 'p'});
     //return;
-    fetchJson(`/api/organ-booking/book?token=${user?.api_key}&slot=${hour}&userId=${user?._id}`, {},
+    fetchJson(`/api/organ-booking/book?slot=${hour}`, {jwt},
       {pending: 'Buche Orgel...', success: 'Buchung erfolgreich', error: 'Buchung war nicht erfolgreich'})
       .then((booking) => setPartialData(data => ({
         availableSlots: data.availableSlots.filter(h => h !== hour),
@@ -59,12 +60,11 @@ export default function Orgel() {
 
   function unbookHour(booking: CalendarEvent) {
     setMyBookingStatus(booking, false);
-    fetchJson(`/api/organ-booking/delete?token=${user?.api_key}&id=${booking.id}`, {},
+    fetchJson(`/api/organ-booking/delete?id=${booking.id}`, {jwt},
       {pending: 'Lösche Buchung', success: 'Buchung gelöscht', error: 'Fehler ist aufgetreten'})
       .then(() => {
         const myBookings = data.myBookings.filter(b => b.id !== booking.id);
         if(data.date === booking.start.dateTime.substring(0, 10)){
-          console.log([...data.availableSlots, new Date(booking.start.dateTime).toISOString()]);
           setPartialData(data => ({myBookings, availableSlots: [...data.availableSlots, new Date(booking.start.dateTime).toISOString()]}));
         }else{
           setPartialData({myBookings});
