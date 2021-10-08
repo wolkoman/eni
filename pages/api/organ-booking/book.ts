@@ -1,38 +1,32 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient, getEventsFromCalendar} from '../../../util/calendar-events';
-import {cockpit} from '../../../util/cockpit-sdk';
+import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';
+import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
 export default async function (req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 
-  const organBookingAccess =
-    req.query.token && await fetch(`${cockpit.host}/api/singletons/get/OrganBookingAccess?token=${req.query.token}`)
-      .then(x => x.text())
-      .then(x => x === '');
+  const user = resolveUserFromRequest(req);
 
-  if (!organBookingAccess) {
+  if (user === undefined ||!user.permissions[Permission.OrganBooking]) {
     res.status(401).json({errorMessage: 'No permission'});
     return;
   }
 
-  const user = await cockpit.listUsers().then((users: any) => users.find((user: any) => req.query.userId === user._id));
-
-  if (!user) {
-    res.status(400).json({errorMessage: 'User not found'});
+  const date = () => new Date(req.query.slot as string);
+  const slots = await getAvailableOrganSlotsForDate(date());
+  if (!slots.includes(req.query.slot as string)) {
+    res.status(400).json({errorMessage: 'Slot nicht verfügbar'});
+    return;
+  }
+  if (date().getTime() < new Date().getTime()) {
+    res.status(400).json({errorMessage: 'Slot liegt in der Vergangenheit'});
     return;
   }
 
-
-  const slots = await getAvailableOrganSlotsForDate(req.query.date);
-  if (!slots.includes(req.query.hour)) {
-    res.status(400).json({errorMessage: 'Slot not available'});
-    return;
-  }
-
-  const startDateTime = new Date(`${req.query.date} ${req.query.hour}`);
-  const endDateTime = new Date(`${req.query.date} ${req.query.hour}`);
-  endDateTime.setMinutes(endDateTime.getMinutes() + 50);
+  const startDateTime = date();
+  const endDateTime = date();
+  endDateTime.setMinutes(endDateTime.getMinutes() + 60);
 
   const oauth2Client = await getCachedGoogleAuthClient();
   const calendar = google.calendar('v3');
@@ -51,5 +45,4 @@ export default async function (req: NextApiRequest & {query: {token: string, dat
   }).catch((err) => {
     res.status(500).json({err});
   });
-
 }

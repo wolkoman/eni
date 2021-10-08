@@ -12,7 +12,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
 
   const { tokens } = await oauth2Client.getToken(req.query.code as string);
 
-  await cockpit.collectionSave("internal-data", {_id: "60d2474f6264631a2e00035c", data: tokens});
+  await cockpit.collectionSave('internal-data', {_id: "60d2474f6264631a2e00035c", data: tokens});
 
   //res.json(tokens);
   res.redirect("/");

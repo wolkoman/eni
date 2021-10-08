@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import Site from '../components/Site';
-import Link from 'next/link';
 
 export default function Redirect() {
   const [redirectIn, setRedirectIn] = useState(8);

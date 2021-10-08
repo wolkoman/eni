@@ -1,17 +1,13 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient, getEventsFromCalendar} from '../../../util/calendar-events';
-import {cockpit} from '../../../util/cockpit-sdk';
+import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {google} from 'googleapis';
-import {getAvailableOrganSlotsForDate} from './check';
+import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
 export default async function (req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {
 
-  const organBookingAccess =
-    req.query.token && await fetch(`${cockpit.host}/api/singletons/get/OrganBookingAccess?token=${req.query.token}`)
-      .then(x => x.text())
-      .then(x => x === '');
+  const user = resolveUserFromRequest(req);
 
-  if (!organBookingAccess) {
+  if (user === undefined ||!user.permissions[Permission.OrganBooking]) {
     res.status(401).json({errorMessage: 'No permission'});
     return;
   }

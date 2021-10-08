@@ -2,14 +2,9 @@ import create from 'zustand'
 import {CalendarEvents} from './calendar-events';
 import {fetchJson} from './fetch-util';
 import {toast} from 'react-toastify';
-
-export enum Permission {
-  Articles,
-  ReaderPlanning,
-  PrivateCalendarAccess,
-  OrganBooking,
-  ExperimentalAccess
-}
+import {Permissions, resolvePermissions} from './verify';
+import {User} from 'cockpit-sdk';
+import {verify} from 'jsonwebtoken';
 
 interface ArticleStore {
   items: any[];
@@ -27,8 +22,9 @@ interface CalendarStore {
 }
 
 interface UserStore {
-  user: { active: boolean, api_key: string, email: string, name: string, group: string, _id: string } | null,
-  permissions: Record<Permission, boolean>,
+  jwt?: string,
+  user?: User,
+  permissions: Permissions,
   load: () => void,
   login: (data: { username: string, password: string }) => Promise<any>,
   logout: () => void,
@@ -62,69 +58,63 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   loaded: false,
   loading: false,
   error: false,
-  load: (token?: string) => {
+  load: (jwt?: string) => {
     if (get().loading || get().loaded) return;
     set(state => ({...state, loading: true}));
-    fetchJson('/api/calendar' + (token ? `?token=${token}` : ''))
+    fetchJson('/api/calendar', {jwt})
       .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))
       .catch(() => set(state => ({...state, items: {}, loaded: true, loading: false, error: true})));
   }
 }));
 
 export const useUserStore = create<UserStore>((set, get) => ({
-  user: null,
   loaded: false,
   loading: false,
-  permissions: {
-    [Permission.Articles]: false,
-    [Permission.ReaderPlanning]: false,
-    [Permission.PrivateCalendarAccess]: false,
-    [Permission.ExperimentalAccess]: false,
-    [Permission.OrganBooking]: false
-  },
+  permissions: {},
   login: (data) => {
     if (get().loading) return Promise.resolve();
     set(state => ({...state, loading: true}));
     return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
-      .then(user => {
-        sessionStorage.setItem('user', JSON.stringify(user));
-        set(state => ({...state, user, loaded: true}));
-        get().updatePermission();
+      .then(({jwt}) => {
+        const user = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User;
+        if(user){
+          set(state => ({...state, user, jwt, loaded: true, loading: false}));
+          console.log("update");
+          get().updatePermission();
+          sessionStorage.setItem('user', JSON.stringify(user));
+          sessionStorage.setItem('jwt', JSON.stringify(jwt));
+        }
       }).catch(() => {
         set(state => ({...state, loading: false}));
         throw new Error();
       })
   },
   logout: () => {
-    sessionStorage.removeItem('user');
-    set(state => ({...state, user: null, loaded: false}));
+    set(state => ({...state, user: undefined, jwt: undefined, loaded: false}));
     get().updatePermission();
+    sessionStorage.clear();
+    location.href = "/";
   },
   load: () => {
     if (get().loaded) return;
-    set(state => ({...state, user: JSON.parse(sessionStorage.getItem('user') ?? '{}'), loaded: true}));
+    set(state => ({...state, user: JSON.parse(sessionStorage.getItem('user') ?? '{}'), jwt: JSON.parse(sessionStorage.getItem('jwt') ?? '{}'), loaded: true}));
     get().updatePermission();
   },
   updatePermission: () => {
-    const user = get().user as UserStore['user'];
+    const user = get().user;
+    if(user === null) return;
     set(state => ({
-      ...state, user, loaded: true, permissions: {
-        [Permission.Articles]: ['admin'].includes(user?.group ?? ''),
-        [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'admin'].includes(user?.group ?? ''),
-        [Permission.ReaderPlanning]: ['admin'].includes(user?.group ?? ''),
-        [Permission.ExperimentalAccess]: ['admin'].includes(user?.group ?? ''),
-        [Permission.OrganBooking]: ['admin', 'OrganAccess'].includes(user?.group ?? '')
-      }
+      ...state, user, loaded: true, permissions: resolvePermissions(user?.group)
     }));
   }
 }));
 
 export const useOverlayStore = create<OverlayStore>((set, get) => ({
   display: (component: React.ReactNode, position: {x: number, y: number}) => {
-    console.log("display not set");
+    console.warn("display not set");
   },
   hide: () => {
-    console.log("hide not set");
+    console.warn("hide not set");
   },
   registerDisplay: (display: ((component: React.ReactNode, position: {x: number, y: number}) => void)) => {
     set(state => ({...state, display}));

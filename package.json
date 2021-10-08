@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@js-temporal/polyfill": "^0.2.0",
+    "@types/jsonwebtoken": "^8.5.5",
     "@types/node": "^14.11.2",
     "@types/react": "^16.9.50",
     "@types/react-dom": "^16.9.8",
@@ -11,6 +13,7 @@
     "bufferutil": "^4.0.3",
     "cockpit-sdk": "^0.15.1",
     "googleapis": "^39.2.0",
+    "jsonwebtoken": "^8.5.1",
     "msw": "^0.35.0",
     "next": "^11.0.0",
     "node-fetch": "^2.6.1",
