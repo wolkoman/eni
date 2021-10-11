@@ -10,12 +10,14 @@ import {useState} from '../../util/use-state-util';
 
 export default function Orgel() {
   const jwt = useUserStore(state => state.jwt)
-  const [data, setData, setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], loading: boolean }>({
+  const [data, setData, setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
+  }>({
     date: '',
     slots: [],
     availableSlots: [],
     myBookings: [],
-    loading: false
+    slotsLoading: false,
+    bookingLoading: false,
   });
 
 
@@ -25,15 +27,17 @@ export default function Orgel() {
   }, [jwt]);
 
   function loadMyBooking() {
+    setPartialData({bookingLoading: true});
     fetchJson(`/api/organ-booking/my`, {jwt})
       .then(myBookings => setPartialData({myBookings}))
-      .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}));
+      .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}))
+      .finally(() => setPartialData({bookingLoading: false}));
   }
 
   function loadAvailableHours(value: string) {
-    setPartialData({date: value, slots: [], loading: true});
+    setPartialData({date: value, slots: [], slotsLoading: true});
     fetchJson(`/api/organ-booking/check?date=${value}`, {jwt})
-      .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots, loading: false}));
+      .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots, slotsLoading: false}));
   }
 
   function bookHour(hour: string) {
@@ -80,6 +84,12 @@ export default function Orgel() {
       <div className="mb-8 md:w-72 md:border-r md:pr-4 flex-shrink-0">
         <div className="text-lg mb-3">Meine Buchungen</div>
         <div>
+          {
+            !data.bookingLoading && data.myBookings.length === 0 && <div className="opacity-70 text-sm italic">Es sind keine zukünftigen Buchungen vorhanden.</div>
+          }
+          {
+            data.bookingLoading && Array(3).fill(0).map((_, index) => <div key={index} className={`h-9 mb-1 shimmer`}/>)
+          }
           {data.myBookings.map(booking => <div
             key={booking.id}
             className={`flex bg-gray-200 mb-2 px-3 py-2 justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
@@ -109,7 +119,7 @@ export default function Orgel() {
         <div className="mt-3 mb-1 text-sm">Verfügbare Zeitslots</div>
         <div className="mb-2 flex flex-wrap">
           {
-            data.loading && Array(10).fill(0).map((_,index) => <div key={index} className={`w-24 h-14 mr-2 mb-2 shimmer`}/>)
+            data.slotsLoading && Array(10).fill(0).map((_, index) => <div key={index} className={`w-24 h-14 mr-2 mb-2 shimmer`}/>)
           }
           {
             data.slots.map(slot => {

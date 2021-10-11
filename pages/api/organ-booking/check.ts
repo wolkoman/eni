@@ -35,7 +35,7 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
 
   const organEvents = await getEventsFromCalendar(calendarIds['inzersdorf-organ'], 'Orgel', false, dayStart, dayEnd);
   const inzersdorfEvents = (await getEventsFromCalendar(calendarIds['inzersdorf'], 'Orgel', false, dayStart, dayEnd))
-    .filter(event => (event.summary+event.description).match(/(Messe|Taufe|Gottesdienst|Taufe|Chor|Kirche)/gi));
+    .filter(event => event.tags.includes('in-church'));
   const events = [...organEvents, ...inzersdorfEvents];
 
   if (events.some(event => event.wholeday)) {

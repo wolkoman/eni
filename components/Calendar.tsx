@@ -42,7 +42,7 @@ export function CalendarPage({}) {
             .filter(([_, events]) => events.length > 0)
             .map(([date, events]) => <div key={date}>
               <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
-              {events.map(event => (<Event key={event.id} event={event} filter={filter}/>))}
+              {events.map(event => (<Event key={event.id} event={event}/>))}
             </div>)}
         </div>
       </div>
@@ -136,7 +136,7 @@ function DumbParishTag(props: { calendar: Calendar, colorless?: boolean }) {
   return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless ? 'bg-white text-black' : info.className}`}>{info.tagName}</div>
 }
 
-export function Event({event, filter}: { event: CalendarEvent, filter: FilterType }) {
+export function Event({event}: { event: CalendarEvent }) {
   return <div className="flex text-lg mb-1">
     <div className="w-10 flex-shrink-0 font-semibold">
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
@@ -151,11 +151,13 @@ export function Event({event, filter}: { event: CalendarEvent, filter: FilterTyp
 
 export function EventSummary(props: {event: CalendarEvent}){
   const displaySummary = props.event.summary.split("/", 2)[0];
-  return <>{props.event.visibility === 'private' && '🔒'} {displaySummary}</>;
+  return <>{displaySummary}</>;
 }
 export function EventDescription(props: {event: CalendarEvent}){
   const displayPersonen = props.event.summary.split("/", 2)?.[1];
   return <>
+    {props.event.tags.includes('private') && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
+    {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
     {displayPersonen && <div>mit {displayPersonen}</div>}
     {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
   </>;
