@@ -21,10 +21,9 @@ export function CalendarPage({}) {
   const [permissions, jwt, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.loaded, state.load]);
   useEffect(() => userLoad(), []);
   useEffect(() => {
-    if (userLoaded) {
-      calendar.load(jwt);
-    }
-  }, [userLoaded]);
+    console.log("LOAD CALENDAR");
+    calendar.load(jwt);
+  }, [jwt]);
 
   return <div data-testid="calendar">
     <SectionHeader>Kalender</SectionHeader>

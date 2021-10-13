@@ -59,7 +59,8 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   loading: false,
   error: false,
   load: (jwt?: string) => {
-    if (get().loading || get().loaded) return;
+    if (get().loading) return;
+    console.log("loading");
     set(state => ({...state, loading: true}));
     fetchJson('/api/calendar', {jwt})
       .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))

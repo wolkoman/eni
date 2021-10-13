@@ -25,7 +25,7 @@ export interface CalendarEvent {
 
 export type CalendarEvents = Record<string, CalendarEvent[]>;
 
-const inChurchRegex = /(Messe|Taufe|Gottesdienst|Taufe|Chor|Kirche |Gebet|Vesper|Ministranten|Trauung|in der Kirche)/gi;
+const notInChurchRegex = /(Pfarrheim|Pfarrhaus|Friedhof|Pfarrgartenpflege|kirchenfrei)/gi;
 
 export async function getEventsFromCalendar(calendarId: string, calendarName: string, isPublic: boolean, timeMin?: Date, timeMax?: Date): Promise<CalendarEvent[]> {
   const oauth2Client = await getCachedGoogleAuthClient();
@@ -55,7 +55,7 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
     calendar: calendarName,
     visibility: event.visibility ?? 'public',
     tags: [
-      (event.summary+(event.description ?? "")).match(inChurchRegex) && 'in-church',
+      !(event.summary+(event.description ?? "")).match(notInChurchRegex) && 'in-church',
       (event.visibility === "private") && 'private'
     ].filter(item => item),
     wholeday: !!event.start?.date,
