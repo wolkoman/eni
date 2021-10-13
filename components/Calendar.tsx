@@ -42,7 +42,7 @@ export function CalendarPage({}) {
             .filter(([_, events]) => events.length > 0)
             .map(([date, events]) => <div key={date}>
               <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
-              {events.map(event => (<Event key={event.id} event={event}/>))}
+              {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
             </div>)}
         </div>
       </div>
@@ -63,19 +63,17 @@ function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterT
     {label: "Marcin", person: 'wojciech'},
   ];
   return <>
-    <div className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0">
-      <div
-        className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer"
-        onClick={() => props.setFilter(null)}>Alle</div>
-    </div>
     <div
       className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
       data-testid="parish-selector">
+      <div
+        className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer"
+        onClick={() => props.setFilter(null)}>Alle</div>
       {parishFilters.map(filt => <div
           className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer relative" key={filt.label}
           onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.parish})}>
           {filt.label}
-          {filt.parish && <div className={`absolute bottom-0 left-0 h-0.5 transition-all ${getCalendarInfo(filt?.parish).className} ${props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>}
+          <div className={`absolute bottom-0 left-0 h-0.5 transition-all s${getCalendarInfo(filt?.parish).className}s bg-gray-600 ${((props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish) || props.filter === null && filt.parish === 'all') ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>
         </div>
       )}
     </div>
@@ -136,7 +134,7 @@ function DumbParishTag(props: { calendar: Calendar, colorless?: boolean }) {
   return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless ? 'bg-white text-black' : info.className}`}>{info.tagName}</div>
 }
 
-export function Event({event}: { event: CalendarEvent }) {
+export function Event({event, permissions}: { event: CalendarEvent, permissions: Permissions }) {
   return <div className="flex text-lg mb-1">
     <div className="w-10 flex-shrink-0 font-semibold">
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
@@ -144,7 +142,7 @@ export function Event({event}: { event: CalendarEvent }) {
     <div className="mx-2"><ParishTag calendar={event.calendar}/></div>
     <div className="mb-2 leading-5" data-testid="event">
       <div className="mt-1 font-semibold"><EventSummary event={event}/></div>
-      <div className="font-normal text-sm leading-4"><EventDescription event={event}/></div>
+      <div className="font-normal text-sm leading-4"><EventDescription event={event} permissions={permissions}/></div>
     </div>
   </div>;
 }
@@ -153,11 +151,13 @@ export function EventSummary(props: {event: CalendarEvent}){
   const displaySummary = props.event.summary.split("/", 2)[0];
   return <>{displaySummary}</>;
 }
-export function EventDescription(props: {event: CalendarEvent}){
+export function EventDescription(props: {event: CalendarEvent, permissions: Permissions}){
   const displayPersonen = props.event.summary.split("/", 2)?.[1];
   return <>
+    {props.permissions[Permission.PrivateCalendarAccess] && <>
     {props.event.tags.includes('private') && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
     {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
+    </>}
     {displayPersonen && <div>mit {displayPersonen}</div>}
     {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
   </>;
