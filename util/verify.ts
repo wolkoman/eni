@@ -13,11 +13,11 @@ export type Permissions = Partial<Record<Permission, boolean>>;
 
 export function resolvePermissions(group: User['group'] = ''): Permissions {
   return {
-    [Permission.Articles]: ['admin'].includes(group),
-    [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'admin'].includes(group),
-    [Permission.ReaderPlanning]: ['admin'].includes(group),
-    [Permission.ExperimentalAccess]: ['admin'].includes(group),
-    [Permission.OrganBooking]: ['admin', 'OrganAccess'].includes(group)
+    [Permission.Articles]: ['admin', 'master'].includes(group),
+    [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'OrganMaster', 'admin', 'master'].includes(group),
+    [Permission.ReaderPlanning]: ['admin', 'master'].includes(group),
+    [Permission.ExperimentalAccess]: ['admin', 'master'].includes(group),
+    [Permission.OrganBooking]: ['admin', 'OrganAccess', 'OrganMaster'].includes(group)
   };
 }
 
