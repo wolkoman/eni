@@ -1,5 +1,5 @@
 import {Calendar, CalendarEvent} from '../util/calendar-events';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
 import {SectionHeader} from './SectionHeader';
@@ -19,11 +19,12 @@ export function CalendarPage({}) {
   const [filter, setFilter] = useState<FilterType>(null);
   const calendar = useCalendarStore(state => state);
   const [permissions, jwt, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.loaded, state.load]);
+  const calendarScrollerRef = useRef(null);
   useEffect(() => userLoad(), []);
-  useEffect(() => {
-    console.log("LOAD CALENDAR");
-    calendar.load(jwt);
-  }, [jwt]);
+  useEffect(() => calendar.load(jwt), [jwt]);
+  /*useEffect(() => {
+    (calendarScrollerRef.current as unknown as HTMLElement).addEventListener("scroll", (e) => console.log(e));
+  }, [calendarScrollerRef]);*/
 
   return <div data-testid="calendar">
     <SectionHeader>Kalender</SectionHeader>
@@ -34,12 +35,12 @@ export function CalendarPage({}) {
           {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
           <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
         </div>
-        <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0">
-          {calendar.loaded || <LoadingEvents/>}
-          {Object.entries(calendar.items)
+        <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0" ref={calendarScrollerRef}>
+          {calendar.loading && <LoadingEvents/>}
+          {calendar.loading || Object.entries(calendar.items)
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
             .filter(([_, events]) => events.length > 0)
-            .map(([date, events]) => <div key={date}>
+            .map(([date, events]) => <div key={date} data-date={date}>
               <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
               {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
             </div>)}
@@ -119,14 +120,7 @@ function ParishTagOverlay(props: {onMouseLeave: () => void, calendar: Calendar }
 }
 
 function ParishTag(props: { calendar: Calendar }) {
-  const [displayOverlay, hideOverlay] = useOverlayStore(state => [state.display, state.hide]);
-  return <div
-    onMouseEnter={(e) => {
-      const position = (e.target as HTMLDivElement).getBoundingClientRect();
-      displayOverlay(<ParishTagOverlay onMouseLeave={() => hideOverlay()} calendar={props.calendar}/>, {x: position.x - 10, y: position.y - 10});
-    }}>
-    <DumbParishTag calendar={props.calendar}/>
-  </div>;
+  return <DumbParishTag calendar={props.calendar}/>;
 }
 function DumbParishTag(props: { calendar: Calendar, colorless?: boolean }) {
   const info = getCalendarInfo(props.calendar);
@@ -147,17 +141,14 @@ export function Event({event, permissions}: { event: CalendarEvent, permissions:
 }
 
 export function EventSummary(props: {event: CalendarEvent}){
-  const displaySummary = props.event.summary.split("/", 2)[0];
-  return <>{displaySummary}</>;
+  return <>{props.event.summary}</>;
 }
 export function EventDescription(props: {event: CalendarEvent, permissions: Permissions}){
-  const displayPersonen = props.event.summary.split("/", 2)?.[1];
   return <>
     {props.permissions[Permission.PrivateCalendarAccess] && <>
     {props.event.tags.includes('private') && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
     {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
     </>}
-    {displayPersonen && <div>mit {displayPersonen}</div>}
     {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
   </>;
 }
@@ -167,7 +158,7 @@ type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PE
 function applyFilter(events: CalendarEvent[], filter: FilterType) {
   return events
     .filter(event =>
-      (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.summary.match(word)))
+      (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.description?.match(word)))
       || (filter?.filterType === 'PARISH' && event.calendar === filter.parish)
       || filter === null)
 
@@ -192,10 +183,20 @@ const ShadowEvent = ({width, description}: { width: number, description: boolean
   </div>
 </div>
 
-export const EventDate = ({date}: { date: Date }) => {
+export function getWeekDayName(day: number) {
+  return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day];
+}
+
+export const EventDate = ({date, scrollInFocus = false}: { date: Date, scrollInFocus?: boolean }) => {
+  const ref = useRef(null);
   const day = date.getDay();
-  return <span className={`${day ? '' : 'underline'}`}>
-    {['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day]},{' '}
+  useEffect(() => {
+    if(scrollInFocus){
+      (ref.current as unknown as HTMLElement).scrollIntoView({behavior: 'smooth'});
+    }
+  }, [scrollInFocus]);
+  return <span className={`${day ? '' : 'underline'}`} ref={ref}>
+    {getWeekDayName(day)},{' '}
     {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}
   </span>;
 }

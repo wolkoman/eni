@@ -12,6 +12,7 @@
     "@types/sanitize-html": "^2.3.1",
     "bufferutil": "^4.0.3",
     "cockpit-sdk": "^0.15.1",
+    "easy-template-x": "^2.1.0",
     "googleapis": "^39.2.0",
     "jsonwebtoken": "^8.5.1",
     "msw": "^0.35.0",

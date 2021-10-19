@@ -60,7 +60,6 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   error: false,
   load: (jwt?: string) => {
     if (get().loading) return;
-    console.log("loading");
     set(state => ({...state, loading: true}));
     fetchJson('/api/calendar', {jwt})
       .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))
@@ -80,7 +79,6 @@ export const useUserStore = create<UserStore>((set, get) => ({
         const user = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User;
         if(user){
           set(state => ({...state, user, jwt, loaded: true, loading: false}));
-          console.log("update");
           get().updatePermission();
           sessionStorage.setItem('user', JSON.stringify(user));
           sessionStorage.setItem('jwt', JSON.stringify(jwt));
