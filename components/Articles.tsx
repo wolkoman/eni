@@ -25,8 +25,8 @@ export default function Articles() {
   const loading = articles.length < 4;
 
   return loading ? <ArticleShadow/> : <>
-    <div className="grid grid-cols-2 break-words mt-8" data-testid="articles">
-      <div className="h-40 md:h-80 mr-4 rounded-lg" style={{
+    <div className="flex md:grid grid-cols-2 break-words mt-8" data-testid="articles">
+      <div className="w-full h-40 md:h-80 mr-4 rounded-lg" style={{
         backgroundImage: `url(${getArticlePreviewImageUrl(articles[0])})`,
         backgroundSize: 'cover',
         backgroundPosition: '50% 50%'
@@ -34,7 +34,7 @@ export default function Articles() {
       <div className="md:pl-4 flex flex-col">
         <div className="uppercase text-primary1 font-semibold my-1">{articles[0].resort}</div>
         <Link href={getArticleLink(articles[0])}>
-          <div className="text-4xl cursor-pointer">{articles[0].title}</div>
+          <div className="text-3xl md:text-4xl cursor-pointer">{articles[0].title}</div>
         </Link>
         <div className="text-lg leading-7 mt-2 hidden md:block">
           {articles[0].content.substring(0, articleMax)}{articles[0].content.length > articleMax ? '...' : ''}
@@ -50,7 +50,7 @@ export default function Articles() {
       <div className="flex flex-col md:grid md:grid-cols-3 md:gap-4 w-full">
         {articles.slice(1, 4).map(article => <Link href={getArticleLink(article)} key={article._id}>
           <div
-            className="flex flex-col lg:flex-row hover:bg-gray-100 p-2 cursor-pointer hover:bg-gray-200">
+            className="flex flex-col lg:flex-row hover:bg-gray-100 p-2 cursor-pointer hover:bg-gray-200 rounded-lg">
             <div className="flex flex-col overflow-hidden">
               <div className="uppercase text-primary1 font-semibold">{article.resort ?? 'Neues'}</div>
               <div className="truncate">{article.title}</div>
@@ -59,7 +59,7 @@ export default function Articles() {
         </Link>)}
       </div>
       <Link href="/artikel">
-        <div className="p-2 flex items-center cursor-pointer hover:bg-gray-200">
+        <div className="p-2 flex items-center cursor-pointer hover:bg-gray-200 rounded-lg">
           <img src="./logos-28.svg" className="w-8"/>
         </div>
       </Link>

@@ -8,9 +8,9 @@ export function Parishes() {
     <SectionHeader>Unsere Pfarren</SectionHeader>
     <div className="grid sm:grid-cols-3 gap-4">
       {(['emmaus','inzersdorf','neustift'] as Calendar[]).map(calendar => getCalendarInfo(calendar)).map(calendar => <div key={calendar.fullName}>
-        <div className={`flex ${calendar.className} rounded-xl`}>
-          <div className={`flex justify-center from-white to-transparent bg-gradient-to-t w-full`}>
-            <img src={calendar.image} className="pb-2 md:h-48 h-24" alt={calendar.fullName}/>
+        <div className={`flex ${calendar.className} rounded-xl mb-2`}>
+          <div className={`flex justify-center items-end from-white to-transparent bg-gradient-to-t w-full`}>
+            <img src={calendar.image} className="md:h-48 h-24" alt={calendar.fullName}/>
           </div>
         </div>
         <div className="md:hidden leading-4 text-center font-semibold text-lg">{calendar.fullName}</div>

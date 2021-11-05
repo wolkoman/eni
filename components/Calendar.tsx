@@ -26,7 +26,7 @@ export function CalendarPage({}) {
     (calendarScrollerRef.current as unknown as HTMLElement).addEventListener("scroll", (e) => console.log(e));
   }, [calendarScrollerRef]);*/
 
-  return <div data-testid="calendar">
+  return <div data-testid="calendar" className="relative">
     <SectionHeader>Kalender</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
@@ -35,7 +35,7 @@ export function CalendarPage({}) {
           {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
           <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
         </div>
-        <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0" ref={calendarScrollerRef}>
+        <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0 relative" ref={calendarScrollerRef}>
           {calendar.loading && <LoadingEvents/>}
           {calendar.loading || Object.entries(calendar.items)
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
@@ -157,14 +157,14 @@ const LoadingEvents = () => <>
   <ShadowEventDate/>
   {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===1}/>)}
 </>
-const ShadowEventDate = () => <div className="w-32 h-3 mb-3 mt-6 shimmer"/>
+const ShadowEventDate = () => <div className="w-36 h-4 mb-1.5 mt-4 shimmer"/>
 const ShadowEvent = ({width, description}: { width: number, description: boolean }) => <div className="flex mb-3">
-  <div className="w-10 h-4 shimmer mr-3"/>
-  <div className="w-12 h-3 mt-0.5 shimmer mr-2 rounded-sm"/>
+  <div className="w-10 h-5 shimmer mr-2"/>
+  <div className="w-14 h-5 shimmer mr-2"/>
   <div>
-    <div className="h-4 shimmer mr-2" style={{width}}/>
-    <div className="h-2 shimmer mt-1" style={{width, display: description ? '':'none'}}/>
-    <div className="h-2 shimmer mt-1" style={{width, display: description ? '':'none'}}/>
+    <div className="h-5 shimmer mr-2" style={{width}}/>
+    <div className="h-3 shimmer mt-0.5" style={{width, display: description ? '':'none'}}/>
+    <div className="h-3 shimmer mt-0.5" style={{width: width / 2, display: description ? '':'none'}}/>
   </div>
 </div>
 
