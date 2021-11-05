@@ -22,6 +22,10 @@ test.describe('calendar', () => {
             .withDescription("mit Pfarrer Mustermann")
             .build(),
             new CalendarEventBuilder()
+              .withSummary('Nachweihnachtsfeier [im Jugendkeller]/Kpl. Thomas')
+              .withStartDateTime('2021-12-31T13:00:00+00:00')
+              .build(),
+            new CalendarEventBuilder()
               .withSummary('Feier der engsten Mitarbeiter:innen')
               .withStartDateTime('2021-12-31T22:00:00+01:00')
               .withDescription("mit Pfarrer Mustermann")
@@ -47,6 +51,15 @@ test.describe('calendar', () => {
       }),
     );
   })
+
+  test('show error calendar', async ({page, port, requestInterceptor, rest}) => {
+    requestInterceptor.use(
+      rest.get(googleCalendarApiUrl(calendarIds.all), (req, res, ctx) => res(ctx.status(500)))
+    );
+    await page.goto(`http://localhost:${port}`);
+    await page.waitForSelector('data-testid=calendar-error');
+    expect(await page.locator('data-testid=calendar').screenshot()).toMatchSnapshot('calendar_error.png');
+  });
 
   test('show loading calendar', async ({page, port}) => {
     await page.goto(`http://localhost:${port}`);

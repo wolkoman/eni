@@ -30,8 +30,8 @@ export function CalendarPage({}) {
     <SectionHeader>Kalender</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
-      <div className="flex flex-col md:flex-row bg-gray-100">
-        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0">
+      <div className="flex flex-col md:flex-row bg-gray-100 rounded-xl overflow-hidden">
+        <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0 rounded-xl">
           {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
           <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
         </div>
@@ -98,33 +98,18 @@ function PrivateCalendarNotice() {
 }
 
 function CalendarErrorNotice() {
-  return <div className="bg-red-100 p-4 px-8">
+  return <div className="bg-gray-100 p-4 px-8 rounded" data-testid="calendar-error">
     Beim Laden der Termine ist ein Fehler aufgetreten. <br/>
     Für Informationen zu den Terminen kontaktieren Sie die Kanzlei.
-  </div>;
-}
-
-function ParishTagOverlay(props: {onMouseLeave: () => void, calendar: Calendar }) {
-  const calendarInfo = getCalendarInfo(props.calendar);
-  return <div className={`bg-white rounded p-3 shadow-xl flex ${calendarInfo.className}`}>
-    <div>
-      <div onMouseLeave={props.onMouseLeave}>
-        <DumbParishTag calendar={props.calendar} colorless={true}/>
-      </div>
-    </div>
-    <div className="px-4">
-      <div className="font-bold">{calendarInfo.fullName}</div>
-      <div className="text-sm">{calendarInfo.address}</div>
-    </div>
   </div>;
 }
 
 function ParishTag(props: { calendar: Calendar }) {
   return <DumbParishTag calendar={props.calendar}/>;
 }
-function DumbParishTag(props: { calendar: Calendar, colorless?: boolean }) {
+function DumbParishTag(props: { calendar: Calendar }) {
   const info = getCalendarInfo(props.calendar);
-  return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless ? 'bg-white text-black' : info.className}`}>{info.tagName}</div>
+  return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${info.className}`}>{info.tagName}</div>
 }
 
 export function Event({event, permissions}: { event: CalendarEvent, permissions: Permissions }) {

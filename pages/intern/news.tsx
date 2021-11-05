@@ -65,12 +65,17 @@ export default function InternArticles() {
       window.URL.revokeObjectURL(blobUrl);
       link = null;
     }
-
   }
 
   return <Site title="Wochenmitteilungen">
-    <input type="date" className="bg-gray-200 px-3 py-1" onChange={(e) => setPartialData({start: new Date(e.target.value)})}/>
-    <input type="date" className="bg-gray-200 px-3 py-1" onChange={(e) => setPartialData({end: new Date(e.target.value)})}/>
-    <Button label="Generieren" onClick={() => generate()} disabled={!loaded}/>
+    <div>
+      <div className="mt-4 text-sm">Start</div>
+      <input type="date" className="bg-gray-200 px-3 py-1" onChange={(e) => setPartialData({start: new Date(e.target.value)})}/>
+    </div>
+    <div>
+      <div className="mt-4 text-sm">Ende</div>
+      <input type="date" className="bg-gray-200 px-3 py-1" onChange={(e) => setPartialData({end: new Date(e.target.value)})}/>
+    </div>
+    <Button className="mt-4" label="Generieren" onClick={() => generate()} disabled={!loaded}/>
   </Site>;
 }

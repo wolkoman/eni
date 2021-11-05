@@ -37,6 +37,7 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
   if (timeMin) start = timeMin.getTime();
   if (timeMax) end = timeMax.getTime();
   const eventsList = await calendar.events.list({
+    maxResults: 1000,
     calendarId,
     auth: oauth2Client,
     timeMin: new Date(start).toISOString(),

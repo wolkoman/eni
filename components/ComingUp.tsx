@@ -13,7 +13,7 @@ export function ComingUpComponent({}) {
   if(!event || calendar.error || !user.permissions[Permission.ExperimentalAccess]) return <></>;
   return <div data-testid="coming-up" className="mb-12">
     <SectionHeader>Nächster Gottesdienst</SectionHeader>
-    <div className="bg-gray-100 px-8 py-4">
+    <div className="bg-gray-100 px-8 py-4 rounded-xl">
       <EventDate date={new Date(event.date)}/> um <EventTime date={new Date(event.start.dateTime)}/> Uhr
       <div>{getCalendarInfo(event.calendar).fullName}</div>
     </div>

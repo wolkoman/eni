@@ -44,13 +44,13 @@ export function Instagram() {
         .filter(item => item.media_type !== 'VIDEO')
         .slice(0, 4)
         .map((item, index) =>
-          <div className={`pb-4 ${index === 3 ? 'md:hidden' : ''}`} key={item.id} data-testid="instagram-item">
-            <div style={{backgroundImage: `url(${item.media_url})`, backgroundSize: 'cover'}} className="relative h-64">
-              <div className="bg-white inline-block px-1 text-gray-600 absolute top-0 right-2 cursor-default">
+          <div className={`pb-4 bg-gray-200 rounded-xl ${index === 3 ? 'md:hidden' : ''}`} key={item.id} data-testid="instagram-item">
+            <div style={{backgroundImage: `url(${item.media_url})`, backgroundSize: 'cover'}} className="relative h-64 rounded-xl">
+              <div className="bg-white inline-block px-2 text-gray-600 absolute top-0 right-0 cursor-default rounded-bl-xl">
                 {new Date(item.timestamp).toLocaleDateString()}
               </div>
             </div>
-            <div>{item.caption}</div>
+            <div className="p-2">{item.caption}</div>
           </div>
         )}
     </div>
