@@ -1,10 +1,11 @@
 import {Calendar, CalendarEvent} from '../util/calendar-events';
-import React, {useEffect, useRef, useState} from 'react';
-import {useCalendarStore, useOverlayStore, useUserStore} from '../util/store';
+import React, {useEffect, useRef} from 'react';
+import {useCalendarStore, useUserStore} from '../util/store';
 import {SanitizeHTML} from './SanitizeHtml';
 import {SectionHeader} from './SectionHeader';
 import {getCalendarInfo} from '../util/calendar-info';
 import {Permission, Permissions} from '../util/verify';
+import {useState} from '../util/use-state-util';
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -16,15 +17,27 @@ type Person = keyof typeof personWords;
 
 
 export function CalendarPage({}) {
+  const [datePositions, setDatePositions, setPartialDatePositions] = useState<Record<string, number>>({});
   const [filter, setFilter] = useState<FilterType>(null);
   const calendar = useCalendarStore(state => state);
   const [permissions, jwt, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.loaded, state.load]);
-  const calendarScrollerRef = useRef(null);
+
   useEffect(() => userLoad(), []);
   useEffect(() => calendar.load(jwt), [jwt]);
-  /*useEffect(() => {
-    (calendarScrollerRef.current as unknown as HTMLElement).addEventListener("scroll", (e) => console.log(e));
-  }, [calendarScrollerRef]);*/
+
+  const calendarScrollerRef = useRef(null);
+  const [pos, setPos] = useState(0);
+  useEffect(() => {
+    const calendar = calendarScrollerRef.current as unknown as HTMLElement;
+    const handler = (e: Event) => {
+      requestIdleCallback(() => {
+        console.log("handle", new Date().getTime());
+      });
+    };
+    //calendar.addEventListener("scroll", handler);
+
+    return () => calendar.removeEventListener("scroll", handler);
+  }, [calendarScrollerRef]);
 
   return <div data-testid="calendar" className="relative">
     <SectionHeader>Kalender</SectionHeader>
@@ -41,7 +54,9 @@ export function CalendarPage({}) {
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
             .filter(([_, events]) => events.length > 0)
             .map(([date, events]) => <div key={date} data-date={date}>
-              <div className="mt-3 leading-5"><EventDate date={new Date(date)}/></div>
+              <div className="mt-3 leading-5">
+                <EventDate date={new Date(date)} filter={filter} setOffsetTop={top => setPartialDatePositions({[date]: top})}/>
+              </div>
               {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
             </div>)}
         </div>
@@ -172,14 +187,14 @@ export function getWeekDayName(day: number) {
   return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day];
 }
 
-export const EventDate = ({date, scrollInFocus = false}: { date: Date, scrollInFocus?: boolean }) => {
+export const EventDate = ({date, setOffsetTop, filter}: { filter: any, date: Date, setOffsetTop?: (top: number) => void }) => {
+
   const ref = useRef(null);
-  const day = date.getDay();
   useEffect(() => {
-    if(scrollInFocus){
-      (ref.current as unknown as HTMLElement).scrollIntoView({behavior: 'smooth'});
-    }
-  }, [scrollInFocus]);
+    if(setOffsetTop)
+    setOffsetTop((ref.current as unknown as HTMLElement).offsetTop!);
+  }, [ref, filter]);
+  const day = date.getDay();
   return <span className={`${day ? '' : 'underline'}`} ref={ref}>
     {getWeekDayName(day)},{' '}
     {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}

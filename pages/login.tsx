@@ -37,15 +37,15 @@ export default function Events() {
 
   return <Site navbar={false} responsive={false}>
     <div className="w-full h-screen relative flex flex-col justify-center items-center bg-gray-100">
-      <div className={`z-10 bg-white border border-gray-200 shadow-lg ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
+      <div className={`z-10 bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
         <div className="h-2 bg-primary1 w-full"/>
         <div className="h-2 bg-primary2 w-full"/>
         <div className="h-2 bg-primary3 w-full"/>
         <div className="p-8 flex flex-col items-center">
-          <div className="font-bold text-2xl my-3">eni.wien</div>
-          <input placeholder="Benutzername" className="my-1 py-1 px-3" value={data.username}
+          <div className="font-bold text-2xl mt-1 mb-5">eine neue initiative</div>
+          <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200" value={data.username}
                  onChange={(event) => setData({...data, username: (event as any).target.value})}/>
-          <input placeholder="Passwort" className="my-1 py-1 px-3" type="password" value={data.password}
+          <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-gray-200" type="password" value={data.password}
                  onChange={(event) => setData({...data, password: (event as any).target.value})}
                  onKeyDown={(e) => {if(e.key === "Enter" && !buttonDisabled()) login()}}
           />

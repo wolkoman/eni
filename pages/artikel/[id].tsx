@@ -12,11 +12,11 @@ export default function Article({article}: {article: Collections['article']}) {
   return <Site>
     <div className="flex flex-col-reverse md:flex-row max-w-2xl mx-auto">
       <div className="flex flex-col mt-12 mb-6">
-        <div className="text-5xl font-semibold">{article.title}</div>
-        <div className="tracking-wide mt-3">am {new Date(article._created * 1000).toLocaleDateString()} von {article.author}</div>
+        <div className="text-5xl font-bold">{article.title}</div>
+        <div className="mt-3 border-t border-gray-400 pt-2">am {new Date(article._created * 1000).toLocaleDateString()} von {article.author}</div>
       </div>
-      <div className="flex-shrink-0">
-        <img src={`${cockpit.host}/${article.preview_image.path}`} className="h-52 max-w-full mr-4" alt="article-preview"/>
+      <div className="flex-shrink-0 ml-4">
+        <img src={`${cockpit.host}/${article.preview_image.path}`} className="h-52 max-w-full mr-4 rounded-lg" alt="article-preview"/>
       </div>
     </div>
     <div className="text-lg font-serif">

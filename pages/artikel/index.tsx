@@ -7,13 +7,13 @@ import {Collections} from 'cockpit-sdk';
 import {SectionHeader} from '../../components/SectionHeader';
 
 export default function Events(props: {articles: Collections['article'][]}) {
-  return <Site>
-    <SectionHeader>Alle Beiträge</SectionHeader>
-    {props.articles.map(article => <Link href={getArticleLink(article)}><div className="flex items-center mb-4 cursor-pointer">
-      <img src={getArticlePreviewImageUrl(article)} className="w-16 mr-4" alt="article-review"/>
-      <div>
-        <div className="">{new Date(article._created * 1000).toLocaleDateString()}</div>
-        <div className="font-bold text-lg">{article.title}</div>
+  return <Site title="Alle Beiträge">
+    {props.articles.map(article => <Link href={getArticleLink(article)}><div className="flex items-start mt-4 cursor-pointer rounded bg-gray-100">
+      <img src={getArticlePreviewImageUrl(article)} className="w-20 mr-4 mt-4 rounded" alt="article-review"/>
+      <div className="py-3">
+        <div className="italic -mb-1">{new Date(article._created * 1000).toLocaleDateString()} {article.external_url ? " - extern" : ""}</div>
+        <div className="font-bold text-xl">{article.title}</div>
+        <div className="">{article.content}</div>
       </div>
     </div></Link>)}
   </Site>;
@@ -23,7 +23,7 @@ export default function Events(props: {articles: Collections['article'][]}) {
 export async function getServerSideProps() {
   return {
     props: {
-      articles: (await cockpit.collectionGet('article', {filter: {platform: "eni"}})).entries
+      articles: (await cockpit.collectionGet('article', {filter: {platform: "eni"}, sort: {_created: -1}})).entries
     }
   }
 }
