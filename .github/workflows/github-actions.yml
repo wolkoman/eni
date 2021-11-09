@@ -1,7 +1,7 @@
 name: Google Token Refresh
 on:
   schedule:
-    - cron:  '0 4 * * 1'
+    - cron:  '0 2 * * *'
 jobs:
   Google-Token-Refresh:
     runs-on: ubuntu-latest
