@@ -187,8 +187,7 @@ export function getWeekDayName(day: number) {
   return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day];
 }
 
-export const EventDate = ({date, setOffsetTop, filter}: { filter: any, date: Date, setOffsetTop?: (top: number) => void }) => {
-
+export const EventDate = ({date, setOffsetTop, filter}: { filter?: any, date: Date, setOffsetTop?: (top: number) => void }) => {
   const ref = useRef(null);
   useEffect(() => {
     if(setOffsetTop)
