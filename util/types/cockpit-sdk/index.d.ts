@@ -4,7 +4,7 @@ declare module 'cockpit-sdk' {
 
   type Object = { _id: string, _created: number }
   export type Collections = {
-    'internal-data': { data: Credentials } & Object
+    'internal-data': { data: Credentials, id: string } & Object
     'article': {
       title: string,
       preview_image: { path: string },
