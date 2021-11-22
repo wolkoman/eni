@@ -119,22 +119,19 @@ function CalendarErrorNotice() {
   </div>;
 }
 
-function ParishTag(props: { calendar: Calendar }) {
-  return <DumbParishTag calendar={props.calendar}/>;
-}
-function DumbParishTag(props: { calendar: Calendar }) {
+function ParishTag(props: { calendar: Calendar, colorless?: boolean }) {
   const info = getCalendarInfo(props.calendar);
-  return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${info.className}`}>{info.tagName}</div>
+  return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
 }
 
 export function Event({event, permissions}: { event: CalendarEvent, permissions: Permissions }) {
-  return <div className="flex text-lg mb-1">
-    <div className="w-10 flex-shrink-0 font-semibold">
+  return <div className={`flex text-lg mb-1 ${event.tags.includes("cancelled") && 'opacity-50'}`}>
+    <div className={`w-10 flex-shrink-0 ${event.tags.includes("cancelled") || 'font-semibold'}`}>
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
     </div>
-    <div className="mx-2"><ParishTag calendar={event.calendar}/></div>
+    <div className="mx-2"><ParishTag calendar={event.calendar} colorless={event.tags.includes("cancelled")}/></div>
     <div className="mb-2 leading-5" data-testid="event">
-      <div className="mt-1 font-semibold"><EventSummary event={event}/></div>
+      <div className={`mt-1 ${event.tags.includes("cancelled") || 'font-semibold'}`}><EventSummary event={event}/></div>
       <div className="font-normal text-sm leading-4"><EventDescription event={event} permissions={permissions}/></div>
     </div>
   </div>;
@@ -149,7 +146,7 @@ export function EventDescription(props: {event: CalendarEvent, permissions: Perm
     {props.event.tags.includes('private') && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
     {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' && <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
     </>}
-    {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
+    {!props.event.tags.includes("cancelled") && props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
   </>;
 }
 

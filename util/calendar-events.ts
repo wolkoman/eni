@@ -20,12 +20,13 @@ export interface CalendarEvent {
   calendar: Calendar,
   visibility: string,
   wholeday: boolean,
-  tags: ('in-church' | 'private')[]
+  tags: ('in-church' | 'private' | 'cancelled')[]
 }
 
 export type CalendarEvents = Record<string, CalendarEvent[]>;
 
 const notInChurchRegex = /(Pfarrheim|Pfarrhaus|Friedhof|Pfarrgartenpflege|kirchenfrei)/gi;
+const cancelledRegex = /(abgesagt)/gi;
 
 export async function getEventsFromCalendar(calendarId: string, calendarName: string, isPublic: boolean, timeMin?: Date, timeMax?: Date): Promise<CalendarEvent[]> {
   const oauth2Client = await getCachedGoogleAuthClient();
@@ -36,6 +37,7 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
   let end = start + 3600000 * 24 * 30 * (isPublic ? 1 : 6);
   if (timeMin) start = timeMin.getTime();
   if (timeMax) end = timeMax.getTime();
+
   const eventsList = await calendar.events.list({
     maxResults: 1000,
     calendarId,
@@ -46,6 +48,7 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
     timeZone: 'Europa/Vienna',
     orderBy: 'startTime'
   });
+
   return eventsList.data.items!.map(event => {
     const displayPersonen = event?.summary?.split("/", 2)?.[1];
     return ({
@@ -59,7 +62,8 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
       visibility: event.visibility ?? 'public',
       tags: [
         !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',
-        (event.visibility === 'private') && 'private'
+        (event.visibility === 'private') && 'private',
+        (event.summary + (event.description ?? '')).match(cancelledRegex) && 'cancelled',
       ].filter(item => item),
       wholeday: !!event.start?.date,
     } as CalendarEvent);
