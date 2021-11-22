@@ -7,6 +7,7 @@ import Link from 'next/link';
 import {Instagram} from '../components/Instagram';
 import {ComingUpComponent} from '../components/ComingUp';
 import {Parishes} from '../components/Parishes';
+import Responsive from '../components/Responsive';
 
 export default function HomePage() {
   return <Site>

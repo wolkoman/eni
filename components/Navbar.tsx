@@ -28,7 +28,8 @@ export default function Navbar() {
             </div>
             <Link href="/">
               <div className="font-bold text-3xl pb-2 ml-6 cursor-pointer" data-testid="title">
-                eni.wien
+                <div className="lg:hidden">eni.wien</div>
+                <div className="hidden lg:block">eine neue initiative</div>
               </div>
             </Link>
             <div className="flex-grow justify-end pr-2 hidden">

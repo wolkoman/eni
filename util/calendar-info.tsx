@@ -15,7 +15,7 @@ export interface CalendarInfo {
 export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
   let infos: Record<Calendar, CalendarInfo> = {
     'all': {
-      className: 'bg-white',
+      className: '',
       fullName: '',
       shortName: '',
       tagName: '',

@@ -37,6 +37,7 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
   if (timeMin) start = timeMin.getTime();
   if (timeMax) end = timeMax.getTime();
   const eventsList = await calendar.events.list({
+    maxResults: 1000,
     calendarId,
     auth: oauth2Client,
     timeMin: new Date(start).toISOString(),
@@ -45,21 +46,24 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
     timeZone: 'Europa/Vienna',
     orderBy: 'startTime'
   });
-  return eventsList.data.items!.map(event => ({
-    id: event.id,
-    summary: event.summary,
-    description: event.description ?? null,
-    date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
-    start: event.start,
-    end: event.end,
-    calendar: calendarName,
-    visibility: event.visibility ?? 'public',
-    tags: [
-      !(event.summary+(event.description ?? "")).match(notInChurchRegex) && 'in-church',
-      (event.visibility === "private") && 'private'
-    ].filter(item => item),
-    wholeday: !!event.start?.date,
-  } as CalendarEvent)).filter(event => event.summary)
+  return eventsList.data.items!.map(event => {
+    const displayPersonen = event?.summary?.split("/", 2)?.[1];
+    return ({
+      id: event.id,
+      summary: event?.summary?.split('/', 2)[0],
+      description: (displayPersonen ? `mit ${displayPersonen}${event.description ? '\n' : ''}` : '') + (event.description ?? ''),
+      date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
+      start: event.start,
+      end: event.end,
+      calendar: calendarName,
+      visibility: event.visibility ?? 'public',
+      tags: [
+        !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',
+        (event.visibility === 'private') && 'private'
+      ].filter(item => item),
+      wholeday: !!event.start?.date,
+    } as CalendarEvent);
+  }).filter(event => event.summary)
     .filter(event => !isPublic || event?.visibility === 'public')
     .map(event => !isPublic ? event : ({
       ...event,
