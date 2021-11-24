@@ -1,5 +1,5 @@
 import React from 'react';
-import {CalendarPage} from '../components/Calendar';
+import {EventsPage} from '../components/Calendar';
 import Articles from '../components/Articles';
 import Site from '../components/Site';
 import Button from '../components/Button';
@@ -14,7 +14,7 @@ export default function HomePage() {
     <Articles/>
     <Parishes/>
     <ComingUpComponent/>
-    <CalendarPage/>
+    <EventsPage/>
     <Instagram/>
     <div className="flex flex-col md:flex-row my-14">
       <Info title="Newsletter" image="./info-01.svg">

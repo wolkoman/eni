@@ -15,32 +15,29 @@ const personWords = {
 }
 type Person = keyof typeof personWords;
 
-
-export function CalendarPage({}) {
+export function EventsPage({}) {
   const [datePositions, setDatePositions, setPartialDatePositions] = useState<Record<string, number>>({});
   const [filter, setFilter] = useState<FilterType>(null);
   const calendar = useCalendarStore(state => state);
   const [permissions, jwt, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.loaded, state.load]);
+  const calendarScrollerRef = useRef(null);
+  const [position, setPosition] = useState('');
 
   useEffect(() => userLoad(), []);
   useEffect(() => calendar.load(jwt), [jwt]);
-
-  const calendarScrollerRef = useRef(null);
-  const [pos, setPos] = useState(0);
-  useEffect(() => {
+  /*useEffect(() => {
     const calendar = calendarScrollerRef.current as unknown as HTMLElement;
-    const handler = (e: Event) => {
-      requestIdleCallback(() => {
-        console.log("handle", new Date().getTime());
-      });
+    const handler = () => {
+      const date = Object.entries(datePositions).find(([date, pos]) => pos > calendar.scrollTop)?.[0]!;
+      setPosition(date);
     };
-    //calendar.addEventListener("scroll", handler);
-
+    if(!calendar) return () => {};
+    calendar?.addEventListener("scroll", handler);
     return () => calendar.removeEventListener("scroll", handler);
-  }, [calendarScrollerRef]);
+  }, [calendarScrollerRef, position]);*/
 
   return <div data-testid="calendar" className="relative">
-    <SectionHeader>Kalender</SectionHeader>
+    <SectionHeader>Termine</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
       <div className="flex flex-col md:flex-row bg-gray-100 rounded-xl overflow-hidden">
@@ -48,21 +45,54 @@ export function CalendarPage({}) {
           {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
           <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
         </div>
-        <div className="h-3xl overflow-y-auto flex-grow events py-4 px-4 lg:px-0 relative" ref={calendarScrollerRef}>
+        <div ref={calendarScrollerRef} className="h-3xl overflow-y-auto flex-grow events mt-4 pb-4 px-4 lg:px-0 relative" >
           {calendar.loading && <LoadingEvents/>}
           {calendar.loading || Object.entries(calendar.items)
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
             .filter(([_, events]) => events.length > 0)
             .map(([date, events]) => <div key={date} data-date={date}>
-              <div className="mt-3 leading-5">
-                <EventDate date={new Date(date)} filter={filter} setOffsetTop={top => setPartialDatePositions({[date]: top})}/>
-              </div>
+              <EventDate date={new Date(date)} filter={filter} setOffsetTop={top => setPartialDatePositions({[date]: top})}/>
               {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
             </div>)}
         </div>
       </div>
     </>}
   </div>;
+}
+
+function CalendarOverview(props: { date: string }) {
+  const [data, , setPartialData] = useState({day: 0, month: 0, year: 2020, firstDay: 0, daysInMonth: 0});
+  const changeMonth = (month: number) => {
+    const date = new Date(data.year, data.month + month, data.day);
+    setPartialData({year: date.getFullYear(), month: date.getMonth()});
+  };
+
+  useEffect(() => {
+    setPartialData({
+      firstDay: new Date(data.year, data.month, 1).getDay(),
+      daysInMonth: new Date(data.year, data.month+1, 0).getDate(),
+    });
+  }, [data.month, data.year]);
+
+  useEffect(() => {
+    if(props.date === "" || props.date === undefined) return;
+    const date = new Date(props.date);
+    setPartialData({day: date.getDate(), month: date.getMonth(), year: date.getFullYear()});
+  }, [props.date]);
+
+  return <>
+    <div className="flex">
+      <div onClick={() => changeMonth(-1)}>{"<"}</div>
+      <div className="text-center flex-grow">{getMonthName(data.month)} {data.year}</div>
+      <div onClick={() => changeMonth(1)}>{">"}</div>
+    </div>
+    <div className="grid grid-cols-7">
+      {Array(((data.firstDay) +6)%7).fill(null).map((_, i) => <div key={i}/>)}
+      {Array(data.daysInMonth).fill(null).map((_, i) => {
+        return <div key={i} className={`text-sm text-center rounded-lg ${i+1 === data.day ? "bg-primary1 text-white" : ""}`}>{(i + 1)}</div>;
+      })}
+    </div>
+  </>;
 }
 
 function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions}) {
@@ -183,18 +213,25 @@ const ShadowEvent = ({width, description}: { width: number, description: boolean
 export function getWeekDayName(day: number) {
   return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day];
 }
+export function getMonthName(month: number) {
+  return ['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][month];
+}
 
 export const EventDate = ({date, setOffsetTop, filter}: { filter?: any, date: Date, setOffsetTop?: (top: number) => void }) => {
   const ref = useRef(null);
   useEffect(() => {
-    if(setOffsetTop)
-    setOffsetTop((ref.current as unknown as HTMLElement).offsetTop!);
+    console.log('set top');
+    if (setOffsetTop)
+      setOffsetTop((ref.current as unknown as HTMLElement).offsetTop!);
   }, [ref, filter]);
   const day = date.getDay();
-  return <span className={`${day ? '' : 'underline'}`} ref={ref}>
-    {getWeekDayName(day)},{' '}
-    {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}
-  </span>;
+  return <div className="sticky top-0">
+    <div className={`mp-3 leading-5 bg-gray-100 z-20 ${day ? '' : 'underline'}`} ref={ref}>
+      {getWeekDayName(day)},{' '}
+      {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}
+    </div>
+    <div className="h-4" style={{background: 'linear-gradient(to bottom, rgb(248,248,248), rgba(248,248,248,0))'}}/>
+  </div>;
 }
 
 export const EventTime = (props: { date: Date }) => {
