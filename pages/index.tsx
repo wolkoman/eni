@@ -7,10 +7,11 @@ import Link from 'next/link';
 import {Instagram} from '../components/Instagram';
 import {ComingUpComponent} from '../components/ComingUp';
 import {Parishes} from '../components/Parishes';
-import Responsive from '../components/Responsive';
+import {TopBranding} from '../components/TopBranding';
 
 export default function HomePage() {
   return <Site>
+    <TopBranding/>
     <Articles/>
     <Parishes/>
     <ComingUpComponent/>
