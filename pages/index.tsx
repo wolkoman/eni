@@ -8,31 +8,35 @@ import {Instagram} from '../components/Instagram';
 import {ComingUpComponent} from '../components/ComingUp';
 import {Parishes} from '../components/Parishes';
 import {TopBranding} from '../components/TopBranding';
+import Responsive from '../components/Responsive';
 
 export default function HomePage() {
-  return <Site>
-    <TopBranding/>
-    <Articles/>
-    <Parishes/>
-    <ComingUpComponent/>
-    <EventsPage/>
+  return <Site responsive={false}>
+    <Responsive>
+      <TopBranding/>
+      <Articles/>
+      <Parishes/>
+      <EventsPage/>
+    </Responsive>
     <Instagram/>
-    <div className="flex flex-col md:flex-row my-14">
-      <Info title="Newsletter" image="./info-01.svg">
-        <div className="mb-4">
-          In unserem monatlichen Newsletter informieren wir kurz und prägnant über zukünftige, aktuelle und vergangene
-          Geschehnisse in unseren drei Pfarren.
-        </div>
-        <Link href="/newsletter"><a><Button label="Newsletter abonnieren"/></a></Link>
-      </Info>
-      <Info title="Pfarrzeitung" image="./info-02.svg">
-        <div className="mb-4">
-          Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr
-          finden Sie in den Pfarrzeitungen der Pfarren.
-        </div>
-        <Link href="/pfarrzeitung"><a><Button label="Pfarrzeitungen ansehen"/></a></Link>
-      </Info>
-    </div>
+    <Responsive>
+      <div className="flex flex-col md:flex-row my-14">
+        <Info title="Newsletter" image="./info-01.svg">
+          <div className="mb-4">
+            In unserem monatlichen Newsletter informieren wir kurz und prägnant über zukünftige, aktuelle und vergangene
+            Geschehnisse in unseren drei Pfarren.
+          </div>
+          <Link href="/newsletter"><a><Button label="Newsletter abonnieren"/></a></Link>
+        </Info>
+        <Info title="Pfarrzeitung" image="./info-02.svg">
+          <div className="mb-4">
+            Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr
+            finden Sie in den Pfarrzeitungen der Pfarren.
+          </div>
+          <Link href="/pfarrzeitung"><a><Button label="Pfarrzeitungen ansehen"/></a></Link>
+        </Info>
+      </div>
+    </Responsive>
   </Site>
 }
 

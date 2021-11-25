@@ -40,5 +40,7 @@ module.exports = {
       ringWidth: ['hover']
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 }

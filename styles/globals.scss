@@ -59,9 +59,35 @@ body {
 
 .st35{
   fill:none;stroke:#2A6266;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+  stroke-dasharray: 1556;
+  stroke-dashoffset: -1556;
+  animation-name: dashdraw;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
+  animation-fill-mode: both;
+  animation-delay: 1s;
+
 }
-.st36{fill:none;stroke:#F4AC11;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-.st37{fill:none;stroke:#139B91;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st36{
+  fill:none;stroke:#F4AC11;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+  stroke-dasharray: 1853;
+  stroke-dashoffset: -1853;
+  animation-name: dashdraw;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
+  animation-fill-mode: both;
+  animation-delay: 2s;
+}
+.st37{
+  fill:none;stroke:#139B91;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+  stroke-dasharray: 1740;
+  stroke-dashoffset: -1740;
+  animation-name: dashdraw;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
+  animation-fill-mode: both;
+  animation-delay: 1.5s;
+}
 
 @keyframes dashdraw {
   to {stroke-dashoffset: 0}

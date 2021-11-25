@@ -4,7 +4,7 @@ import {getCalendarInfo} from "../util/calendar-info";
 import {SectionHeader} from './SectionHeader';
 
 export function Parishes() {
-  return <div className="py-6 pb-12 md:py-12">
+  return <div className="py-6 pb-12 mt:py-12">
     <SectionHeader>Unsere Pfarren</SectionHeader>
     <div className="grid sm:grid-cols-3 gap-4">
       {(['emmaus','inzersdorf','neustift'] as Calendar[]).map(calendar => getCalendarInfo(calendar)).map(calendar => <div key={calendar.fullName} className={`shadow-lg rounded-lg overflow-hidden flex sm:flex-col`}>

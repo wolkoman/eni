@@ -3,16 +3,16 @@ import React from 'react';
 export function TopBranding() {
   return <>
     <div className="mt-4 md:mt-12 lg:-mx-18 xl:-mx-28">
-      <div className="text-5xl font-bold">gemeinsam pfarre</div>
-      <div className="flex">
+      <div className="text-5xl font-bold serif">eine neue initative</div>
+      <div className="flex hidden">
         <div className="mr-2 md:mr-8">Pfarre Emmaus am Wienerberg</div>
         <div className="mr-2 md:mr-8">Pfarre Inzersdorf (St. Nikolaus)</div>
         <div className="mr-2 md:mr-8">Pfarre Inzersdorf-Neustift</div>
       </div>
     </div>
-    <div className="h-20 md:h-32 lg:h-44 mt-10 mb-24 lg:mt-12">
+    <div className="h-20 md:h-32 lg:h-32 mt-4 mb-24">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1730.6 125.4"
-           className="h-20 md:h-32 lg:h-44 absolute right-20">
+           className="h-20 md:h-32 lg:h-32 absolute right-44">
         <g>
           <path className="st35"
                 d="M1442.3,49c-7.4-6.1-24-8.7-24-8.7l0.3-32.8h-28c0,0,0,17.8-0.3,26.7c-11,0-36.5,2.5-60.2,18.7 c-0.7,6,0.2,44.3,0.2,44.3H-4.2"/>

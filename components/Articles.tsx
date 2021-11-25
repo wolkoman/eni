@@ -6,6 +6,7 @@ import {useRouter} from 'next/router';
 import {cockpit} from '../util/cockpit-sdk';
 import {useArticleStore} from '../util/store';
 import {Collections} from 'cockpit-sdk';
+import {SectionHeader} from './SectionHeader';
 
 export function getArticlePreviewImageUrl(article: Collections['article']) {
   const url = article.preview_image.path;
@@ -24,44 +25,44 @@ export default function Articles() {
   const loading = articles.length < 4;
 
   return loading ? <ArticleShadow/> : <>
-    <div className="flex md:grid grid-cols-2 break-words mt-8" data-testid="articles">
-      <div className="w-full h-40 md:h-80 mr-4 rounded-lg" style={{
-        backgroundImage: `url(${getArticlePreviewImageUrl(articles[0])})`,
-        backgroundSize: 'cover',
-        backgroundPosition: '50% 50%'
-      }}/>
-      <div className="md:pl-4 flex flex-col">
-        <div className="uppercase text-primary1 font-semibold my-1">{articles[0].resort}</div>
-        <Link href={getArticleLink(articles[0])}>
-          <div className="text-3xl md:text-4xl cursor-pointer">{articles[0].title}</div>
-        </Link>
-        <div className="text-lg leading-7 mt-2 hidden md:block">
-          {articles[0].content.substring(0, articleMax)}{articles[0].content.length > articleMax ? '...' : ''}
-        </div>
-        <div className="flex justify-end hidden md:block">
-          <Link href={getArticleLink(articles[0])}><a>
-            <Button label="Weiterlesen"/></a>
+    <SectionHeader>Aktuelles</SectionHeader>
+    <div className="flex flex-col md:flex-row lg:-mx-16 xl:-mx-32">
+
+      <div className="flex break-words bg-white shadow-lg rounded-xl overflow-hidden h-full  items-stretch" data-testid="articles">
+
+        <div className="w-1/2 h-full flex-shrink-0" style={{
+          backgroundImage: `url(${getArticlePreviewImageUrl(articles[0])})`,
+          backgroundSize: 'cover',
+          backgroundPosition: '50% 50%'
+        }}/>
+
+        <div className="px-8 py-4 flex flex-col">
+          <div className="uppercase text-primary1 font-semibold my-1">{articles[0].resort}</div>
+          <Link href={getArticleLink(articles[0])}>
+            <div className="text-3xl md:text-4xl cursor-pointer">{articles[0].title}</div>
           </Link>
+          <div className="text-lg leading-7 mt-2 line-clamp-4">
+            {articles[0].content}
+          </div>
+          <div className="flex justify-end">
+            <Link href={getArticleLink(articles[0])}><a>
+              <Button label="Weiterlesen"/></a>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-    <div className="flex pt-6 items-stretch">
-      <div className="flex flex-col md:grid md:grid-cols-3 md:gap-4 w-full">
+
+      <div className="flex flex-col w-96 ml-4">
         {articles.slice(1, 4).map(article => <Link href={getArticleLink(article)} key={article._id}>
           <div
-            className="flex flex-col lg:flex-row hover:bg-gray-100 p-2 cursor-pointer hover:bg-gray-200 rounded-lg">
+            className="flex flex-col lg:flex-row p-2 cursor-pointer">
             <div className="flex flex-col overflow-hidden">
-              <div className="uppercase text-primary1 font-semibold">{article.resort ?? 'Neues'}</div>
-              <div className="truncate">{article.title}</div>
+              <div className="uppercase text-primary1 text-sm">{article.resort ?? 'Neues'}</div>
+              <div className="line-clamp-2  font-semibold">{article.title}</div>
             </div>
           </div>
         </Link>)}
       </div>
-      <Link href="/artikel">
-        <div className="p-2 flex items-center cursor-pointer hover:bg-gray-200 rounded-lg">
-          <img src="./logos-28.svg" className="w-8"/>
-        </div>
-      </Link>
     </div>
   </>;
 }
