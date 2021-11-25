@@ -26,11 +26,11 @@ export default function Articles() {
 
   return loading ? <ArticleShadow/> : <>
     <SectionHeader>Aktuelles</SectionHeader>
-    <div className="flex flex-col md:flex-row lg:-mx-16 xl:-mx-32">
+    <div className="flex flex-col md:flex-row lg:-mx-16 xl:-mx-24">
 
-      <div className="flex break-words bg-white shadow-lg rounded-xl overflow-hidden h-full  items-stretch" data-testid="articles">
+      <div className="flex break-words bg-white shadow-lg rounded-xl overflow-hidden items-stretch" data-testid="articles">
 
-        <div className="w-1/2 h-full flex-shrink-0" style={{
+        <div className="w-1/2 flex-shrink-0" style={{
           backgroundImage: `url(${getArticlePreviewImageUrl(articles[0])})`,
           backgroundSize: 'cover',
           backgroundPosition: '50% 50%'
