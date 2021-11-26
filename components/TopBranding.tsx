@@ -2,14 +2,14 @@ import React from 'react';
 
 export function TopBranding() {
   return <>
-    <div className="mt-12 mb-36 lg:-mx-18 xl:-mx-28 relative">
+    <div className="mt-12 mb-44 lg:-mx-18 xl:-mx-28 relative">
       <div className="text-5xl font-bold serif">eine neue initative</div>
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1730.6 125.4"
-           className="h-20 md:h-32 lg:h-32 absolute top-0 right-0 mt-16 md:mt-0">
+           className="h-20 md:h-32 lg:h-32 absolute top-0 right-0 mt-32 sm:mt-16 lg:mt-0">
         <defs>
           <linearGradient id="Gradient2" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#fbfbfb"/>
-            <stop offset="100%" stop-color="#fbfbfb" stop-opacity="0"/>
+            <stop offset="0%" stopColor="#fbfbfb"/>
+            <stop offset="100%" stopColor="#fbfbfb" stopOpacity="0"/>
           </linearGradient>
         </defs>
         <g>
@@ -23,11 +23,6 @@ export function TopBranding() {
           <rect id="rect1" x="0" y="80" width="150" height="100"  fill="url(#Gradient2)"/>
         </g>
       </svg>
-      <div className="flex hidden">
-        <div className="mr-2 md:mr-8">Pfarre Emmaus am Wienerberg</div>
-        <div className="mr-2 md:mr-8">Pfarre Inzersdorf (St. Nikolaus)</div>
-        <div className="mr-2 md:mr-8">Pfarre Inzersdorf-Neustift</div>
-      </div>
     </div>
     <div className="">
     </div>

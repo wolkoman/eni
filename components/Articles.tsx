@@ -36,10 +36,10 @@ export default function Articles() {
           backgroundPosition: '50% 50%'
         }}/>
 
-        <div className="px-8 py-4 flex flex-col">
+        <div className="px-4 md:px-8 py-4 flex flex-col">
           <div className="uppercase text-primary1 font-semibold my-1">{articles[0].resort}</div>
           <Link href={getArticleLink(articles[0])}>
-            <div className="text-3xl md:text-4xl cursor-pointer">{articles[0].title}</div>
+            <div className="text-xl font-bold md:font-normal md:text-3xl md:text-4xl cursor-pointer">{articles[0].title}</div>
           </Link>
           <div className="text-lg leading-7 mt-2 line-clamp-4">
             {articles[0].content}
@@ -52,7 +52,7 @@ export default function Articles() {
         </div>
       </div>
 
-      <div className="flex flex-col w-96 ml-4">
+      <div className="flex flex-col mt-6 md:mt-0 md:w-96 ml-4">
         {articles.slice(1, 4).map(article => <Link href={getArticleLink(article)} key={article._id}>
           <div
             className="flex flex-col lg:flex-row p-2 cursor-pointer">
