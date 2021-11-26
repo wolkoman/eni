@@ -8,6 +8,7 @@
 body {
   font-family: "Source Sans Pro";
   color: #333;
+  background: #fbfbfb;
 }
 
 .events::-webkit-scrollbar {
@@ -45,12 +46,8 @@ body {
   background-size: 1000px 100%;
 }
 @keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
+  0% {background-position: -1000px 0;}
+  100% {background-position: 1000px 0;}
 }
 
 * > .on-parent-hover{
@@ -58,4 +55,40 @@ body {
 }
 *:hover > .on-parent-hover{
   opacity: 100;
+}
+
+.st35{
+  fill:none;stroke:#2A6266;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+  stroke-dasharray: 1556;
+  stroke-dashoffset: -1556;
+  animation-name: dashdraw;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
+  animation-fill-mode: both;
+  animation-delay: 1s;
+
+}
+.st36{
+  fill:none;stroke:#F4AC11;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+  stroke-dasharray: 1853;
+  stroke-dashoffset: -1853;
+  animation-name: dashdraw;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
+  animation-fill-mode: both;
+  animation-delay: 2s;
+}
+.st37{
+  fill:none;stroke:#139B91;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+  stroke-dasharray: 1740;
+  stroke-dashoffset: -1740;
+  animation-name: dashdraw;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
+  animation-fill-mode: both;
+  animation-delay: 1.5s;
+}
+
+@keyframes dashdraw {
+  to {stroke-dashoffset: 0}
 }

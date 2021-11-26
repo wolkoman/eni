@@ -40,12 +40,12 @@ export function EventsPage({}) {
     <SectionHeader>Termine</SectionHeader>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
-      <div className="flex flex-col md:flex-row bg-gray-100 rounded-xl overflow-hidden">
+      <div className="flex flex-col md:flex-row rounded-xl shadow-lg bg-white overflow-hidden">
         <div className="flex flex-col p-2 md:p-4 md:mr-8 text-lg md:w-52 bg-gray-200 flex-shrink-0 rounded-xl">
           {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
           <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
         </div>
-        <div ref={calendarScrollerRef} className="h-3xl overflow-y-auto flex-grow events mt-4 pb-4 px-4 lg:px-0 relative" >
+        <div ref={calendarScrollerRef} className="h-3xl overflow-y-auto flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
           {calendar.loading && <LoadingEvents/>}
           {calendar.loading || Object.entries(calendar.items)
             ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
@@ -226,11 +226,11 @@ export const EventDate = ({date, setOffsetTop, filter}: { filter?: any, date: Da
   }, [ref, filter]);
   const day = date.getDay();
   return <div className="sticky top-0">
-    <div className={`mp-3 leading-5 bg-gray-100 z-20 ${day ? '' : 'underline'}`} ref={ref}>
+    <div className={`mp-3 leading-5 bg-white z-20 ${day ? '' : 'underline'}`} ref={ref}>
       {getWeekDayName(day)},{' '}
       {date.getDate()}. {['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'][date.getMonth()]}
     </div>
-    <div className="h-4" style={{background: 'linear-gradient(to bottom, rgb(248,248,248), rgba(248,248,248,0))'}}/>
+    <div className="h-4" style={{background: 'linear-gradient(to bottom, rgb(255,255,255), rgba(255,255,255,0))'}}/>
   </div>;
 }
 
