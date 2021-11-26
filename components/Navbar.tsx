@@ -16,7 +16,7 @@ export default function Navbar() {
     </Link>
     <div className="flex flex-col justify-center items-center leading-4 hidden md:block opacity-80 text-right">
       <div className="text-md md:ml-24">kanzlei@eni.wien</div>
-      <div className="text-md md:ml-24 hiddens">+1 616 4340</div>
+      <div className="text-md md:ml-24 hidden">+1 616 4340</div>
     </div>
   </div>;
 }
