@@ -26,7 +26,7 @@ export interface CalendarEvent {
 export type CalendarEvents = Record<string, CalendarEvent[]>;
 
 const notInChurchRegex = /(Pfarrheim|Pfarrhaus|Friedhof|Pfarrgartenpflege|kirchenfrei)/gi;
-const cancelledRegex = /(abgesagt)/gi;
+const cancelledRegex = /(abgesagt|findet nicht statt)/gi;
 
 export async function getEventsFromCalendar(calendarId: string, calendarName: string, isPublic: boolean, timeMin?: Date, timeMax?: Date): Promise<CalendarEvent[]> {
   const oauth2Client = await getCachedGoogleAuthClient();
