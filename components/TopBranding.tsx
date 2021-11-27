@@ -3,7 +3,7 @@ import React from 'react';
 export function TopBranding() {
   return <>
     <div className="mt-12 mb-44 lg:-mx-18 xl:-mx-28 relative">
-      <div className="text-5xl font-bold serif">eine neue initative</div>
+      <div className="text-5xl font-bold serif">eine neue initiative</div>
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1730.6 125.4"
            className="h-20 md:h-32 lg:h-32 absolute top-0 right-0 mt-32 sm:mt-16 lg:mt-0">
         <defs>
