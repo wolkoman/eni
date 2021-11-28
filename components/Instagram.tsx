@@ -25,7 +25,7 @@ export function Instagram() {
       {feed
         .filter(item => item.media_type !== 'VIDEO')
         .map((item) =>
-          <SwiperSlide style={{width: 300}}><InstagramItem key={item.id} item={item}/></SwiperSlide>
+          <SwiperSlide key={item.id} style={{width: 300}}><InstagramItem item={item}/></SwiperSlide>
         )}
       {feed.length > 0 && <SwiperSlide style={{width: 300}}>
         <div className="w-full h-64 text-xl text-center flex items-center justify-center">
@@ -51,26 +51,6 @@ function InstagramItem({item}: { item?: InstagramFeedItem }) {
         <div className="shimmer w-full h-4 mt-1"/>
         <div className="shimmer w-full h-4 mt-1"/>
         </>}
-    </div>
-  </div>;
-}
-
-function ShadowInstagram(props: {}) {
-  return <div className="my-10" data-testid="instagram">
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-      {Array(4).fill(0)
-        .map((_, index) =>
-          <div className={`pb-4 ${index === 3 ? 'md:hidden' : ''}`} key={index} data-testid="instagram-item">
-            <div className="relative h-64 shimmer rounded-xl">
-              <div
-                className="bg-white inline-block px-2 text-gray-600 absolute top-0 right-0 cursor-default rounded-bl-xl w-20 h-6"/>
-            </div>
-            <div className="w-full h-5 shimmer my-1.5 rounded"/>
-            <div className="w-full h-5 shimmer my-1.5 rounded"/>
-            <div className="w-full h-5 shimmer my-1.5 rounded"/>
-            <div className="w-3/4 h-5 shimmer my-1.5 rounded"/>
-          </div>
-        )}
     </div>
   </div>;
 }

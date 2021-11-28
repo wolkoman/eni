@@ -2,6 +2,7 @@ import {Calendar} from "./calendar-events";
 import React from "react";
 
 export interface CalendarInfo {
+  id: Calendar,
   className: string,
   fullName: string,
   shortName: string,
@@ -15,6 +16,7 @@ export interface CalendarInfo {
 export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
   let infos: Record<Calendar, CalendarInfo> = {
     'all': {
+      id: 'all',
       className: '',
       fullName: '',
       shortName: '',
@@ -25,6 +27,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       imageColor: ''
     },
     'emmaus': {
+      id: 'emmaus',
       className: 'bg-primary1 text-white',
       fullName: 'Pfarre Emmaus am Wienerberg',
       shortName: 'Emmaus',
@@ -36,6 +39,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
         errichtet.</>,
     },
     'inzersdorf': {
+      id: 'inzersdorf',
       className: 'bg-primary2 text-white',
       fullName: 'Pfarre Inzersdorf (St. Nikolaus)',
       shortName: 'St. Nikolaus',
@@ -47,6 +51,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
         Erzdiözese Wien.</>,
     },
     'neustift': {
+      id: 'neustift',
       className: 'bg-primary3',
       fullName: 'Pfarre Inzersdorf - Neustift',
       shortName: 'Neustift',
@@ -58,6 +63,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
         Hilfe der Christen geweiht.</>,
     },
     'inzersdorf-organ': {
+      id: 'inzersdorf-organ',
       className: 'bg-primary3',
       fullName: '',
       shortName: '',

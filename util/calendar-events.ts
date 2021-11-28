@@ -13,6 +13,7 @@ export type Calendar = keyof typeof calendarIds;
 export interface CalendarEvent {
   id: string,
   summary: string,
+  mainPerson?: string,
   description: string,
   date: string,
   start: { dateTime: string },
@@ -54,7 +55,8 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
     return ({
       id: event.id,
       summary: event?.summary?.split('/', 2)[0],
-      description: (displayPersonen ? `mit ${displayPersonen}${event.description ? '\n' : ''}` : '') + (event.description ?? ''),
+      mainPerson: displayPersonen,
+      description: event.description ?? '',
       date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
       start: event.start,
       end: event.end,

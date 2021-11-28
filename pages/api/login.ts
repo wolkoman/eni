@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const persons = await cockpit.collectionGet('person', {filter: {username: body.username, code: body.password}});
   const secretOrPrivateKey = Buffer.from(process.env.PRIVATE_KEY!, 'base64');
+  console.log(persons, secretOrPrivateKey);
 
   if(persons.entries.length === 1){
     const person = persons.entries[0];

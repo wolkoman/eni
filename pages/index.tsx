@@ -5,10 +5,10 @@ import Site from '../components/Site';
 import Button from '../components/Button';
 import Link from 'next/link';
 import {Instagram} from '../components/Instagram';
-import {ComingUpComponent} from '../components/ComingUp';
 import {Parishes} from '../components/Parishes';
 import {TopBranding} from '../components/TopBranding';
 import Responsive from '../components/Responsive';
+import {ComingUp} from "../components/ComingUp";
 
 export default function HomePage() {
   return <Site responsive={false}>
@@ -16,7 +16,7 @@ export default function HomePage() {
       <TopBranding/>
       <Articles/>
       <Parishes/>
-      <EventsPage/>
+      <ComingUp/>
     </Responsive>
     <Instagram/>
     <Responsive>
