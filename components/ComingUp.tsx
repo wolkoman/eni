@@ -30,8 +30,7 @@ export function ComingUp({}) {
 
     <div className="hidden lg:grid grid-cols-3">
       {infos.map(info => <ComingUpTitle key={info.id} info={info}/>)}
-      <ComingUpRow label="Heute" now={now} infos={infos} calendar={calendar.items}/>
-      <ComingUpRow label="Morgen" now={tomorrow} infos={infos} calendar={calendar.items} last={true}/>
+      {dates.map((date, index) => <ComingUpRow label={date.label} now={date.date} infos={infos} calendar={calendar.items} last={index + 1 === dates.length}/>)}
     </div>
 
       <div className="lg:hidden">
@@ -64,12 +63,12 @@ function ComingUpColumn(props: { calendar: CalendarEvents, info: CalendarInfo, d
 }
 
 function ComingUpTitle(props: { info: CalendarInfo }) {
-  return <div className="mx-2 overflow-hidden  rounded-t-lg shadow-lg">
-    <div className={props.info.className+ " h-2"}></div>
-    <div
-    className="p-2 text-center text-xl font-bold">
-    {props.info.shortName}
-  </div>
+  return <div className="mx-2 overflow-hidden bg-white rounded-t-lg relative">
+    <div className={props.info.className + " h-1"}/>
+    <div className={`p-2 text-center text-xl font-bold relative z-10 `}>
+      {props.info.shortName}
+    </div>
+    <div className={props.info.className + " absolute top-0 left-0 w-full h-full opacity-10"}/>
   </div>;
 }
 

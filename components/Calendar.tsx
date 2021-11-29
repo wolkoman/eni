@@ -104,7 +104,7 @@ function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterT
         className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer"
         onClick={() => props.setFilter(null)}>Alle</div>
       {parishFilters.map(filt => <div
-          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer relative" key={filt.label}
+          className="px-3 py-1 mb-1 cursor-pointer relative" key={filt.label}
           onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.parish})}>
           {filt.label}
           <div className={`absolute bottom-0 left-0 h-0.5 transition-all ${getCalendarInfo(filt?.parish).className} bg-gray-600 ${((props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish) || props.filter === null && filt.parish === 'all') ? 'w-full opacity-100' : 'opacity-0 w-0'}`}/>
@@ -115,7 +115,7 @@ function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterT
       className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
       data-testid="parish-selector">
       {personFilters.map(filt => <div
-          className="px-3 py-1 hover:bg-gray-200 mb-1 cursor-pointer relative" key={filt.label}
+          className="px-3 py-1 mb-1 cursor-pointer relative" key={filt.label}
           onClick={() => props.setFilter({filterType: 'PERSON', person: filt.person})}>
           {filt.label}
         </div>
@@ -216,12 +216,12 @@ export const EventDate = ({date, setOffsetTop, filter}: { filter?: any, date: Da
       setOffsetTop((ref.current as unknown as HTMLElement).offsetTop!);
   }, [ref, filter]);
   const day = date.getDay();
-  return <div className="sticky top-14 md:top-0">
-    <div className={`mp-3 leading-5 bg-white z-20 ${day ? '' : 'underline'}`} ref={ref}>
+  return <div className="sticky top-14 md:top-0 relative z-10">
+    <div className={`mp-3 leading-5 bg-gray-back pt-4 ${day ? '' : 'underline'}`} ref={ref}>
       {getWeekDayName(day)},{' '}
       {date.getDate()}. {getMonthName(date.getMonth())}
     </div>
-    <div className="h-4" style={{background: 'linear-gradient(to bottom, rgb(255,255,255), rgba(255,255,255,0))'}}/>
+    <div className="h-4 to-gray-50 bg-gradient-to-t from-transparent"/>
   </div>;
 }
 
