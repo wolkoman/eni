@@ -9,6 +9,7 @@ import {CalendarEvent} from '../../util/calendar-events';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/Calendar';
+import {sanitizeOptions} from "../../components/SanitizeHtml";
 
 
 export default function InternArticles() {
@@ -27,7 +28,11 @@ export default function InternArticles() {
   }
 
   function toCalEevent(event: CalendarEvent) {
-    return {time: toTime(event.start.dateTime), title: event.summary, description: (false ? `\n${sanitize(event.description)}` : null)};
+    return {
+      time: toTime(event.start.dateTime),
+      title: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
+      description:  event.description.toString().trim().length > 0 ? `\n${sanitize(event.description.trim(), sanitizeOptions)}` : ""
+    };
   }
 
   async function generate() {

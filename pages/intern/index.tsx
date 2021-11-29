@@ -15,21 +15,21 @@ export default function Intern() {
       <div className="text-4xl my-8">Hallo {user?.name?.split(" ")?.[0] ?? "Benutzer:in"}!</div>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4">
-      <Link href="/"><div className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer">Startseite</div></Link>
-      {
-        permissions[Permission.Articles] &&
-        <Link href="intern/artikel"><div className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer">Artikel Importer</div></Link>
-      }
-      {
-        permissions[Permission.OrganBooking] &&
-        <Link href="intern/orgel"><div className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer">Orgel Buchung</div></Link>
-      }
-      {
-        permissions[Permission.ExperimentalAccess] &&
-        <Link href="intern/news"><div className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer">Wochenmitteilungen</div></Link>
-      }
-      <Link href="https://forms.gle/vCeFKfYwXL7E8ct7A"><div className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer">Feedback</div></Link>
-      <div className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer" onClick={logout}>Logout</div>
+      <InternButton href="/" label="Startseite"/>
+      <InternButton href="/termine" label="Termine"/>
+      {permissions[Permission.Articles] && <InternButton href="intern/artikel" label="Importer"/>}
+      {permissions[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
+      {permissions[Permission.ExperimentalAccess] && <InternButton href="intern/news" label="Wochenmitteilung"/>}
+      <InternButton href="//forms.gle/vCeFKfYwXL7E8ct7A" label="Feedback"/>
+      <InternButton onClick={logout} label="Logout"/>
     </div>
   </Site>
+}
+
+function InternButton({href, label, onClick}: {href?: string, label: string, onClick?: () => any}) {
+  return <Link href={href ?? ''}>
+    <div onClick={onClick} className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer">
+      {label}
+    </div>
+  </Link>;
 }
