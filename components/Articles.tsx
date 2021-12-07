@@ -55,15 +55,24 @@ export default function Articles() {
       </div>
 
       <div className="flex flex-col mt-6 md:mt-0 md:w-96 ml-4">
-        {articles.slice(1, 4).map(article => <Link href={getArticleLink(article)} key={article._id}>
+        {articles.slice(1, 4).map((article, index) => <Link href={getArticleLink(article)} key={article._id}>
           <div
-            className="flex flex-col lg:flex-row p-2 cursor-pointer">
+            className={`flex flex-col lg:flex-row p-2 cursor-pointer ${index === 2 && 'hidden md:block'}`}>
             <div className="flex flex-col overflow-hidden">
               <div className="uppercase text-primary1 text-sm">{article.resort ?? 'Neues'}</div>
               <div className="line-clamp-2  font-semibold">{article.title}</div>
             </div>
           </div>
         </Link>)}
+        <Link href="/artikel">
+          <div
+            className="flex flex-col lg:flex-row p-2 cursor-pointer">
+            <div className="flex flex-col overflow-hidden">
+              <div className="uppercase text-primary1 text-sm">Weiteres</div>
+              <div className="line-clamp-2  font-semibold">Alle Beiträge</div>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   </>;

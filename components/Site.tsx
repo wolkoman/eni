@@ -25,6 +25,6 @@ export default function Site({ children, responsive = true, narrow = false, navb
       {children}
     </Responsive>: children}
       </div>
-    {navbar && <Footer />}
+    {footer && <Footer />}
   </div></>;
 }
