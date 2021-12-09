@@ -3,8 +3,10 @@ import React, {useEffect} from 'react';
 import {useCalendarStore, useUserStore} from '../util/store';
 import {SectionHeader} from './SectionHeader';
 import {CalendarInfo, getCalendarInfo} from '../util/calendar-info';
-import {CalendarErrorNotice, Event, EventDescription, EventSummary, EventTime, getWeekDayName} from './Calendar';
+import {getWeekDayName} from './Calendar';
 import Link from 'next/link';
+import {CalendarErrorNotice} from './CalendarNotice';
+import {Event, EventDescription, EventSummary, EventTime} from './CalendarEvent';
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
