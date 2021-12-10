@@ -6,6 +6,7 @@ import {SectionHeader} from './SectionHeader';
 import {getCalendarInfo} from '../util/calendar-info';
 import {Permission, Permissions} from '../util/verify';
 import {useState} from '../util/use-state-util';
+import {CalendarCacheNotice} from "./CalendarCacheNotice";
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -27,6 +28,7 @@ export function EventsPage({}) {
   useEffect(() => calendar.load(jwt), [jwt]);
 
   return <div data-testid="calendar" className="relative">
+    <CalendarCacheNotice/>
     {calendar.error && <CalendarErrorNotice/>}
     {calendar.error || <>
       <div className="flex flex-col md:flex-row">

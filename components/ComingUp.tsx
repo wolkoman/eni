@@ -5,6 +5,7 @@ import {SectionHeader} from './SectionHeader';
 import {CalendarInfo, getCalendarInfo} from '../util/calendar-info';
 import {CalendarErrorNotice, Event, EventDescription, EventSummary, EventTime, getWeekDayName} from './Calendar';
 import Link from 'next/link';
+import {CalendarCacheNotice} from "./CalendarCacheNotice";
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -45,6 +46,7 @@ export function ComingUp({}) {
     </div>
 
     {calendar.error && <CalendarErrorNotice/>}
+    <CalendarCacheNotice/>
   </div>;
 }
 

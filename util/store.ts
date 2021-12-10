@@ -15,6 +15,7 @@ interface ArticleStore {
 
 interface CalendarStore {
   items: CalendarEvents;
+  cache?: string;
   loading: boolean;
   loaded: boolean;
   error: boolean;
@@ -62,7 +63,7 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
     if (get().loading) return;
     set(state => ({...state, loading: true}));
     fetchJson('/api/calendar', {jwt})
-      .then(data => set(state => ({...state, items: data, loaded: true, loading: false})))
+      .then(data => set(state => ({...state, items: data.events, loaded: true, loading: false, cache: data.cache})))
       .catch(() => set(state => ({...state, items: {}, loaded: true, loading: false, error: true})));
   }
 }));
