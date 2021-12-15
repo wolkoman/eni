@@ -8,8 +8,8 @@ import {useCalendarStore, useUserStore} from '../../util/store';
 import {CalendarEvent} from '../../util/calendar-events';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
-import {getWeekDayName} from '../../components/Calendar';
 import {sanitizeOptions} from "../../components/SanitizeHtml";
+import {getWeekDayName} from '../../components/calendar/Calendar';
 
 
 export default function InternArticles() {

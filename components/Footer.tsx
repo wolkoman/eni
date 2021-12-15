@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import Responsive from './Responsive';
 import {useUserStore} from '../util/store';
 
-export default function Footer(props: {}) {
+export default function Footer() {
   const [isLoggedIn, load] = useUserStore(state => [state.user?.active, state.load]);
   useEffect(() => load(), []);
   return <>
@@ -16,10 +16,10 @@ export default function Footer(props: {}) {
           <div className="text-sm mr-1 inline-block">Pfarre Inzersdorf (St. Nikolaus),</div>
           <div className="text-sm mr-1 inline-block">Pfarre Inzersdorf-Neustift</div>
         </div>
-            <Link href="impressum"><div className="cursor-pointer underline hover:no-underline mb-5">Impressum</div></Link>
+            <Link href="/impressum"><div className="cursor-pointer underline hover:no-underline mb-5">Impressum</div></Link>
           {isLoggedIn
             ? <Link href="/intern"><div className="cursor-pointer underline hover:no-underline mb-5">Zum Mitgliedsbereich</div></Link>
-            : <Link href="/login"><div className="cursor-pointer underline hover:no-underline mb-5">Login</div></Link>}
+            : <Link href="/login"><div className="cursor-pointer mb-5 px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded transform hover:scale-105 transition-all">Login</div></Link>}
         </div>
       </Responsive>
     </div>

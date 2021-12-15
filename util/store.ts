@@ -20,6 +20,7 @@ interface CalendarStore {
   loaded: boolean;
   error: boolean;
   load: (token?: string) => void;
+  lastLoadedWithToken?: string,
 }
 
 interface UserStore {
@@ -59,11 +60,12 @@ export const useCalendarStore = create<CalendarStore>((set, get) => ({
   loaded: false,
   loading: false,
   error: false,
+  lastLoadedWithToken: "none",
   load: (jwt?: string) => {
-    if (get().loading) return;
+    if (get().loading || jwt === get().lastLoadedWithToken) return;
     set(state => ({...state, loading: true}));
     fetchJson('/api/calendar', {jwt})
-      .then(data => set(state => ({...state, items: data.events, loaded: true, loading: false, cache: data.cache})))
+      .then(data => set(state => ({...state, items: data.events, loaded: true, loading: false, cache: data.cache, lastLoadedWithToken: jwt})))
       .catch(() => set(state => ({...state, items: {}, loaded: true, loading: false, error: true})));
   }
 }));
