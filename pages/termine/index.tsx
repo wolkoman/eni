@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import Site from '../../components/Site';
 import {
     applyFilter,
@@ -20,7 +20,6 @@ export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
     const calendar = useCalendarStore(state => state);
     const [permissions, jwt, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.load]);
-    const calendarScrollerRef = useRef(null);
 
     useEffect(() => userLoad(), []);
     useEffect(() => calendar.load(jwt), [jwt]);
@@ -37,7 +36,7 @@ export default function EventPage() {
                   <FilterSelector filter={filter} setFilter={filter => setFilter(filter)}
                                   userPermissions={permissions}/>
                 </div>
-                <div ref={calendarScrollerRef} className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
+                <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
                     {calendar.loading && <LoadingEvents/>}
                     {calendar.loading || Object.entries(calendar.items)
                         ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
