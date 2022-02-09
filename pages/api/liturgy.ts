@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {XMLParser} from "fast-xml-parser";
 import {Permission, resolveUserFromRequest} from "../../util/verify";
 import {cockpit} from "../../util/cockpit-sdk";
-export default async function (req: NextApiRequest, res: NextApiResponse){
+export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
   const user = resolveUserFromRequest(req);
   if (user === undefined || !user?.permissions[Permission.ExperimentalAccess]) {

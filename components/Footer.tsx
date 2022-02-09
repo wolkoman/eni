@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, {useEffect} from 'react';
 import Responsive from './Responsive';
-import {useUserStore} from '../util/store';
+import {useUserStore} from '../util/use-user-store';
 
 export default function Footer() {
   const [isLoggedIn, load] = useUserStore(state => [state.user?.active, state.load]);

@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {google} from 'googleapis';
 import {cockpit} from '../../../util/cockpit-sdk';
 
-export default async function (req: NextApiRequest, res: NextApiResponse){
+export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,

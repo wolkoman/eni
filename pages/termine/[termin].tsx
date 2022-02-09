@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import {EventDateText, EventDescription, EventTime} from '../../components/calendar/Calendar';
 import Site from '../../components/Site';
-import {useCalendarStore, useUserStore} from "../../util/store";
 import {useState} from "../../util/use-state-util";
 import {useRouter} from "next/router";
 import {CalendarEvent} from "../../util/calendar-events";
+import {useCalendarStore} from '../../util/use-calendar-store';
+import {useUserStore} from '../../util/use-user-store';
 
 export default function EventPage() {
   const calendar = useCalendarStore(state => state);

@@ -2,18 +2,12 @@ import {Event, getWeekDayName} from './Calendar';
 import Link from 'next/link';
 import {CalendarCacheNotice} from './CalendarCacheNotice';
 import {CalendarErrorNotice} from './CalendarErrorNotice';
-import {useCalendarStore, useUserStore} from '../../util/store';
 import {useEffect} from 'react';
 import {SectionHeader} from '../SectionHeader';
 import {CalendarInfo, getCalendarInfo} from '../../util/calendar-info';
 import {Calendar, CalendarEvents} from '../../util/calendar-events';
-
-const personWords = {
-  brezovski: ['Brezovski', 'Zvonko'],
-  thomas: ['Thomas', 'Gil'],
-  campos: ['David', 'Campos'],
-  wojciech: ['Wojciech', 'Marcin']
-}
+import {useCalendarStore} from '../../util/use-calendar-store';
+import {useUserStore} from '../../util/use-user-store';
 
 export function ComingUp({}) {
   const calendar = useCalendarStore(state => state);

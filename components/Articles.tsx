@@ -4,9 +4,9 @@ import {useEffect} from 'react';
 import Button from './Button';
 import {useRouter} from 'next/router';
 import {cockpit} from '../util/cockpit-sdk';
-import {useArticleStore} from '../util/store';
 import {Collections} from 'cockpit-sdk';
 import {SectionHeader} from './SectionHeader';
+import {useArticleStore} from '../util/use-article-store';
 
 export function getArticlePreviewImageUrl(article: Collections['article']) {
   const url = article.preview_image.path;
@@ -18,10 +18,8 @@ export function getArticleLink(article: Collections['article']) {
 }
 
 export default function Articles() {
-  const [articles, articleLoaded, articleLoad] = useArticleStore(state => [state.items, state.loaded, state.load]);
+  const [articles, articleLoad] = useArticleStore(state => [state.items, state.load]);
   useEffect(() => articleLoad(), []);
-  const articleMax = 300;
-  const router = useRouter();
   const loading = articles.length < 4;
 
   return <>

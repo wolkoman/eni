@@ -3,7 +3,7 @@ import {calendarIds, getEventsFromCalendar} from '../../../util/calendar-events'
 import {Temporal} from '@js-temporal/polyfill';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const user = resolveUserFromRequest(req);
 
@@ -24,7 +24,6 @@ const slots = (day: Date) => [9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(hour =>
   month: day.getMonth()+1,
   year: day.getFullYear(),
 }));
-const slotDuration = 1;
 
 export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[]> {
 

@@ -4,9 +4,8 @@ import {Permission, resolveUserFromRequest} from '../../util/verify';
 import {cockpit} from "../../util/cockpit-sdk";
 import {notifyAdmin} from "../../util/telegram";
 
-
 const calendarCacheId = "61b335996165305292000383";
-export default async function (req: NextApiRequest, res: NextApiResponse){
+export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
   const user = resolveUserFromRequest(req);
 
@@ -20,7 +19,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
   }else{
     const cachedEvents = await cockpit.collectionGet("internal-data",{filter: {_id: calendarCacheId}});
     res.json(cachedEvents.entries[0].data);
-    notifyAdmin("Google Calendar failed");
+    await notifyAdmin("Google Calendar failed");
   }
 
 }
