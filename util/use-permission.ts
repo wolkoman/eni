@@ -1,6 +1,6 @@
-import {useUserStore} from './store';
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
+import { useUserStore } from './use-user-store';
 import {Permission} from './verify';
 
 export const usePermission = (requiredPermissions: Permission[] = []) => {

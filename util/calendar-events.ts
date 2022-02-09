@@ -21,13 +21,14 @@ export interface CalendarEvent {
   calendar: Calendar,
   visibility: string,
   wholeday: boolean,
-  tags: ('in-church' | 'private' | 'cancelled')[]
+  tags: ('in-church' | 'private' | 'cancelled' | 'liturgy')[]
 }
 
 export type CalendarEvents = Record<string, CalendarEvent[]>;
 
-const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|Pfarrgarten|kirchenfrei)/gi;
+const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt)/gi;
+const liturgyRegex = /(Messe|Rorate)/gi;
 
 export async function getEventsFromCalendar(calendarId: string, calendarName: string, isPublic: boolean, timeMin?: Date, timeMax?: Date): Promise<CalendarEvent[]> {
   const oauth2Client = await getCachedGoogleAuthClient();
@@ -66,6 +67,7 @@ export async function getEventsFromCalendar(calendarId: string, calendarName: st
         !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',
         (event.visibility === 'private') && 'private',
         (event.summary + (event.description ?? '')).match(cancelledRegex) && 'cancelled',
+        event.summary?.match(liturgyRegex) && 'liturgy',
       ].filter(item => item),
       wholeday: !!event.start?.date,
     } as CalendarEvent);

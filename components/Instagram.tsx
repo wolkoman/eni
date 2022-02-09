@@ -21,7 +21,7 @@ export function Instagram() {
   return <div className="my-10" data-testid="instagram">
     <SectionHeader>Einblick ins Pfarrleben</SectionHeader>
     <Swiper slidesPerView={'auto'} spaceBetween={30} centeredSlides={true} className="mySwiper">
-      {feed.length === 0 && Array(3).fill(0).map((_,index) => <SwiperSlide style={{width: 300}}><InstagramItem key={index}/></SwiperSlide>)}
+      {feed.length === 0 && Array(3).fill(0).map((_,index) => <SwiperSlide key={index} style={{width: 300}}><InstagramItem key={index}/></SwiperSlide>)}
       {feed
         .filter(item => item.media_type !== 'VIDEO')
         .map((item) =>

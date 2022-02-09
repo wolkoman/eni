@@ -1,14 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
-import {useUserStore} from '../../util/store';
 import Site from '../../components/Site';
-import {usePermission} from '../../util/usePermission';
+import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {useRouter} from 'next/router';
+import {useUserStore} from '../../util/use-user-store';
 
 export default function Intern() {
   const [permissions, user, logout] = useUserStore(state => [state.permissions, state.user, state.logout]);
-  const router = useRouter();
   usePermission([]);
   return <Site title="Mitgliedsbereich">
     <div>

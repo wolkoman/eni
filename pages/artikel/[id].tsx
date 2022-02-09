@@ -12,7 +12,7 @@ export default function Article({article}: { article: Collections['article'] }) 
     if (article.external_url) {
       router.push(article.external_url);
     }
-  }, [article.external_url]);
+  }, [article.external_url, router]);
   return <Site navbar={false} responsive={false}>
     <div className="relative text-white">
       <div className="absolute w-full h-full top-0 left-0 overflow-x-hidden"

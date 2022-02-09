@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {google} from 'googleapis';
 
-export default function (req: NextApiRequest, res: NextApiResponse){
+export default function handler(req: NextApiRequest, res: NextApiResponse){
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,

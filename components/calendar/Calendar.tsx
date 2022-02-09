@@ -1,12 +1,8 @@
-import {Calendar, CalendarEvent} from '../util/calendar-events';
-import React, {useEffect, useRef} from 'react';
-import {useCalendarStore, useUserStore} from '../util/store';
-import {SanitizeHTML} from './SanitizeHtml';
-import {SectionHeader} from './SectionHeader';
-import {getCalendarInfo} from '../util/calendar-info';
-import {Permission, Permissions} from '../util/verify';
-import {useState} from '../util/use-state-util';
-import {CalendarCacheNotice} from "./CalendarCacheNotice";
+import {useRouter} from 'next/router';
+import {SanitizeHTML} from '../SanitizeHtml';
+import {Permission, Permissions} from '../../util/verify';
+import {Calendar, CalendarEvent} from '../../util/calendar-events';
+import {getCalendarInfo} from '../../util/calendar-info';
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -16,77 +12,7 @@ const personWords = {
 }
 type Person = keyof typeof personWords;
 
-export function EventsPage({}) {
-  const [datePositions, setDatePositions, setPartialDatePositions] = useState<Record<string, number>>({});
-  const [filter, setFilter] = useState<FilterType>(null);
-  const calendar = useCalendarStore(state => state);
-  const [permissions, jwt, userLoaded, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.loaded, state.load]);
-  const calendarScrollerRef = useRef(null);
-  const [position, setPosition] = useState('');
-
-  useEffect(() => userLoad(), []);
-  useEffect(() => calendar.load(jwt), [jwt]);
-
-  return <div data-testid="calendar" className="relative">
-    <CalendarCacheNotice/>
-    {calendar.error && <CalendarErrorNotice/>}
-    {calendar.error || <>
-      <div className="flex flex-col md:flex-row">
-        <div className="flex flex-col w-full md:w-auto self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 bg-white shadow flex-shrink-0 rounded-xl sticky top-2 md:top-10 z-20 bg-white">
-          {permissions[Permission.PrivateCalendarAccess] && <PrivateCalendarNotice/>}
-          <FilterSelector filter={filter} setFilter={filter => setFilter(filter)} userPermissions={permissions}/>
-        </div>
-        <div ref={calendarScrollerRef} className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
-          {calendar.loading && <LoadingEvents/>}
-          {calendar.loading || Object.entries(calendar.items)
-            ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
-            .filter(([_, events]) => events.length > 0)
-            .map(([date, events]) => <div key={date} data-date={date}>
-              <EventDate date={new Date(date)} filter={filter} setOffsetTop={top => setPartialDatePositions({[date]: top})}/>
-              {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
-            </div>)}
-        </div>
-      </div>
-    </>}
-  </div>;
-}
-
-function CalendarOverview(props: { date: string }) {
-  const [data, , setPartialData] = useState({day: 0, month: 0, year: 2020, firstDay: 0, daysInMonth: 0});
-  const changeMonth = (month: number) => {
-    const date = new Date(data.year, data.month + month, data.day);
-    setPartialData({year: date.getFullYear(), month: date.getMonth()});
-  };
-
-  useEffect(() => {
-    setPartialData({
-      firstDay: new Date(data.year, data.month, 1).getDay(),
-      daysInMonth: new Date(data.year, data.month+1, 0).getDate(),
-    });
-  }, [data.month, data.year]);
-
-  useEffect(() => {
-    if(props.date === "" || props.date === undefined) return;
-    const date = new Date(props.date);
-    setPartialData({day: date.getDate(), month: date.getMonth(), year: date.getFullYear()});
-  }, [props.date]);
-
-  return <>
-    <div className="flex">
-      <div onClick={() => changeMonth(-1)}>{"<"}</div>
-      <div className="text-center flex-grow">{getMonthName(data.month)} {data.year}</div>
-      <div onClick={() => changeMonth(1)}>{">"}</div>
-    </div>
-    <div className="grid grid-cols-7">
-      {Array(((data.firstDay) +6)%7).fill(null).map((_, i) => <div key={i}/>)}
-      {Array(data.daysInMonth).fill(null).map((_, i) => {
-        return <div key={i} className={`text-sm text-center rounded-lg ${i+1 === data.day ? "bg-primary1 text-white" : ""}`}>{(i + 1)}</div>;
-      })}
-    </div>
-  </>;
-}
-
-function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions}) {
+export function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions}) {
   const parishFilters: {label: string, parish: Calendar}[] = [
     {label: 'Emmaus', parish: 'emmaus'},
     {label: 'St. Nikolaus', parish: 'inzersdorf'},
@@ -126,20 +52,6 @@ function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterT
   </>;
 }
 
-export function PrivateCalendarNotice() {
-  return <div className="px-3 py-1 text-sm pb-4 text-gray-500 md:w-44">
-    <div className="font-bold">Private Kalenderansicht</div>
-    Geben Sie vertrauliche Daten nicht weiter!
-  </div>;
-}
-
-export function CalendarErrorNotice() {
-  return <div className="bg-gray-100 p-4 px-8 rounded" data-testid="calendar-error">
-    Beim Laden der Termine ist ein Fehler aufgetreten. <br/>
-    Für Informationen zu den Terminen kontaktieren Sie die Kanzlei.
-  </div>;
-}
-
 export function ParishTag(props: { calendar: Calendar, colorless?: boolean }) {
   const info = getCalendarInfo(props.calendar);
   return <div className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
@@ -159,7 +71,14 @@ export function Event({event, permissions, noTag}: { event: CalendarEvent, permi
 }
 
 export function EventSummary(props: {event: CalendarEvent}){
-  return <>{props.event.summary}</>;
+  const router = useRouter();
+  const liturgy = props.event.tags.includes("liturgy") && false;
+  return <span
+    className={`${liturgy && 'underline hover:no-underline cursor-pointer'}`}
+    onClick={liturgy ? () => router.push(`/termine/${props.event.id}`) : () => {}}
+  >
+    {props.event.summary}
+  </span>;
 }
 export function EventDescription(props: {event: CalendarEvent, permissions: Permissions}){
   return <div className="font-normal text-sm leading-4">
@@ -173,9 +92,9 @@ export function EventDescription(props: {event: CalendarEvent, permissions: Perm
   </div>;
 }
 
-type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
+export type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
 
-function applyFilter(events: CalendarEvent[], filter: FilterType) {
+export function applyFilter(events: CalendarEvent[], filter: FilterType) {
   return events
     .filter(event =>
       (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))
@@ -184,7 +103,7 @@ function applyFilter(events: CalendarEvent[], filter: FilterType) {
 
 }
 
-const LoadingEvents = () => <>
+export const LoadingEvents = () => <>
   <ShadowEventDate/>
   {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===0}/>)}
   <ShadowEventDate/>
@@ -210,21 +129,22 @@ export function getMonthName(month: number) {
   return ['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][month];
 }
 
-export const EventDate = ({date, setOffsetTop, filter}: { filter?: any, date: Date, setOffsetTop?: (top: number) => void }) => {
-  const ref = useRef(null);
-  useEffect(() => {
-    console.log('set top');
-    if (setOffsetTop)
-      setOffsetTop((ref.current as unknown as HTMLElement).offsetTop!);
-  }, [ref, filter]);
+export const EventDate = ({date}: { date: Date }) => {
   const day = date.getDay();
   return <div className="sticky top-14 md:top-0 relative z-10">
-    <div className={`mp-3 leading-5 bg-gray-back pt-4 ${day ? '' : 'underline'}`} ref={ref}>
-      {getWeekDayName(day)},{' '}
-      {date.getDate()}. {getMonthName(date.getMonth())}
+    <div className={`mp-3 leading-5 bg-gray-back pt-4 ${day ? '' : 'underline'}`}>
+      <EventDateText date={date}/>
     </div>
     <div className="h-4 to-gray-50 bg-gradient-to-t from-transparent"/>
   </div>;
+}
+
+export const EventDateText = ({date}: { date: Date }) => {
+  const day = date.getDay();
+  return <>
+      {getWeekDayName(day)},{' '}
+      {date.getDate()}. {getMonthName(date.getMonth())}
+  </>;
 }
 
 export const EventTime = (props: { date: Date }) => {

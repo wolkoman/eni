@@ -4,7 +4,7 @@ import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
-export default async function (req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 
   const user = resolveUserFromRequest(req);
 

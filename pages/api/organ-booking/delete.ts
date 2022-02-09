@@ -3,7 +3,7 @@ import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-eve
 import {google} from 'googleapis';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
-export default async function (req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {
 
   const user = resolveUserFromRequest(req);
 

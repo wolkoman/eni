@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {cockpit} from '../../util/cockpit-sdk';
 
-export default async function (req: NextApiRequest, res: NextApiResponse){
+export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
   const instagramData = await cockpit.collectionGet("internal-data", {filter: {id: "instagram"}});
   const instagramToken = instagramData.entries[0].data.token;

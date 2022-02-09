@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import Site from '../components/Site';
-import {useUserStore} from '../util/store';
 import Button from '../components/Button';
 import {toast} from 'react-toastify';
 import {useState} from '../util/use-state-util';
 import {useRouter} from 'next/router';
+import {useUserStore} from '../util/use-user-store';
 
 export default function Events() {
   const [data, setData, setPartialData] = useState({username: '', password: ''});

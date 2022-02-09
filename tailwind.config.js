@@ -31,7 +31,7 @@ module.exports = {
         primary3: "#f4ac11",
       },
       height: {
-        xl: "200px",
+        "xl": "200px",
         "2xl": "400px",
         "3xl": "500px",
       },},

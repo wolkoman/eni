@@ -4,8 +4,8 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/toast-override.scss";
 import "swiper/css/bundle";
-import {useOverlayStore} from '../util/store';
 import {useEffect, useState} from 'react';
+import {useOverlayStore} from '../util/use-overlay-store';
 
 // Used by next-fixutre.ts to pass requestInterceptor to each test,
 // where it can be used to set up the server-side request mocks.
