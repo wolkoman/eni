@@ -1,6 +1,5 @@
 import React from 'react';
 import Site from '../components/Site';
-import Link from 'next/link';
 
 export default function NewsletterPage() {
     return <Site title="Newsletter">
