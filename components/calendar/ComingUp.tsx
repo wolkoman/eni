@@ -21,17 +21,21 @@ export function ComingUp({}) {
 
     return <div data-testid="calendar" className="relative">
         <SectionHeader>Termine</SectionHeader>
-        <div className="lg:-mx-16">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {infos.map(info =>
-                    <ComingUpColumn key={info.id} dates={dates} now={now} info={info} calendar={calendar.items}/>
-                )}
-            </div>
-            <div className="text-right underline hover:no-underline cursor-pointer mt-6">
-                <Link href="/termine"><a>Alle Termine anzeigen</a></Link>
-            </div>
+        <div className="lg:-mx-16 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {!calendar.loaded
+                ? Array(3).fill(0).map(info => <div className="shimmer h-44"/>)
+                : infos.map(info => <ComingUpColumn
+                    key={info.id}
+                    dates={dates}
+                    now={now}
+                    info={info}
+                    calendar={calendar.items}
+                />
+            )}
         </div>
-
+        <div className="text-right underline hover:no-underline cursor-pointer mt-6">
+            <Link href="/termine"><a>Alle Termine anzeigen</a></Link>
+        </div>
         {calendar.error && <CalendarErrorNotice/>}
         <CalendarCacheNotice/>
     </div>;
@@ -70,11 +74,10 @@ function getMyDate(props: number) {
 function ComingUpDate(props: { label: string; now: number; info: CalendarInfo; calendar: CalendarEvents; last?: boolean }) {
     const events = (props.calendar[getMyDate(props.now)] ?? [])
         .filter(event => event.calendar === props.info.id && !event.tags.includes('cancelled'));
-    return <div className={`px-4 py-2`}>
-        <div className={`opacity-80 uppercase mb-1 text-sm ${events.length === 0 && 'hidden'}`}>
+    return events.length === 0 ? <></> : <div className="m-4">
+        <div className="opacity-80 uppercase mb-1 text-sm">
             {props.label}, {getWeekDayName(new Date(props.now).getDay())}
         </div>
-        {events
-            .map(event => <Event key={event.id} event={event} permissions={{}} noTag={true}/>)}
+        {events.map(event => <Event key={event.id} event={event} permissions={{}} noTag={true}/>)}
     </div>;
 }

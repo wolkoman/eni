@@ -62,10 +62,14 @@ export function Event({event, permissions, noTag}: { event: CalendarEvent, permi
     <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes("cancelled") || 'font-semibold'}`}>
       {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
     </div>
-    {noTag || <div className="mr-2"><ParishTag calendar={event.calendar} colorless={event.tags.includes("cancelled")}/></div>}
+    {noTag || <div className="mr-2">
+      <ParishTag calendar={event.calendar} colorless={event.tags.includes("cancelled")}/>
+    </div>}
     <div className="mb-2 leading-5" data-testid="event">
-      <div className={`mt-1 ${event.tags.includes("cancelled") || 'font-semibold'}`}><EventSummary event={event}/></div>
-      <div><EventDescription event={event} permissions={permissions}/></div>
+      <div className={`mt-1 ${event.tags.includes("cancelled") || 'font-semibold'}`}>
+        <EventSummary event={event}/>
+      </div>
+      <EventDescription event={event} permissions={permissions}/>
     </div>
   </div>;
 }

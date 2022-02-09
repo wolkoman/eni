@@ -19,13 +19,13 @@ export default function HomePage() {
     </Responsive>
     <Instagram/>
     <Responsive>
-      <div className="flex flex-col md:flex-row my-14">
-        <Info title="Newsletter" image="./info-01.svg">
+      <div className="grid md:grid-cols-2 gap-4 my-14">
+        <Info title="Wochenmitteilungen" image="./info-01.svg">
           <div className="mb-4">
-            In unserem monatlichen Newsletter informieren wir kurz und prägnant über zukünftige, aktuelle und vergangene
-            Geschehnisse in unseren drei Pfarren.
+            Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu in Ihr Postfach.
+            Schicken Sie eine Mail mit der gewünschten Pfarre an die Kanzlei und bleiben Sie up to date.
           </div>
-          <Link href="/newsletter"><a><Button label="Newsletter abonnieren"/></a></Link>
+          <a href="mailto://kanzlei@eni.wien"><Button label="Mail schicken"/></a>
         </Info>
         <Info title="Pfarrzeitung" image="./info-02.svg">
           <div className="mb-4">
