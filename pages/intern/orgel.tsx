@@ -22,7 +22,7 @@ export default function Orgel() {
   useEffect(() => {
     if (jwt)
       loadMyBooking();
-  }, [jwt, loadMyBooking]);
+  }, [jwt]);
 
   function loadMyBooking() {
     setPartialData({bookingLoading: true});

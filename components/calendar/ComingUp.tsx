@@ -1,13 +1,14 @@
-import {Event, getWeekDayName} from './Calendar';
+import {getWeekDayName} from './Calendar';
 import Link from 'next/link';
 import {CalendarCacheNotice} from './CalendarCacheNotice';
 import {CalendarErrorNotice} from './CalendarErrorNotice';
 import {useEffect} from 'react';
-import {SectionHeader} from '../SectionHeader';
 import {CalendarInfo, getCalendarInfo} from '../../util/calendar-info';
 import {Calendar, CalendarEvents} from '../../util/calendar-events';
 import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
+import {Section} from '../Section';
+import {Event} from './Event';
 
 export function ComingUp({}) {
     const calendar = useCalendarStore(state => state);
@@ -19,29 +20,31 @@ export function ComingUp({}) {
 
     useEffect(() => calendar.load(jwt), [jwt]);
 
-    return <div data-testid="calendar" className="relative">
-        <SectionHeader>Termine</SectionHeader>
-        <div className="lg:-mx-16">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {infos.map(info =>
-                    <ComingUpColumn key={info.id} dates={dates} now={now} info={info} calendar={calendar.items}/>
-                )}
-            </div>
-            <div className="text-right underline hover:no-underline cursor-pointer mt-6">
-                <Link href="/termine"><a>Alle Termine anzeigen</a></Link>
-            </div>
+    return <Section title="Termin">
+        <div className="lg:-mx-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {infos.map(info => <ComingUpColumn
+                    key={info.id}
+                    dates={dates}
+                    info={info}
+                    calendar={calendar.items}
+                    loading={calendar.loading}
+                />
+            )}
         </div>
-
+        <div className="text-right underline hover:no-underline cursor-pointer mt-6">
+            <Link href="/termine"><a>Alle Termine anzeigen</a></Link>
+        </div>
         {calendar.error && <CalendarErrorNotice/>}
         <CalendarCacheNotice/>
-    </div>;
+    </Section>;
 }
 
-function ComingUpColumn(props: { calendar: CalendarEvents, info: CalendarInfo, dates: ({ date: number; label: string })[], now: number }) {
+function ComingUpColumn(props: { calendar: CalendarEvents, info: CalendarInfo, dates: ({ date: number; label: string })[], loading: boolean }) {
     const eventCount = props.dates.reduce((events, date) => events + (props.calendar[getMyDate(date.date)]?.filter(event => event.calendar === props.info.id) ?? []).length, 0);
-    return <div className="bg-white shadow-lg text-lg rounded-lg overflow-hidden">
+    return <div className="bg-white shadow text-lg rounded-lg overflow-hidden">
         <ComingUpTitle info={props.info}/>
-        {eventCount === 0 && <div className="uppercase text-sm p-5">Keine Termine heute und morgen</div>}
+        {(!props.loading && eventCount === 0) && <div className="uppercase text-sm p-5">Keine Termine heute und morgen</div>}
+        {props.loading && <div className="shimmer h-80"/>}
         {props.dates.map(({label, date}, index) => <ComingUpDate
             key={index}
             label={label}
@@ -54,12 +57,11 @@ function ComingUpColumn(props: { calendar: CalendarEvents, info: CalendarInfo, d
 }
 
 function ComingUpTitle(props: { info: CalendarInfo }) {
-    return <div className="relative">
-        <div className={props.info.className + ' h-1'}/>
-        <div className={`p-2 text-center text-xl font-bold relative z-10 `}>
+    return <div className={"relative " + props.info.className}>
+        <div className={`p-2 text-center text-xl font-bold relative z-10`}>
             {props.info.shortName}
         </div>
-        <div className={props.info.className + ' absolute top-0 left-0 w-full h-full opacity-10'}/>
+        <div className={'absolute top-0 left-0 w-full h-full'}/>
     </div>;
 }
 
@@ -70,11 +72,10 @@ function getMyDate(props: number) {
 function ComingUpDate(props: { label: string; now: number; info: CalendarInfo; calendar: CalendarEvents; last?: boolean }) {
     const events = (props.calendar[getMyDate(props.now)] ?? [])
         .filter(event => event.calendar === props.info.id && !event.tags.includes('cancelled'));
-    return <div className={`px-4 py-2`}>
-        <div className={`opacity-80 uppercase mb-1 text-sm ${events.length === 0 && 'hidden'}`}>
+    return events.length === 0 ? <></> : <div className="m-4">
+        <div className="opacity-80 uppercase mb-1 text-sm">
             {props.label}, {getWeekDayName(new Date(props.now).getDay())}
         </div>
-        {events
-            .map(event => <Event key={event.id} event={event} permissions={{}} noTag={true}/>)}
+        {events.map(event => <Event key={event.id} event={event} permissions={{}} noTag={true}/>)}
     </div>;
 }

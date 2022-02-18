@@ -35,7 +35,7 @@ export default function Events() {
     return data.username.length === 0 || data.password.length === 0;
   }
 
-  return <Site navbar={false} responsive={false}>
+  return <Site navbar={false} responsive={false} footer={false}>
     <div className="w-full h-screen relative flex flex-col justify-center items-center bg-gray-100">
       <div className={`z-10 bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
         <div className="h-2 bg-primary1 w-full"/>
