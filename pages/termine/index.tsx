@@ -2,9 +2,6 @@ import React, {useEffect} from 'react';
 import Site from '../../components/Site';
 import {
     applyFilter,
-    Event,
-    EventDate,
-    FilterSelector,
     FilterType,
     LoadingEvents
 } from '../../components/calendar/Calendar';
@@ -16,6 +13,9 @@ import {CalendarPrivateNotice} from '../../components/calendar/CalendarPrivateNo
 import {CalendarEvent} from '../../util/calendar-events';
 import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
+import {FilterSelector} from '../../components/calendar/FilterSelector';
+import {Event, EventDate} from '../../components/calendar/Event';
+import {Section} from '../../components/Section';
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
@@ -28,16 +28,18 @@ export default function EventPage() {
     return <Site>
         <div data-testid="calendar" className="relative">
             <CalendarCacheNotice/>
-            {calendar.error && <CalendarErrorNotice/>}
             {calendar.error || <>
               <div className="flex flex-col md:flex-row">
-                <div
-                  className="flex flex-col w-full md:w-auto self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 bg-white shadow flex-shrink-0 rounded-xl sticky top-2 md:top-10 z-20 bg-white">
-                    {permissions[Permission.PrivateCalendarAccess] && <CalendarPrivateNotice/>}
-                  <FilterSelector filter={filter} setFilter={filter => setFilter(filter)}
-                                  userPermissions={permissions}/>
+                <div className="flex flex-col w-full md:w-auto self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 bg-white shadow flex-shrink-0 rounded-xl sticky top-0 md:top-5 z-20 bg-white">
+                  <FilterSelector
+                    filter={filter}
+                    setFilter={filter => setFilter(filter)}
+                    userPermissions={permissions}
+                  />
                 </div>
                 <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
+                    <div className="font-bold text-4xl mb-6">Termine</div>
+                    {calendar.error && <CalendarErrorNotice/>}
                     {calendar.loading && <LoadingEvents/>}
                     {calendar.loading || Object.entries(calendar.items)
                         ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])

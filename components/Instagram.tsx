@@ -31,14 +31,14 @@ export function Instagram() {
             {feed
                 .filter(item => item.media_type !== 'VIDEO')
                 .map((item) =>
-                    <SwiperSlide key={item.id} style={{width: 300}}>
+                    <SwiperSlide key={item.id} style={{width: 400, maxWidth: '100%'}}>
                         <InstagramItem item={item}/>
                     </SwiperSlide>
                 )}
-            {feed.length > 0 && <SwiperSlide style={{width: 300}}>
-              <div className="w-full h-64 text-xl text-center flex items-center justify-center">
+            {feed.length > 0 && <SwiperSlide style={{width: 400}}>
+              <div className="w-full h-96 text-xl text-center flex items-center justify-center cursor-all-scroll">
                 <div>
-                  Weitere Bilder<br/>auf unserem
+                  Weitere Bilder<br/>auf unserem{' '}
                   <a href="//instagram.com/eni.wien/" className="text-primary1 font-bold underline">Instagram</a>
                 </div>
               </div>
@@ -49,17 +49,18 @@ export function Instagram() {
 
 function InstagramItem({item}: { item?: InstagramFeedItem }) {
     return <div
-        className="pb-4 rounded-xl shadow-lg mb-6"
+        className="pb-4 rounded-xl shadow mb-6 overflow-hidden bg-white flex flex-col cursor-all-scroll"
         data-testid="instagram-item"
     >
-        <div style={{backgroundImage: `url(${item?.media_url})`, backgroundSize: 'cover'}}
-             className={`relative h-64 bg-center rounded-xl ${item == null && 'shimmer'}`}>
+        <div
+            style={{backgroundImage: `url(${item?.media_url})`, backgroundSize: 'cover'}}
+            className={`relative bg-center ${item == null && 'shimmer'} aspect-square text-right`}>
             <div
-                className="bg-white inline-block px-2 text-gray-600 absolute top-0 right-0 cursor-default rounded-bl-xl">
+                className="bg-white inline-block px-2 text-right cursor-default rounded-bl font-bold">
                 {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}
             </div>
         </div>
-        <div className="p-2">
+        <div className="p-6 text-lg">
             {item?.caption}
             {item == null && <>
               <div className="shimmer w-full h-4 mt-1"/>
