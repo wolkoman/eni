@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {fetchJson} from '../util/fetch-util';
 import {SectionHeader} from './SectionHeader';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import {siteType, SiteType} from '../util/sites';
 
 interface InstagramFeedItem {
     id: string,
@@ -30,6 +31,7 @@ export function Instagram() {
             )}
             {feed
                 .filter(item => item.media_type !== 'VIDEO')
+                .filter(item => siteType === SiteType.ENI || item.caption.includes("#emmaus"))
                 .map((item) =>
                     <SwiperSlide key={item.id} style={{width: 400, maxWidth: '100%'}}>
                         <InstagramItem item={item}/>

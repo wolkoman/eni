@@ -3,6 +3,7 @@ import Responsive from './Responsive';
 import {ReactNode, useEffect} from 'react';
 import Footer from './Footer';
 import Head from 'next/head';
+import {site} from '../util/sites';
 
 export default function Site(props: { title?: string, children: ReactNode, responsive?: boolean, narrow?: boolean, navbar?: boolean, footer?: boolean }) {
 
@@ -14,7 +15,7 @@ export default function Site(props: { title?: string, children: ReactNode, respo
 
     return <>
         <Head>
-            <title>eni.wien</title>
+            <title>{site("eni.wien", "emmaus.wien")}</title>
             <script type="text/javascript" src="https://app.mailjet.com/statics/js/widget.modal.js"/>
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">

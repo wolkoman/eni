@@ -5,9 +5,11 @@ import {cockpit} from '../../util/cockpit-sdk';
 import {useRouter} from 'next/router';
 import Navbar from '../../components/Navbar';
 import Responsive from '../../components/Responsive';
+import {siteType, SiteType} from '../../util/sites';
 
 export default function Article({article}: { article: Collections['article'] }) {
   const router = useRouter();
+  const previewImagePath = article.preview_image.path.startsWith("http") ? `${article.preview_image.path}` : `${cockpit.host}/${article.preview_image.path}`;
   useEffect(() => {
     if (article.external_url) {
       router.push(article.external_url);
@@ -17,7 +19,7 @@ export default function Article({article}: { article: Collections['article'] }) 
     <div className="relative text-white">
       <div className="absolute w-full h-full top-0 left-0 overflow-x-hidden"
            style={{
-             backgroundImage: `url(${cockpit.host}/${article.preview_image.path})`,
+             backgroundImage: `url(${previewImagePath})`,
              backgroundPosition: 'center center',
              backgroundSize: 'cover',
              filter: 'blur(5px) brightness(0.7) contrast(0.8)'
@@ -27,7 +29,7 @@ export default function Article({article}: { article: Collections['article'] }) 
         <Responsive>
           <div className="flex flex-col-reverse md:flex-row">
             <div className="flex-shrink-0 ml-4">
-              <img src={`${cockpit.host}/${article.preview_image.path}`}
+              <img src={`${previewImagePath}`}
                    className="h-52 max-w-full mr-4 rounded-lg relative top-8"
                    alt="article-preview"/>
             </div>
@@ -55,7 +57,7 @@ export default function Article({article}: { article: Collections['article'] }) 
 export async function getServerSideProps(context: any) {
   const article = (await cockpit.collectionGet('article', {
     filter: {
-      platform: 'eni',
+      platform: {[SiteType.ENI]: 'eni',[SiteType.EMMAUS]: 'emmaus'}[siteType],
       _id: context.params.id
     }
   })).entries[0];
