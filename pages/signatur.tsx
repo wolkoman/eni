@@ -19,7 +19,6 @@ function Signatur({signatur}: {signatur:{ address: string; mail: string; name: s
     <br/>
 
     <div style={{fontSize: 12}}>
-
       {[
         signatur.mail ? <><a style={{color: '#2A6266'}}
                              href={`mailto:${signatur.mail}`}>{signatur.mail}</a> | </> : null,

@@ -1,20 +1,20 @@
 import React, {useEffect} from 'react';
-import {usePermission} from '../../util/usePermission';
+import {usePermission} from '../../util/use-permission';
 import Site from '../../components/Site';
 import Button from '../../components/Button';
 import {Permission} from '../../util/verify';
 import {TemplateHandler} from 'easy-template-x';
-import {useCalendarStore, useUserStore} from '../../util/store';
 import {CalendarEvent} from '../../util/calendar-events';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
-import {getWeekDayName} from '../../components/Calendar';
-import {sanitizeOptions} from "../../components/SanitizeHtml";
+import {sanitizeOptions} from '../../components/SanitizeHtml';
+import {getWeekDayName} from '../../components/calendar/Calendar';
+import {useCalendarStore} from '../../util/use-calendar-store';
 
 
 export default function InternArticles() {
   usePermission([Permission.ExperimentalAccess]);
-  const [data, setData, setPartialData] = useState({start: new Date(), end: new Date()});
+  const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
   const [events, loaded, load] = useCalendarStore(state => [state.items, state.loaded, state.load])
 
   useEffect(() => load(), [])
@@ -40,16 +40,16 @@ export default function InternArticles() {
     const templateFile = await response.blob();
     const wordData = {
       event: Object.entries(events)
-        .filter(([date, events]) => data.start.getTime() <= new Date(date).getTime() && data.end.getTime() >= new Date(date).getTime())
+        .filter(([date]) => data.start.getTime() <= new Date(date).getTime() && data.end.getTime() >= new Date(date).getTime())
         .map(([date, events]) => ({date, events: events.filter(e => e.visibility === "public")}))
         .map(({date, events}) => {
           const day = new Date(date).getDay();
           return ({
             sundaydate: day === 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}` : '',
             date: day !== 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}` : '',
-            emmaus: events.filter(event => event.calendar == 'emmaus').map(toCalEevent),
-            inzersdorf: events.filter(event => event.calendar == 'inzersdorf').map(toCalEevent),
-            neustift: events.filter(event => event.calendar == 'neustift').map(toCalEevent),
+            emmaus: events.filter(event => event.calendar === 'emmaus').map(toCalEevent),
+            inzersdorf: events.filter(event => event.calendar === 'inzersdorf').map(toCalEevent),
+            neustift: events.filter(event => event.calendar === 'neustift').map(toCalEevent),
           });
         }),
     };

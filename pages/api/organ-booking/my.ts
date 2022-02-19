@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {calendarIds, getEventsFromCalendar} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const user = resolveUserFromRequest(req);
 

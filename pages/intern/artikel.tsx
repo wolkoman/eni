@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
-import {usePermission} from '../../util/usePermission';
+import {usePermission} from '../../util/use-permission';
 import Site from '../../components/Site';
 import Button from '../../components/Button';
 import {Permission} from '../../util/verify';

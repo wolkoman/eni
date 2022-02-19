@@ -1,16 +1,14 @@
 import React, {useEffect} from 'react';
 import Site from '../../components/Site';
-import {useUserStore} from '../../util/store';
 import {CalendarEvent} from '../../util/calendar-events';
-import Modal from '../../components/Modal';
-import Button from '../../components/Button';
 import {toast} from 'react-toastify';
 import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
+import {useUserStore} from '../../util/use-user-store';
 
 export default function Orgel() {
   const jwt = useUserStore(state => state.jwt)
-  const [data, setData, setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
+  const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
   }>({
     date: '',
     slots: [],
