@@ -1,21 +1,14 @@
 import React, {useEffect} from 'react';
 import Site from '../../components/Site';
-import {
-    applyFilter,
-    FilterType,
-    LoadingEvents
-} from '../../components/calendar/Calendar';
+import {applyFilter, FilterType, LoadingEvents} from '../../components/calendar/Calendar';
 import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
-import {Permission} from '../../util/verify';
-import {CalendarPrivateNotice} from '../../components/calendar/CalendarPrivateNotice';
 import {CalendarEvent} from '../../util/calendar-events';
 import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
-import {Section} from '../../components/Section';
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);

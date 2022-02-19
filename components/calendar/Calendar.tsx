@@ -24,8 +24,6 @@ export const LoadingEvents = () => <>
   {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===0}/>)}
   <ShadowEventDate/>
   {[180, 120].map((width, index) => <ShadowEvent key={index} width={width} description={index===2}/>)}
-  <ShadowEventDate/>
-  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===1}/>)}
 </>
 const ShadowEventDate = () => <div className="w-36 h-4 mb-1.5 mt-4 shimmer"/>
 const ShadowEvent = ({width, description}: { width: number, description: boolean }) => <div className="flex mb-3">
