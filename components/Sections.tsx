@@ -7,7 +7,7 @@ import {Info} from './Info';
 export function Sections() {
     return <Section title="Weiteres">
         <div className="grid md:grid-cols-2 gap-4">
-            <Info title="Wochenmitteilungen" image="./info-01.svg">
+            <Info title="Wochen&shy;mitteilungen" image="./info-01.svg">
                 <div className="mb-4">
                     Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu in Ihr Postfach.
                     Schicken Sie eine Mail mit der gewünschten Pfarre an die Kanzlei und bleiben Sie up to date.

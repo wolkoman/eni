@@ -8,11 +8,13 @@ import Responsive from '../components/Responsive';
 import {ComingUp} from '../components/calendar/ComingUp';
 import {Sections} from '../components/Sections';
 import {siteType, SiteType} from '../util/sites';
+import Navbar from '../components/Navbar';
 
 export default function HomePage() {
-    return <Site responsive={false}>
+    return <Site responsive={false} navbar={false}>
         {{
             [SiteType.ENI]: <>
+                <div className="text-white"><Navbar/></div>
                 <Responsive>
                     <TopBranding/>
                     <Articles/>
@@ -24,6 +26,7 @@ export default function HomePage() {
                     <Sections/>
                 </Responsive></>,
             [SiteType.EMMAUS]: <>
+                <div className="text-white"><Navbar/></div>
                 <Responsive>
                     <TopBranding/>
                     <Articles/>

@@ -9,6 +9,8 @@ export interface CalendarInfo {
   tagName: string,
   address: string,
   image: string,
+  websiteUrl: string,
+  websiteDisplay: string,
   imageColor: string,
   description: (x: string) => React.ReactNode,
 }
@@ -22,6 +24,8 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       shortName: '',
       tagName: '',
       address: '',
+      websiteUrl: 'https://eni.wien',
+      websiteDisplay: 'https://eni.wien',
       description: () => '',
       image: '',
       imageColor: ''
@@ -35,6 +39,8 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       address: 'Tesarekplatz 2, 1100 Wien',
       image: '/logos_Emmaus Stroke.svg',
       imageColor: '/logos_Emmaus Fade.svg',
+      websiteUrl: 'https://tesarekplatz.at',
+      websiteDisplay: 'tesarekplatz.at',
       description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik
         errichtet.</>,
     },
@@ -47,6 +53,8 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       address: 'Inzersdorf Kirchenplatz 1, 1230 Wien',
       image: '/logos_Inzersdorf Stroke.svg',
       imageColor: '/logos_Inzersdorf Fade.svg',
+      websiteUrl: 'https://pfarresanktnikolaus.at',
+      websiteDisplay: 'pfarresanktnikolaus.at',
       description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der
         Erzdiözese Wien.</>,
     },
@@ -59,6 +67,8 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       address: 'Don-Bosco-Gasse 14, 1230 Wien',
       image: '/logos_Neustift Stroke.svg',
       imageColor: '/logos_Neustift Fade.svg',
+      websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
+      websiteDisplay: 'pfarreinzersdorfneustift.at/',
       description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,
         Hilfe der Christen geweiht.</>,
     },
@@ -69,6 +79,8 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       shortName: '',
       tagName: '',
       address: '',
+      websiteUrl: '',
+      websiteDisplay: '',
       description: () => '',
       image: '',
       imageColor: ''

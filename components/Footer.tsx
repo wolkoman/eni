@@ -8,7 +8,7 @@ export default function Footer() {
     const [isLoggedIn, load] = useUserStore(state => [state.user?.active, state.load]);
     useEffect(() => load(), []);
     return <>
-        <div className="pt-6 text-gray-600 mt-6">
+        <div className="pt-6 text-neutral-600 mt-6">
             <Responsive>
                 <div className="flex flex-col md:flex-row justify-between md:items-center">
                     <div className="mb-5">
