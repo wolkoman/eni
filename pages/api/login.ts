@@ -12,12 +12,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const person = await getPerson(body.username, body.password);
     const secretOrPrivateKey = Buffer.from(process.env.PRIVATE_KEY!, 'base64');
 
-    if (!!person) {
+    if (person !== null && person !== undefined) {
         delete person.code;
         const permissions = resolvePermissionsForCompetences(person.competences);
         const userlikeObject: User = {...person, permissions, api_key: `person_${person._id}`, is_person:true};
         res.json({jwt: sign(userlikeObject, secretOrPrivateKey, {algorithm: 'RS256'})});
-    } else {
+    } else if(person === undefined){
         const cockpitUser = await cockpit.authUser(body.username, body.password);
         if ('message' in cockpitUser) {
             res.status(401).json({});
@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         const user: User = {...cockpitUser, permissions: resolvePermissionsForGroup(cockpitUser.group), parish: "all", username: cockpitUser.user, is_person:false};
         res.status('error' in user ? 401 : 200).json({jwt: sign(user, secretOrPrivateKey, {algorithm: 'RS256'})});
-        console.log(user);
+    }else{
+        res.status(401).json({});
     }
 }

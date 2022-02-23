@@ -3,7 +3,7 @@ import {site, siteType, SiteType} from '../util/sites';
 
 export function TopBranding() {
     return <>
-        <div className="mt-24 mb-64 flex justify-between">
+        <div className="mt-12 sm:mt-24 mb-64 flex justify-between">
             <div>
                 <div className="text-5xl font-bold text-white">
                     {site('eine neue initiative', 'emmaus am wienerberg')}

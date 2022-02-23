@@ -11,10 +11,13 @@ export const usePermission = (requiredPermissions: Permission[] = []) => {
     if(loaded){
       if (!user?.active) {
         router.push('/');
-      }else{
+      }else {
         const unauthorized = requiredPermissions.some(p => !permissions[p]);
-        if(unauthorized){
+        if (unauthorized) {
           router.push('/');
+        }
+        if (user && user.group === "PrivateCalendarAccess" && router.asPath !== "/intern/move-user") {
+          router.push("/intern/move-user");
         }
       }
     }

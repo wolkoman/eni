@@ -16,7 +16,7 @@ export default function Intern() {
             <InternButton href="/" label="Startseite"/>
             <InternButton href="/termine" label="Termine"/>
             {permissions?.[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
-            <InternButton href="//forms.gle/vCeFKfYwXL7E8ct7A" label="Feedback"/>
+            <InternButton href="https://forms.gle/vCeFKfYwXL7E8ct7A" label="Feedback"/>
             {user?.is_person && <InternButton href="intern/change-password" label="Passwort ändern"/>}
             {user && !user?.is_person && <InternButton href="https://data.eni.wien" label="Cockpit"/>}
             <InternButton onClick={logout} label="Logout"/>
