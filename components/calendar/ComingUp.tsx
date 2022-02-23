@@ -21,21 +21,23 @@ export function ComingUp({}) {
     useEffect(() => calendar.load(jwt), [jwt]);
 
     return <Section title="Termin">
-        <div className="lg:-mx-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {infos.map(info => <ComingUpColumn
-                    key={info.id}
-                    dates={dates}
-                    info={info}
-                    calendar={calendar.items}
-                    loading={calendar.loading}
-                />
-            )}
-        </div>
-        <div className="text-right underline hover:no-underline cursor-pointer mt-6">
-            <Link href="/termine"><a>Alle Termine anzeigen</a></Link>
-        </div>
-        {calendar.error && <CalendarErrorNotice/>}
-        <CalendarCacheNotice/>
+        {calendar.error ? <CalendarErrorNotice/> : <>
+            <div className="lg:-mx-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {infos.map(info => <ComingUpColumn
+                        key={info.id}
+                        dates={dates}
+                        info={info}
+                        calendar={calendar.items}
+                        loading={calendar.loading}
+                    />
+                )}
+            </div>
+            <div className="text-right underline hover:no-underline cursor-pointer mt-6">
+                <Link href="/termine"><a>Alle Termine anzeigen</a></Link>
+            </div>
+            <CalendarCacheNotice/>
+        </>
+        }
     </Section>;
 }
 
@@ -43,7 +45,8 @@ function ComingUpColumn(props: { calendar: CalendarEvents, info: CalendarInfo, d
     const eventCount = props.dates.reduce((events, date) => events + (props.calendar[getMyDate(date.date)]?.filter(event => event.calendar === props.info.id) ?? []).length, 0);
     return <div className="bg-white shadow text-lg rounded-lg overflow-hidden">
         <ComingUpTitle info={props.info}/>
-        {(!props.loading && eventCount === 0) && <div className="uppercase text-sm p-5">Keine Termine heute und morgen</div>}
+        {(!props.loading && eventCount === 0) &&
+          <div className="uppercase text-sm p-5">Keine Termine heute und morgen</div>}
         {props.loading && <div className="shimmer h-80"/>}
         {props.dates.map(({label, date}, index) => <ComingUpDate
             key={index}
@@ -57,7 +60,7 @@ function ComingUpColumn(props: { calendar: CalendarEvents, info: CalendarInfo, d
 }
 
 function ComingUpTitle(props: { info: CalendarInfo }) {
-    return <div className={"relative " + props.info.className}>
+    return <div className={'relative ' + props.info.className}>
         <div className={`p-2 text-center text-xl font-bold relative z-10`}>
             {props.info.shortName}
         </div>

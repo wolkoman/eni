@@ -21,9 +21,10 @@ declare module 'cockpit-sdk' {
       active: boolean,
       name: string,
       username: string,
-      parish: 'emmaus' | 'inzersdorf' | 'neustift' | 'all' | 'extern',
-      competences: ('organ')[],
-      code: string
+      parish: 'emmaus' | 'inzersdorf' | 'neustift' | 'all',
+      competences: ('organ' | 'calendar' | 'admin')[],
+      code?: string,
+      email?: string,
     } & Object,
   }
   type Singletons = {
@@ -36,9 +37,12 @@ declare module 'cockpit-sdk' {
   export type User = {
     _id: string;
     group: '' | 'PrivateCalendarAccess' | 'OrganAccess' | 'admin',
+    user: string,
     api_key: string,
     name: string,
-    active: boolean
+    email: string,
+    active: boolean,
+    permissions: Record<string, boolean>,
   }
   type Error = {
     message: string

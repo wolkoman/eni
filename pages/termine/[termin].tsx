@@ -9,7 +9,7 @@ import {EventDateText, EventDescription, EventTime} from '../../components/calen
 
 export default function EventPage() {
   const calendar = useCalendarStore(state => state);
-  const [permissions, jwt, userLoad] = useUserStore(state => [state.permissions, state.jwt, state.load]);
+  const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
   const [event, setEvent] = useState<CalendarEvent | undefined | null>(undefined);
   const {query: {termin}} = useRouter();
 

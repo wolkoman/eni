@@ -52,7 +52,6 @@ export function Event({event, permissions, noTag}: { event: CalendarEvent, permi
 export const EventDate = ({date, setOffsetTop, filter}: { filter?: any, date: Date, setOffsetTop?: (top: number) => void }) => {
   const ref = useRef(null);
   useEffect(() => {
-    console.log('set top');
     if (setOffsetTop)
       setOffsetTop((ref.current as unknown as HTMLElement).offsetTop!);
   }, [ref, filter]);

@@ -13,7 +13,7 @@ import {useCalendarStore} from '../../util/use-calendar-store';
 
 
 export default function InternArticles() {
-  usePermission([Permission.ExperimentalAccess]);
+  usePermission([Permission.Admin]);
   const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
   const [events, loaded, load] = useCalendarStore(state => [state.items, state.loaded, state.load])
 

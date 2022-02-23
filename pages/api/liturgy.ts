@@ -5,7 +5,7 @@ import {cockpit} from "../../util/cockpit-sdk";
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
   const user = resolveUserFromRequest(req);
-  if (user === undefined || !user?.permissions[Permission.ExperimentalAccess]) {
+  if (user === undefined || !user?.permissions[Permission.Admin]) {
     res.status(401).json({errorMessage: 'No permission'});
     return;
   }
