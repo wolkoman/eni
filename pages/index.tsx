@@ -14,9 +14,13 @@ export default function HomePage() {
     return <Site responsive={false} navbar={false}>
         {{
             [SiteType.ENI]: <>
-                <div className="text-white"><Navbar/></div>
+                <div className="bg-gray-200 relative">
+                    <Navbar/>
+                    <Responsive>
+                        <TopBranding/>
+                    </Responsive>
+                </div>
                 <Responsive>
-                    <TopBranding/>
                     <Articles/>
                     <Parishes/>
                     <ComingUp/>
@@ -26,7 +30,7 @@ export default function HomePage() {
                     <Sections/>
                 </Responsive></>,
             [SiteType.EMMAUS]: <>
-                <div className="text-white"><Navbar/></div>
+                <div className=""><Navbar/></div>
                 <Responsive>
                     <TopBranding/>
                     <Articles/>

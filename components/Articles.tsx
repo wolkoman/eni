@@ -18,19 +18,19 @@ export function getArticleLink(article?: Collections['article']) {
 
 function BigArticle(props: { article?: Collections['article'] }) {
     return <div
-        className={`flex flex-col md:flex-row bg-white shadow rounded-xl overflow-hidden items-stretch w-full h-[480px] md:h-[360px] ${!props.article && 'shimmer'}`}
+        className={`flex flex-col md:flex-row items-stretch w-full ${!props.article && 'shimmer'}`}
         data-testid="articles">
 
-        <div className="md:w-1/2 md:h-full w-full h-44 flex-shrink-0" style={!props.article ? {} : {
+        <div className="md:w-80 aspect-square flex-shrink-0 rounded-lg" style={!props.article ? {} : {
             backgroundImage: `url(${getArticlePreviewImageUrl(props.article)})`,
             backgroundSize: 'cover',
             backgroundPosition: '50% 50%'
         }}/>
         <div className="p-4 md:p-8 flex flex-col">
             {!props.article || <>
-              <div className="uppercase text-primary1 font-semibold my-1">{props.article?.resort}</div>
+              <div className="uppercase opacity-80 font-semibold my-1 text-lg">{props.article?.resort}</div>
               <Link href={getArticleLink(props.article)}>
-                <div className="text-2xl font-bold md:font-semibold md:text-4xl cursor-pointer line-clamp-2">
+                <div className="text-3xl font-bold md:font-semibold md:text-5xl cursor-pointer line-clamp-2">
                     {props.article.title}
                 </div>
               </Link>
@@ -51,11 +51,16 @@ function BigArticle(props: { article?: Collections['article'] }) {
 function SmallArticleCard(props: { article?: Collections['article'] }) {
     return <Link href={getArticleLink(props.article)}>
         <div
-            className={`flex flex-col lg:flex-row p-4 cursor-pointer bg-white shadow rounded-lg h-32 ${!props.article && 'shimmer'}`}>
+            className={`flex flex-col lg:flex-row items-center p-4 cursor-pointer ${!props.article && 'shimmer'}`}>
+
+            <div className="md:w-32 mr-4 aspect-square flex-shrink-0 rounded-lg" style={!props.article ? {} : {
+                backgroundImage: `url(${getArticlePreviewImageUrl(props.article)})`,
+                backgroundSize: 'cover',
+                backgroundPosition: '50% 50%'
+            }}/>
             <div className="flex flex-col overflow-hidden">
-                <div className="uppercase text-primary1 text-sm">{props.article?.resort}</div>
-                <div className="line-clamp-1 font-semibold">{props.article?.title}</div>
-                <div className="line-clamp-2">{props.article?.content}</div>
+                <div className="uppercase opacity-80 text-sm">{props.article?.resort}</div>
+                <div className="line-clamp-3 font-semibold text-xl">{props.article?.title}</div>
             </div>
         </div>
     </Link>;
@@ -63,10 +68,9 @@ function SmallArticleCard(props: { article?: Collections['article'] }) {
 
 function AllArticlesCard() {
     return <Link href="/artikel">
-        <div className="p-2 cursor-pointer p-4 bg-white shadow rounded-lg">
-            <div className="flex flex-col overflow-hidden">
-                <div className="uppercase text-primary1 text-sm">Weiteres</div>
-                <div className="line-clamp-1 font-semibold">Alle Beiträge</div>
+        <div className="p-2 cursor-pointer">
+            <div className="flex justify-end">
+                <div className="underline">Alle Beiträge</div>
             </div>
         </div>
     </Link>;
@@ -75,13 +79,13 @@ function AllArticlesCard() {
 export default function Articles() {
     const [articles] = useArticleStore(state => [state.items, state.load()]);
     return <Section title="Aktuelles">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col">
             <BigArticle article={articles[0]}/>
-            <div className="flex flex-col mt-6 md:mt-0 md:w-96 md:ml-4 space-y-2">
+            <div className="flex flex-col md:flex-row mt-6">
                 <SmallArticleCard article={articles[1]}/>
                 <SmallArticleCard article={articles[2]}/>
-                <AllArticlesCard/>
             </div>
+            <AllArticlesCard/>
         </div>
     </Section>;
 }
