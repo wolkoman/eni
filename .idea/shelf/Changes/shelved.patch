@@ -1,0 +1,186 @@
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
++++ /dev/null	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
+@@ -1,5 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+Index: pages/api/instagram.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {NextApiRequest, NextApiResponse} from 'next';\r\nimport {cockpit} from '../../util/cockpit-sdk';\r\n\r\nexport default async function handler(req: NextApiRequest, res: NextApiResponse){\r\n\r\n  const instagramData = await cockpit.collectionGet(\"internal-data\", {filter: {id: \"instagram\"}});\r\n  const instagramToken = instagramData.entries[0].data.token;\r\n\r\n  const feed = await fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,username,timestamp,caption&limit=5&access_token=${instagramToken}`)\r\n    .then(response => response.json())\r\n    .then(response => response.data);\r\n\r\n  res.json(feed);\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/instagram.ts b/pages/api/instagram.ts
+--- a/pages/api/instagram.ts	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
++++ b/pages/api/instagram.ts	(date 1648211373977)
+@@ -6,6 +6,7 @@
+   const instagramData = await cockpit.collectionGet("internal-data", {filter: {id: "instagram"}});
+   const instagramToken = instagramData.entries[0].data.token;
+ 
++  console.log(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,username,timestamp,caption&limit=5&access_token=${instagramToken}`)
+   const feed = await fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,username,timestamp,caption&limit=5&access_token=${instagramToken}`)
+     .then(response => response.json())
+     .then(response => response.data);
+Index: pages/index.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport Articles from '../components/Articles';\r\nimport Site from '../components/Site';\r\nimport {Instagram} from '../components/Instagram';\r\nimport {Parishes} from '../components/Parishes';\r\nimport {TopBranding} from '../components/TopBranding';\r\nimport Responsive from '../components/Responsive';\r\nimport {ComingUp} from '../components/calendar/ComingUp';\r\nimport {Sections} from '../components/Sections';\r\nimport {siteType, SiteType} from '../util/sites';\r\nimport Navbar from '../components/Navbar';\r\n\r\nexport default function HomePage() {\r\n    return <Site responsive={false} navbar={false}>\r\n        {{\r\n            [SiteType.ENI]: <>\r\n                <div className=\"text-white\"><Navbar/></div>\r\n                <Responsive>\r\n                    <TopBranding/>\r\n                    <Articles/>\r\n                    <Parishes/>\r\n                    <ComingUp/>\r\n                </Responsive>\r\n                <Instagram/>\r\n                <Responsive>\r\n                    <Sections/>\r\n                </Responsive></>,\r\n            [SiteType.EMMAUS]: <>\r\n                <div className=\"text-white\"><Navbar/></div>\r\n                <Responsive>\r\n                    <TopBranding/>\r\n                    <Articles/>\r\n                </Responsive>\r\n                <Instagram/>\r\n                <Responsive>\r\n                    <Sections/>\r\n                </Responsive></>\r\n        }[siteType]}\r\n    </Site>\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/index.tsx b/pages/index.tsx
+--- a/pages/index.tsx	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
++++ b/pages/index.tsx	(date 1648505126266)
+@@ -14,7 +14,7 @@
+     return <Site responsive={false} navbar={false}>
+         {{
+             [SiteType.ENI]: <>
+-                <div className="text-white"><Navbar/></div>
++                <Navbar/>
+                 <Responsive>
+                     <TopBranding/>
+                     <Articles/>
+@@ -26,7 +26,7 @@
+                     <Sections/>
+                 </Responsive></>,
+             [SiteType.EMMAUS]: <>
+-                <div className="text-white"><Navbar/></div>
++                <Navbar/>
+                 <Responsive>
+                     <TopBranding/>
+                     <Articles/>
+Index: components/TopBranding.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport {site, siteType, SiteType} from '../util/sites';\r\n\r\nexport function TopBranding() {\r\n    return <>\r\n        <div className=\"mt-12 sm:mt-24 mb-64 flex justify-between\">\r\n            <div>\r\n                <div className=\"text-5xl font-bold text-white\">\r\n                    {site('eine neue initiative', 'emmaus am wienerberg')}\r\n                </div>\r\n                <div className=\"text-white opacity-80 leading-5 mt-4 text-lg\">\r\n                    {site(<>\r\n                        Pfarre <strong>E</strong>mmaus am Wienerberg,\r\n                        St. <strong>N</strong>ikolaus und <strong>I</strong>nzersdorf-Neustift<br/>\r\n                        Dekanat XXIII, Wien\r\n                    </>, <>\r\n                        Röm.-kath. Pfarre Emmaus am Wienerberg<br/>\r\n                        Dekanat XXIII, Wien\r\n                    </>)}\r\n                </div>\r\n            </div>\r\n            <img src={site('/logo.svg', '/logo_emmaus.svg')} className=\"hidden lg:block\"/>\r\n            <div className=\"absolute top-0 left-0 max-w-none w-full h-3xl\" style={{\r\n                backgroundImage: site('url(/hero_background.svg)', 'url(/hero_background_emmaus.svg)'),\r\n                backgroundSize: 'cover',\r\n                backgroundPosition: '0% 100%',\r\n                zIndex: -100\r\n            }}/>\r\n        </div>\r\n    </>;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/TopBranding.tsx b/components/TopBranding.tsx
+--- a/components/TopBranding.tsx	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
++++ b/components/TopBranding.tsx	(date 1648505401785)
+@@ -1,31 +1,26 @@
+ import React from 'react';
+ import {site, siteType, SiteType} from '../util/sites';
++import {getCalendarInfo} from "../util/calendar-info";
+ 
+ export function TopBranding() {
+     return <>
+         <div className="mt-12 sm:mt-24 mb-64 flex justify-between">
+             <div>
+-                <div className="text-5xl font-bold text-white">
++                <img src="./logo.svg"/>
++                <div className="text-5xl font-bold my-8">
+                     {site('eine neue initiative', 'emmaus am wienerberg')}
+                 </div>
+-                <div className="text-white opacity-80 leading-5 mt-4 text-lg">
++                <div className="opacity-80 leading-5 mt-4 text-lg">
+                     {site(<>
+-                        Pfarre <strong>E</strong>mmaus am Wienerberg,
+-                        St. <strong>N</strong>ikolaus und <strong>I</strong>nzersdorf-Neustift<br/>
+-                        Dekanat XXIII, Wien
++                        Pfarre <span className={getCalendarInfo("emmaus").textClassName + " font-bold"}>E</span>mmaus am Wienerberg<br/>
++                        Pfarre St. <span className={getCalendarInfo("inzersdorf").textClassName + " font-bold"}>N</span>ikolaus<br/>
++                        Pfarre <span className={getCalendarInfo("neustift").textClassName + " font-bold"}>I</span>nzersdorf-Neustift<br/>
+                     </>, <>
+                         Röm.-kath. Pfarre Emmaus am Wienerberg<br/>
+                         Dekanat XXIII, Wien
+                     </>)}
+                 </div>
+             </div>
+-            <img src={site('/logo.svg', '/logo_emmaus.svg')} className="hidden lg:block"/>
+-            <div className="absolute top-0 left-0 max-w-none w-full h-3xl" style={{
+-                backgroundImage: site('url(/hero_background.svg)', 'url(/hero_background_emmaus.svg)'),
+-                backgroundSize: 'cover',
+-                backgroundPosition: '0% 100%',
+-                zIndex: -100
+-            }}/>
+         </div>
+     </>;
+ }
+\ No newline at end of file
+Index: public/logo.svg
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><svg width=\"410\" height=\"109\" viewBox=\"0 0 410 109\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\r\n<path d=\"M119.636 49.016C113.089 43.6207 99.4892 40.9078 95.9749 40.2796C95.4866 40.1924 95.1348 39.7681 95.1393 39.272L95.4285 7.66465C95.4335 7.10881 94.9844 6.6555 94.4285 6.6555H67.8487C67.2964 6.6555 66.8486 7.09275 66.8479 7.64504C66.8429 11.3992 66.8089 24.9529 66.5729 32.9447C66.557 33.4837 66.1192 33.9085 65.5801 33.9152C53.9396 34.0597 28.8783 36.8863 5.45519 52.7391C5.21546 52.9013 5.05835 53.137 5.03384 53.4254C4.39066 60.993 5.07612 105 5.07612 105\" stroke=\"white\" stroke-width=\"8\" stroke-linecap=\"round\"/>\r\n<path d=\"M405.392 63.3046L398.579 59.3565C398.427 59.2682 398.254 59.2217 398.078 59.2217H344.211C343.659 59.2217 343.211 58.774 343.211 58.2217V22.327C343.211 22.0326 343.081 21.7532 342.856 21.5632L322.683 4.5133C322.327 4.21281 321.811 4.1974 321.439 4.47613L299.401 20.9504C299.149 21.1392 299 21.4361 299 21.7514V104.542\" stroke=\"white\" stroke-width=\"8\" stroke-linecap=\"round\"/>\r\n<path d=\"M257.373 50.9538C294.965 40.8174 228.249 33.0103 219.671 32.0645C219.162 32.0083 218.778 31.5788 218.778 31.0665V5C218.778 4.44772 218.331 4 217.778 4H195.376C194.823 4 194.376 4.44772 194.376 5V31.0663C194.376 31.5787 193.992 32.0083 193.483 32.0644C184.958 33.0031 119.033 40.7071 154.997 50.7392C155.429 50.8595 155.784 51.263 155.79 51.7108L156.393 101.888\" stroke=\"white\" stroke-width=\"8\" stroke-linecap=\"round\"/>\r\n</svg>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/public/logo.svg b/public/logo.svg
+--- a/public/logo.svg	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
++++ b/public/logo.svg	(date 1648504998934)
+@@ -1,5 +1,5 @@
+-<svg width="410" height="109" viewBox="0 0 410 109" fill="none" xmlns="http://www.w3.org/2000/svg">
+-<path d="M119.636 49.016C113.089 43.6207 99.4892 40.9078 95.9749 40.2796C95.4866 40.1924 95.1348 39.7681 95.1393 39.272L95.4285 7.66465C95.4335 7.10881 94.9844 6.6555 94.4285 6.6555H67.8487C67.2964 6.6555 66.8486 7.09275 66.8479 7.64504C66.8429 11.3992 66.8089 24.9529 66.5729 32.9447C66.557 33.4837 66.1192 33.9085 65.5801 33.9152C53.9396 34.0597 28.8783 36.8863 5.45519 52.7391C5.21546 52.9013 5.05835 53.137 5.03384 53.4254C4.39066 60.993 5.07612 105 5.07612 105" stroke="white" stroke-width="8" stroke-linecap="round"/>
+-<path d="M405.392 63.3046L398.579 59.3565C398.427 59.2682 398.254 59.2217 398.078 59.2217H344.211C343.659 59.2217 343.211 58.774 343.211 58.2217V22.327C343.211 22.0326 343.081 21.7532 342.856 21.5632L322.683 4.5133C322.327 4.21281 321.811 4.1974 321.439 4.47613L299.401 20.9504C299.149 21.1392 299 21.4361 299 21.7514V104.542" stroke="white" stroke-width="8" stroke-linecap="round"/>
+-<path d="M257.373 50.9538C294.965 40.8174 228.249 33.0103 219.671 32.0645C219.162 32.0083 218.778 31.5788 218.778 31.0665V5C218.778 4.44772 218.331 4 217.778 4H195.376C194.823 4 194.376 4.44772 194.376 5V31.0663C194.376 31.5787 193.992 32.0083 193.483 32.0644C184.958 33.0031 119.033 40.7071 154.997 50.7392C155.429 50.8595 155.784 51.263 155.79 51.7108L156.393 101.888" stroke="white" stroke-width="8" stroke-linecap="round"/>
++<svg width="320" height="77" viewBox="0 0 320 77" fill="none" xmlns="http://www.w3.org/2000/svg">
++<path d="M4.57897 72.1883C4.57897 72.1883 4.12702 43.1731 4.53751 37.6412C4.55893 37.3525 4.71799 37.0934 4.95807 36.9317C20.4797 26.4756 37.0436 24.4948 44.9863 24.3512C45.5254 24.3414 45.9619 23.9186 45.9769 23.3796C46.1215 18.1835 46.1477 9.84481 46.1524 6.99335C46.1533 6.44106 46.6012 5.99998 47.1535 5.99998H64.3854C64.9412 5.99998 65.3904 6.45329 65.3853 7.00913L65.1963 27.6694C65.1918 28.1654 65.5466 28.5904 66.0343 28.6804C68.6909 29.1709 76.949 30.9064 81.3121 34.2182C81.55 34.3988 81.6807 34.6826 81.6807 34.9813V72.1883" stroke="#2A6266" stroke-width="8" stroke-linecap="round"/>
++<path d="M243.423 71.6675V16.1109C243.423 15.7956 243.571 15.4988 243.824 15.31L258.316 4.47613C258.689 4.1974 259.205 4.21281 259.56 4.51331L272.823 15.7225C273.048 15.9125 273.178 16.1919 273.178 16.4863V40.1656C273.178 40.7179 273.625 41.1656 274.178 41.1656H310.016C310.193 41.1656 310.366 41.2121 310.518 41.3004L314.528 43.6246C314.837 43.8034 315.027 44.1331 315.027 44.4898V71.6675" stroke="#F4AC11" stroke-width="8" stroke-linecap="round"/>
++<path d="M128.79 71.8813L128.387 38.3581C128.381 37.9103 128.033 37.509 127.602 37.3867C104.286 30.7638 146.804 25.6634 153.488 24.9174C153.997 24.8605 154.353 24.4339 154.353 23.9215V7C154.353 6.44772 154.801 6 155.353 6H169.777C170.329 6 170.777 6.44771 170.777 7V23.9216C170.777 24.4339 171.133 24.8606 171.642 24.9175C178.32 25.6637 220.767 30.7625 197.537 37.3836C197.102 37.5075 196.752 37.9151 196.752 38.3671V71.8813" stroke="#139B91" stroke-width="8" stroke-linecap="round"/>
+ </svg>
+Index: util/calendar-info.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Calendar} from \"./calendar-events\";\r\nimport React from \"react\";\r\n\r\nexport interface CalendarInfo {\r\n  id: Calendar,\r\n  className: string,\r\n  fullName: string,\r\n  shortName: string,\r\n  tagName: string,\r\n  address: string,\r\n  image: string,\r\n  websiteUrl: string,\r\n  websiteDisplay: string,\r\n  imageColor: string,\r\n  description: (x: string) => React.ReactNode,\r\n}\r\n\r\nexport const getCalendarInfo = (calendar: Calendar): CalendarInfo => {\r\n  let infos: Record<Calendar, CalendarInfo> = {\r\n    'all': {\r\n      id: 'all',\r\n      className: '',\r\n      fullName: '',\r\n      shortName: '',\r\n      tagName: '',\r\n      address: '',\r\n      websiteUrl: 'https://eni.wien',\r\n      websiteDisplay: 'https://eni.wien',\r\n      description: () => '',\r\n      image: '',\r\n      imageColor: ''\r\n    },\r\n    'emmaus': {\r\n      id: 'emmaus',\r\n      className: 'bg-primary1 text-white',\r\n      fullName: 'Pfarre Emmaus am Wienerberg',\r\n      shortName: 'Emmaus',\r\n      tagName: 'Emmaus',\r\n      address: 'Tesarekplatz 2, 1100 Wien',\r\n      image: '/logos_Emmaus Stroke.svg',\r\n      imageColor: '/logos_Emmaus Fade.svg',\r\n      websiteUrl: 'https://tesarekplatz.at',\r\n      websiteDisplay: 'tesarekplatz.at',\r\n      description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik\r\n        errichtet.</>,\r\n    },\r\n    'inzersdorf': {\r\n      id: 'inzersdorf',\r\n      className: 'bg-primary2 text-white',\r\n      fullName: 'Pfarre Inzersdorf (St. Nikolaus)',\r\n      shortName: 'St. Nikolaus',\r\n      tagName: 'Nikolaus',\r\n      address: 'Inzersdorf Kirchenplatz 1, 1230 Wien',\r\n      image: '/logos_Inzersdorf Stroke.svg',\r\n      imageColor: '/logos_Inzersdorf Fade.svg',\r\n      websiteUrl: 'https://pfarresanktnikolaus.at',\r\n      websiteDisplay: 'pfarresanktnikolaus.at',\r\n      description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der\r\n        Erzdiözese Wien.</>,\r\n    },\r\n    'neustift': {\r\n      id: 'neustift',\r\n      className: 'bg-primary3',\r\n      fullName: 'Pfarre Inzersdorf - Neustift',\r\n      shortName: 'Neustift',\r\n      tagName: 'Neustift',\r\n      address: 'Don-Bosco-Gasse 14, 1230 Wien',\r\n      image: '/logos_Neustift Stroke.svg',\r\n      imageColor: '/logos_Neustift Fade.svg',\r\n      websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',\r\n      websiteDisplay: 'pfarreinzersdorfneustift.at/',\r\n      description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,\r\n        Hilfe der Christen geweiht.</>,\r\n    },\r\n    'inzersdorf-organ': {\r\n      id: 'inzersdorf-organ',\r\n      className: 'bg-primary3',\r\n      fullName: '',\r\n      shortName: '',\r\n      tagName: '',\r\n      address: '',\r\n      websiteUrl: '',\r\n      websiteDisplay: '',\r\n      description: () => '',\r\n      image: '',\r\n      imageColor: ''\r\n    },\r\n  };\r\n  return infos[calendar];\r\n};
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/util/calendar-info.tsx b/util/calendar-info.tsx
+--- a/util/calendar-info.tsx	(revision 3e79c6ac9be52881167b165dd94ce8d16c58aa5c)
++++ b/util/calendar-info.tsx	(date 1648505450621)
+@@ -3,6 +3,7 @@
+ 
+ export interface CalendarInfo {
+   id: Calendar,
++  textClassName: string,
+   className: string,
+   fullName: string,
+   shortName: string,
+@@ -19,6 +20,7 @@
+   let infos: Record<Calendar, CalendarInfo> = {
+     'all': {
+       id: 'all',
++      textClassName: '',
+       className: '',
+       fullName: '',
+       shortName: '',
+@@ -32,6 +34,7 @@
+     },
+     'emmaus': {
+       id: 'emmaus',
++      textClassName: 'text-primary1',
+       className: 'bg-primary1 text-white',
+       fullName: 'Pfarre Emmaus am Wienerberg',
+       shortName: 'Emmaus',
+@@ -46,6 +49,7 @@
+     },
+     'inzersdorf': {
+       id: 'inzersdorf',
++      textClassName: 'text-primary2',
+       className: 'bg-primary2 text-white',
+       fullName: 'Pfarre Inzersdorf (St. Nikolaus)',
+       shortName: 'St. Nikolaus',
+@@ -60,6 +64,7 @@
+     },
+     'neustift': {
+       id: 'neustift',
++      textClassName: 'text-primary3',
+       className: 'bg-primary3',
+       fullName: 'Pfarre Inzersdorf - Neustift',
+       shortName: 'Neustift',
+@@ -74,6 +79,7 @@
+     },
+     'inzersdorf-organ': {
+       id: 'inzersdorf-organ',
++      textClassName: 'text-primary3',
+       className: 'bg-primary3',
+       fullName: '',
+       shortName: '',

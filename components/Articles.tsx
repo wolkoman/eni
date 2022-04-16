@@ -6,6 +6,7 @@ import {Collections} from 'cockpit-sdk';
 import {SectionHeader} from './SectionHeader';
 import {useArticleStore} from '../util/use-article-store';
 import {Section} from './Section';
+import Responsive from "./Responsive";
 
 export function getArticlePreviewImageUrl(article: Collections['article']) {
     const url = article.preview_image.path;
@@ -21,7 +22,7 @@ function BigArticle(props: { article?: Collections['article'] }) {
         className={`flex flex-col md:flex-row items-stretch w-full ${!props.article && 'shimmer'}`}
         data-testid="articles">
 
-        <div className="md:w-80 aspect-square flex-shrink-0 rounded-lg" style={!props.article ? {} : {
+        <div className="w-64 md:w-80 aspect-square flex-shrink-0 rounded-lg border-4 border-white" style={!props.article ? {} : {
             backgroundImage: `url(${getArticlePreviewImageUrl(props.article)})`,
             backgroundSize: 'cover',
             backgroundPosition: '50% 50%'
@@ -51,9 +52,9 @@ function BigArticle(props: { article?: Collections['article'] }) {
 function SmallArticleCard(props: { article?: Collections['article'] }) {
     return <Link href={getArticleLink(props.article)}>
         <div
-            className={`flex flex-col lg:flex-row items-center p-4 cursor-pointer ${!props.article && 'shimmer'}`}>
+            className={`flex flex-row p-4 cursor-pointer ${!props.article && 'shimmer'}`}>
 
-            <div className="md:w-32 mr-4 aspect-square flex-shrink-0 rounded-lg" style={!props.article ? {} : {
+            <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded-lg  border-4 border-white" style={!props.article ? {} : {
                 backgroundImage: `url(${getArticlePreviewImageUrl(props.article)})`,
                 backgroundSize: 'cover',
                 backgroundPosition: '50% 50%'
@@ -78,7 +79,7 @@ function AllArticlesCard() {
 
 export default function Articles() {
     const [articles] = useArticleStore(state => [state.items, state.load()]);
-    return <Section title="Aktuelles">
+    return <div className="bg-primary1/25 py-1"><Responsive><Section title="Aktuelles">
         <div className="flex flex-col">
             <BigArticle article={articles[0]}/>
             <div className="flex flex-col md:flex-row mt-6">
@@ -87,5 +88,6 @@ export default function Articles() {
             </div>
             <AllArticlesCard/>
         </div>
-    </Section>;
+    </Section>
+    </Responsive></div>;
 }

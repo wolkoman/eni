@@ -5,7 +5,7 @@ import React from 'react';
 import {Info} from './Info';
 
 export function Sections() {
-    return <Section title="Weiteres">
+    return <Section title="Wochenmitteilungen">
         <div className="grid md:grid-cols-2 gap-4">
             <Info title="Wochen&shy;mitteilungen" image="./info-01.svg">
                 <div className="mb-4">

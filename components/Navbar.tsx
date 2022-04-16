@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import {SiteType, siteType} from '../util/sites';
+import {site, SiteType, siteType} from '../util/sites';
 import React from 'react';
 
 export default function Navbar() {
@@ -7,14 +7,19 @@ export default function Navbar() {
     <Link href="/">
       <div className="text-3xl cursor-pointer" data-testid="title">
         {{
-          [SiteType.ENI]: "eni.wien",
-          [SiteType.EMMAUS]: "emmaus.wien"
+          [SiteType.ENI]: <div className="flex space-x-4">
+            <div>eni.wien</div>
+            <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32"/>
+          </div>,
+          [SiteType.EMMAUS]: <div className="flex space-x-4">
+            <div>emmaus.wien</div>
+          </div>
         }[siteType]}
       </div>
     </Link>
     <div className="flex flex-col justify-center items-center leading-4 hidden md:block opacity-80 text-right">
       <div className="text-md md:ml-24">kanzlei@eni.wien</div>
-      <div className="text-md md:ml-24 hidden">+1 616 4340</div>
+      <div className="text-md md:ml-24">+43 664 886 32 680 </div>
     </div>
   </div>;
 }

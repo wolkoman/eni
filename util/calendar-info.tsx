@@ -3,6 +3,7 @@ import React from "react";
 
 export interface CalendarInfo {
   id: Calendar,
+  borderColor: string,
   className: string,
   fullName: string,
   shortName: string,
@@ -20,6 +21,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
     'all': {
       id: 'all',
       className: '',
+      borderColor: '',
       fullName: '',
       shortName: '',
       tagName: '',
@@ -32,6 +34,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
     },
     'emmaus': {
       id: 'emmaus',
+      borderColor: 'border-primary1',
       className: 'bg-primary1 text-white',
       fullName: 'Pfarre Emmaus am Wienerberg',
       shortName: 'Emmaus',
@@ -47,6 +50,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
     'inzersdorf': {
       id: 'inzersdorf',
       className: 'bg-primary2 text-white',
+      borderColor: 'border-primary2',
       fullName: 'Pfarre Inzersdorf (St. Nikolaus)',
       shortName: 'St. Nikolaus',
       tagName: 'Nikolaus',
@@ -61,6 +65,7 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
     'neustift': {
       id: 'neustift',
       className: 'bg-primary3',
+      borderColor: 'border-primary3',
       fullName: 'Pfarre Inzersdorf - Neustift',
       shortName: 'Neustift',
       tagName: 'Neustift',
@@ -68,14 +73,15 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       image: '/logos_Neustift Stroke.svg',
       imageColor: '/logos_Neustift Fade.svg',
       websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
-      websiteDisplay: 'pfarreinzersdorfneustift.at/',
+      websiteDisplay: 'pfarreinzersdorfneustift.at',
       description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,
         Hilfe der Christen geweiht.</>,
     },
     'inzersdorf-organ': {
       id: 'inzersdorf-organ',
-      className: 'bg-primary3',
+      className: 'bg-primary2',
       fullName: '',
+      borderColor: 'border-primary2',
       shortName: '',
       tagName: '',
       address: '',

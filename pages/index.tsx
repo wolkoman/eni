@@ -14,15 +14,15 @@ export default function HomePage() {
     return <Site responsive={false} navbar={false}>
         {{
             [SiteType.ENI]: <>
-                <div className="bg-gray-200 relative">
+                <div className=" relative">
                     <Navbar/>
                     <Responsive>
                         <TopBranding/>
+                        <Parishes/>
                     </Responsive>
                 </div>
+                <Articles/>
                 <Responsive>
-                    <Articles/>
-                    <Parishes/>
                     <ComingUp/>
                 </Responsive>
                 <Instagram/>

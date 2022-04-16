@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {fetchJson} from '../util/fetch-util';
 import {SectionHeader} from './SectionHeader';
 import {siteType, SiteType} from '../util/sites';
+import Responsive from "./Responsive";
 
 interface InstagramFeedItem {
     id: string,
@@ -20,9 +21,11 @@ export function Instagram() {
             .catch(() => setFeed([]));
     }, [])
 
-    return <div className="my-10" data-testid="instagram">
+    return <div className="py-2 bg-primary3/25" data-testid="instagram">
+        <Responsive>
         <SectionHeader>Einblick ins Pfarrleben</SectionHeader>
-        <div className="grid grid-cols-5">
+        </Responsive>
+        <div className="lg:grid space-y-4 lg:space-y-0 grid-cols-5 gap-4 px-8">
         {feed.length === 0 && Array(3).fill(0).map((_, index) =>
             <InstagramItem key={index}/>
         )}
@@ -33,7 +36,7 @@ export function Instagram() {
                 <InstagramItem item={item}/>
             )}
         {feed.length > 0 &&
-            <div className="w-full h-96 text-xl text-center flex items-center justify-center cursor-all-scroll">
+            <div className="w-full h-96 text-xl text-center flex items-center justify-center">
                 <div>
                     Weitere Bilder<br/>auf unserem{' '}
                     <a href="//instagram.com/eni.wien/" className="text-primary1 font-bold underline">Instagram</a>
@@ -47,12 +50,13 @@ export function Instagram() {
 function InstagramItem({item}: { item?: InstagramFeedItem }) {
     return <div
             style={{backgroundImage: `url(${item?.media_url})`, backgroundSize: 'cover'}}
-            className={`relative bg-center ${item == null && 'shimmer'} aspect-square text-right`}>
-            {item?.caption}
-            <div
-                className="bg-white inline-block px-2 text-right cursor-default rounded-bl font-bold">
+            className={`relative bg-center ${item == null && 'shimmer'} aspect-square text-right border-4 border-white rounded-lg group`}>
+        <div className="flex flex-col justify-end h-full">
+            <div className="lg:opacity-0 group-hover:opacity-100 backdrop-blur bg-white/40 text-black text-lg font-bold p-4">
+                {item?.caption}
                 {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}
             </div>
+        </div>
 
     </div>;
 }

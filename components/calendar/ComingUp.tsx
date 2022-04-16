@@ -20,7 +20,7 @@ export function ComingUp({}) {
 
     useEffect(() => calendar.load(jwt), [jwt]);
 
-    return <Section title="Termin">
+    return <Section title="Termine">
         {calendar.error ? <CalendarErrorNotice/> : <>
             <div className="lg:-mx-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {infos.map(info => <ComingUpColumn
