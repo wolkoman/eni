@@ -79,7 +79,7 @@ function AllArticlesCard() {
 
 export default function Articles() {
     const [articles] = useArticleStore(state => [state.items, state.load()]);
-    return <div className="bg-primary1/25 py-1"><Responsive><Section title="Aktuelles">
+    return <div className="border-t border-b border-black/20 bg-gray-200 py-1"><Responsive><Section title="Aktuelles">
         <div className="flex flex-col">
             <BigArticle article={articles[0]}/>
             <div className="flex flex-col md:flex-row mt-6">

@@ -9,7 +9,7 @@ export default function Navbar() {
         {{
           [SiteType.ENI]: <div className="flex space-x-4">
             <div>eni.wien</div>
-            <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32"/>
+            <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32 hidden"/>
           </div>,
           [SiteType.EMMAUS]: <div className="flex space-x-4">
             <div>emmaus.wien</div>

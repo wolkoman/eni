@@ -21,11 +21,11 @@ export function Instagram() {
             .catch(() => setFeed([]));
     }, [])
 
-    return <div className="py-2 bg-primary3/25" data-testid="instagram">
+    return <div className="py-10" data-testid="instagram">
         <Responsive>
         <SectionHeader>Einblick ins Pfarrleben</SectionHeader>
         </Responsive>
-        <div className="lg:grid space-y-4 lg:space-y-0 grid-cols-5 gap-4 px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8">
         {feed.length === 0 && Array(3).fill(0).map((_, index) =>
             <InstagramItem key={index}/>
         )}
@@ -50,9 +50,9 @@ export function Instagram() {
 function InstagramItem({item}: { item?: InstagramFeedItem }) {
     return <div
             style={{backgroundImage: `url(${item?.media_url})`, backgroundSize: 'cover'}}
-            className={`relative bg-center ${item == null && 'shimmer'} aspect-square text-right border-4 border-white rounded-lg group`}>
+            className={`rounded-lg relative bg-center ${item == null && 'shimmer'} aspect-square text-right group`}>
         <div className="flex flex-col justify-end h-full">
-            <div className="lg:opacity-0 group-hover:opacity-100 backdrop-blur bg-white/40 text-black text-lg font-bold p-4">
+            <div className="lg:opacity-0 group-hover:opacity-100 backdrop-blur bg-white/60 text-black text-lg p-4">
                 {item?.caption}
                 {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}
             </div>

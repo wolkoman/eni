@@ -14,17 +14,11 @@ export default function HomePage() {
     return <Site responsive={false} navbar={false}>
         {{
             [SiteType.ENI]: <>
-                <div className=" relative">
-                    <Navbar/>
-                    <Responsive>
-                        <TopBranding/>
-                        <Parishes/>
-                    </Responsive>
-                </div>
-                <Articles/>
+                <Navbar/>
                 <Responsive>
-                    <ComingUp/>
+                    <Parishes/>
                 </Responsive>
+                <ComingUp/>
                 <Instagram/>
                 <Responsive>
                     <Sections/>
