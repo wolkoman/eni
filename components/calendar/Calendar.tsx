@@ -10,12 +10,12 @@ export type Person = keyof typeof personWords;
 
 export type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
 
-export function applyFilter(events: CalendarEvent[], filter: FilterType) {
+export function applyFilter(events: CalendarEvent[], filter: FilterType, group?: string) {
   return events
     .filter(event =>
-      (filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))
+        ((filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))
       || (filter?.filterType === 'PARISH' && event.calendar === filter.parish)
-      || filter === null)
+      || (filter === null)) && ((event.groups.includes(decodeURI(group ?? ""))) || group === undefined))
 
 }
 

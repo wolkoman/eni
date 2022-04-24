@@ -8,31 +8,35 @@
 body {
   font-family: "Source Sans Pro";
   color: #333;
-  background: #fbfbfb;
 }
 
 .events::-webkit-scrollbar {
   width: 8px;
 }
+
 .events::-webkit-scrollbar-thumb {
   background-color: #CBCBCB;
 }
+
 .events::-webkit-scrollbar-thumb:hover {
   background-color: #909090;
 }
 
-.custom-html{
+.custom-html {
   p {
     margin: 12px 0;
   }
+
   h1 {
     font-size: 24px;
     font-weight: bold;
   }
+
   h2 {
     font-size: 20px;
     font-weight: bold;
   }
+
   h3 {
     font-size: 18px;
     text-decoration: underline;
@@ -41,24 +45,35 @@ body {
 
 
 .shimmer {
-  animation : shimmer 2s infinite linear;
+  animation: shimmer 2s infinite linear;
   background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
   background-size: 1000px 100%;
 }
+
 @keyframes shimmer {
-  0% {background-position: -1000px 0;}
-  100% {background-position: 1000px 0;}
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
-* > .on-parent-hover{
+* > .on-parent-hover {
   opacity: 0;
 }
-*:hover > .on-parent-hover{
+
+*:hover > .on-parent-hover {
   opacity: 100;
 }
 
-.st35{
-  fill:none;stroke:#2A6266;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+.st35 {
+  fill: none;
+  stroke: #2A6266;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
   stroke-dasharray: 1556;
   stroke-dashoffset: -1556;
   animation-name: dashdraw;
@@ -68,8 +83,14 @@ body {
   animation-delay: 1s;
 
 }
-.st36{
-  fill:none;stroke:#F4AC11;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+
+.st36 {
+  fill: none;
+  stroke: #F4AC11;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
   stroke-dasharray: 1853;
   stroke-dashoffset: -1853;
   animation-name: dashdraw;
@@ -78,8 +99,14 @@ body {
   animation-fill-mode: both;
   animation-delay: 2s;
 }
-.st37{
-  fill:none;stroke:#139B91;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;
+
+.st37 {
+  fill: none;
+  stroke: #139B91;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
   stroke-dasharray: 1740;
   stroke-dashoffset: -1740;
   animation-name: dashdraw;
@@ -89,6 +116,15 @@ body {
   animation-delay: 1.5s;
 }
 
+.text-stroke {
+  text-shadow: 3px 3px 0 black,
+  -4px 4px 0 black,
+  4px -4px 0 black,
+  -4px -4px 0 black;
+}
+
 @keyframes dashdraw {
-  to {stroke-dashoffset: 0}
+  to {
+    stroke-dashoffset: 0
+  }
 }

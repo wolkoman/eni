@@ -59,7 +59,7 @@ function SmallArticleCard(props: { article?: Collections['article'] }) {
                 backgroundSize: 'cover',
                 backgroundPosition: '50% 50%'
             }}/>
-            <div className="flex flex-col overflow-hidden">
+            <div className="flex flex-col justify-center overflow-hidden">
                 <div className="uppercase opacity-80 text-sm">{props.article?.resort}</div>
                 <div className="line-clamp-3 font-semibold text-xl">{props.article?.title}</div>
             </div>
@@ -69,25 +69,27 @@ function SmallArticleCard(props: { article?: Collections['article'] }) {
 
 function AllArticlesCard() {
     return <Link href="/artikel">
-        <div className="p-2 cursor-pointer">
-            <div className="flex justify-end">
-                <div className="underline">Alle Beiträge</div>
+            <div
+                className={`flex flex-row p-4 cursor-pointer`}>
+                <div className="flex flex-col justify-center overflow-hidden">
+                    <div className="line-clamp-3 font-semibold text-xl">Alle Beiträge</div>
+                </div>
             </div>
-        </div>
     </Link>;
 }
 
 export default function Articles() {
     const [articles] = useArticleStore(state => [state.items, state.load()]);
-    return <div className="border-t border-b border-black/20 bg-gray-200 py-1"><Responsive><Section title="Aktuelles">
+    return <Responsive><Section title="Aktuelles">
         <div className="flex flex-col">
             <BigArticle article={articles[0]}/>
-            <div className="flex flex-col md:flex-row mt-6">
+            <div className="grid grid-cols-2 mt-6">
                 <SmallArticleCard article={articles[1]}/>
                 <SmallArticleCard article={articles[2]}/>
+                <SmallArticleCard article={articles[4]}/>
+                <AllArticlesCard/>
             </div>
-            <AllArticlesCard/>
         </div>
     </Section>
-    </Responsive></div>;
+    </Responsive>;
 }

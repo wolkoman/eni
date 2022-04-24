@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import Articles from '../components/Articles';
 import Site from '../components/Site';
 import {Instagram} from '../components/Instagram';
@@ -15,21 +15,24 @@ export default function HomePage() {
         {{
             [SiteType.ENI]: <>
                 <Navbar/>
-                <Responsive>
-                    <Parishes/>
-                </Responsive>
+                <Parishes/>
                 <ComingUp/>
-                <Instagram/>
+                <GreyBackground>
+                    <Instagram/>
+                </GreyBackground>
                 <Responsive>
                     <Sections/>
                 </Responsive></>,
             [SiteType.EMMAUS]: <>
-                <div className=""><Navbar/></div>
-                <Responsive>
-                    <TopBranding/>
+                <Navbar/>
+                <TopBranding/>
+                <GreyBackground>
                     <Articles/>
-                </Responsive>
-                <Instagram/>
+                </GreyBackground>
+                <ComingUp/>
+                <GreyBackground>
+                    <Instagram/>
+                </GreyBackground>
                 <Responsive>
                     <Sections/>
                 </Responsive></>
@@ -37,3 +40,8 @@ export default function HomePage() {
     </Site>
 }
 
+export function GreyBackground(props: { children: ReactNode }) {
+    return <div className={"border-t border-b border-black/20 bg-gray-200 py-12"}>
+        {props.children}
+    </div>;
+}

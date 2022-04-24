@@ -9,11 +9,13 @@ import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
+import {useRouter} from "next/router";
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
     const calendar = useCalendarStore(state => state);
     const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
+    const {query: {q}} = useRouter();
 
     useEffect(() => userLoad(), []);
     useEffect(() => calendar.load(jwt), [jwt]);
@@ -36,7 +38,7 @@ export default function EventPage() {
                         {calendar.error && <CalendarErrorNotice/>}
                         {calendar.loading && <LoadingEvents/>}
                         {calendar.loading || Object.entries(calendar.items)
-                            ?.map(([date, events]) => [date, applyFilter(events, filter)] as [string, CalendarEvent[]])
+                            ?.map(([date, events]) => [date, applyFilter(events, filter, q as string)] as [string, CalendarEvent[]])
                             .filter(([_, events]) => events.length > 0)
                             .map(([date, events]) => <div key={date} data-date={date}>
                                 <EventDate date={new Date(date)}/>

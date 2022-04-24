@@ -14,7 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const person = await getPerson(user.username, req.body.password);
-    console.log("person",person);
 
     if (person === undefined || req.body.neo.length < 4) {
         res.status(401).json({errorMessage: 'No permission'});
@@ -22,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     await cockpit.collectionSave('person', {...person, code: doubleHash(req.body.neo)})
-    console.log("saving");
     res.status(200).json({});
 
 }

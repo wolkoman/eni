@@ -1,12 +1,14 @@
 import {CalendarCacheNotice} from './CalendarCacheNotice';
 import {CalendarErrorNotice} from './CalendarErrorNotice';
-import {useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {CalendarEvent} from '../../util/calendar-events';
 import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
 import {Section} from '../Section';
 import {Event, EventDateText} from './Event';
 import Responsive from '../Responsive';
+import {SectionHeader} from "../SectionHeader";
+import Link from "next/link";
 
 export function ComingUp({}) {
     const calendar = useCalendarStore(state => state);
@@ -14,34 +16,6 @@ export function ComingUp({}) {
     const [jwt] = useUserStore(state => [state.jwt]);
     const now = new Date().getTime();
     const tomorrow = now + 3600 * 1000 * 24 * 7;
-
-    function summaryToGroup(summary: string): string[] {
-        let conditions: ((x: string) => string | false)[] = [
-            x => x.startsWith("taufe") && "Taufe",
-            x => x.startsWith("grabwache") && "Grabwache",
-            x => x.includes("messe") && "Messe",
-            x => x.includes("jungschar") && "Jungschar",
-            x => x.includes("evangel") && "Ökumene",
-            x => x.startsWith("emmausgebet") && "Gebet & Bibel",
-            x => x.startsWith("gebetsrunde") && "Gebet & Bibel",
-            x => x.startsWith("sprechstunde mit jesus") && "Gebet & Bibel",
-            x => x.includes("eltern-kind-treff") && "Kinder",
-            x => x.startsWith("kinderstunde") && "Kinder",
-            x => x.startsWith("bibel aktiv") && "Gebet & Bibel",
-            x => x.startsWith("vesper") && "Gottesdienst",
-            x => x.includes("taufe") && "_",
-            x => x.includes("generalprobe") && "_",
-            x => x.includes("pgr sitzung") && "Gremien",
-            x => x.includes("caritas-sprechstunde") && "Gremien",
-        ];
-        let groups = conditions.reduce<(string|false)[]>((groups, condition) => [
-            ...groups,
-            condition(summary.toLowerCase())
-        ], [])
-            .filter((group): group is string => !!group);
-
-        return groups.length === 0 ? [summary] : groups.filter(group => group !== "_");
-    }
 
     useEffect(() => calendar.load(jwt), [jwt]);
     useEffect(() => {
@@ -52,40 +26,56 @@ export function ComingUp({}) {
             ).filter(event => event.visibility !== 'private');
         const groups = events.reduce<Record<string, Record<string, CalendarEvent[]>>>((groups, event) => ({
             ...groups,
-            ...Object.fromEntries(summaryToGroup(event.summary).map(group => [
+            ...Object.fromEntries(event.groups?.map(group => [
                 group,
                 {
                     ...(groups[group] ?? []),
-                    [event.date]:[
+                    [event.date]: [
                         ...(groups?.[group]?.[event.date] ?? []),
                         event
                     ]
                 }
-            ]))
+            ]) ?? [])
         }), {});
         setGroups(groups);
     }, [calendar]);
 
-    return <div className={"border-t border-b border-black/20 bg-gray-200"}><Responsive>
-        <Section title="Die nächsten 7 Tage">
+    return <Responsive>
+        <div className="my-10">
+            <div className="flex justify-between">
+                <SectionHeader>Die nächsten 7 Tage</SectionHeader>
+                <Link href="/termine">
+                    <div className="my-8 px-3 py-1 bg-white rounded-xl cursor-pointer underline hover:no-underline">Alle
+                        Termine
+                    </div>
+                </Link>
+            </div>
             {calendar.error ? <CalendarErrorNotice/> :
                 <div className="grid lg:grid-cols-2 gap-8">
                     {Object.entries(groups)
-                        .map(([group, calendar]) => <div className="border border-black/20 rounded-xl p-4">
-                                <div className="text-2xl font-bold text-center">{group}</div>
-                                <div>{Object.entries(calendar).map(([date, events]) =>
-                                    <div>
-                                        <div className="my-2">
-                                            <EventDateText date={new Date(date)}/>
-                                        </div>
-                                        {(events ?? []).map(event => <Event event={event} permissions={{}}/>)}
+                        .map(([group, calendar]) => <div
+                                className="max-h-96 overflow-hidden relative rounded-xl border border-[#eee] shadow-lg relative p-4 pb-12">
+                                    <Link href={`/termine?q=${encodeURIComponent(group)}`}>
+                                    <div
+                                        className="absolute w-full h-12 left-0 bottom-0 bg-[#fff] text-center pt-2 cursor-pointer underline hover:no-underline">
+                                        Alle {group} Termine
                                     </div>
-                                )}
-                                </div>
+                                    </Link>
+                                    <div className="text-2xl font-bold text-center">{group}</div>
+                                    <div>{Object.entries(calendar).map(([date, events]) =>
+                                        <div>
+                                            <div className="my-2">
+                                                <EventDateText date={new Date(date)}/>
+                                            </div>
+                                            {(events ?? []).map(event => <Event event={event} permissions={{}}/>)}
+                                        </div>
+                                    )}
+                                    </div>
                             </div>
                         )}
                     <CalendarCacheNotice/>
                 </div>
             }
-        </Section></Responsive></div>;
+        </div>
+    </Responsive>;
 }
