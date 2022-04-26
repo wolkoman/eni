@@ -10,6 +10,7 @@ import {useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
+import Link from "next/link";
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
@@ -34,7 +35,11 @@ export default function EventPage() {
                         />
                     </div>
                     <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
-                        <div className="font-bold text-4xl mb-6">Termine</div>
+                        {q ? <div>
+                                <div className="font-bold text-4xl mb-6">{q}</div>
+                                <Link href="/termine"><div className="cursor-pointer underline hover:no-underline">Alle Termine anzeigen</div></Link>
+                            </div> :
+                            <div className="font-bold text-4xl mb-6">Termine</div>}
                         {calendar.error && <CalendarErrorNotice/>}
                         {calendar.loading && <LoadingEvents/>}
                         {calendar.loading || Object.entries(calendar.items)

@@ -43,6 +43,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().startsWith("emmausgebet") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("gebetsrunde") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("sprechstunde mit jesus") && "Gebet & Bibel",
+    x => x.summary.toLowerCase().includes("maiandacht") && "Maiandacht",
     x => x.summary.toLowerCase().includes("eltern-kind-treff") && "Kinder",
     x => x.summary.toLowerCase().startsWith("kinderstunde") && "Kinder",
     x => x.summary.toLowerCase().startsWith("bibel aktiv") && "Gebet & Bibel",
