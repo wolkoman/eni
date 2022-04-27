@@ -11,6 +11,7 @@ import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
 import Link from "next/link";
+import {site} from "../../util/sites";
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
@@ -26,14 +27,14 @@ export default function EventPage() {
             <CalendarCacheNotice/>
             <>
                 <div className="flex flex-col md:flex-row">
-                    <div
+                    {site(<div
                         className="flex flex-col w-full md:w-auto self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 bg-white shadow flex-shrink-0 rounded-xl sticky top-0 md:top-5 z-20 bg-white">
                         <FilterSelector
                             filter={filter}
                             setFilter={filter => setFilter(filter)}
                             userPermissions={permissions}
                         />
-                    </div>
+                    </div>,<div className=" md:w-36"></div>)}
                     <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
                         {q ? <div>
                                 <div className="font-bold text-4xl mb-6">{q}</div>

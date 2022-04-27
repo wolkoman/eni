@@ -4,7 +4,7 @@ import {SectionHeader} from './SectionHeader';
 import {siteType, SiteType} from '../util/sites';
 import Responsive from "./Responsive";
 
-interface InstagramFeedItem {
+export interface InstagramFeedItem {
     id: string,
     media_type: 'CAROUSEL_ALBUM' | 'VIDEO' | 'IMAGE',
     media_url: string,
@@ -13,19 +13,13 @@ interface InstagramFeedItem {
     caption: string,
 }
 
-export function Instagram() {
-    const [feed, setFeed] = useState<InstagramFeedItem[]>([]);
-    useEffect(() => {
-        fetchJson('/api/instagram')
-            .then(response => setFeed(response))
-            .catch(() => setFeed([]));
-    }, [])
+export function Instagram(props: {items: any[]}) {
+    const feed = props.items;
 
     return <div data-testid="instagram">
         <Responsive>
             <SectionHeader>Einblick ins Pfarrleben</SectionHeader>
-        </Responsive>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {feed.length === 0 && Array(3).fill(0).map((_, index) =>
                 <InstagramItem key={index}/>
             )}
@@ -43,6 +37,7 @@ export function Instagram() {
                 </div>}
 
         </div>
+        </Responsive>
     </div>;
 }
 
@@ -51,7 +46,7 @@ function InstagramItem({item}: { item?: InstagramFeedItem }) {
         style={{backgroundImage: `url(${item?.media_url})`, backgroundSize: 'cover'}}
         className={`rounded-lg relative bg-center ${item == null && 'shimmer'} aspect-square text-right group shadow`}>
         <div className="flex flex-col justify-end h-full">
-            <div className="lg:opacity-0 group-hover:opacity-100 backdrop-blur bg-white/60 text-black text-lg p-4">
+            <div className="lg:opacity-0 group-hover:opacity-100 backdrop-blur bg-white/60 text-black p-4">
                 {item?.caption}
                 {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}
             </div>

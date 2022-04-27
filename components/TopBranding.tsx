@@ -4,13 +4,15 @@ import Responsive from "./Responsive";
 import {getCalendarInfo} from "../util/calendar-info";
 
 export function TopBranding() {
-    return <div className={getCalendarInfo("emmaus").className + " pt-24 mt-12 text-stroke"}>
+    return <div className={"from-primary1/60 to-transparent bg-gradient-to-t pt-24 md:mt-12 relative overflow-hidden"}>
         <Responsive>
-            <div className="flex justify-around items-center">
-                <div className="text-6xl font-bold self-start stroke-2 stroke-black">
-                    Pfarre Emmaus<br/>am Wienerberg
+            <div className="flex flex-col md:flex-row justify-around items-center">
+                <img className="absolute scale-125 opacity-50 hidden" src="/emmaus_graphics.svg"/>
+                <div className="text-7xl  self-start text-black/90 text-shadow relative">
+                    <span className="font-bold">Pfarre Emmaus</span><br/>
+                    <span className="text-primary1">am Wienerberg</span>
                 </div>
-                <img className="self-end h-64" src={getCalendarInfo("emmaus").image}/>
+                <img className="self-end h-80 md:h-96 relative" src={getCalendarInfo("emmaus").image}/>
             </div>
         </Responsive>
     </div>;

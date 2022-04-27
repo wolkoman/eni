@@ -41,7 +41,7 @@ export function ComingUp({}) {
     }, [calendar]);
 
     return <Responsive>
-        <div className="my-10">
+        <div className="my-20">
             <div className="flex justify-between">
                 <SectionHeader>Die nächsten 7 Tage</SectionHeader>
                 <Link href="/termine">
@@ -54,23 +54,26 @@ export function ComingUp({}) {
                 <div className="grid lg:grid-cols-2 gap-8">
                     {Object.entries(groups)
                         .map(([group, calendar]) => <div
-                                className="max-h-96 overflow-hidden relative rounded-xl border border-[#eee] shadow-lg relative p-4 pb-12">
-                                    <Link href={`/termine?q=${encodeURIComponent(group)}`}>
+                                className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-primary1/40 relative p-4 pb-12">
+                                <Link href={`/termine?q=${encodeURIComponent(group)}`}>
                                     <div
-                                        className="absolute w-full h-12 left-0 bottom-0 bg-[#fff] text-center pt-2 cursor-pointer underline hover:no-underline">
-                                        Alle {group} Termine
-                                    </div>
-                                    </Link>
-                                    <div className="text-2xl font-bold text-center">{group}</div>
-                                    <div>{Object.entries(calendar).map(([date, events]) =>
-                                        <div>
-                                            <div className="my-2">
-                                                <EventDateText date={new Date(date)}/>
-                                            </div>
-                                            {(events ?? []).map(event => <Event event={event} permissions={{}}/>)}
+                                        className="absolute w-full h-10 left-0 bottom-0 bg-[#fff] text-center">
+                                        <div className="absolute top-0 left-0 w-full h-full bg-primary1/20 pt-2 cursor-pointer underline hover:no-underline">
+
+                                            Alle {group} Termine
                                         </div>
-                                    )}
                                     </div>
+                                </Link>
+                                <div className="text-2xl font-bold text-center">{group}</div>
+                                <div>{Object.entries(calendar).map(([date, events]) =>
+                                    <div>
+                                        <div className="my-2">
+                                            <EventDateText date={new Date(date)}/>
+                                        </div>
+                                        {(events ?? []).map(event => <Event event={event} permissions={{}}/>)}
+                                    </div>
+                                )}
+                                </div>
                             </div>
                         )}
                     <CalendarCacheNotice/>
