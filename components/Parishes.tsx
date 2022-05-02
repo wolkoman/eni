@@ -8,7 +8,7 @@ export function Parishes() {
     return <div className="overflow-hidden"><Responsive>
             <div className="py-12 mb-12 relative">
                 <div className="text-6xl font-bold pt-16 text-center z-10 relative">
-                    {site('Emmaus Nikolaus Inzersdorf', 'emmaus am wienerberg')}
+                    {site('Eine Neue Initiative', 'emmaus am wienerberg')}
                 </div>
                 <div className="text-xl pb-16 text-center z-10 relative">
                     {site('Drei katholische Pfarren im Dekanat 23, Wien', 'emmaus am wienerberg')}
