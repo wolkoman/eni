@@ -6,7 +6,7 @@ import Responsive from './Responsive';
 
 export function Parishes() {
     return <div className="overflow-hidden"><Responsive>
-            <div className="py-12 mb-12 relative">
+            <div className="md:pt-12 relative">
                 <div className="text-6xl font-bold pt-16 text-center z-10 relative">
                     {site('Eine Neue Initiative', 'emmaus am wienerberg')}
                 </div>
@@ -28,7 +28,7 @@ export function Parishes() {
                                              alt={calendar.fullName}/>
                                     </div>
                                 </div>
-                                <div className="p-6 flex flex-col justify-center">
+                                <div className="p-4 m:p-6 flex flex-col justify-center">
                                     <div className="text-lg font-semibold leading-5">{calendar.fullName}</div>
                                     <div
                                         className="leading-5 text-center mt-2 italic md:text-left">{calendar.address}</div>

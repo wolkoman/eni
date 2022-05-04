@@ -51,20 +51,19 @@ export function ComingUp({}) {
                 </Link>
             </div>
             {calendar.error ? <CalendarErrorNotice/> :
-                <div className="grid lg:grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2 gap-4">
                     {Object.entries(groups)
                         .map(([group, calendar]) => <div
-                                className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-primary1/40 relative p-4 pb-12">
+                                className="max-h-96 overflow-hidden relative rounded-2xl border border-black/20 relative px-4 py-2 pb-12">
                                 <Link href={`/termine?q=${encodeURIComponent(group)}`}>
                                     <div
                                         className="absolute w-full h-10 left-0 bottom-0 bg-[#fff] text-center">
-                                        <div className="absolute top-0 left-0 w-full h-full bg-primary1/20 pt-2 cursor-pointer underline hover:no-underline">
-
+                                        <div className="absolute top-0 left-0 w-full h-full bg-black/10 pt-2 cursor-pointer underline hover:no-underline">
                                             Alle {group} Termine
                                         </div>
                                     </div>
                                 </Link>
-                                <div className="text-2xl font-bold text-center">{group}</div>
+                                <div className="text-xl font-bold text-center">{group}</div>
                                 <div>{Object.entries(calendar).map(([date, events]) =>
                                     <div>
                                         <div className="my-2">

@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import {fetchJson} from '../util/fetch-util';
 import {SectionHeader} from './SectionHeader';
-import {siteType, SiteType} from '../util/sites';
 import Responsive from "./Responsive";
 
 export interface InstagramFeedItem {
@@ -45,12 +44,11 @@ function InstagramItem({item}: { item?: InstagramFeedItem }) {
     return <div
         style={{backgroundImage: `url(${item?.media_url})`, backgroundSize: 'cover'}}
         className={`rounded-lg relative bg-center ${item == null && 'shimmer'} aspect-square text-right group shadow`}>
-        <div className="flex flex-col justify-end h-full">
-            <div className="lg:opacity-0 group-hover:opacity-100 backdrop-blur bg-white/60 text-black p-4">
-                {item?.caption}
+        <div className="flex flex-col justify-end h-full ">
+            <div className="lg:opacity-0 group-hover:opacity-100s backdrop-blur bg-white/60 text-black p-4">
+                {item?.caption.normalize()}
                 {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}
             </div>
         </div>
-
     </div>;
 }
