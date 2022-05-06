@@ -1,9 +1,11 @@
 import create from 'zustand';
-import {CalendarEvents} from './calendar-events';
+import {CalendarEvent, CalendarEvents} from './calendar-events';
 import {fetchJson} from './fetch-util';
 
 export const useCalendarStore = create<{
-    items: CalendarEvents;
+    items: CalendarEvent[];
+    groupByDate: (events: CalendarEvent[]) => Record<string, CalendarEvent[]>
+    groupByDateAndGroup: (events: CalendarEvent[]) => Record<string,Record<string, CalendarEvent[]>>
     cache?: string;
     loading: boolean;
     loaded: boolean;
@@ -11,11 +13,26 @@ export const useCalendarStore = create<{
     load: (token?: string) => void;
     lastLoadedWithToken?: string,
 }>((set, get) => ({
-    items: {},
+    items: [],
     loaded: false,
     loading: false,
     error: false,
     lastLoadedWithToken: 'none',
+    groupByDate: (events) => {
+        return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({...record, [event.date]: [...(record[event.date] ?? []), event]}), {})
+    },
+    groupByDateAndGroup: (events) => {
+        return Object.fromEntries(Object.entries(events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
+                ...record,
+                ...(Object.fromEntries(event.groups.map(group => ([
+                    group,
+                    [
+                        ...(record[group] ?? []),
+                        event
+                    ]
+                ]))))
+            }), {})).map(([group, events]) => [group, get().groupByDate(events)]));
+    },
     load: (jwt?: string) => {
         if (get().loading && jwt === get().lastLoadedWithToken) return;
         if (get().loaded && jwt === get().lastLoadedWithToken) return;
@@ -29,6 +46,6 @@ export const useCalendarStore = create<{
                 cache: data.cache,
                 lastLoadedWithToken: jwt
             })))
-            .catch(() => set(state => ({...state, items: {}, loaded: true, loading: false, error: true})));
+            .catch(() => set(state => ({...state, items: [], loaded: true, loading: false, error: true})));
     }
 }));

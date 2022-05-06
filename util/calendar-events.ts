@@ -1,6 +1,5 @@
 import {google, people_v1} from 'googleapis';
 import {cockpit} from './cockpit-sdk';
-import Schema$Event = people_v1.Schema$Event;
 import {site} from "./sites";
 
 export const calendarIds = {
@@ -55,7 +54,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("generalprobe") && "_",
     x => x.summary.toLowerCase().includes("pgr sitzung") && "Gremien",
     x => x.summary.toLowerCase().includes("chor") && "Chorprobe",
-    x => x.summary.toLowerCase().includes("caritas-sprechstunde") && "Gremien",
+    x => x.summary.toLowerCase().includes("sprechstunde") && "Sprechstunde",
   ];
   let groups = conditions.reduce<(string | false)[]>((groups, condition) => [
     ...groups,
@@ -132,26 +131,19 @@ export async function getCachedGoogleAuthClient() {
   return oauth2Client;
 }
 
-export async function getEvents(props: { public: boolean }): Promise<CalendarEvents> {
+export async function getEvents(props: { public: boolean }): Promise<CalendarEvent[]> {
 
   const getTimeOfEvent = (event: any) => new Date(event!.start?.date ?? event!.start?.dateTime!).getTime();
-  const allEvents = (await Promise.all(
-    Object.entries(calendarIds).filter(([name, calendarId]) => site([
-      calendarIds.all,
-      calendarIds.emmaus,
-      calendarIds.inzersdorf,
-      calendarIds.neustift
-    ],[calendarIds.emmaus]).includes(calendarId)).map(([name, calendarId]) => getEventsFromCalendar(calendarId, name, props.public))
+  return (await Promise.all(
+      Object.entries(calendarIds).filter(([name, calendarId]) => site([
+        calendarIds.all,
+        calendarIds.emmaus,
+        calendarIds.inzersdorf,
+        calendarIds.neustift
+      ], [calendarIds.emmaus]).includes(calendarId)).map(([name, calendarId]) => getEventsFromCalendar(calendarId, name, props.public))
   ))
-    .flat()
-    .filter(event => !!event);
-
-  return allEvents
-    .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))
-    .reduce((previous, current) => {
-      previous[current!.date] = previous[current!.date] ?? [];
-      previous[current!.date].push(current);
-      return previous;
-    }, {} as any);
+      .flat()
+      .filter(event => !!event)
+      .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b));
 
 }

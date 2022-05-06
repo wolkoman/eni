@@ -43,7 +43,7 @@ export default function EventPage() {
                             <div className="font-bold text-4xl mb-6">Termine</div>}
                         {calendar.error && <CalendarErrorNotice/>}
                         {calendar.loading && <LoadingEvents/>}
-                        {calendar.loading || Object.entries(calendar.items)
+                        {calendar.loading || Object.entries(calendar.groupByDate(calendar.items))
                             ?.map(([date, events]) => [date, applyFilter(events, filter, q as string)] as [string, CalendarEvent[]])
                             .filter(([_, events]) => events.length > 0)
                             .map(([date, events]) => <div key={date} data-date={date}>

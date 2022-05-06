@@ -1,5 +1,3 @@
-import {useEffect, useState} from 'react';
-import {fetchJson} from '../util/fetch-util';
 import {SectionHeader} from './SectionHeader';
 import Responsive from "./Responsive";
 

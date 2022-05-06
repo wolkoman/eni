@@ -10,6 +10,10 @@ import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 
+function getGroupSorting(group: string) {
+    return ['Gebet & Bibel','Gottesdienst','Heilige Messe'].indexOf(group);
+}
+
 export function ComingUp({}) {
     const calendar = useCalendarStore(state => state);
     const [groups, setGroups] = useState<Record<string, Record<string, CalendarEvent[]>>>({});
@@ -19,25 +23,10 @@ export function ComingUp({}) {
 
     useEffect(() => calendar.load(jwt), [jwt]);
     useEffect(() => {
-        const events = Object.entries(calendar.items)
-            .filter(([date]) => new Date(date) < new Date(tomorrow))
-            .flatMap(([date, events]) => events
-                .map(event => ({...event, date}))
-            ).filter(event => event.visibility !== 'private');
-        const groups = events.reduce<Record<string, Record<string, CalendarEvent[]>>>((groups, event) => ({
-            ...groups,
-            ...Object.fromEntries(event.groups?.map(group => [
-                group,
-                {
-                    ...(groups[group] ?? []),
-                    [event.date]: [
-                        ...(groups?.[group]?.[event.date] ?? []),
-                        event
-                    ]
-                }
-            ]) ?? [])
-        }), {});
-        setGroups(groups);
+        const events = calendar.items
+            .filter(event => new Date(event.date) < new Date(tomorrow))
+            .filter(event => event.visibility !== 'private');
+        setGroups(calendar.groupByDateAndGroup(events));
     }, [calendar]);
 
     return <Responsive>
@@ -45,14 +34,14 @@ export function ComingUp({}) {
             <div className="flex justify-between">
                 <SectionHeader>Die nächsten 7 Tage</SectionHeader>
                 <Link href="/termine">
-                    <div className="my-8 px-3 py-1 bg-white rounded-xl cursor-pointer underline hover:no-underline">Alle
-                        Termine
+                    <div className="my-8 px-3 py-1 bg-white rounded-xl cursor-pointer underline hover:no-underline">
+                        Alle Termine
                     </div>
                 </Link>
             </div>
             {calendar.error ? <CalendarErrorNotice/> :
                 <div className="grid md:grid-cols-2 gap-4">
-                    {Object.entries(groups)
+                    {Object.entries(groups).sort(([group1],[group2]) => getGroupSorting(group2) - getGroupSorting(group1))
                         .map(([group, calendar]) => <div
                                 className="max-h-96 overflow-hidden relative rounded-2xl border border-black/20 relative px-4 py-2 pb-12">
                                 <Link href={`/termine?q=${encodeURIComponent(group)}`}>
