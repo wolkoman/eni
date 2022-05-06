@@ -10,12 +10,13 @@ import {useState} from '../../util/use-state-util';
 import {sanitizeOptions} from '../../components/SanitizeHtml';
 import {getWeekDayName} from '../../components/calendar/Calendar';
 import {useCalendarStore} from '../../util/use-calendar-store';
+import {calendar} from "googleapis/build/src/apis/calendar";
 
 
 export default function InternArticles() {
   usePermission([Permission.Admin]);
   const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
-  const [events, loaded, load] = useCalendarStore(state => [state.items, state.loaded, state.load])
+  const [calendar, events, loaded, load] = useCalendarStore(state => [state,state.items, state.loaded, state.load])
 
   useEffect(() => load(), [])
 
@@ -39,7 +40,7 @@ export default function InternArticles() {
     const response = await fetch('/eni.docx');
     const templateFile = await response.blob();
     const wordData = {
-      event: Object.entries(events)
+      event: Object.entries(calendar.groupByDate(events))
         .filter(([date]) => data.start.getTime() <= new Date(date).getTime() && data.end.getTime() >= new Date(date).getTime())
         .map(([date, events]) => ({date, events: events.filter(e => e.visibility === "public")}))
         .map(({date, events}) => {

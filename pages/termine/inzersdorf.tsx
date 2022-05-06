@@ -16,9 +16,7 @@ export default function EventPage() {
             <div className="font-bold text-sm mb-4 text-[#000]">AKTUELLE VERANSTALTUNGEN:</div>
             {calendar.error && <CalendarErrorNotice/>}
             {calendar.loading && <LoadingEvents/>}
-            {calendar.loading || Object.values(calendar.items)
-                ?.filter(events => events.length > 0)
-                .flat()
+            {calendar.loading || calendar.items
                 .filter(event => event.calendar === 'inzersdorf' && !event.summary.match(/Messe|Taufe|(?<!-)Wortgottesdienst|ENTFÄLLT/))
                 .slice(0, 3)
                 .map(event => <div key={event.id} className="mb-4">
