@@ -11,6 +11,13 @@ declare module 'cockpit-sdk' {
       inzersdorf: string,
       neustift: string
     } & Object,
+    'site': {
+      name: string,
+      slug: string,
+      layout: {component: string, settings: {text: string}}[]
+      children: Collections['site'][],
+      level: number
+    } & Object,
     'article': {
       title: string,
       preview_image: { path: string },
@@ -21,7 +28,7 @@ declare module 'cockpit-sdk' {
       external_image: string,
       slug: string,
       platform: string[] | string,
-      layout: {component: string, settings: {text: string}}[]
+      layout: {component: string, settings: {text: string}}[],
     } & Object,
     'person': {
       active: boolean,

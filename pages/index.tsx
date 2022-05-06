@@ -15,6 +15,7 @@ import {fetchWeeklies} from "../util/fetchWeeklies";
 import {Collections} from "cockpit-sdk";
 import {Section} from "../components/Section";
 import Link from "next/link";
+import {fetchEmmausSites} from "../util/fetchEmmausSites";
 
 function EmmausSections() {
     return <Responsive><Section title="Gruppen">
@@ -39,7 +40,7 @@ function EmmausSection(props: { picture: string, title: string, flipped?: boolea
     </div>;
 }
 
-export default function HomePage(props: { instagram: InstagramFeedItem[], articles: any[], weeklies: Collections['weekly'][] }) {
+export default function HomePage(props: { instagram: InstagramFeedItem[], articles: any[], weeklies: Collections['weekly'][], sites: Collections['site'][] }) {
     return <Site responsive={false} navbar={false}>
         {{
             [SiteType.ENI]: <>
@@ -60,6 +61,11 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
             [SiteType.EMMAUS]: <>
                 <Navbar/>
                 <TopBranding/>
+                <div className="flex bg-primary1 text-white text-lg">
+                    {props.sites.filter(site => site.level === 0).map(site => <Link href={`/${site.slug}`}><div className="px-8 py-4 cursor-pointer">
+                        {site.name}
+                    </div></Link>)}
+                </div>
                 <Articles items={props.articles}/>
                 <ComingUp/>
                 <Instagram items={props.instagram}/>
@@ -75,6 +81,7 @@ export async function getStaticProps() {
         props: {
             instagram: await fetchInstagramFeed(),
             articles: await site(() => Promise.resolve({}), () => fetchArticles())(),
+            sites: await site(() => Promise.resolve({}), () => fetchEmmausSites())(),
             weeklies: await fetchWeeklies()
         },
         revalidate: 100,
