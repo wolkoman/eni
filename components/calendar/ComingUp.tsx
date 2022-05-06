@@ -11,7 +11,7 @@ import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 
 function getGroupSorting(group: string) {
-    return ['Gebet & Bibel','Gottesdienst','Heilige Messe'].indexOf(group);
+    return ['Gebet & Bibel', 'Gottesdienst', 'Heilige Messe'].indexOf(group);
 }
 
 export function ComingUp({}) {
@@ -41,13 +41,14 @@ export function ComingUp({}) {
             </div>
             {calendar.error ? <CalendarErrorNotice/> :
                 <div className="grid md:grid-cols-2 gap-4">
-                    {Object.entries(groups).sort(([group1],[group2]) => getGroupSorting(group2) - getGroupSorting(group1))
+                    {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
                         .map(([group, calendar]) => <div
-                                className="max-h-96 overflow-hidden relative rounded-2xl border border-black/20 relative px-4 py-2 pb-12">
+                                className="max-h-96 overflow-hidden relative rounded-2xl border border-black/10 relative px-4 py-2 pb-12 shadow">
                                 <Link href={`/termine?q=${encodeURIComponent(group)}`}>
                                     <div
                                         className="absolute w-full h-10 left-0 bottom-0 bg-[#fff] text-center">
-                                        <div className="absolute top-0 left-0 w-full h-full bg-black/10 pt-2 cursor-pointer underline hover:no-underline">
+                                        <div
+                                            className="absolute top-0 left-0 w-full h-full bg-black/5 pt-2 cursor-pointer underline hover:no-underline">
                                             Alle {group} Termine
                                         </div>
                                     </div>
@@ -64,6 +65,12 @@ export function ComingUp({}) {
                                 </div>
                             </div>
                         )}
+                    <Link href="/termine">
+                        <div
+                            className="rounded-2xl text-3xl font-bold bg-black/5 p-12 border border-black/10 shadow cursor-pointer">
+                            Alle Termine
+                        </div>
+                    </Link>
                     <CalendarCacheNotice/>
                 </div>
             }

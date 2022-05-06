@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import Articles from '../components/Articles';
 import Site from '../components/Site';
 import {Instagram, InstagramFeedItem} from '../components/Instagram';
@@ -10,7 +10,6 @@ import {Sections} from '../components/Sections';
 import {site, siteType, SiteType} from '../util/sites';
 import Navbar from '../components/Navbar';
 import {fetchInstagramFeed} from "../util/fetchInstagram";
-import {cockpit} from "../util/cockpit-sdk";
 import {fetchArticles} from "../util/fetchArticles";
 import {fetchWeeklies} from "../util/fetchWeeklies";
 import {Collections} from "cockpit-sdk";

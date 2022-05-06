@@ -8,7 +8,7 @@ export function TopBranding() {
         <Responsive>
             <div className="flex flex-col md:flex-row justify-around items-center">
                 <img className="absolute scale-125 opacity-50 hidden" src="/emmaus_graphics.svg"/>
-                <div className="text-7xl  self-start text-black/90 text-shadow relative">
+                <div className="text-7xl self-start text-black/90 text-shadow relative">
                     <span className="font-bold">Pfarre Emmaus</span><br/>
                     <span className="text-primary1">am Wienerberg</span>
                 </div>

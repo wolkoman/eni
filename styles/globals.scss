@@ -117,10 +117,8 @@ body {
 }
 
 .text-stroke {
-  text-shadow: 3px 3px 0 black,
-  -4px 4px 0 black,
-  4px -4px 0 black,
-  -4px -4px 0 black;
+  -webkit-text-stroke: 12px white;
+  z-index:-1;
 }
 
 @keyframes dashdraw {
