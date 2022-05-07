@@ -10,7 +10,6 @@ import {useState} from '../../util/use-state-util';
 import {sanitizeOptions} from '../../components/SanitizeHtml';
 import {getWeekDayName} from '../../components/calendar/Calendar';
 import {useCalendarStore} from '../../util/use-calendar-store';
-import {calendar} from "googleapis/build/src/apis/calendar";
 
 
 export default function InternArticles() {
@@ -29,9 +28,10 @@ export default function InternArticles() {
   }
 
   function toCalEevent(event: CalendarEvent) {
+    const special = event.groups.includes("Heilige Messe");
     return {
-      time: toTime(event.start.dateTime),
-      title: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
+      [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),
+      [special ? 'specialtitle' : 'title']: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
       description:  event.description.toString().trim().length > 0 ? `\n${sanitize(event.description.trim(), sanitizeOptions)}` : ""
     };
   }

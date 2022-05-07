@@ -19,7 +19,7 @@ export const Article = (props: {image?: string, title: string, created?: number,
                     <div className="flex flex-col-reverse md:flex-row">
                         <div className="flex-shrink-0 ml-4">
                             <img src={`${props.image}`}
-                                 className={`h-52 max-w-full mr-4 rounded-lg relative top-8 ${props.image || 'opacity-0'}`}
+                                 className={`h-52 max-w-full mr-4 rounded-lg relative top-8 ${props.image || 'opacity-0 hidden'}`}
                                  alt="article-preview"/>
                         </div>
                         <div className="flex flex-col mt-12 mb-6">

@@ -1,6 +1,9 @@
-import {google, people_v1} from 'googleapis';
+import {google} from 'googleapis';
 import {cockpit} from './cockpit-sdk';
 import {site} from "./sites";
+import {Permission} from "./verify";
+import {notifyAdmin} from "./telegram";
+import {User} from "./user";
 
 export const calendarIds = {
   'all': 'admin@tesarekplatz.at',
@@ -146,4 +149,22 @@ export async function getEvents(props: { public: boolean }): Promise<CalendarEve
       .filter(event => !!event)
       .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b));
 
+}
+
+export const getEventsForUser = async (user: User) => {
+
+  const calendarCacheId = "61b335996165305292000383";
+
+  const privateCalendarAccess = user && user.permissions[Permission.PrivateCalendarAccess];
+  const events = (await getEvents({public: !privateCalendarAccess}).catch(() => null));
+  if(events !== null){
+    if(!privateCalendarAccess){
+      cockpit.collectionSave("internal-data",{_id: calendarCacheId, data: {events, cache: new Date().toISOString()}});
+    }
+    return {events, cache: null};
+  }else{
+    const cachedEvents = await cockpit.collectionGet("internal-data",{filter: {_id: calendarCacheId}});
+    await notifyAdmin("Google Calendar failed");
+    return cachedEvents.entries[0].data;
+  }
 }

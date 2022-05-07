@@ -1,10 +1,9 @@
 import {CalendarCacheNotice} from './CalendarCacheNotice';
 import {CalendarErrorNotice} from './CalendarErrorNotice';
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CalendarEvent} from '../../util/calendar-events';
 import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
-import {Section} from '../Section';
 import {Event, EventDateText} from './Event';
 import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
@@ -41,6 +40,11 @@ export function ComingUp({}) {
             </div>
             {calendar.error ? <CalendarErrorNotice/> :
                 <div className="grid md:grid-cols-2 gap-4">
+                    {calendar.loading && Array(5).fill(0).map(() => <div
+                        className="shimmer h-96 overflow-hidden relative rounded-2xl border border-black/10 relative px-4 py-2 pb-12 shadow">
+                        <div>
+                        </div>
+                    </div>)}
                     {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
                         .map(([group, calendar]) => <div
                                 className="max-h-96 overflow-hidden relative rounded-2xl border border-black/10 relative px-4 py-2 pb-12 shadow">

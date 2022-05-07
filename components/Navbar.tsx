@@ -17,6 +17,11 @@ export default function Navbar() {
         }[siteType]}
       </div>
     </Link>
+    <Link href="/menu"><div className="flex flex-col justify-center items-center md:hidden">
+      <div className="bg-black/70 h-1 w-8 mb-1.5 mt-2"/>
+      <div className="bg-black/70 h-1 w-8 mb-1.5"/>
+      <div className="bg-black/70 h-1 w-8 mb-1.5"/>
+    </div></Link>
     <div className="flex flex-col justify-center items-center leading-4 hidden md:block opacity-80 text-right">
       <div className="text-md md:ml-24">kanzlei@eni.wien</div>
       <div className="text-md md:ml-24">+43 664 886 32 680 </div>

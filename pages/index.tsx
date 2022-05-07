@@ -16,6 +16,9 @@ import {Collections} from "cockpit-sdk";
 import {Section} from "../components/Section";
 import Link from "next/link";
 import {fetchEmmausSites} from "../util/fetchEmmausSites";
+import {resolveUserFromRequest} from "../util/verify";
+import {getEventsForUser} from "../util/calendar-events";
+import {GetStaticPropsContext} from "next";
 
 function EmmausSections() {
     return <Responsive><Section title="Gruppen">
@@ -43,7 +46,7 @@ function EmmausSection(props: { picture: string, title: string, flipped?: boolea
 export default function HomePage(props: { instagram: InstagramFeedItem[], articles: any[], weeklies: Collections['weekly'][], sites: Collections['site'][] }) {
     return <Site responsive={false} navbar={false}>
         {{
-            [SiteType.ENI]: <>
+            [SiteType.ENI]: () => <>
                 <Navbar/>
                 <Parishes/>
                 <ComingUp/>
@@ -58,10 +61,10 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                     </div>
                 </Responsive>
             </>,
-            [SiteType.EMMAUS]: <>
+            [SiteType.EMMAUS]: () => <>
                 <Navbar/>
                 <TopBranding/>
-                <div className="flex bg-primary1 text-white text-lg">
+                <div className="px-8 bg-primary1 text-white text-lg hidden md:flex">
                     {props.sites.filter(site => site.level === 0).map(site => <Link href={`/${site.slug}`}><div className="px-8 py-4 cursor-pointer">
                         {site.name}
                     </div></Link>)}
@@ -69,14 +72,12 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                 <Articles items={props.articles}/>
                 <ComingUp/>
                 <Instagram items={props.instagram}/>
-                <EmmausSections/>
             </>
-        }[siteType]}
+        }[siteType]()}
     </Site>
 }
 
-export async function getStaticProps() {
-
+export async function getStaticProps(context: GetStaticPropsContext) {
     return {
         props: {
             instagram: await fetchInstagramFeed(),
