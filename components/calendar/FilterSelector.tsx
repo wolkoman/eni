@@ -17,7 +17,7 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
     ];
     return <>
         <div
-            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0 "
             data-testid="parish-selector">
             <div
                 className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter === null ? 'bg-gray-200' : ''}`}

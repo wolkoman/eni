@@ -8,6 +8,7 @@ export enum Permission {
   Articles = "ARTICLES",
   PrivateCalendarAccess = "PRIVATE_CALENDAR_ACCESS",
   OrganBooking = "ORGAN_BOOKING",
+  Editor = "EDITOR",
   Admin = "ADMIN"
 }
 export type Permissions = Partial<Record<Permission, boolean>>;
@@ -17,6 +18,7 @@ export function resolvePermissionsForGroup(group: CockpitUser['group'] = ''): Pe
     [Permission.Articles]: ['admin', 'master'].includes(group),
     [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'OrganMaster', 'admin', 'master'].includes(group),
     [Permission.Admin]: ['admin', 'master'].includes(group),
+    [Permission.Editor]: ['admin', 'master'].includes(group),
     [Permission.OrganBooking]: ['admin', 'OrganAccess', 'OrganMaster'].includes(group)
   };
 }

@@ -10,7 +10,7 @@ import {useState} from '../../util/use-state-util';
 import {sanitizeOptions} from '../../components/SanitizeHtml';
 import {getWeekDayName} from '../../components/calendar/Calendar';
 import {useCalendarStore} from '../../util/use-calendar-store';
-
+import {saveFile} from "../../util/save-file";
 
 export default function InternArticles() {
   usePermission([Permission.Admin]);
@@ -59,18 +59,6 @@ export default function InternArticles() {
     const doc = await handler.process(templateFile, wordData as any);
 
     saveFile('wochenmitteilung.docx', doc);
-
-    function saveFile(filename: string, blob: Blob) {
-      const blobUrl = URL.createObjectURL(blob);
-      let link: HTMLAnchorElement | null = document.createElement("a");
-      link.download = filename;
-      link.href = blobUrl;
-      document.body.appendChild(link);
-      link.click();
-      link?.remove();
-      window.URL.revokeObjectURL(blobUrl);
-      link = null;
-    }
   }
 
   return <Site title="Wochenmitteilungen">

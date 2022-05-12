@@ -39,9 +39,32 @@ declare module 'cockpit-sdk' {
       code?: string,
       email?: string,
     } & Object,
+    paper_texts: {
+      article: Reference,
+      text: string
+    } & Object,
+    paper_projects: {
+      name: string,
+      guideline_link: string,
+      deadline: string
+    } & Object,
+    paper_articles: {
+      name: string,
+      project: Reference,
+      author: string,
+      email: string,
+      char_min: string,
+      char_max: string
+      status: 'finished' | 'corrected' | 'written' | 'writing'
+    } & Object,
+  }
+  type Reference = {
+    _id: string,
+    link: string,
+    display: string
   }
   type Singletons = {
-    'impressum': { content: string } & Object
+    impressum: { content: string } & Object
   }
   type CollectionResponse<T> = {
     entries: T[]
