@@ -19,6 +19,7 @@
     "fast-xml-parser": "^4.0.1",
     "googleapis": "^92.0.0",
     "jsonwebtoken": "^8.5.1",
+    "lottie-react": "^2.2.1",
     "msw": "^0.36.4",
     "next": "^12.0.1",
     "node-fetch": "^3.1.1",

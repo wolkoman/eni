@@ -1,11 +1,13 @@
+import Lottie from 'lottie-react';
 import React from 'react';
 import {Calendar} from '../util/calendar-events';
 import {getCalendarInfo} from '../util/calendar-info';
 import {site} from "../util/sites";
 import Responsive from './Responsive';
+import eniAnimation from "../public/eni_animation.json";
 
 export function Parishes() {
-    return <div className="overflow-hidden"><Responsive>
+    return <div className=""><Responsive>
         <div className="md:pt-12 relative">
             <div className="text-6xl font-bold pt-16 text-center z-10 relative">
                 <div className="relative">
@@ -18,8 +20,7 @@ export function Parishes() {
             <div className="text-xl pb-16 text-center z-10 relative">
                 {site('Drei katholische Pfarren im Dekanat 23, Wien', 'emmaus am wienerberg')}
             </div>
-            <img src="/eni_graphics.svg"
-                 className="absolute top-24 scale-[350%] md:scale-[250%] left-28"/>
+            <Lottie animationData={eniAnimation} loop={false} className="absolute top-16 scale-[350%] md:scale-[250%] left-28"/>
             <div className="flex flex-col md:flex-row justify-center md:space-x-4 relative">
                 {(['emmaus', 'inzersdorf', 'neustift'] as Calendar[])
                     .map(calendar => getCalendarInfo(calendar))
