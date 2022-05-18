@@ -7,7 +7,7 @@ import Responsive from './Responsive';
 import eniAnimation from "../public/eni_animation.json";
 
 export function Parishes() {
-    return <div className=""><Responsive>
+    return <div className="overflow-x-hidden"><Responsive>
         <div className="md:pt-12 relative">
             <div className="text-6xl font-bold pt-16 text-center z-10 relative">
                 <div className="relative">
