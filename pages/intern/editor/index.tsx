@@ -16,7 +16,7 @@ export default function Index() {
 
   return <Site title="Projekte der Redaktionen">
     <div className="grid grid-cols-1 md:grid-cols-3 m-2">
-    {projects?.map(project => <Link href={`editor/${project._id}`} key={project._id}>
+    {projects?.map(project => <Link href={`editor/project?projectId=${project._id}`} key={project._id}>
       <div className="rounded-xl shadow border border-black/10 h-32 flex flex-col justify-center p-6 hover:bg-black/[3%] cursor-pointer">
         <div className="text-2xl">{project.name}</div>
         <div className="">Readktionsschluss: {new Date(project.deadline).toLocaleDateString()}</div>

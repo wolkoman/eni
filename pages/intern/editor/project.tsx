@@ -21,7 +21,7 @@ export default function Index() {
       <Link href="."><div className="m-2 cursor-pointer bg-black/5 px-3 py-1 rounded">Zurück</div></Link>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-3 m-2">
-      {articles?.map(article => <Link href={`write/${article._id}`} key={article._id}>
+      {articles?.map(article => <Link href={`article?articleId=${article._id}`} key={article._id}>
         <div className="rounded-xl shadow border border-black/10 h-32 flex flex-col justify-center p-6 hover:bg-black/[3%] cursor-pointer">
           <div className="text-2xl">{article.name}</div>
           <div className="">{article.author}</div>

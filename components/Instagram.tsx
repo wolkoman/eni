@@ -46,7 +46,7 @@ function InstagramItem({item}: { item?: InstagramFeedItem }) {
         className={`rounded-lg relative bg-center ${item == null && 'shimmer'} aspect-square text-right group shadow`}>
         <div className="flex flex-col justify-end h-full ">
             <div className="lg:opacity-0 group-hover:opacity-100s backdrop-blur bg-white/60 text-black p-4">
-                {Aesthetically.unformat(item?.caption.normalize())}
+                {Aesthetically.unformat(item?.caption.normalize() ?? '')}
                 {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}
             </div>
         </div>

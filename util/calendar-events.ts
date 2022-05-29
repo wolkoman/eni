@@ -42,6 +42,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("messe") && "Heilige Messe",
     x => x.summary.toLowerCase().includes("jungschar") && "Jungschar",
     x => x.summary.toLowerCase().includes("evangel") && "Ökumene",
+    x => x.summary.toLowerCase().startsWith("friedensgebet") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("emmausgebet") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("gebetsrunde") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("bibelrunde") && "Gebet & Bibel",
@@ -49,6 +50,8 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("maiandacht") && "Maiandacht",
     x => x.summary.toLowerCase().includes("rosenkranz") && "Rosenkranz",
     x => x.summary.toLowerCase().includes("eltern-kind-treff") && "Kinder",
+    x => x.summary.toLowerCase().includes("mädchenabend") && "Kinder",
+    x => x.summary.toLowerCase().includes("jugendtreffen") && "Jugend",
     x => x.summary.toLowerCase().startsWith("kinderstunde") && "Kinder",
     x => x.summary.toLowerCase().startsWith("bibel aktiv") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("vesper") && "Gottesdienst",
@@ -60,6 +63,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("pgr sitzung") && "Gremien",
     x => x.summary.toLowerCase().includes("chor") && "Chorprobe",
     x => x.summary.toLowerCase().includes("sprechstunde") && "Sprechstunde",
+    x => x.summary.toLowerCase().includes("woche des lebens") && "Kinder",
   ];
   let groups = conditions.reduce<(string | false)[]>((groups, condition) => [
     ...groups,
