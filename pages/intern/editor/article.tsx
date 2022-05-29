@@ -1,15 +1,16 @@
 import {Collections} from 'cockpit-sdk';
 import React, {ReactNode, useEffect, useState} from 'react';
-import Site from '../../../../components/Site';
-import {cockpit} from "../../../../util/cockpit-sdk";
-import {fetchJson} from "../../../../util/fetch-util";
+import Site from '../../../components/Site';
+import {cockpit} from "../../../util/cockpit-sdk";
+import {fetchJson} from "../../../util/fetch-util";
 import {useRouter} from "next/router";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
-import {saveFile} from "../../../../util/save-file";
-import {useUserStore} from "../../../../util/use-user-store";
-import {Permission} from "../../../../util/verify";
-import Button from "../../../../components/Button";
+import {saveFile} from "../../../util/save-file";
+import {useUserStore} from "../../../util/use-user-store";
+import {Permission} from "../../../util/verify";
+import Button from "../../../components/Button";
+import Responsive from "../../../components/Responsive";
 
 export default function Index(props: { article: Collections['paper_articles'], versions: Collections['paper_texts'][] }) {
 
@@ -79,7 +80,7 @@ export default function Index(props: { article: Collections['paper_articles'], v
             .catch(() => toast.error("Abgabe war nicht erfolgreich"));
     }
 
-    return <div className="bg-black/[3%]"><Site navbar={false} footer={false}>
+    return <Site navbar={false} footer={false} responsive={false}>
         {finishModalOpen && <Modal>
             <div className="text-lg">Wollen Sie den Text abgeben?</div>
             <div className="space-x-2">
@@ -88,44 +89,45 @@ export default function Index(props: { article: Collections['paper_articles'], v
             </div>
         </Modal>}
         <div className="flex flex-col h-screen">
-            <div className="flex justify-between py-3">
-                <div>
-                    <div className="flex items-center">
-                        <div className="text-xl font-bold mr-2">{props.article.name}</div>
-                        {editable && {
-                            saved: <div className="opacity-80 text-sm">gespeichert</div>,
-                            saving: <div className="opacity-80 text-sm">speichert..</div>,
-                            justnow: <div className="opacity-80 text-sm">gerade eben gespeichert</div>,
-                            error: <div className="bg-red-600 text-white font-bold text-sm px-2 rounded">Speichern
-                                fehlgeschlagen</div>,
-                        }[saved]}
+            <div className="p-4 bg-[url('/eni_graphics_gray.svg')] border-b border-gray-200">
+                <Responsive>
+                    <div className="flex justify-between">
+                        <div>
+                            <div className="flex flex-row">
+                                <div className="text-2xl text-primary2 font-bold mr-2 -mb-2">{props.article.project.display}</div>
+                                <div className="text-2xl text-primary1 font-bold mr-2 -mb-2">{props.article.name}</div>
+                            </div>
+                            <div className="text-sm">{props.article.author}</div>
+                        </div>
+                        <div className="flex space-x-3 items-start">
+                            {editable && <div className="opacity-80 text-sm my-3">{{
+                                saved: "gespeichert",
+                                saving: "speichert..",
+                                justnow: "gerade eben gespeichert",
+                                error: <div className="bg-red-600 text-white font-bold text-sm px-2 rounded">Speichern
+                                    fehlgeschlagen</div>,
+                            }[saved]}</div>}
+                            {editable && <Button label="Speichern" secondary={true} onClick={saveAndDownload}
+                                                 disabled={saved === "saving" || saved === "saved"}/>}
+                            {permission ? <select
+                                className="px-3 py-1 border border-black/10 bg-black/5 rounded cursor-pointer"
+                                value={status} disabled={statusLoading}
+                                onChange={event => saveStatus(event.target?.value as any)}>
+                                <option value="writing">In Arbeit</option>
+                                <option value="written">Geschrieben</option>
+                                <option value="corrected">Lektoriert</option>
+                                <option value="finished">Fertiggestellt</option>
+                            </select> : editable && <Button label="Abgeben" onClick={() => setFinishModalOpen(true)}/>}
+                        </div>
                     </div>
-                    <div className="text-sm">{props.article.author}</div>
-                </div>
-                <div className="flex space-x-3 items-start">
-                    {editable && <div className="px-3 py-1 border border-black/10 rounded cursor-pointer"
-                                      onClick={saveAndDownload}>Speichern
-                    </div>}
-                    {permission ? <select
-                        className="px-3 py-1 border border-black/10 bg-black/5 rounded cursor-pointer"
-                        value={status} disabled={statusLoading}
-                        onChange={event => saveStatus(event.target?.value as any)}>
-                        <option value="writing">In Arbeit</option>
-                        <option value="written">Geschrieben</option>
-                        <option value="corrected">Lektoriert</option>
-                        <option value="finished">Fertiggestellt</option>
-                    </select> : editable && <div
-                        className="px-3 py-1 border border-black/10 bg-black/5 rounded cursor-pointer"
-                        onClick={() => setFinishModalOpen(true)}>Abgeben</div>}
-                </div>
+                </Responsive>
             </div>
-            <textarea
+            <div className="h-full "><Responsive className="h-full"><textarea
                 readOnly={!editable}
-                className={`${editable ? 'border' : 'bg-transparent'} border-black/10 w-full h-full outline-none p-5 font-serif text-lg rounded`}
+                className={`w-full h-full outline-none font-serif text-lg py-4`}
                 onChange={e => setText(e.target!.value)} defaultValue={props.versions[0].text}>
-
-        </textarea>
-            <div className="flex justify-between py-3">
+            </textarea></Responsive></div>
+            <div className="py-2 px-4 border-t border-gray-200"><Responsive className="w-full flex justify-between">
                 <div className="text-sms">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
                 <div className={`text-sms px-2 rounded ${{
                     unfinished: `${Math.round(100 * length / ((+props.article.char_min + +props.article.char_max) * 0.5))}%`,
@@ -136,14 +138,15 @@ export default function Index(props: { article: Collections['paper_articles'], v
                     perfect: `100%`,
                     excess: `${length - +props.article.char_max} Zeichen Überschuss`,
                 }[note]}</div>
-            </div>
+            </Responsive></div>
         </div>
-    </Site></div>
+    </Site>
 }
 
-function Modal(props: {children: ReactNode, title?: string}){
-    return <div className="absolute top-0 left-0 w-screen h-screen bg-black/10 flex items-center justify-center backdrop-blur-sm">
-        <div className="bg-white border border-black/5 rounded-lg shadow text-center p-6">
+function Modal(props: { children: ReactNode, title?: string }) {
+    return <div
+        className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center backdrop-blur-sm">
+        <div className="bg-white border border-black/5 rounded-lg shadow-lg text-center p-6">
             {props.title && <div className="font-bold mb-2">{props.title}</div>}
             <div>{props.children}</div>
         </div>
@@ -151,11 +154,11 @@ function Modal(props: {children: ReactNode, title?: string}){
 }
 
 export async function getServerSideProps(context: any) {
-    const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: context.params.articleId}})).entries[0];
+    const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: context.query.articleId}})).entries[0];
     return article ? {
         props: {
             article,
-            versions: (await cockpit.collectionGet('paper_texts', {filter: {article: context.params.articleId}})).entries
+            versions: (await cockpit.collectionGet('paper_texts', {filter: {article: context.query.articleId}})).entries
         }
     } : {
         notFound: true
