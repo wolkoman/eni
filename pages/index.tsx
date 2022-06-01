@@ -16,32 +16,9 @@ import {Collections} from "cockpit-sdk";
 import {Section} from "../components/Section";
 import Link from "next/link";
 import {fetchEmmausSites} from "../util/fetchEmmausSites";
-import {resolveUserFromRequest} from "../util/verify";
-import {getEventsForUser} from "../util/calendar-events";
 import {GetStaticPropsContext} from "next";
+import {EmmausSections} from "../components/EmmausSections";
 
-function EmmausSections() {
-    return <Responsive><Section title="Gruppen">
-        <div className="flex flex-col items-center space-y-8">
-            <EmmausSection picture={"/Ill_Child.svg"} title="Kinder"/>
-            <EmmausSection picture={"/Ill_Bird.svg"} title="Firmung" flipped={true}/>
-            <EmmausSection picture={"/Ill_Music.svg"} title="Chor"/>
-            <EmmausSection picture={"/Ill_Church.svg"} title="Pfarre" flipped={true}/>
-        </div>
-    </Section></Responsive>;
-}
-
-function EmmausSection(props: { picture: string, title: string, flipped?: boolean }) {
-    return <div className={`flex ${props.flipped && 'flex-row-reverse'} space-x-4 items-center max-w-2xl`}>
-        <div className="w-52">
-            <img src={props.picture} className=""/>
-        </div>
-        <div className="">
-            <div className="text-4xl font-semibold">{props.title}</div>
-            <div className="text-lg  my-4">{props.title}</div>
-        </div>
-    </div>;
-}
 
 export default function HomePage(props: { instagram: InstagramFeedItem[], articles: any[], weeklies: Collections['weekly'][], sites: Collections['site'][] }) {
     return <Site responsive={false} navbar={false}>
@@ -71,6 +48,7 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                 </div>
                 <Articles items={props.articles}/>
                 <ComingUp/>
+                <EmmausSections weeklies={props.weeklies}/>
                 <Instagram items={props.instagram}/>
             </>
         }[siteType]()}

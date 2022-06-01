@@ -9,7 +9,9 @@ declare module 'cockpit-sdk' {
       date: string,
       emmaus: string,
       inzersdorf: string,
-      neustift: string
+      neustift: string,
+      neustift: string,
+      preview: { path: string },
     } & Object,
     'site': {
       name: string,

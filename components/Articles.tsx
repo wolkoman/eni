@@ -6,9 +6,11 @@ import {Collections} from 'cockpit-sdk';
 import {Section} from './Section';
 import Responsive from "./Responsive";
 
-export function getArticlePreviewImageUrl(article: Collections['article']) {
-    const url = article.preview_image.path;
-    return url.startsWith('https') ? url : `${cockpit.host}${url}`;
+export function getCockpitImageUrl(url: string) {
+    if(url.startsWith('https')) return url;
+    if(url.startsWith('/storage')) return `${cockpit.host}${url}`;
+    if(url.startsWith('storage')) return `${cockpit.host}/${url}`;
+    return `${cockpit.host}/storage/uploads/${url}`
 }
 
 export function getArticleLink(article?: Collections['article']) {
@@ -22,7 +24,7 @@ function BigArticle(props: { article?: Collections['article'] }) {
 
         <div className="w-64 md:w-80 aspect-square flex-shrink-0 rounded-lg border-white outline outline-4 outline-primary1/50"
              style={!props.article ? {} : {
-                 backgroundImage: `url(${getArticlePreviewImageUrl(props.article)})`,
+                 backgroundImage: `url(${getCockpitImageUrl(props.article.preview_image.path)})`,
                  backgroundSize: 'cover',
                  backgroundPosition: '50% 50%'
              }}/>
@@ -55,7 +57,7 @@ function SmallArticleCard(props: { article?: Collections['article'] }) {
 
             <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded-lg  outline outline-4 outline-primary1/50"
                  style={!props.article ? {} : {
-                     backgroundImage: `url(${getArticlePreviewImageUrl(props.article)})`,
+                     backgroundImage: `url(${getCockpitImageUrl(props.article.preview_image.path)})`,
                      backgroundSize: 'cover',
                      backgroundPosition: '50% 50%'
                  }}/>
