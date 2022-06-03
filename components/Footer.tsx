@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import Responsive from './Responsive';
 import {useUserStore} from '../util/use-user-store';
 import {site, siteType, SiteType} from '../util/sites';
+import Button from "./Button";
 
 export default function Footer() {
     const [isLoggedIn, load] = useUserStore(state => [state.user?.active, state.load]);
@@ -29,9 +30,7 @@ export default function Footer() {
                             <div className="cursor-pointer underline hover:no-underline mb-5">Zum Mitgliedsbereich</div>
                         </Link>
                         : <Link href="/login">
-                            <div
-                                className="cursor-pointer mb-5 px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded transform hover:scale-105 transition-all">Login
-                            </div>
+                            <Button label="Login"/>
                         </Link>}</>}
                 </div>
             </Responsive>

@@ -36,13 +36,10 @@ export default function Events() {
   }
 
   return <Site navbar={false} responsive={false} footer={false}>
-    <div className="w-full h-screen relative flex flex-col justify-center items-center bg-gray-100">
-      <div className={`z-10 bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
-        <div className="h-2 bg-primary1 w-full"/>
-        <div className="h-2 bg-primary2 w-full"/>
-        <div className="h-2 bg-primary3 w-full"/>
+    <div className="w-full h-screen relative flex flex-col justify-center items-center bg-[url(/bg-login.svg)] bg-cover bg-center">
+      <div className={`z-10 bg-white borde border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
         <div className="p-8 flex flex-col items-center">
-          <div className="font-bold text-2xl mt-1 mb-5">eine neue initiative</div>
+          <div className="font-bold text-2xl mb-5">eine neue initiative</div>
           <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200" value={data.username}
                  onChange={(event) => setData({...data, username: (event as any).target.value})}/>
           <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-gray-200" type="password" value={data.password}

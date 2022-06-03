@@ -9,7 +9,7 @@ export async function fetchInstagramFeed(){
         .then(response => response.json())
         .then(response => response.data
             ?.filter((post: any) => post.caption.toLowerCase().includes(site('', 'emmaus')))
-            .slice(0, 15) ?? []
+            .slice(0, 7) ?? []
         );
 
 }

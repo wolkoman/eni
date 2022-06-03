@@ -26,7 +26,7 @@ export default function EventPage() {
             <CalendarCacheNotice/>
             <div className="flex flex-col md:flex-row">
                 {site(<div
-                    className="flex flex-col w-full self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 bg-white shadow rounded-xl border border-black/10 sticky top-0 md:top-5 z-20 bg-white">
+                    className="flex flex-col w-full self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 bg-white rounded-xl border-4 border-black/10 sticky top-0 md:top-5 z-20 bg-white">
                     <FilterSelector
                         filter={filter}
                         setFilter={filter => setFilter(filter)}

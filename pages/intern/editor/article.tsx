@@ -89,23 +89,23 @@ export default function Index(props: { article: Collections['paper_articles'], v
             </div>
         </Modal>}
         <div className="flex flex-col h-screen">
-            <div className="p-4 bg-[url('/eni_graphics_gray.svg')] border-b border-gray-200">
+            <div className="p-4 bg-black/5">
                 <Responsive>
                     <div className="flex justify-between">
                         <div>
-                            <div className="flex flex-row">
-                                <div className="text-2xl text-primary2 font-bold mr-2 -mb-2">{props.article.project.display}</div>
-                                <div className="text-2xl text-primary1 font-bold mr-2 -mb-2">{props.article.name}</div>
+                            <div className="flex flex-row text-black/70">
+                                <div className="text-2xl mr-2 -mb-2  font-bold">{props.article.name}</div>
                             </div>
                             <div className="text-sm">{props.article.author}</div>
                         </div>
-                        <div className="flex space-x-3 items-start">
-                            {editable && <div className="opacity-80 text-sm my-3">{{
+                        <div className="flex flex-row space-x-3 items-center">
+                            {editable && <div className="opacity-80 text-sm">{{
                                 saved: "gespeichert",
                                 saving: "speichert..",
                                 justnow: "gerade eben gespeichert",
-                                error: <div className="bg-red-600 text-white font-bold text-sm px-2 rounded">Speichern
-                                    fehlgeschlagen</div>,
+                                error: <div className="bg-red-600 text-white font-bold text-sm px-2 rounded">
+                                    Speichern fehlgeschlagen
+                                </div>,
                             }[saved]}</div>}
                             {editable && <Button label="Speichern" secondary={true} onClick={saveAndDownload}
                                                  disabled={saved === "saving" || saved === "saved"}/>}
@@ -127,13 +127,13 @@ export default function Index(props: { article: Collections['paper_articles'], v
                 className={`w-full h-full outline-none font-serif text-lg py-4`}
                 onChange={e => setText(e.target!.value)} defaultValue={props.versions[0].text}>
             </textarea></Responsive></div>
-            <div className="py-2 px-4 border-t border-gray-200"><Responsive className="w-full flex justify-between">
+            <div className={`py-2 px-4 transition-all ${{
+                unfinished: `bg-black/5`,
+                perfect: `bg-green-700 text-white`,
+                excess: 'bg-red-600 text-white font-bold',
+            }[note]}`}><Responsive className="w-full flex justify-between">
                 <div className="text-sms">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
-                <div className={`text-sms px-2 rounded ${{
-                    unfinished: `${Math.round(100 * length / ((+props.article.char_min + +props.article.char_max) * 0.5))}%`,
-                    perfect: `bg-green-700 text-white`,
-                    excess: 'bg-red-600 text-white font-bold',
-                }[note]}`}>{{
+                <div className={`text-sms px-2 rounded `}>{{
                     unfinished: `${Math.round(200 * length / (+props.article.char_min + +props.article.char_max))}%`,
                     perfect: `100%`,
                     excess: `${length - +props.article.char_max} Zeichen Überschuss`,
@@ -145,8 +145,8 @@ export default function Index(props: { article: Collections['paper_articles'], v
 
 function Modal(props: { children: ReactNode, title?: string }) {
     return <div
-        className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center backdrop-blur-sm">
-        <div className="bg-white border border-black/5 rounded-lg shadow-lg text-center p-6">
+        className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center backdrop-blur-sm bg-black/20 z-20">
+        <div className="bg-white border-4 border-black/10 rounded-lg shadow-lg text-center p-8">
             {props.title && <div className="font-bold mb-2">{props.title}</div>}
             <div>{props.children}</div>
         </div>

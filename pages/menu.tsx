@@ -15,5 +15,5 @@ export default function HomePage(props: { sites: Collections['site'][] }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    return site({notFound: true}, {props: {sites: await fetchEmmausSites().then(site => site.filter(s => s.level === 0))}})
+    return site({notFound: true}, {revalidate: 10, props: {sites: await fetchEmmausSites().then(site => site.filter(s => s.level === 0))}})
 }

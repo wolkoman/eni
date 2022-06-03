@@ -45,8 +45,8 @@ body {
 
 
 .shimmer {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+  animation: shimmer 1s infinite cubic-bezier(.61,0,.29,1);
+  background: linear-gradient(to right, #f5f5f5 0%, #e2e2e2 5%, #f5f5f5 10%);
   background-size: 1000px 100%;
 }
 

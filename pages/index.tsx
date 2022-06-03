@@ -29,14 +29,6 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                 <ComingUp/>
                 <Instagram items={props.instagram}/>
                 <Sections weeklies={props.weeklies}/>
-                <Responsive>
-                    <div className="flex justify-end my-16">
-                        <Link href="/artikel/627003446365316d55000388">
-                            <div className="underline hover:no-underline cursor-pointer w-44 rotate-[-10deg]">
-                                Hat diese Seite nicht anders ausgeschaut?
-                            </div></Link>
-                    </div>
-                </Responsive>
             </>,
             [SiteType.EMMAUS]: () => <>
                 <Navbar/>
