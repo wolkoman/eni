@@ -22,7 +22,7 @@ function BigArticle(props: { article?: Collections['article'] }) {
         className={`flex flex-col md:flex-row items-stretch w-full ${!props.article && 'shimmer'}`}
         data-testid="articles">
 
-        <div className="w-64 md:w-80 aspect-square flex-shrink-0 rounded-lg border-white outline outline-4 outline-primary1/50"
+        <div className="w-64 md:w-80 aspect-square flex-shrink-0 rounded-lg border-white outline outline-4 outline-emmaus/50"
              style={!props.article ? {} : {
                  backgroundImage: `url(${getCockpitImageUrl(props.article.preview_image.path)})`,
                  backgroundSize: 'cover',
@@ -55,7 +55,7 @@ function SmallArticleCard(props: { article?: Collections['article'] }) {
         <div
             className={`flex flex-row p-4 cursor-pointer ${!props.article && 'shimmer'}`}>
 
-            <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded-lg  outline outline-4 outline-primary1/50"
+            <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded-lg  outline outline-4 outline-emmaus/50"
                  style={!props.article ? {} : {
                      backgroundImage: `url(${getCockpitImageUrl(props.article.preview_image.path)})`,
                      backgroundSize: 'cover',

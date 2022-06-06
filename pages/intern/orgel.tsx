@@ -124,7 +124,7 @@ export default function Orgel() {
               const unavailable = !data.availableSlots.includes(slot);
               return <div
                 key={slot}
-                className={`w-24 h-14 text-center mr-2 mb-2 flex justify-center items-center ${unavailable ? 'cursor-default opacity-50' : 'cursor-pointer hover:bg-primary1 hover:text-white bg-gray-200'}`}
+                className={`w-24 h-14 text-center mr-2 mb-2 flex justify-center items-center ${unavailable ? 'cursor-default opacity-50' : 'cursor-pointer hover:bg-emmaus hover:text-white bg-gray-200'}`}
                 onClick={() => unavailable ? null : bookHour(slot)}>
                 <div>{new Date(slot).toLocaleTimeString().substring(0,5)}</div>
               </div>;

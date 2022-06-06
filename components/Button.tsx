@@ -4,7 +4,7 @@ export default function Button(props: {label: string, onClick?: () => any, secon
   return <div className={`
       ${props.className ?? ''}
       inline-block px-3 py-1 text-white rounded transform transition
-      ${props.secondary ? 'border border-black/80 text-black/80' : 'bg-black/80 ring-primary1'}
+      ${props.secondary ? 'border border-black/80 text-black/80' : 'bg-black/80 ring-emmaus'}
       ${props.disabled ? 'pointer-events-none opacity-70 border-black/50'  : 'cursor-pointer hover:opacity-90'}
     `}
     onClick={props.onClick}>

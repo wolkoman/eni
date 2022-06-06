@@ -13,8 +13,8 @@ export default function HomePage(props: { site: Collections['site'] }) {
             Test
             </>,
             [SiteType.EMMAUS]: <Article title={props.site.name}>
-                {props.site.children.length > 0 && <div className="flex flex-wrap bg-primary1/20 text-center">
-                    {props.site.children.map(child => <Link href={`/${child.slug}`}><div className="p-5 md:px-3 md:py-1 cursor-pointer hover:text-white hover:bg-primary1">{child.name}</div></Link>)}
+                {props.site.children.length > 0 && <div className="flex flex-wrap bg-emmaus/20 text-center">
+                    {props.site.children.map(child => <Link href={`/${child.slug}`}><div className="p-5 md:px-3 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">{child.name}</div></Link>)}
                 </div>}
                 {props.site.layout?.map(layoutEntity => ({
                     text: <div key={layoutEntity.component} dangerouslySetInnerHTML={{__html: layoutEntity.settings.text}}

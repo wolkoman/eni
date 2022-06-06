@@ -19,16 +19,16 @@ module.exports = {
         'serif': ['Source Serif Pro'],
       },
       colors: {
+        secondary: { default: "#cd309a" },
+        emmaus: "#2a6266",
+        inzersdorf: "#139b91",
+        neustift: "#f4ac11",
         gray: {
           back: "#fbfbfb",
           100: "#f8f8f8",
           200: "#f4f4f4",
           300: "#dddddd",
         },
-        secondary: { default: "#cd309a" },
-        primary1: "#2a6266",
-        primary2: "#139b91",
-        primary3: "#f4ac11",
       },
       height: {
         "xl": "200px",
