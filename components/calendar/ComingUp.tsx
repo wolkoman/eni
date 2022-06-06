@@ -10,12 +10,14 @@ import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 
 function getGroupSorting(group: string) {
-    return ['Gebet & Bibel', 'Gottesdienst', 'Heilige Messe'].indexOf(group);
+    return ['Gebet & Bibel', 'Gottesdienst', 'Heilige Messe', 'Lange Nacht der Kirchen'].indexOf(group);
 }
 
 export function ComingUp({}) {
     const calendar = useCalendarStore(state => state);
     const [groups, setGroups] = useState<Record<string, Record<string, CalendarEvent[]>>>({});
+    console.log(groups);
+    const lndkEvents = groups['Lange Nacht der Kirchen'] ?? {};
     const [jwt] = useUserStore(state => [state.jwt]);
     const now = new Date().getTime();
     const tomorrow = now + 3600 * 1000 * 24 * 7;
@@ -44,7 +46,37 @@ export function ComingUp({}) {
                     {calendar.loading && Array(5).fill(0).map(() =>
                         <div className="shimmer h-96 border-4 overflow-hidden relative rounded-2xl border border-black/10 relative px-4 py-2 pb-12 shadow"/>
                     )}
+
+
+
+                    <div
+                        className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-black/10 relative px-4 py-2 pb-12">
+                        <Link href={`/termine?q=${encodeURIComponent("Lange Nacht der Kirchen")}`}>
+                            <div
+                                className="absolute w-full h-10 left-0 bottom-0 bg-[#fff]">
+                                <div
+                                    className="absolute top-0 left-0 w-full h-full bg-black/10 hover:pl-5 transition-all hover:bg-black/5 pt-2 cursor-pointer">
+                                    <div className="flex justify-center items-center space-x-2">
+                                        Ganzes Programm
+                                        <Icon/></div>
+                                </div>
+                            </div>
+                        </Link>
+                        <div className="text-2xl font-bold text-center">{"Lange Nacht der Kirchen"}</div>
+                        <div className="bg-black/10 p-1 px-2 rounded my-1 ">{"Die Lange Nacht der Kirchen findet dieses Jahr für alle Pfarren in der Pfarre Inzersdorf (St. Nikolaus) statt."}</div>
+                        <div>{Object.entries(lndkEvents).map(([date, events]) =>
+                            <div>
+                                <div className="my-2"><EventDateText date={new Date(date)}/></div>
+                                {(events ?? []).map(event => <Event event={"Lange Nacht der Kirchen" === "Lange Nacht der Kirchen" ? {...event, description: '', mainPerson: ''} :event} permissions={{}}/>)}
+                            </div>
+                        )}
+                        </div>
+                    </div>
+
+
+
                     {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
+                        .filter(([group]) => group !== "Lange Nacht der Kirchen")
                         .map(([group, calendar]) => <div
                                 className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-black/10 relative px-4 py-2 pb-12">
                                 <Link href={`/termine?q=${encodeURIComponent(group)}`}>

@@ -14,7 +14,7 @@ export function applyFilter(events: CalendarEvent[], filter: FilterType, group?:
   return events
     .filter(event =>
         ((filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))
-      || (filter?.filterType === 'PARISH' && event.calendar === filter.parish)
+      || (filter?.filterType === 'PARISH' && (event.calendar === filter.parish || event.calendar == "all"))
       || (filter === null)) && ((event.groups.includes(decodeURI(group ?? ""))) || group === undefined))
 
 }

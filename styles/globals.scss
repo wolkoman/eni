@@ -67,54 +67,16 @@ body {
   opacity: 100;
 }
 
-.st35 {
-  fill: none;
-  stroke: #2A6266;
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10;
-  stroke-dasharray: 1556;
-  stroke-dashoffset: -1556;
-  animation-name: dashdraw;
-  animation-duration: 2s;
-  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
-  animation-fill-mode: both;
-  animation-delay: 1s;
-
-}
-
-.st36 {
-  fill: none;
-  stroke: #F4AC11;
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10;
-  stroke-dasharray: 1853;
-  stroke-dashoffset: -1853;
-  animation-name: dashdraw;
-  animation-duration: 2s;
-  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
-  animation-fill-mode: both;
-  animation-delay: 2s;
-}
-
-.st37 {
-  fill: none;
-  stroke: #139B91;
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10;
-  stroke-dasharray: 1740;
-  stroke-dashoffset: -1740;
-  animation-name: dashdraw;
-  animation-duration: 2s;
-  animation-timing-function: cubic-bezier(0, 0, 0.15, 1.01);
-  animation-fill-mode: both;
-  animation-delay: 1.5s;
-}
+.bg-lndk{ background: #b7004e; }
+.bg-emmaus{ background: #2a6266; }
+.text-emmaus{ color: #2a6266; }
+.border-emmaus{ border-color: #2a6266; }
+.bg-inzersdorf{ background: #139b91; }
+.text-inzersdorf{ color: #139b91; }
+.border-inzersdorf{ border-color: #139b91; }
+.bg-neustift{ background: #f4ac11; }
+.text-neustift{ color: #f4ac11; }
+.border-neustift{ border-color: #f4ac11; }
 
 .text-stroke {
   -webkit-text-stroke: 18px white;

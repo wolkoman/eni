@@ -59,6 +59,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && "Gottesdienst",
     x => x.summary.toLowerCase().includes("taufe") && "_",
     x => x.summary.toLowerCase().includes(" ehe") && "_",
+    x => (x.description??'').toLowerCase().includes("[lndk]") && "Lange Nacht der Kirchen",
     x => x.summary.toLowerCase().includes("motorrad") && "_",
     x => x.summary.toLowerCase().includes("generalprobe") && "_",
     x => x.summary.toLowerCase().includes("pgr sitzung") && "Gremien",
@@ -145,7 +146,7 @@ export async function getEvents(props: { public: boolean }): Promise<CalendarEve
 
   const getTimeOfEvent = (event: any) => new Date(event!.start?.date ?? event!.start?.dateTime!).getTime();
   return (await Promise.all(
-      Object.entries(calendarIds).filter(([name, calendarId]) => site([
+      Object.entries(calendarIds).filter(([, calendarId]) => site([
         calendarIds.all,
         calendarIds.emmaus,
         calendarIds.inzersdorf,
@@ -154,6 +155,12 @@ export async function getEvents(props: { public: boolean }): Promise<CalendarEve
   ))
       .flat()
       .filter(event => !!event)
+      .map(x => {
+        console.log(x.summary);
+        if(x.summary === "Moderne Kirchenmusik")
+          console.log(x);
+        return x;
+      })
       .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b));
 
 }
@@ -163,7 +170,7 @@ export const getEventsForUser = async (user: User) => {
   const calendarCacheId = "61b335996165305292000383";
 
   const privateCalendarAccess = user && user.permissions[Permission.PrivateCalendarAccess];
-  const events = (await getEvents({public: !privateCalendarAccess}).catch(() => null));
+  const events = await getEvents({public: !privateCalendarAccess});
   if(events !== null){
     if(!privateCalendarAccess){
       cockpit.collectionSave("internal-data",{_id: calendarCacheId, data: {events, cache: new Date().toISOString()}});

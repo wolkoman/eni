@@ -20,11 +20,11 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
   let infos: Record<Calendar, CalendarInfo> = {
     'all': {
       id: 'all',
-      className: '',
+      className: 'bg-lndk text-white',
       borderColor: '',
       fullName: '',
       shortName: '',
-      tagName: '',
+      tagName: 'LNdK',
       address: '',
       websiteUrl: 'https://eni.wien',
       websiteDisplay: 'https://eni.wien',

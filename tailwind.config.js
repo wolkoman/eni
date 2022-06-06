@@ -19,7 +19,6 @@ module.exports = {
         'serif': ['Source Serif Pro'],
       },
       colors: {
-        secondary: { default: "#cd309a" },
         emmaus: "#2a6266",
         inzersdorf: "#139b91",
         neustift: "#f4ac11",
