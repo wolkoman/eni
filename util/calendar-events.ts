@@ -59,7 +59,6 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && "Gottesdienst",
     x => x.summary.toLowerCase().includes("taufe") && "_",
     x => x.summary.toLowerCase().includes(" ehe") && "_",
-    x => (x.description??'').toLowerCase().includes("[lndk]") && "Lange Nacht der Kirchen",
     x => x.summary.toLowerCase().includes("motorrad") && "_",
     x => x.summary.toLowerCase().includes("generalprobe") && "_",
     x => x.summary.toLowerCase().includes("pgr sitzung") && "Gremien",
