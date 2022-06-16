@@ -60,7 +60,7 @@ export default function Index(props: { article: Collections['paper_articles'], v
 
     function saveAndDownload() {
         return save().catch(() => {
-            saveFile(`${props.article.name} ${new Date().toLocaleDateString()}.txt`, new Blob([text]));
+            saveFile(`${props.article.name} ${new Date().toLocaleDateString("de-AT")}.txt`, new Blob([text]));
             throw new Error();
         })
     }

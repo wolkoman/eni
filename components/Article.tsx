@@ -25,7 +25,7 @@ export const Article = (props: {image?: string, title: string, created?: number,
                         <div className="flex flex-col mt-12 mb-6">
                             <div className="text-5xl font-bold">{props.title}</div>
                             <div className="flex">
-                                {props.created && <div className="mt-3 italic pt-2 mr-2">am {new Date((props.created ?? 0) * 1000).toLocaleDateString()}</div>}
+                                {props.created && <div className="mt-3 italic pt-2 mr-2">am {new Date((props.created ?? 0) * 1000).toLocaleDateString("de-AT")}</div>}
                                 {props.author && <div className="mt-3 italic pt-2">von {props.author}</div>}
                             </div>
                         </div>

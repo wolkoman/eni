@@ -154,12 +154,6 @@ export async function getEvents(props: { public: boolean }): Promise<CalendarEve
   ))
       .flat()
       .filter(event => !!event)
-      .map(x => {
-        console.log(x.summary);
-        if(x.summary === "Moderne Kirchenmusik")
-          console.log(x);
-        return x;
-      })
       .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b));
 
 }

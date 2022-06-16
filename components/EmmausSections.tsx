@@ -20,7 +20,7 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
                 </div>
                 <div className="flex space-x-2">
                     {['emmaus'].map(id => getCalendarInfo(id as any)).map(info =>
-                        <Link href={getCockpitImageUrl(paper.emmaus)}>
+                        <Link href={getCockpitImageUrl(paper.emmaus)} key={info.id}>
                             <div className={`${info.className} px-3 py-1 my-1 text-lg rounded cursor-pointer`}>
                                 Aktuelle Ausgabe
                             </div>

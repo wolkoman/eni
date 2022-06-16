@@ -93,7 +93,7 @@ export default function Orgel() {
             className={`flex bg-gray-200 mb-2 px-3 py-2 justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
             <div className="flex">
               <div className="w-20 font-bold">
-                {new Date(booking.start.dateTime).toLocaleDateString()}
+                {new Date(booking.start.dateTime).toLocaleDateString("de-AT")}
               </div>
               <div>
                 {new Date(booking.start.dateTime).toLocaleTimeString().substring(0, 5)}{' - '}

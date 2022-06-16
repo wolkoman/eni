@@ -62,7 +62,7 @@ export default function InternArticles() {
                 <div className="underline hover:no-underline">{item.title.trim()} </div>
               </Link>
             </div>
-            <div>{new Date(item.isoDate).toLocaleDateString()}</div>
+            <div>{new Date(item.isoDate).toLocaleDateString("de-AT")}</div>
           </div>
           <div>{item.content.trim()}</div>
           <div className="flex justify-end">

@@ -24,7 +24,7 @@ export function Instagram(props: { items: any[] }) {
                 )}
                 {feed
                     .filter(item => item.media_type !== 'VIDEO')
-                    .map((item) => <InstagramItem item={item}/>)}
+                    .map((item) => <InstagramItem key={item.id} item={item}/>)}
                 {feed.length > 0 &&
                     <div
                         className="w-full h-64 text-xl text-center flex items-center justify-center bg-black/10 rounded-lg">
@@ -49,7 +49,7 @@ function InstagramItem({item}: { item?: InstagramFeedItem }) {
         <div>
             <div className="text-xl p-5">
                 <div
-                    className="inline-block text-lg px-1 bg-black/10 font-bold rounded mr-4 mb-4">{item == null || new Date(item?.timestamp ?? 0).toLocaleDateString()}</div>
+                    className="inline-block text-lg px-1 bg-black/10 font-bold rounded mr-4 mb-4">{item == null || new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}</div>
                 <div>{Aesthetically.unformat(item?.caption.normalize() ?? '')}</div>
             </div>
         </div>

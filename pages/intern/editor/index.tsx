@@ -19,7 +19,7 @@ export default function Index() {
     {projects?.map(project => <Link href={`editor/project?projectId=${project._id}`} key={project._id}>
       <div className="rounded-xl shadow border border-black/10 h-32 flex flex-col justify-center p-6 hover:bg-black/[3%] cursor-pointer">
         <div className="text-2xl">{project.name}</div>
-        <div className="">Readktionsschluss: {new Date(project.deadline).toLocaleDateString()}</div>
+        <div className="">Readktionsschluss: {new Date(project.deadline).toLocaleDateString("de-AT")}</div>
     </div></Link>)}
     </div>
   </Site>

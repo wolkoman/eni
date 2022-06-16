@@ -34,7 +34,7 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                 <Navbar/>
                 <TopBranding/>
                 <div className="px-8 bg-emmaus text-white text-lg hidden md:flex">
-                    {props.sites.filter(site => site.level === 0).map(site => <Link href={`/${site.slug}`}><div className="px-8 py-4 cursor-pointer">
+                    {props.sites.filter(site => site.level === 0).map(site => <Link href={`/${site.slug}`} key={site.slug}><div className="px-8 py-4 cursor-pointer">
                         {site.name}
                     </div></Link>)}
                 </div>
