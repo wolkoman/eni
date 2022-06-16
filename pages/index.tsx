@@ -20,6 +20,21 @@ import {GetStaticPropsContext} from "next";
 import {EmmausSections} from "../components/EmmausSections";
 
 
+function Navigation(props: { sites: Collections["site"][] }) {
+    return <div className="sticky z-20 top-0 px-8 bg-emmaus/90 text-white text-lg hidden md:flex justify-between">
+        <div className="flex justify-between p-4 font-bold">
+            Pfarre Emmaus am Wienerberg
+        </div>
+        <div className="flex flex-wrap">
+        {props.sites.filter(site => site.level === 0).map(site => <Link href={`/${site.slug}`} key={site.slug}>
+            <div className="p-4 cursor-pointer">
+                {site.name}
+            </div>
+        </Link>)}
+        </div>
+    </div>;
+}
+
 export default function HomePage(props: { instagram: InstagramFeedItem[], articles: any[], weeklies: Collections['weekly'][], sites: Collections['site'][] }) {
     return <Site responsive={false} navbar={false}>
         {{
@@ -33,11 +48,7 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
             [SiteType.EMMAUS]: () => <>
                 <Navbar/>
                 <TopBranding/>
-                <div className="px-8 bg-emmaus text-white text-lg hidden md:flex">
-                    {props.sites.filter(site => site.level === 0).map(site => <Link href={`/${site.slug}`} key={site.slug}><div className="px-8 py-4 cursor-pointer">
-                        {site.name}
-                    </div></Link>)}
-                </div>
+                <Navigation sites={props.sites}/>
                 <Articles items={props.articles}/>
                 <ComingUp/>
                 <EmmausSections weeklies={props.weeklies}/>

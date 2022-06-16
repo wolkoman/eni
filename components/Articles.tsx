@@ -71,11 +71,8 @@ function SmallArticleCard(props: { article?: Collections['article'] }) {
 
 function AllArticlesCard() {
     return <Link href="/artikel">
-        <div
-            className={`flex flex-row p-4 cursor-pointer`}>
-            <div className="flex flex-col justify-center overflow-hidden">
+        <div className={`flex flex-row items-center m-4 p-2 cursor-pointer outline outline-4 outline-emmaus/50 rounded`}>
                 <div className="line-clamp-3 font-semibold text-xl">Alle Beiträge</div>
-            </div>
         </div>
     </Link>;
 }
@@ -84,7 +81,7 @@ export default function Articles(props: { items: any[] }) {
     return <div className="my-20"><Responsive><Section title="Aktuelles">
         <div className="flex flex-col">
             <BigArticle article={props.items[0]}/>
-            <div className="grid grid-cols-2 mt-6">
+            <div className="grid md:grid-cols-2 mt-6">
                 <SmallArticleCard article={props.items[1]}/>
                 <SmallArticleCard article={props.items[2]}/>
                 <SmallArticleCard article={props.items[3]}/>

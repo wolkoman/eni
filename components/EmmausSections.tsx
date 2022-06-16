@@ -9,9 +9,9 @@ import {getCockpitImageUrl} from "./Articles";
 export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
     const paper = props.weeklies.find(weekly => weekly.emmaus && weekly.preview)!;
     return <Responsive><Section title="Pfarrzeitung">
-        <div className="flex flex-col md:flex-row items-start max-w-2xl mx-auto">
-            <img src={getCockpitImageUrl(paper.preview.path)} className="w-64 mr-8"/>
-            <div>
+        <div className="flex flex-col md:flex-row items-start max-w-2xl mx-auto my-24">
+            <img src={getCockpitImageUrl(paper.preview.path)} className="w-64 mr-8 rounded outline outline-4 outline-emmaus/50"/>
+            <div className="mt-4">
                 <div className="text-5xl">
                     Der Emmausbote
                 </div>

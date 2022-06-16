@@ -12,7 +12,7 @@ export default function Navbar() {
             <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32 hidden"/>
           </div>,
           [SiteType.EMMAUS]: <div className="flex space-x-4">
-            <div>emmaus.wien</div>
+            <div>tesarekplatz.at</div>
           </div>
         }[siteType]}
       </div>

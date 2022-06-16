@@ -15,7 +15,7 @@ export default function Site(props: { title?: string, children: ReactNode, respo
 
     return <>
         <Head>
-            <title>{site("eni.wien", "emmaus.wien")}</title>
+            <title>{site("eni.wien", "tesarekplatz.at")}</title>
             <script type="text/javascript" src="https://app.mailjet.com/statics/js/widget.modal.js"/>
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">

@@ -25,11 +25,11 @@ export default function Footer() {
                     <Link href="/impressum">
                         <div className="cursor-pointer underline hover:no-underline mb-5">Impressum</div>
                     </Link>
-                    {siteType === SiteType.ENI && <>{isLoggedIn
-                        ? <Link href="/intern">
+                    {<>{isLoggedIn
+                        ? <Link href="https://eni.wien/login">
                             <div className="cursor-pointer underline hover:no-underline mb-5">Zum Mitgliedsbereich</div>
                         </Link>
-                        : <Link href="/login">
+                        : <Link href="https://eni.wien/login">
                             <Button label="Login"/>
                         </Link>}</>}
                 </div>

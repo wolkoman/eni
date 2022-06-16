@@ -32,7 +32,7 @@ export function ComingUp({}) {
         <div className="my-20">
             <div className="flex justify-between">
                 <SectionHeader>Die nächsten 7 Tage</SectionHeader>
-                <Link href="/termine">
+                <Link href="https://eni.wien/termine">
                     <div
                         className="my-9 px-3 py-1 bg-white rounded-lg cursor-pointer bg-black/10 hover:bg-black/5 transition-all">
                         Alle Termine
@@ -50,7 +50,7 @@ export function ComingUp({}) {
                         .map(([group, calendar]) => <div
                                 key={group}
                                 className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-black/10 relative px-4 py-2 pb-12">
-                                <Link href={`/termine?q=${encodeURIComponent(group)}`}>
+                                <Link href={`https://eni.wien/termine?q=${encodeURIComponent(group)}`}>
                                     <div
                                         className="absolute w-full h-10 left-0 bottom-0 bg-[#fff]">
                                         <div
@@ -71,7 +71,7 @@ export function ComingUp({}) {
                                 </div>
                             </div>
                         )}
-                    <Link href="/termine">
+                    <Link href="https://eni.wien/termine">
                         <div
                             className="rounded-2xl text-3xl font-bold border-4 border-black/5 bg-black/10 hover:bg-black/5 p-12 shadow cursor-pointer transition-all">
                             Alle Termine
@@ -84,7 +84,7 @@ export function ComingUp({}) {
     </Responsive>;
 }
 
-function Icon() {
+export function Icon() {
     return <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg"
                 className="mx-1">
         <path d="M1 6.5H15M15 6.5L9.25641 1M15 6.5L9.25641 12" stroke="#474747" strokeWidth="1.5"
