@@ -10,7 +10,7 @@ import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 
 function getGroupSorting(group: string) {
-    return ['Gebet & Bibel', 'Gottesdienst', 'Heilige Messe', 'Lange Nacht der Kirchen'].indexOf(group);
+    return ['Gebet & Bibel', 'Gottesdienst', 'Heilige Messe'].indexOf(group);
 }
 
 export function ComingUp({}) {
