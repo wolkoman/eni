@@ -40,6 +40,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().startsWith("taufe") && "Taufe",
     x => x.summary.toLowerCase().startsWith("grabwache") && "Grabwache",
     x => x.summary.toLowerCase().includes("messe") && "Heilige Messe",
+    x => x.summary.includes("Firmung") && "Heilige Messe",
     x => x.summary.toLowerCase().includes("jungschar") && "Jungschar",
     x => x.summary.toLowerCase().includes("evangel") && "Ökumene",
     x => x.summary.toLowerCase().startsWith("friedensgebet") && "Gebet & Bibel",
@@ -59,9 +60,10 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && "Gottesdienst",
     x => x.summary.toLowerCase().includes("taufe") && "_",
     x => x.summary.toLowerCase().includes(" ehe") && "_",
+    x => x.summary.toLowerCase().includes("firmvorbereitung") && "_",
     x => x.summary.toLowerCase().includes("motorrad") && "_",
     x => x.summary.toLowerCase().includes("generalprobe") && "_",
-    x => x.summary.toLowerCase().includes("pgr sitzung") && "Gremien",
+    x => x.summary.toLowerCase().includes("sitzung") && "Gremien",
     x => x.summary.toLowerCase().includes("chor") && "Chorprobe",
     x => x.summary.toLowerCase().includes("sprechstunde") && "Sprechstunde",
     x => x.summary.toLowerCase().includes("woche des lebens") && "Kinder",
@@ -71,6 +73,10 @@ function getGroupFromEvent(event: any): string[] {
     condition(event)
   ], [])
       .filter((group): group is string => !!group);
+
+  if(groups.length === 0 && event.visibility !== "private"){
+    notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
+  }
 
   return groups.length === 0 ? [event.summary] : groups.filter(group => group !== "_");
 }
