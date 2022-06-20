@@ -17,7 +17,7 @@ export function Instagram(props: { items: any[] }) {
 
     return <div data-testid="instagram">
         <Responsive>
-            <SectionHeader>Einblick ins Pfarrleben</SectionHeader>
+            <SectionHeader id="pfarrleben">Einblick ins Pfarrleben</SectionHeader>
             <div className="grid grid-cols-1 gap-4">
                 {feed.length === 0 && Array(3).fill(0).map((_, index) =>
                     <InstagramItem key={index}/>

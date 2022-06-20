@@ -31,7 +31,7 @@ export function ComingUp({}) {
     return <Responsive>
         <div className="my-20">
             <div className="flex justify-between">
-                <SectionHeader>Die nächsten 7 Tage</SectionHeader>
+                <SectionHeader id="termine">Die nächsten 7 Tage</SectionHeader>
                 <Link href="https://eni.wien/termine">
                     <div
                         className="my-9 px-3 py-1 bg-white rounded-lg cursor-pointer bg-black/10 hover:bg-black/5 transition-all">

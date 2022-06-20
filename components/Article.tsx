@@ -1,4 +1,4 @@
-import Navbar from "./Navbar";
+import TopBar from "./TopBar";
 import Responsive from "./Responsive";
 import Site from "./Site";
 import React, {ReactNode} from "react";
@@ -14,7 +14,7 @@ export const Article = (props: {image?: string, title: string, created?: number,
                      filter: 'blur(5px) brightness(0.7) contrast(0.8)'
                  }}/>}
             <div className="relative z-10">
-                <Navbar/>
+                <TopBar/>
                 <Responsive>
                     <div className="flex flex-col-reverse md:flex-row">
                         <div className="flex-shrink-0 ml-4">

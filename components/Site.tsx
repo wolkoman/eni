@@ -1,4 +1,4 @@
-import Navbar from './Navbar';
+import TopBar from './TopBar';
 import Responsive from './Responsive';
 import {ReactNode, useEffect} from 'react';
 import Footer from './Footer';
@@ -20,7 +20,7 @@ export default function Site(props: { title?: string, children: ReactNode, respo
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">
             <div>
-                {(props.navbar ?? true) && <Navbar/>}
+                {(props.navbar ?? true) && <TopBar/>}
                 {(props.responsive ?? true) ? <Responsive narrow={props.narrow}>
                     {props.title ? <div className="font-bold text-2xl my-4">{props.title}</div> : null}
                     {props.children}

@@ -77,15 +77,24 @@ function AllArticlesCard() {
     </Link>;
 }
 
-export default function Articles(props: { items: any[] }) {
-    return <div className="my-20"><Responsive><Section title="Aktuelles">
+
+export default function Articles(props: { items: Collections['article'][], sites: Collections['site'][] }) {
+
+    const Button = (props: { slug: string, name: string }) => <Link href={`/${props.slug}`}>
+        <div
+            className=" p-4 rounded-lg border-4 border-emmaus/50 font-bold text-lg cursor-pointer">{props.name}</div>
+    </Link>
+
+    return <div className="my-20"><Responsive><Section title="Aktuelles" id="aktuelles">
         <div className="flex flex-col">
             <BigArticle article={props.items[0]}/>
             <div className="grid md:grid-cols-2 mt-6">
                 <SmallArticleCard article={props.items[1]}/>
                 <SmallArticleCard article={props.items[2]}/>
-                <SmallArticleCard article={props.items[3]}/>
-                <AllArticlesCard/>
+            </div>
+            <div className="grid grid-cols-3 md:grid-cols-4 mt-6 gap-2">
+                {props.sites.filter(site => site.level === 0).map(site => <Button key={site._id} name={site.name} slug={site.slug}/>)}
+                <Button slug={'/artikel'} name="Alle Beiträge"/>
             </div>
         </div>
     </Section>
