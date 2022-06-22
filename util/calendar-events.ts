@@ -55,6 +55,7 @@ function getGroupFromEvent(event: any): string[] {
     x => x.summary.toLowerCase().includes("ministrantenstunde") && "Kinder",
     x => x.summary.toLowerCase().includes("jugendtreffen") && "Jugend",
     x => x.summary.toLowerCase().startsWith("kinderstunde") && "Kinder",
+    x => x.summary.toLowerCase().startsWith("plauder") && "Gemeinschaft",
     x => x.summary.toLowerCase().startsWith("bibel aktiv") && "Gebet & Bibel",
     x => x.summary.toLowerCase().startsWith("vesper") && "Gottesdienst",
     x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && "Gottesdienst",
