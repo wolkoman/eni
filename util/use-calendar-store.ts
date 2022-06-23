@@ -46,6 +46,9 @@ export const useCalendarStore = create<{
                 cache: data.cache,
                 lastLoadedWithToken: jwt
             })))
-            .catch(() => set(state => ({...state, items: [], loaded: true, loading: false, error: true})));
+            .catch(() => {
+                set(state => ({...state, items: [], loaded: false, loading: false, error: true}));
+                get().load(jwt);
+            });
     }
 }));
