@@ -6,13 +6,6 @@ import Head from 'next/head';
 import {site} from '../util/sites';
 
 export default function Site(props: { title?: string, children: ReactNode, responsive?: boolean, narrow?: boolean, navbar?: boolean, footer?: boolean }) {
-
-    useEffect(() => {
-        if (window.location.href.includes('next.eni.wien')) {
-            window.location.replace('https://eni.wien/redirect');
-        }
-    })
-
     return <>
         <Head>
             <title>{site("eni.wien", "tesarekplatz.at")}</title>

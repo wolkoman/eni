@@ -2,12 +2,14 @@ import Link from 'next/link';
 import React, {useEffect} from 'react';
 import Responsive from './Responsive';
 import {useUserStore} from '../util/use-user-store';
-import {site, siteType, SiteType} from '../util/sites';
+import {site} from '../util/sites';
 import Button from "./Button";
+import {useEmmausProd} from "../utils/use-emmaus-prod";
 
 export default function Footer() {
     const [isLoggedIn, load] = useUserStore(state => [state.user?.active, state.load]);
     useEffect(() => load(), []);
+    const emmausProd = useEmmausProd();
     return <>
         <div className="pt-6 text-neutral-600 mt-6">
             <Responsive>
@@ -26,10 +28,10 @@ export default function Footer() {
                         <div className="cursor-pointer underline hover:no-underline mb-5">Impressum</div>
                     </Link>
                     {<>{isLoggedIn
-                        ? <Link href="https://eni.wien/login">
+                        ? <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
                             <div className="cursor-pointer underline hover:no-underline mb-5">Zum Mitgliedsbereich</div>
                         </Link>
-                        : <Link href="https://eni.wien/login">
+                        : <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
                             <Button label="Login"/>
                         </Link>}</>}
                 </div>
