@@ -154,7 +154,6 @@ export async function getCachedGoogleAuthClient() {
 }
 
 export async function getEvents(props: { public: boolean }): Promise<CalendarEvent[]> {
-
   const getTimeOfEvent = (event: any) => new Date(event!.start?.date ?? event!.start?.dateTime!).getTime();
   return (await Promise.all(
       Object.entries(calendarIds).filter(([, calendarId]) => site([
@@ -175,7 +174,7 @@ export const getEventsForUser = async (user: User) => {
   const calendarCacheId = "61b335996165305292000383";
 
   const privateCalendarAccess = user && user.permissions[Permission.PrivateCalendarAccess];
-  const events = await getEvents({public: !privateCalendarAccess});
+  const events = await getEvents({public: !privateCalendarAccess}).catch(() => null);
   if(events !== null){
     if(!privateCalendarAccess){
       cockpit.collectionSave("internal-data",{_id: calendarCacheId, data: {events, cache: new Date().toISOString()}});

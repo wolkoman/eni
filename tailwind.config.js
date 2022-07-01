@@ -20,6 +20,7 @@ module.exports = {
       },
       colors: {
         emmaus: "#2a6266",
+        'emmaus-sec':"#FF8A44",
         inzersdorf: "#139b91",
         neustift: "#f4ac11",
         gray: {

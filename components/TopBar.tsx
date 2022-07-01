@@ -6,15 +6,14 @@ export default function TopBar() {
   return <div className="flex flex-row justify-between py-4 px-10 lg:px-24 z-10" data-testid="navbar">
     <Link href="/">
       <div className="text-3xl cursor-pointer" data-testid="title">
-        {{
-          [SiteType.ENI]: <div className="flex space-x-4">
+        {site(<div className="flex space-x-4">
             <div>eni.wien</div>
             <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32 hidden"/>
           </div>,
-          [SiteType.EMMAUS]: <div className="flex space-x-4">
+            <div className="flex space-x-4">
             <div>tesarekplatz.at</div>
           </div>
-        }[siteType]}
+        )}
       </div>
     </Link>
     {site(<></>,<Link href="/menu"><div className="flex flex-col justify-center items-center md:hidden">

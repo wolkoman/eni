@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {getArticleLink, getCockpitImageUrl} from '../../components/Articles';
 import {cockpit} from '../../util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
-import {siteType, SiteType} from '../../util/sites';
+import {site, siteType, SiteType} from '../../util/sites';
 
 export default function Events(props: {articles: Collections['article'][]}) {
   return <Site title="Alle Beiträge">
@@ -23,7 +23,7 @@ export default function Events(props: {articles: Collections['article'][]}) {
 export async function getServerSideProps() {
   return {
     props: {
-      articles: (await cockpit.collectionGet('article', {filter: {platform: {[SiteType.ENI]: 'eni',[SiteType.EMMAUS]: 'emmaus'}[siteType]}, sort: {_created: -1}})).entries
+      articles: (await cockpit.collectionGet('article', {filter: {platform: site('eni', 'emmaus')}, sort: {_created: -1}})).entries
     }
   }
 }

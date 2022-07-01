@@ -34,6 +34,7 @@ export const useCalendarStore = create<{
             }), {})).map(([group, events]) => [group, get().groupByDate(events)]));
     },
     load: (jwt?: string) => {
+        console.log("loaded",get().loaded)
         if (get().loading && jwt === get().lastLoadedWithToken) return;
         if (get().loaded && jwt === get().lastLoadedWithToken) return;
         set(state => ({...state, loading: true}));
@@ -47,8 +48,7 @@ export const useCalendarStore = create<{
                 lastLoadedWithToken: jwt
             })))
             .catch(() => {
-                set(state => ({...state, items: [], loaded: false, loading: false, error: true}));
-                get().load(jwt);
+                set(state => ({...state, items: [], loaded: true, loading: false, error: true}));
             });
     }
 }));

@@ -3,7 +3,7 @@ import {Collections} from 'cockpit-sdk';
 import {cockpit} from '../../util/cockpit-sdk';
 import {useRouter} from 'next/router';
 import {Article as ArticleSite} from '../../components/Article';
-import {siteType, SiteType} from '../../util/sites';
+import {site, siteType, SiteType} from '../../util/sites';
 
 export default function Article({article}: { article: Collections['article'] }) {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function Article({article}: { article: Collections['article'] }) 
 export async function getServerSideProps(context: any) {
   const article = (await cockpit.collectionGet('article', {
     filter: {
-      platform: {[SiteType.ENI]: 'eni',[SiteType.EMMAUS]: 'emmaus'}[siteType],
+      platform: site('eni', 'emmaus'),
       _id: context.params.id
     }
   })).entries[0];
