@@ -5,8 +5,9 @@ import Responsive from "./Responsive";
 import {Collections} from "cockpit-sdk";
 import {cockpit} from "../util/cockpit-sdk";
 import {getCalendarInfo} from "../util/calendar-info";
+import Button from "./Button";
 
-export function Sections(props: { weeklies: Collections['weekly'][] }) {
+export function EniSections(props: { weeklies: Collections['weekly'][] }) {
     const weekly = props.weeklies[0]
     return <Responsive><Section title="Mitteilungen"><div className="space-y-12 my-12 max-w-2xl">
         <div className="flex flex-col md:flex-row items-start">
@@ -22,7 +23,7 @@ export function Sections(props: { weeklies: Collections['weekly'][] }) {
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                         <Link href={`${cockpit.host}/${weekly[info.id as 'emmaus']}`}>
-                            <div className={`${info.className} px-3 py-1 my-1 text-lg rounded cursor-pointer`}>{info.shortName}</div>
+                            <Button label={info.shortName} className={info.className}/>
                         </Link>
                     )}
                 </div>
@@ -44,13 +45,11 @@ export function Sections(props: { weeklies: Collections['weekly'][] }) {
                             inzersdorf: "https://www.pfarresanktnikolaus.at/wp/?page_id=89",
                             neustift: "https://www.erzdioezese-wien.at/pages/pfarren/9233/pfarrblatt"
                         }[info.id as 'emmaus']}>
-                            <div className={`${info.className} px-3 py-1 my-1 text-lg rounded cursor-pointer`}>
-                                {{
-                                    emmaus: "Emmausbote",
-                                    inzersdorf: "BLICKpunkt",
-                                    neustift: "IN-News"
-                                }[info.id as 'emmaus']}
-                            </div>
+                            <Button label={{
+                                emmaus: "Emmausbote",
+                                inzersdorf: "BLICKpunkt",
+                                neustift: "IN-News"
+                            }[info.id as 'emmaus']} className={info.className}/>
                         </Link>
                     )}
                 </div>

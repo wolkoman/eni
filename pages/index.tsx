@@ -5,7 +5,7 @@ import {Instagram, InstagramFeedItem} from '../components/Instagram';
 import {EniBranding} from '../components/EniBranding';
 import {EmmausBranding} from '../components/EmmausBranding';
 import {ComingUp} from '../components/calendar/ComingUp';
-import {Sections} from '../components/Sections';
+import {EniSections} from '../components/EniSections';
 import {site, siteType, SiteType} from '../util/sites';
 import TopBar from '../components/TopBar';
 import {fetchInstagramFeed} from "../util/fetchInstagram";
@@ -27,7 +27,7 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                 <EniBranding/>
                 <ComingUp/>
                 <Instagram items={props.instagram}/>
-                <Sections weeklies={props.weeklies}/>
+                <EniSections weeklies={props.weeklies}/>
             </>,
             () => <>
                 <div className="md:sticky inset-0 w-full" >

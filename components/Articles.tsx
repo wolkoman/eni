@@ -36,9 +36,9 @@ function ArticleCard(props: { article?: Collections['article'] }) {
 
 export default function Articles(props: { items: Collections['article'][], sites: Collections['site'][] }) {
     return <div className="my-20"><Responsive><Section id="aktuelles">
-        <div className="flex flex-col">
-            <div className="my-20">
-                <div className="text-5xl mb-20 flex flex-col justify-center text-center max-w-2xl mx-auto">
+        <div className="flex flex-col my-20">
+            <div>
+                <div className="text-2xl md:text-5xl mb-20 flex flex-col justify-center text-center max-w-2xl mx-auto">
                     „Am gleichen Tag waren zwei von den Jüngern auf dem Weg in ein Dorf namens Emmaus..“
                     <div className="text-lg font-bold text-emmaus">Lukas, 24:13</div>
                 </div>
@@ -49,6 +49,16 @@ export default function Articles(props: { items: Collections['article'][], sites
                         <ArticleCard article={props.items[2]}/>
                         <div className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle Beiträge</div>
                     </div>
+                </div>
+            </div>
+
+            <div>
+                <div className="grid md:grid-cols-3 gap-4 my-6">
+                    {props.sites.filter(site => site.level === 0).map(site =>
+                        <Link href={"/"+site.slug}>
+                        <div className="p-4 py-6 rounded border border-emmaus/20 hover:bg-emmaus/5 font-bold text-lg cursor-pointer text-center">{site.name}</div>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

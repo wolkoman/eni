@@ -11,7 +11,7 @@ export default function TopBar() {
             <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32 hidden"/>
           </div>,
             <div className="flex space-x-4">
-            <div>tesarekplatz.at</div>
+            <div>emmaus.wien</div>
           </div>
         )}
       </div>

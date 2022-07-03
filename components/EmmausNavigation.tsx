@@ -14,8 +14,8 @@ export function EmmausNavigation() {
             Pfarre Emmaus am Wienerberg
         </div>
         <div className="flex-wrap hidden md:flex">
-            <Button href="#aktuelles" name="Aktuelles"/>
             <Button href="#termine" name="Termine"/>
+            <Button href="#pfarrzeitung" name="Pfarrzeitung"/>
             <Button href="#pfarrleben" name="Pfarrleben"/>
             <Button href="#kontakt" name="Kontakt"/>
         </div>
