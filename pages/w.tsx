@@ -1,25 +1,21 @@
 import React, {useState} from 'react';
 import Site from '../components/Site';
 
-function Lied(){
-
+function Lied(lied: string[]) {
+    const [open,setOpen] = useState(false)
+    // @ts-ignore
+    return <div key={lied}>
+        <div className={"font-bold my-4 p-3 bg-black/10 rounded"} onClick={() => setOpen(!open)}>{lied[0]}</div>
+        {open && lied.slice(1).map(line => {
+            if (line.trim().startsWith("Refrain") || line.trim().startsWith("Strophe") || line.trim().startsWith("Bridge")) {
+                return <div className="italic mt-2">{line}</div>;
+            } else {
+                return <div className="text-lg">{line}</div>;
+            }
+        })}
+    </div>;
 }
-
 export default function HomePage() {
-    function getDiv(lied: string[]) {
-        const [open,setOpen] = useState(false)
-        // @ts-ignore
-        return <div key={lied}>
-            <div className={"font-bold my-4 p-3 bg-black/10 rounded"} onClick={() => setOpen(!open)}>{lied[0]}</div>
-            {open && lied.slice(1).map(line => {
-                if (line.trim().startsWith("Refrain") || line.trim().startsWith("Strophe") || line.trim().startsWith("Bridge")) {
-                    return <div className="italic mt-2">{line}</div>;
-                } else {
-                    return <div className="text-lg">{line}</div>;
-                }
-            })}
-        </div>;
-    }
     const [dark,setDark] = useState(false)
 
     return <Site responsive={true} navbar={false} footer={false}>
@@ -32,7 +28,7 @@ export default function HomePage() {
             <div className={`w-10 h-10 rounded-full flex-shrink-0 ${dark ? "bg-white": "bg-black "}`} onClick={() => setDark(!dark)}></div>
         </div>
 
-        {lieder.split("\n\n").map(lied => lied.split("\n")).map(lied => getDiv(lied))}
+        {lieder.split("\n\n").map(lied => lied.split("\n")).map(lied => Lied(lied))}
         </div>
 
     </Site>
