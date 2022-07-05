@@ -9,11 +9,11 @@ export default function EventPage() {
     useEffect(() => calendar.load(), [calendar.loaded]);
 
     return <div data-testid="calendar" className="relative">
-        <link rel="stylesheet" id="faith-webfonts-css"
-              href="//fonts.googleapis.com/css?family=Lato%3A400%2C400i%2C700%2C700i&#038;subset=latin%2Clatin-ext"
-              type="text/css" media="all"/>
-        <div className="flex-grow events mt-4 lg:px-0 relative font-[Lato]">
-            <div className="font-bold text-sm mb-4 text-[#000]">AKTUELLE VERANSTALTUNGEN:</div>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com"/>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"/>
+        <div className="flex-grow events mt-4 lg:px-0 relative font-[Rubik]">
+            <div className="font-bold text-sm mb-4 text-[#000] tracking-tighter">AKTUELLE VERANSTALTUNGEN:</div>
             {calendar.error && <CalendarErrorNotice/>}
             {calendar.loading && <LoadingEvents/>}
             {calendar.loading || calendar.items

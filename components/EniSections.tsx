@@ -2,13 +2,10 @@ import {Section} from './Section';
 import Link from 'next/link';
 import React from 'react';
 import Responsive from "./Responsive";
-import {Collections} from "cockpit-sdk";
-import {cockpit} from "../util/cockpit-sdk";
 import {getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
 
-export function EniSections(props: { weeklies: Collections['weekly'][] }) {
-    const weekly = props.weeklies[0]
+export function EniSections() {
     return <Responsive><Section title="Mitteilungen"><div className="space-y-12 my-12 max-w-2xl">
         <div className="flex flex-col md:flex-row items-start">
             <img src="./info-01.svg" className="w-32 mr-8"/>
@@ -22,7 +19,7 @@ export function EniSections(props: { weeklies: Collections['weekly'][] }) {
                 </div>
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
-                        <Link href={`${cockpit.host}/${weekly[info.id as 'emmaus']}`}>
+                        <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
                             <Button label={info.shortName} className={info.className}/>
                         </Link>
                     )}
@@ -40,7 +37,7 @@ export function EniSections(props: { weeklies: Collections['weekly'][] }) {
                 </div>
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
-                        <Link href={{
+                        <Link key={info.id} href={{
                             emmaus: "https://tesarekplatz.at/aktuell/emmausbote",
                             inzersdorf: "https://www.pfarresanktnikolaus.at/wp/?page_id=89",
                             neustift: "https://www.erzdioezese-wien.at/pages/pfarren/9233/pfarrblatt"

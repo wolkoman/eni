@@ -4,7 +4,7 @@ import Site from "./Site";
 import React, {ReactNode} from "react";
 
 export const Article = (props: {image?: string, title: string, created?: number, author?: string, children: ReactNode}) => {
-    return <Site navbar={false} responsive={false}>
+    return <Site navbar={false} responsive={false} title={props.title}>
         <div className={`relative ${props.image ? 'text-white' :''}`}>
             {props.image && <div className="absolute w-full h-full top-0 left-0 overflow-x-hidden"
                  style={{

@@ -36,7 +36,7 @@ export default function Events() {
         return data.username.length === 0 || data.password.length === 0;
     }
 
-    return <Site navbar={false} responsive={false} footer={false}>
+    return <Site navbar={false} responsive={false} footer={false} title="Login">
         <div
             className="w-full h-screen relative flex flex-col justify-center items-center bg-[url(/bg-login.svg)] bg-cover bg-center">
             <div

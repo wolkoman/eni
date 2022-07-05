@@ -27,13 +27,13 @@ export default function Footer() {
                     <Link href="/impressum">
                         <div className="cursor-pointer underline hover:no-underline mb-5">Impressum</div>
                     </Link>
-                    {<>{isLoggedIn
+                    {isLoggedIn
                         ? <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
                             <div className="cursor-pointer underline hover:no-underline mb-5">Zum Mitgliedsbereich</div>
                         </Link>
                         : <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
                             <Button label="Login"/>
-                        </Link>}</>}
+                        </Link>}
                 </div>
             </Responsive>
         </div>

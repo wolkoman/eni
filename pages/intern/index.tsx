@@ -26,7 +26,7 @@ export default function Intern() {
           <div className="my-8 text-xl">Administration</div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             <InternButton href="intern/artikel" label="Importer"/>
-            <InternButton href="intern/news" label="Wochenmitteilung"/>
+            <InternButton href="intern/weekly" label="Wochenmitteilung"/>
           </div>
         </>}
     </Site>
@@ -35,7 +35,7 @@ export default function Intern() {
 function InternButton({href, label, onClick}: { href?: string, label: string, onClick?: () => any }) {
     return <Link href={href ?? ''}>
         <div onClick={onClick}
-             className="h-32 bg-white shadow rounded-xl flex justify-center items-center text-lg cursor-pointer text-xl border border-black/10 hover:bg-black/[3%] ">
+             className="h-32 bg-white rounded-xl flex justify-center items-center text-lg cursor-pointer text-xl border-2 border-black/10 hover:bg-black/[3%] ">
             {label}
         </div>
     </Link>;

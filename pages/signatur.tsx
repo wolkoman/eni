@@ -121,7 +121,7 @@ export default function HomePage() {
 
     <div className="text-lg font-bold">Signatur</div>
     {/* @ts-ignore */}
-    <div style={{padding: 20, border: "1px solid grey"}} contentEditable="true" ref={divRef}>
+    <div style={{padding: 20, border: "1px solid grey"}} ref={divRef}>
       <Signatur signatur={signatur}/>
     </div>
 
