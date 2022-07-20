@@ -8,7 +8,7 @@ export async function fetchInstagramFeed(){
     return await fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,username,timestamp,caption&limit=100&access_token=${instagramToken}`)
         .then(response => response.json())
         .then(response => response.data
-            ?.filter((post: any) => post.caption.toLowerCase().includes(site('', 'emmaus')))
+            ?.filter((post: any) => post.caption?.toLowerCase().includes(site('', 'emmaus')))
             .slice(0, 7) ?? []
         );
 

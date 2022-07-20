@@ -35,8 +35,7 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
                     Das Wochenblatt
                 </div>
                 <div className="text-lg my-3">
-                    Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles
-                    mehr finden Sie im Emmausboten.
+                    Wöchentliche Termine und Ankündigungen. Immer was neu, im Wochenblatt!
                 </div>
                 <div className="flex space-x-2">
                     <Link href={getCockpitImageUrl(blatt.emmaus)}>
