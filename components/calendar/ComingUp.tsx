@@ -11,7 +11,7 @@ import Link from "next/link";
 import {useEmmausProd} from "../../utils/use-emmaus-prod";
 
 function getGroupSorting(group: string) {
-    return ['Gebet & Bibel', 'Gottesdienst', 'Advent', 'Weihnachten', 'Heilige Messe'].indexOf(group);
+    return ['Gebet & Bibel', 'Wallfahrt', 'Gottesdienst', 'Advent', 'Weihnachten', 'Heilige Messe'].indexOf(group);
 }
 
 export function ComingUp({}) {

@@ -37,6 +37,7 @@ const liturgyRegex = /(Messe|Rorate)/gi;
 
 function getGroupFromEvent(event: any): string[] {
   let conditions: ((x: CalendarEvent) => string | false)[] = [
+    x => x.summary.toLowerCase().includes("wallfahrt") && "Wallfahrt",
     x => x.summary.toLowerCase().startsWith("taufe") && "Taufe",
     x => x.summary.toLowerCase().startsWith("grabwache") && "Grabwache",
     x => x.summary.toLowerCase().includes("messe") && "Heilige Messe",
