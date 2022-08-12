@@ -180,7 +180,7 @@ export const getEventsForUser = async (user: User) => {
   const privateCalendarAccess = user && user.permissions[Permission.PrivateCalendarAccess];
   const events = await getEvents({public: !privateCalendarAccess}).catch(() => null);
   if(events !== null){
-    if(!privateCalendarAccess){
+    if(!privateCalendarAccess && site(true, false)){
       cockpit.collectionSave("internal-data",{_id: calendarCacheId, data: {events, cache: new Date().toISOString()}});
     }
     return {events, cache: null};
