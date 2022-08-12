@@ -42,8 +42,8 @@ export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
       address: 'Tesarekplatz 2, 1100 Wien',
       image: '/logos_Emmaus Stroke.svg',
       imageColor: '/logos_Emmaus Fade.svg',
-      websiteUrl: 'https://tesarekplatz.at',
-      websiteDisplay: 'tesarekplatz.at',
+      websiteUrl: 'https://emmaus.wien/',
+      websiteDisplay: 'emmaus.wien',
       description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik
         errichtet.</>,
     },

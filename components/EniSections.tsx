@@ -38,7 +38,7 @@ export function EniSections() {
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                         <Link key={info.id} href={{
-                            emmaus: "https://tesarekplatz.at/aktuell/emmausbote",
+                            emmaus: "https://emmaus.wien/#pfarrzeitung",
                             inzersdorf: "https://www.pfarresanktnikolaus.at/wp/?page_id=89",
                             neustift: "https://www.erzdioezese-wien.at/pages/pfarren/9233/pfarrblatt"
                         }[info.id as 'emmaus']}>
