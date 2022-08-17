@@ -18,6 +18,15 @@ module.exports = {
         'sans': ['Source Sans Pro'],
         'serif': ['Source Serif Pro'],
       },
+      animation: {
+        wiggle: 'wiggle 0.5s ease-out 0s 1 normal both running',
+      },
+      keyframes: {
+        wiggle: {
+          '0%': { transform: 'translateY(100px)', opacity: 0 },
+          '100%': { transform: 'translateY(0px)', opacity: 1 },
+        }
+      },
       colors: {
         emmaus: "#2a6266",
         'emmaus-sec':"#FF8A44",

@@ -8,7 +8,7 @@ import eniAnimation from "../public/eni_animation.json";
 
 export function EniBranding() {
 
-    return <div className="overflow-x-hidden"><Responsive>
+    return <div className="overflow-hidden"><Responsive>
         <div className="md:pt-12 relative">
             <div className="text-6xl font-bold pt-16 text-center z-10 relative">
                 <div className="relative">
@@ -31,9 +31,10 @@ export function EniBranding() {
             <div className="flex flex-col md:flex-row justify-center md:space-x-4 relative">
                 {(['emmaus', 'inzersdorf', 'neustift'] as Calendar[])
                     .map(calendar => getCalendarInfo(calendar))
-                    .map(calendar =>
+                    .map((calendar, index) =>
                         <div key={calendar.image}
-                             className={`rounded-xl md:w-64 flex flex-row md:flex-col bg-white border-8 border-white z-10`}>
+                             style={{animationDelay: (0.25+index* 0.25) + "s"}}
+                             className={`rounded-xl md:w-64 flex flex-row md:flex-col bg-white border-8 border-white z-10 animate-wiggle`}>
                             <div className={`${calendar.className} flex-shrink-0 rounded-lg w-32 md:w-auto`}>
                                 <div
                                     className="flex justify-center items-end from-white to-transparent bg-gradient-to-l sm:bg-gradient-to-t w-full h-full">
