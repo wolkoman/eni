@@ -1,9 +1,9 @@
 import React from 'react';
-import Link from 'next/link';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
 import {useUserStore} from '../../util/use-user-store';
+import {InternButton} from "../../components/InternButton";
 
 export default function Intern() {
     const [permissions, user, logout] = useUserStore(state => [state.user?.permissions, state.user, state.logout]);
@@ -32,11 +32,3 @@ export default function Intern() {
     </Site>
 }
 
-function InternButton({href, label, onClick}: { href?: string, label: string, onClick?: () => any }) {
-    return <Link href={href ?? ''}>
-        <div onClick={onClick}
-             className="h-32 bg-white rounded-xl flex justify-center items-center text-lg cursor-pointer text-xl border-2 border-black/10 hover:bg-black/[3%] ">
-            {label}
-        </div>
-    </Link>;
-}

@@ -6,19 +6,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: req.body.articleId}})).entries[0];
 
-    if(!article){
+    if (!article) {
         res.status(400).end();
         return;
     }
     const user = resolveUserFromRequest(req);
-    if(article.status !== 'writing' && !user?.permissions[Permission.Editor]){
+    if (article.status !== 'writing' && !user?.permissions[Permission.Editor]) {
         res.status(401).end();
         return;
     }
 
-    const textId = (await cockpit.collectionGet('paper_texts', {filter: {article: req.body.articleId}})).entries?.[0]?._id;
+    const entries = (await cockpit.collectionGet('paper_texts', {
+        filter: {article: req.body.articleId},
+        sort: {_created: -1}
+    })).entries;
+    console.log(entries[0]);
+    const latestText = entries?.[0];
+    let latestTextId: string | null = latestText?._id;
 
-    await cockpit.collectionSave('paper_texts', {_id: textId, article: {_id: req.body.articleId}, text: req.body.text});
+    let createNew = latestText?._created + 60*10 < new Date().getTime()/1000;
+    console.log("new", createNew,"latest text", new Date((latestText?._created + 60*10)*1000), "deadline", new Date(new Date().getTime()))
+    if(createNew){
+        latestTextId = null;
+    }
+
+    await cockpit.collectionSave('paper_texts', {
+        _id: latestTextId,
+        article: {_id: req.body.articleId},
+        text: req.body.text,
+    });
 
     res.status(200).json({});
 

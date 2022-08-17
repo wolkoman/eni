@@ -43,7 +43,7 @@ declare module 'cockpit-sdk' {
     } & Object,
     paper_texts: {
       article: Reference,
-      text: string
+      text: string,
     } & Object,
     paper_projects: {
       name: string,
