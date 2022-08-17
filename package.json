@@ -15,7 +15,7 @@
     "aesthetically": "^0.0.5",
     "bufferutil": "^4.0.6",
     "cockpit-sdk": "^0.15.1",
-    "easy-template-x": "^2.1.0",
+    "easy-template-x": "^3.0.0",
     "fast-xml-parser": "^4.0.8",
     "googleapis": "^100.0.0",
     "jsonwebtoken": "^8.5.1",
