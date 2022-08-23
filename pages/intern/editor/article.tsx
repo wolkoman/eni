@@ -3,7 +3,7 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import {cockpit} from "../../../util/cockpit-sdk";
 import {fetchJson} from "../../../util/fetch-util";
-import {Router, useRouter} from "next/router";
+import {useRouter} from "next/router";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
 import {saveFile} from "../../../util/save-file";
@@ -19,7 +19,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     const router = useRouter();
 
     function MoreOptions(cprops: { editable: any, onSave: () => Promise<void>, saved: "saving" | "saved" | "justnow" | "error", permission: any, value: any, disabled: boolean, onSaveStatusChange: (status: Collections['paper_articles']['status']) => any, onFinish: () => void }) {
-        return <div className="flex space-x-2">
+        return <div className="flex space-x-2 text-black/80">
             {cprops.editable && <Button label="Speichern" secondary={true} onClick={cprops.onSave}
                                         disabled={cprops.saved === "saving" || cprops.saved === "saved"}/>}
             {cprops.permission ? <>
@@ -53,7 +53,10 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     useEffect(() => {
         setLength(text.length);
-        setNote(text.length < +props.article.char_min ? 'unfinished' : (text.length > +props.article.char_max ? 'excess' : 'perfect'));
+        setNote(text.length < +props.article.char_min
+            ? 'unfinished'
+            : (text.length > +props.article.char_max ? 'excess' : 'perfect')
+        );
         setSaved(x => x === 'saved' ? 'justnow' : x);
         if (text.length > +props.article.char_max + 100 && !warning.active) {
             setWarning({open: true, active: true});
@@ -185,15 +188,15 @@ export default function Index(props: { article: Collections['paper_articles'], p
                     </div>}
                 <textarea
                     readOnly={!editable}
-                    className={`w-full h-full outline-none font-serif text-lg p-2 rounded ${{
-                        unfinished: `border border-black/80`,
+                    className={`w-full h-full outline-none font-serif text-lg p-4 rounded ${{
+                        unfinished: `border border-black/50`,
                         perfect: `border-2 border-green-700`,
                         excess: 'border-2 border-red-600',
                     }[note]}`}
                     onChange={e => setText(e.target!.value)} defaultValue={props.versions[0]?.text ?? ''}>
             </textarea></Responsive></div>
             <div className={`py-2 px-4 transition-all ${{
-                unfinished: `bg-black/5`,
+                unfinished: ``,
                 perfect: `text-green-700 font-bold`,
                 excess: 'bg-red-600 text-white font-bold',
             }[note]}`}><Responsive className="w-full flex justify-between">

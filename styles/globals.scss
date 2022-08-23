@@ -111,7 +111,11 @@ body {
 .border-neustift{ border-color: #f4ac11; }
 
 .text-stroke {
-  -webkit-text-stroke: 18px white;
+  -webkit-text-stroke: 12px white;
+  z-index:-1;
+}
+.text-stroke-sm {
+  -webkit-text-stroke: 2px white;
   z-index:-1;
 }
 
