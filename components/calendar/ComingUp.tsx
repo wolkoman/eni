@@ -9,6 +9,7 @@ import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 import {useEmmausProd} from "../../utils/use-emmaus-prod";
+import {ShadowEvent} from "./Calendar";
 
 function getGroupSorting(group: string) {
     return ['Gebet & Bibel', 'Wallfahrt', 'Gottesdienst', 'Advent', 'Weihnachten', 'Heilige Messe'].indexOf(group);
@@ -45,7 +46,13 @@ export function ComingUp({}) {
                 <div className="grid md:grid-cols-2 gap-4">
                     {calendar.loading && Array(5).fill(0).map((x, i) =>
                         <div key={i}
-                             className="shimmer h-96 border-4 overflow-hidden relative rounded-2xl border border-black/10 relative px-4 py-2 pb-12 shadow"/>
+                             className="animate-pulse h-96 border-4 overflow-hidden relative rounded-2xl border border-black/10 relative px-4 py-2 pb-12 shadow">
+                            <div className="bg-black/20 mx-auto mt-2 mb-5 w-36 h-6 rounded"/>
+                            <ShadowEvent width={150}/>
+                            <ShadowEvent width={90} description={true}/>
+                            <ShadowEvent width={110}/>
+                            <div className="absolute bottom-0 left-0 w-full bg-black/10 h-10"/>
+                        </div>
                     )}
 
                     {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
@@ -53,13 +60,12 @@ export function ComingUp({}) {
                                 key={group}
                                 className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-black/10 relative px-4 py-2 pb-12">
                                 <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}>
-                                    <div
-                                        className="absolute w-full h-10 left-0 bottom-0 bg-[#fff]">
-                                        <div
-                                            className="absolute top-0 left-0 w-full h-full bg-black/10 hover:pl-5 transition-all hover:bg-black/5 pt-2 cursor-pointer">
+                                    <div className="absolute w-full h-10 left-0 bottom-0 bg-[#fff]">
+                                        <div className="w-full h-full bg-black/10 hover:pl-5 transition-all hover:bg-black/5 pt-2 cursor-pointer">
                                             <div className="flex justify-center items-center space-x-2">
-                                                Alle {group} Termine
-                                                <Icon/></div>
+                                                <div>Alle {group} Termine</div>
+                                                <Icon/>
+                                            </div>
                                         </div>
                                     </div>
                                 </Link>
