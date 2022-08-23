@@ -30,7 +30,7 @@ function Signatur({signatur}: {signatur:{ address: string; mail: string; name: s
       {signatur.address && <div>{signatur.address}</div>}
       <div>
         <img
-            src="https://eni.wien/landing-27.svg" width="500"/>
+            src="https://eni.wien/signatur.svg" width="500"/>
       </div>
     </div>
   </div>;
