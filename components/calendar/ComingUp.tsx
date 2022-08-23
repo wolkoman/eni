@@ -54,7 +54,6 @@ export function ComingUp({}) {
                             <div className="absolute bottom-0 left-0 w-full bg-black/10 h-10"/>
                         </div>
                     )}
-
                     {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
                         .map(([group, calendar]) => <div
                                 key={group}
