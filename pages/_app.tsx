@@ -3,7 +3,6 @@ import * as React from 'react';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/toast-override.scss";
-import "swiper/css/bundle";
 import {useEffect, useState} from 'react';
 import {useOverlayStore} from '../util/use-overlay-store';
 
