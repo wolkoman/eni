@@ -1,8 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {cockpit} from '../../util/cockpit-sdk';
 import {doubleHash, resolveUserFromRequest} from '../../util/verify';
-import {createHash} from 'crypto';
-import {Collections} from 'cockpit-sdk';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

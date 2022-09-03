@@ -19,20 +19,20 @@ export function applyFilter(events: CalendarEvent[], filter: FilterType, group?:
 
 }
 
-export const LoadingEvents = () => <>
+export const LoadingEvents = () => <div className="animate-pulse">
   <ShadowEventDate/>
   {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===0}/>)}
   <ShadowEventDate/>
   {[180, 120].map((width, index) => <ShadowEvent key={index} width={width} description={index===2}/>)}
-</>
-const ShadowEventDate = () => <div className="w-36 h-4 mb-1.5 mt-4 shimmer"/>
-const ShadowEvent = ({width, description}: { width: number, description: boolean }) => <div className="flex mb-3">
-  <div className="w-10 h-5 shimmer rounded mr-2"/>
-  <div className="w-14 h-5 shimmer rounded mr-2"/>
+</div>
+const ShadowEventDate = () => <div className="w-36 h-4 mb-1.5 mt-4 rounded bg-black/10"/>
+export const ShadowEvent = ({width, description}: { width: number, description?: boolean }) => <div className="flex mb-3">
+  <div className="w-10 h-5 bg-black/10 rounded mr-2"/>
+  <div className="w-14 h-5 bg-black/20 rounded mr-2"/>
   <div>
-    <div className="h-5 shimmer rounded mr-2" style={{width}}/>
-    <div className="h-3 shimmer rounded mt-0.5" style={{width, display: description ? '':'none'}}/>
-    <div className="h-3 shimmer rounded mt-0.5" style={{width: width / 2, display: description ? '':'none'}}/>
+    <div className="h-5 bg-black/10 rounded mr-2" style={{width}}/>
+    <div className="h-3 bg-black/10 rounded mt-0.5" style={{width, display: description ? '':'none'}}/>
+    <div className="h-3 bg-black/10 rounded mt-0.5" style={{width: width / 2, display: description ? '':'none'}}/>
   </div>
 </div>
 

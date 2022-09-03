@@ -13,17 +13,21 @@ export function EniBranding() {
             <div className="text-6xl font-bold pt-16 text-center z-10 relative">
                 <div className="relative">
                     {site('Eine Neue Initiative', 'emmaus am wienerberg')}
-                    <div className="absolute top-0 left-0 w-full text-stroke">
+                    <div className="absolute inset-0 text-stroke">
                         {site('Eine Neue Initiative', 'emmaus am wienerberg')}
                     </div>
                 </div>
             </div>
             <div className="text-xl pb-16 text-center z-10 relative">
-                {site('Drei katholische Pfarren im Dekanat 23, Wien', 'emmaus am wienerberg')}
+                Drei katholische Pfarren im Dekanat 23, Wien
+                <div className="absolute inset-0 text-stroke-sm">
+                    Drei katholische Pfarren im Dekanat 23, Wien
+                </div>
             </div>
             <Lottie
                 animationData={eniAnimation}
                 play
+                
                 loop={false}
                 className="absolute top-24 md:top-16 scale-[450%] md:scale-[200%] left-28"
             >

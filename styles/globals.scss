@@ -2,8 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap');
+@font-face {
+  font-family: "Source Sans Pro";
+  font-weight: 400;
+  src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSansPro-Regular_uid_6304deb300d3f.ttf");
+}
+@font-face {
+  font-family: "Source Sans Pro";
+  font-weight: 600;
+  src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSansPro-SemiBold_uid_6304deb18f192.ttf");
+}
+@font-face {
+  font-family: "Source Sans Pro";
+  font-weight: 700;
+  src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSansPro-Bold_uid_6304deb2b223a.ttf");
+}
+
+@font-face {
+  font-family: "Source Serif Pro";
+  font-weight: 400;
+  src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSerifPro-Regular_uid_6304deb22e566.ttf");
+}
+@font-face {
+  font-family: "Source Serif Pro";
+  font-weight: 600;
+  src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSerifPro-SemiBold_uid_6304deb27aa1d.ttf");
+}
+@font-face {
+  font-family: "Source Serif Pro";
+  font-weight: 700;
+  src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSerifPro-Bold_uid_6304deb1dc999.ttf");
+}
+
 
 html{
   scroll-behavior: smooth;
@@ -81,7 +111,11 @@ body {
 .border-neustift{ border-color: #f4ac11; }
 
 .text-stroke {
-  -webkit-text-stroke: 18px white;
+  -webkit-text-stroke: 12px white;
+  z-index:-1;
+}
+.text-stroke-sm {
+  -webkit-text-stroke: 2px white;
   z-index:-1;
 }
 
