@@ -86,7 +86,7 @@ function getGroupFromEvent(event: any): string[] {
       .filter((group): group is string => !!group);
 
   if(groups.length === 0 && event.visibility !== "private"){
-    notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
+    //notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
   }
 
   return groups.length === 0 ? [event.summary] : groups.filter(group => group !== "_");
