@@ -187,7 +187,7 @@ export const getEventsForUser = async (user: User) => {
             cockpit.collectionSave("internal-data", {
                 _id: calendarCacheId,
                 data: {events, cache: new Date().toISOString()}
-            }).catch(() => notifyAdmin("Cache Save failed"));
+            }).catch();
         }
         return {events, cache: null};
     } else {
