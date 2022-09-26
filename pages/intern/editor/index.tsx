@@ -1,7 +1,6 @@
 import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
-import Link from "next/link";
 import {fetchJson} from "../../../util/fetch-util";
 import {useUserStore} from "../../../util/use-user-store";
 import {InternButton} from "../../../components/InternButton";

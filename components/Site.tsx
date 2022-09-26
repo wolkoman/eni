@@ -24,7 +24,7 @@ export default function Site(props: {
             {props.keywords && <meta name="keywords" content={props.keywords.join(", ")}/>}
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">
-            <div>
+            <div className="flex-grow flex flex-col items-stretch">
                 {(props.navbar ?? true) && <TopBar/>}
                 {(props.responsive ?? true) ? <Responsive narrow={props.narrow}>
                     {props.title ? <div className="font-bold text-2xl my-4">{props.title}</div> : null}

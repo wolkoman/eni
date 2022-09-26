@@ -14,8 +14,11 @@ export default function Events() {
     const router = useRouter();
 
     useEffect(() => {
+        console.log({user});
         if (!user?.active) {
             setData({username: '', password: ''});
+        }else{
+            router.push("/intern");
         }
     }, [user]);
 

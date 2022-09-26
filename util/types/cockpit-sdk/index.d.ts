@@ -37,7 +37,7 @@ declare module 'cockpit-sdk' {
       name: string,
       username: string,
       parish: 'emmaus' | 'inzersdorf' | 'neustift' | 'all',
-      competences: ('organ' | 'calendar' | 'admin')[],
+      competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing')[],
       code?: string,
       email?: string,
     } & Object,

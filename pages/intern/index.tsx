@@ -17,6 +17,7 @@ export default function Intern() {
             <InternButton href="/termine" label="Termine"/>
             {permissions?.[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
             {permissions?.[Permission.Editor] && <InternButton href="intern/editor" label="Redaktion"/>}
+            {permissions?.[Permission.LimitedEventEditing] && <InternButton href="intern/limited-event-editing" label="Musik Inzersdorf"/>}
             <InternButton href="https://forms.gle/vCeFKfYwXL7E8ct7A" label="Feedback"/>
             {user?.is_person && <InternButton href="intern/change-password" label="Passwort ändern"/>}
             {user && !user?.is_person && <InternButton href="https://data.eni.wien" label="Cockpit"/>}
