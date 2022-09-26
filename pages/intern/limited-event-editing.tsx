@@ -6,10 +6,12 @@ import {Permission} from "../../util/verify";
 import {useUserStore} from "../../util/use-user-store";
 import {CalendarEvent} from "../../util/calendar-events";
 import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
+import {fetchJson} from "../../util/fetch-util";
 
-const musicDescriptionMatch = /(?<=^Musikal\. Gestaltung: )(.*)(?=$)/m;
+export const musicDescriptionMatch = /(?<=^Musikal\. Gestaltung: )(.*)(?=$)/m;
 export default function LimitedEventEditing() {
-    const [event, setEvent] = useState<(CalendarEvent & {music?: string}) | undefined>();
+    const [music, setMusic] = useState("");
+    const [event, setEvent] = useState<CalendarEvent | undefined>();
     const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);
     const [loading, loaded, load, events, group] = useCalendarStore(state => [state.loading, state.loaded, state.load, state.items, state.groupByDate]);
     const jwt = useUserStore(state => state.jwt);
@@ -29,10 +31,22 @@ export default function LimitedEventEditing() {
         );
     }, [events]);
     useEffect(() => {
-        if(!event) return;
+        if (!event) return;
         const match = (event.description ?? "").match(musicDescriptionMatch) ?? [''];
-        event.music = match[0] ?? "";
+        console.log(match);
+        setMusic(match[0] ?? "");
     }, [event]);
+
+    function saveMusic() {
+        fetchJson("/api/calendar/music", {json: {music, eventId: event?.id}, jwt}, {
+            success: "Musik wurde gespeichert",
+            error: "Ein Fehler hat das Speichern verhindert",
+            pending: "Musik wird gespeichert..."
+        }).then(event => {
+            load(jwt);
+            setEvent(event);
+        });
+    }
 
     return <Site title="Termine bearbeiten">
         <div className="mt-8 grid md:grid-cols-2 flex-grow overflow-y-auto flex-[1_0_0] gap-6 bg-black/10 rounded-lg">
@@ -47,13 +61,21 @@ export default function LimitedEventEditing() {
                         event={event} permissions={{}}/></div>)}
                 </div>)}
             </div>
-            <div className=" my-8">
+            {event && <div className="flex flex-col my-8">
                 <div className="text-3xl font-bold my-4">{event?.summary}</div>
-                <div className="text-lg my-2"><EventDateText date={new Date(event?.date!)}/></div>
-                <div className="text-lg my-2">{new Date(event?.start.dateTime!).toLocaleTimeString()}</div>
-                <div className="text-lg my-2">{event?.description}</div>
-                <input className="text-lg my-2" defaultValue={event?.music ?? ""}></input>
-            </div>
+                <div className="text-lg my-1"><EventDateText
+                    date={new Date(event?.date!)}/>, {new Date(event?.start.dateTime!).toLocaleTimeString()}</div>
+                <div className="text-lg my-1">{event?.description}</div>
+                <div className="flex-grow flex flex-col justify-end">
+                    <div>Musikalische Gestaltung</div>
+                    <div className="flex">
+                        <input className="text-lg px-2 py-1" value={music}
+                               onChange={({target}) => setMusic(target.value)}></input>
+                        <button className="bg-emmaus text-white px-4 hover:opacity-80" onClick={saveMusic}>Speichern
+                        </button>
+                    </div>
+                </div>
+            </div>}
         </div>
     </Site>
 }
