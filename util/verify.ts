@@ -19,9 +19,9 @@ export function resolvePermissionsForGroup(group: CockpitUser['group'] = ''): Pe
     [Permission.Articles]: ['admin', 'master'].includes(group),
     [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'OrganMaster', 'admin', 'master'].includes(group),
     [Permission.Admin]: ['admin', 'master'].includes(group),
-    [Permission.Editor]: ['admin', 'master'].includes(group),
+    [Permission.Editor]: ['admin', 'master', 'ArticleEditor'].includes(group),
     [Permission.OrganBooking]: ['admin', 'OrganAccess', 'OrganMaster'].includes(group),
-    [Permission.LimitedEventEditing]: ['admin', 'master'].includes(group),
+    [Permission.LimitedEventEditing]: ['admin', 'master', 'OrganMaster'].includes(group),
   };
 }
 
