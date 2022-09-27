@@ -6,6 +6,7 @@ import {fetchJson} from "../../../util/fetch-util";
 import {useUserStore} from "../../../util/use-user-store";
 import {useRouter} from "next/router";
 import {InternButton} from "../../../components/InternButton";
+import Button from "../../../components/Button";
 
 export default function Index() {
 
@@ -18,25 +19,27 @@ export default function Index() {
     }, [projectId, jwt])
 
     return <Site title="Projekte der Redaktionen">
-        <div className="flex">
-            <Link href=".">
-                <div className="m-2 cursor-pointer bg-black/5 px-3 py-1 rounded">Zurück</div>
-            </Link>
+        <div className="flex mb-4">
+            <Link href="."><Button label="Zurück" secondary={true}/></Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 m-2">
-            {articles?.map(article => <InternButton href={`article?articleId=${article._id}`} key={article._id}>
-                <div className="text-2xl font-bold line-clamp-1 mx-4">
-                    <div className={`inline-block w-4 h-4 rounded ${{
-                        'finished': 'bg-black',
-                        'corrected': 'bg-green-700',
-                        'written': 'bg-green-300',
-                        'writing': 'bg-yellow-400'
-                    }[article.status]}`}/>
-                    {article.name}</div>
-                <div className="text-lg line-clamp-1">{article.author}</div>
-                <div className="text-lg line-clamp-1">{article.char_min} - {article.char_max} Zeichen</div>
-            </InternButton>)}
-
-        </div>
+        <table className="table-auto border-collapse">
+            <tbody>
+            {articles?.map(article => <tr className="border-b border-black/10 md:text-lg">
+                <td className="font-bold p-2">
+                    <a href={`article?articleId=${article._id}`}
+                       key={article._id} className="flex items-center space-x-2">
+                        <div className={`w-4 h-4 shrink-0 rounded ${{
+                            'finished': 'bg-black',
+                            'corrected': 'bg-green-700',
+                            'written': 'bg-green-300',
+                            'writing': 'bg-yellow-400'
+                        }[article.status]}`}/>
+                        <div>{article.name}</div>
+                        </a></td>
+                <td>{article.author}</td>
+                <td>{article.char_min} - {article.char_max}<span className="hidden md:inline"> Zeichen</span></td>
+            </tr>)}
+            </tbody>
+        </table>
     </Site>
 }

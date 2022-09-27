@@ -124,8 +124,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
         </Modal>}
         {warning.open && <Modal>
             <div className="text-lg font-bold">Achtung, Zeichenlimit!</div>
-            <div className="text-lg mb-2">Sie haben das Zeichenlimit weit überschritten.<br/>Bitte beachten Sie die
-                Richtlinien zum Schreiben von Beiträgen.
+            <div className="text-lg mb-2">Sie haben das Zeichenlimit weit überschritten.
             </div>
             <div className="space-x-2">
                 <Button label="Okay" onClick={() => setWarning(value => ({...value, open: false}))}></Button>
@@ -151,7 +150,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
                             <div>
                                 <div className="flex flex-row text-black/80">
                                     <div
-                                        className="text-2xl mr-2 -mb-2 font-bold line-clamp-1">{props.project.name} {props.article.name}</div>
+                                        className="text-2xl mr-2 -mb-2 font-bold line-clamp-1">{props.article.name}</div>
                                 </div>
                                 <div className="text-sm line-clamp-1">{props.article.author} (Deadline: {new Date(props.project.deadline).toLocaleDateString()})</div>
                             </div>
@@ -199,13 +198,13 @@ export default function Index(props: { article: Collections['paper_articles'], p
                 unfinished: ``,
                 perfect: `text-green-700 font-bold`,
                 excess: 'bg-red-600 text-white font-bold',
-            }[note]}`}><Responsive className="w-full flex justify-between">
-                <div className="text-sms">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
-                <div className={`text-sms px-2 rounded `}>{{
+            }[note]}`}><Responsive><div className="flex justify-between">
+                <div className="">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
+                <div className={`px-2 rounded`}>{{
                     unfinished: `${Math.round(200 * length / (+props.article.char_min + +props.article.char_max))}%`,
                     perfect: `100%`,
                     excess: `${length - +props.article.char_max} Zeichen Überschuss`,
-                }[note]}</div>
+                }[note]}</div></div>
             </Responsive></div>
         </div>
     </Site>
