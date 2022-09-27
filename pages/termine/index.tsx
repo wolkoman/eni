@@ -4,7 +4,7 @@ import {applyFilter, FilterType, LoadingEvents} from '../../components/calendar/
 import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
-import {useCalendarStore} from '../../util/use-calendar-store';
+import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
@@ -43,7 +43,7 @@ export default function EventPage() {
                         <div className="font-bold text-4xl mb-6">Termine</div>}
                     {calendar.error && <CalendarErrorNotice/>}
                     {calendar.loading && <LoadingEvents/>}
-                    {calendar.loading || Object.entries(calendar.groupByDate(applyFilter(calendar.items, filter, q as string)))
+                    {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, q as string)))
                         .map(([date, events]) => <div key={date} data-date={date}>
                             <EventDate date={new Date(date)}/>
                             {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}

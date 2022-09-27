@@ -17,8 +17,17 @@ import {EmmausSections} from "../components/EmmausSections";
 import {EmmausNavigation} from "../components/EmmausNavigation";
 import {Section} from "../components/Section";
 import Responsive from "../components/Responsive";
+import {CalendarEvent, EventsObject, getCachedEvents} from "../util/calendar-events";
 
-export default function HomePage(props: { instagram: InstagramFeedItem[], articles: any[], weeklies: Collections['weekly'][], sites: Collections['site'][] }) {
+export default function HomePage(
+    props: {
+        eventsObject: EventsObject,
+        instagram: InstagramFeedItem[],
+        articles: any[],
+        weeklies: Collections['weekly'][],
+        sites: Collections['site'][]
+    }
+) {
     return site(() => <>
             <Site
                 responsive={false} navbar={false}
@@ -26,7 +35,7 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
                 <TopBar/>
                 <EniBranding/>
-                <ComingUp/>
+                <ComingUp eventsObject={props.eventsObject}/>
                 <Instagram items={props.instagram}/>
                 <EniSections/>
             </Site>
@@ -42,7 +51,7 @@ export default function HomePage(props: { instagram: InstagramFeedItem[], articl
             <div className="relative z-10 bg-white">
                 <EmmausNavigation/>
                 <Articles items={props.articles} sites={props.sites}/>
-                <ComingUp/>
+                <ComingUp eventsObject={props.eventsObject}/>
                 <EmmausSections weeklies={props.weeklies}/>
                 <Instagram items={props.instagram}/>
                 <Responsive>
@@ -64,10 +73,11 @@ export async function getStaticProps() {
     return {
         props: {
             instagram: await fetchInstagramFeed(),
+            eventsObject: await getCachedEvents(false),
             articles: await site(() => Promise.resolve({}), () => fetchArticles())(),
             sites: await site(() => Promise.resolve({}), () => fetchEmmausSites())(),
             weeklies: await site(() => Promise.resolve({}), () => fetchWeeklies())(),
         },
-        revalidate: 10,
+        revalidate: 60,
     }
 }

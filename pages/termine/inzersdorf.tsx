@@ -1,12 +1,8 @@
-import React, {useEffect} from 'react';
-import {LoadingEvents} from '../../components/calendar/Calendar';
-import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
-import {useCalendarStore} from '../../util/use-calendar-store';
+import React from 'react';
 import {EventDateText, EventSummary, EventTime} from '../../components/calendar/Event';
+import {EventsObject, getCachedEvents} from "../../util/calendar-events";
 
-export default function EventPage() {
-    const calendar = useCalendarStore(state => state);
-    useEffect(() => calendar.load(), [calendar.loaded]);
+export default function EventPage(props: {eventsObject: EventsObject}) {
 
     return <div data-testid="calendar" className="relative">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -14,9 +10,7 @@ export default function EventPage() {
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"/>
         <div className="flex-grow events mt-4 lg:px-0 relative font-[Rubik]">
             <div className="font-bold text-sm mb-4 text-[#000] tracking-tighter">AKTUELLE VERANSTALTUNGEN:</div>
-            {calendar.error && <CalendarErrorNotice/>}
-            {calendar.loading && <LoadingEvents/>}
-            {calendar.loading || calendar.items
+            {props.eventsObject.events
                 .filter(event => event.calendar === 'inzersdorf' && !event.summary.match(/Messe|Taufe|(?<!-)Wortgottesdienst|ENTFÄLLT/))
                 .slice(0, 3)
                 .map(event => <div key={event.id} className="mb-4">
@@ -36,4 +30,13 @@ export default function EventPage() {
         </div>
         <style>{"body{ background:none; }"}</style>
     </div>;
+}
+
+export async function getStaticProps() {
+    return {
+        props: {
+            eventsObject: await getCachedEvents(false),
+        },
+        revalidate: 60,
+    }
 }

@@ -2,10 +2,28 @@ import create from 'zustand';
 import {CalendarEvent, CalendarEvents} from './calendar-events';
 import {fetchJson} from './fetch-util';
 
+export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
+    return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
+        ...record,
+        [event.date]: [...(record[event.date] ?? []), event]
+    }), {});
+}
+
+export function groupEventsByDateAndGroup(events: CalendarEvent[]): Record<string, Record<string, CalendarEvent[]>> {
+    return Object.fromEntries(Object.entries(events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
+        ...record,
+        ...(Object.fromEntries(event.groups.map(group => ([
+            group,
+            [
+                ...(record[group] ?? []),
+                event
+            ]
+        ]))))
+    }), {})).map(([group, events]) => [group, groupEventsByDate(events)]))
+}
+
 export const useCalendarStore = create<{
     items: CalendarEvent[];
-    groupByDate: (events: CalendarEvent[]) => Record<string, CalendarEvent[]>
-    groupByDateAndGroup: (events: CalendarEvent[]) => Record<string,Record<string, CalendarEvent[]>>
     cache?: string;
     loading: boolean;
     loaded: boolean;
@@ -18,21 +36,6 @@ export const useCalendarStore = create<{
     loading: false,
     error: false,
     lastLoadedWithToken: 'none',
-    groupByDate: (events) => {
-        return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({...record, [event.date]: [...(record[event.date] ?? []), event]}), {})
-    },
-    groupByDateAndGroup: (events) => {
-        return Object.fromEntries(Object.entries(events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
-                ...record,
-                ...(Object.fromEntries(event.groups.map(group => ([
-                    group,
-                    [
-                        ...(record[group] ?? []),
-                        event
-                    ]
-                ]))))
-            }), {})).map(([group, events]) => [group, get().groupByDate(events)]));
-    },
     load: (jwt?: string) => {
         if (get().loading && jwt === get().lastLoadedWithToken) return;
         if (get().loaded && jwt === get().lastLoadedWithToken) return;

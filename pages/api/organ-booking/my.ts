@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getEventsFromCalendar} from '../../../util/calendar-events';
+import {calendarIds, getCalendarEvents} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -11,6 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  res.json((await getEventsFromCalendar(calendarIds['inzersdorf-organ'], 'Orgel', false)).filter(event => event.summary === user.name));
+  res.json((await getCalendarEvents(calendarIds['inzersdorf-organ'], 'Orgel', {public: false})).filter(event => event.summary === user.name));
 
 }
