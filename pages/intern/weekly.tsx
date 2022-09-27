@@ -8,7 +8,7 @@ import {CalendarEvent} from '../../util/calendar-events';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
-import {useCalendarStore} from '../../util/use-calendar-store';
+import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
 import {saveFile} from "../../util/save-file";
 
 export default function InternArticles() {
@@ -44,7 +44,7 @@ export default function InternArticles() {
         const to = data.end.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 10);
         const wordData = {
             daterange: `${from}. - ${to}`,
-            event: Object.entries(calendar.groupByDate(events))
+            event: Object.entries(groupEventsByDate(events))
                 .filter(([date]) => data.start.getTime() <= new Date(date).getTime() && data.end.getTime() >= new Date(date).getTime())
                 .map(([date, events]) => ({date, events: events.filter(e => e.visibility === "public")}))
                 .map(({date, events: allEvents}) => {

@@ -52,9 +52,7 @@ export default function LimitedEventEditing() {
                 className="flex flex-col overflow-y-scroll border-4 border-black/10 bg-white px-4 rounded-lg max-h-96 md:max-h-[none]">
                 {records.map(([date, events]) => <div key={date}>
                     <EventDate date={new Date(date)}/>
-                    {events.filter(event => event.calendar === 'inzersdorf').map(event => <div
-                        key={event.id}
-                        className="cursor-pointer hover:bg-black/5 px-2"
+                    {events.filter(event => event.calendar === 'inzersdorf').map(event => <div key={event.id} className="cursor-pointer hover:bg-black/5 px-2"
                         onClick={() => setEvent(event)}
                     ><Event
                         event={event} permissions={{}}/></div>)}
