@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {getArticleLink, getCockpitImageUrl} from '../../components/Articles';
 import {cockpit} from '../../util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
-import {site, siteType, SiteType} from '../../util/sites';
+import {site} from '../../util/sites';
 
 export default function Events(props: {articles: Collections['article'][]}) {
   return <Site title="Alle Beiträge">

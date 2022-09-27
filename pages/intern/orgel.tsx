@@ -18,19 +18,20 @@ export default function Orgel() {
     bookingLoading: false,
   });
 
-
   useEffect(() => {
+
+    function loadMyBooking() {
+      setPartialData({bookingLoading: true});
+      fetchJson(`/api/organ-booking/my`, {jwt})
+          .then(myBookings => setPartialData({myBookings}))
+          .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}))
+          .finally(() => setPartialData({bookingLoading: false}));
+    }
+
     if (jwt)
       loadMyBooking();
   }, [jwt]);
 
-  function loadMyBooking() {
-    setPartialData({bookingLoading: true});
-    fetchJson(`/api/organ-booking/my`, {jwt})
-      .then(myBookings => setPartialData({myBookings}))
-      .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}))
-      .finally(() => setPartialData({bookingLoading: false}));
-  }
 
   function loadAvailableHours(value: string) {
     setPartialData({date: value, slots: [], slotsLoading: true});

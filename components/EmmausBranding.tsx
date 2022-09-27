@@ -1,5 +1,4 @@
 import React from 'react';
-import {site, siteType, SiteType} from '../util/sites';
 import Responsive from "./Responsive";
 import {getCalendarInfo} from "../util/calendar-info";
 

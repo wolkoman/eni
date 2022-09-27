@@ -30,7 +30,7 @@ function OverlayContainer() {
     registerHide(() => {
       setComponent(undefined);
     })
-  }, []);
+  }, [registerDisplay, registerDisplay]);
   return component ? <div className="fixed" style={{top: position?.y, left: position?.x}}>{component}</div> : <div/>;
 }
 

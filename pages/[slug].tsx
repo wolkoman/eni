@@ -1,11 +1,10 @@
 import React from 'react';
-import {site as siteDif, siteType, SiteType} from '../util/sites';
+import {site as siteDif} from '../util/sites';
 import {Collections} from "cockpit-sdk";
 import {fetchEmmausSites} from "../util/fetchEmmausSites";
 import {GetStaticPaths, GetStaticProps} from "next";
 import {Article} from "../components/Article";
 import Link from "next/link";
-import {Icon} from "../components/calendar/ComingUp";
 
 export default function HomePage(props: { site: Collections['site'] & {parent: Collections['site']}}) {
     return siteDif(<></>, <Article title={props.site.name}>
@@ -37,7 +36,7 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
     const sites = await siteDif(() => Promise.resolve([]), () => fetchEmmausSites())();
     const site = sites.find(site => site.slug === context.params!.slug);
-    if (site == undefined) {
+    if (site === undefined) {
         return {
             notFound: true
         }

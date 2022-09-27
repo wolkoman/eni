@@ -20,7 +20,7 @@ export default function Events() {
         }else{
             router.push("/intern");
         }
-    }, [user]);
+    }, [user, router, setData]);
 
     function login() {
         toast.promise(_login(data), {

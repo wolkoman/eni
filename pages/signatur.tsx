@@ -29,7 +29,7 @@ function Signatur({signatur}: {signatur:{ address: string; mail: string; name: s
       ].filter(x => !!x)}
       {signatur.address && <div>{signatur.address}</div>}
       <div>
-        <img
+        <img alt="signatur"
             src="https://eni.wien/signatur.svg" width="500"/>
       </div>
     </div>

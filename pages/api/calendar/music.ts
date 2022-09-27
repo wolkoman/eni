@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient, getCachedEvents} from '../../../util/calendar-events';
+import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";

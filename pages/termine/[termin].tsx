@@ -13,8 +13,8 @@ export default function EventPage() {
   const [event, setEvent] = useState<CalendarEvent | undefined | null>(undefined);
   const {query: {termin}} = useRouter();
 
-  useEffect(() => userLoad(), []);
-  useEffect(() => calendar.load(jwt), [jwt]);
+  useEffect(() => userLoad(), [userLoad]);
+  useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
   useEffect(() => {
     if (Object.keys(calendar.items).length === 0) return;
     const events = Object.values(calendar.items).flat();

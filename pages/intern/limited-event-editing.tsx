@@ -19,7 +19,7 @@ export default function LimitedEventEditing() {
     useEffect(() => {
         if (!jwt) return;
         if (!loaded && !loading) load(jwt);
-    }, [jwt, loading]);
+    }, [jwt, loading, load, loaded]);
     useEffect(() => {
         setRecords(Object.entries(groupEventsByDate(events.filter(event =>
                 event.calendar === 'inzersdorf'

@@ -3,7 +3,7 @@ import {Collections} from 'cockpit-sdk';
 import {cockpit} from '../../util/cockpit-sdk';
 import {useRouter} from 'next/router';
 import {Article as ArticleSite} from '../../components/Article';
-import {site, siteType, SiteType} from '../../util/sites';
+import {site} from '../../util/sites';
 
 export default function Article({article}: { article: Collections['article'] }) {
   const router = useRouter();

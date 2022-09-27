@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import * as React from 'react';
-import Button from './Button';
 import {cockpit} from '../util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
 import {Section} from './Section';

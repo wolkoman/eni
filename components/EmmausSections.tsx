@@ -3,7 +3,6 @@ import Link from 'next/link';
 import React from 'react';
 import Responsive from "./Responsive";
 import {Collections} from "cockpit-sdk";
-import {getCalendarInfo} from "../util/calendar-info";
 import {getCockpitImageUrl} from "./Articles";
 import Button from "./Button";
 

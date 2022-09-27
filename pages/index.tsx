@@ -17,7 +17,7 @@ import {EmmausSections} from "../components/EmmausSections";
 import {EmmausNavigation} from "../components/EmmausNavigation";
 import {Section} from "../components/Section";
 import Responsive from "../components/Responsive";
-import {CalendarEvent, EventsObject, getCachedEvents} from "../util/calendar-events";
+import {EventsObject, getCachedEvents} from "../util/calendar-events";
 
 export default function HomePage(
     props: {

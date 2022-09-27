@@ -14,9 +14,9 @@ import {saveFile} from "../../util/save-file";
 export default function InternArticles() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
-    const [calendar, events, loaded, load] = useCalendarStore(state => [state, state.items, state.loaded, state.load])
+    const [events, loaded, load] = useCalendarStore(state => [state.items, state.loaded, state.load])
 
-    useEffect(() => load(), [])
+    useEffect(() => load(), [load])
 
     function pad(num: number) {
         return `${num < 10 ? '0' : ''}${num}`

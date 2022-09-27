@@ -5,7 +5,6 @@ import Link from "next/link";
 import {fetchJson} from "../../../util/fetch-util";
 import {useUserStore} from "../../../util/use-user-store";
 import {useRouter} from "next/router";
-import {InternButton} from "../../../components/InternButton";
 import Button from "../../../components/Button";
 
 export default function Index() {

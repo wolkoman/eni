@@ -63,7 +63,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
         } else if (text.length < +props.article.char_max + 100 && warning.active) {
             setWarning({open: false, active: false});
         }
-    }, [text]);
+    }, [text, props.article.char_max, props.article.char_min, warning.active]);
     useEffect(() => {
         const interval = setInterval(() => save(), 10000);
         return () => clearInterval(interval);
@@ -82,7 +82,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     function save(): Promise<void> {
         if (!editable) return Promise.reject();
-        if (saved == 'saved') return Promise.resolve();
+        if (saved === 'saved') return Promise.resolve();
         setSaved('saving');
         return fetchJson("/api/editor/save", {json: {articleId, text}, jwt})
             .then(() => setSaved('saved'))

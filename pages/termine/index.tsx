@@ -18,8 +18,8 @@ export default function EventPage() {
     const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
     const {query: {q}} = useRouter();
 
-    useEffect(() => userLoad(), []);
-    useEffect(() => calendar.load(jwt), [jwt]);
+    useEffect(() => userLoad(), [userLoad]);
+    useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
 
     return <Site>
         <div data-testid="calendar" className="relative">
