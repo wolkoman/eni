@@ -32,7 +32,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
                     .map(([group, calendar]) => <div
                             key={group}
-                            className="max-h-96 overflow-hidden relative rounded-2xl border-4 border-black/10 relative px-4 py-2 pb-12">
+                            className="max-h-96 overflow-hidden relative rounded-2xl border-2 border-black/10 relative px-4 py-2 pb-12">
                             <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}>
                                 <div className="absolute w-full h-10 left-0 bottom-0 bg-[#fff]">
                                     <div
@@ -56,7 +56,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                     )}
                 <Link href={`${urlPrefix}/termine`}>
                     <div
-                        className="rounded-2xl text-3xl font-bold border-4 border-black/5 bg-black/10 hover:bg-black/5 p-12 shadow cursor-pointer transition-all">
+                        className="rounded-2xl text-3xl font-bold bg-black/10 hover:bg-black/5 p-12 cursor-pointer transition-all">
                         Alle Termine
                     </div>
                 </Link>

@@ -46,7 +46,7 @@ export default function HomePage(
             keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
             <div className="md:sticky inset-0 w-full">
                 <TopBar/>
-                <EmmausBranding/>
+                <EmmausBranding eventsObject={props.eventsObject}/>
             </div>
             <div className="relative z-10 bg-white">
                 <EmmausNavigation/>

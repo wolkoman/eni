@@ -13,8 +13,8 @@ export default function Footer() {
     return <>
         <div className="pt-6 text-neutral-600 mt-6">
             <Responsive>
-                <div className="flex flex-col md:flex-row justify-between md:items-center">
-                    <div className="mb-5">
+                <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 justify-between md:items-center mb-5">
+                    <div>
                         {site(
                             <>Eine Neue Initiative. Zusammenarbeit der Pfarren:<br/>
                                 <div className="text-sm mr-1 inline-block">Pfarre Emmaus am Wienerberg,</div>
@@ -25,11 +25,11 @@ export default function Footer() {
                         )}
                     </div>
                     <Link href="/impressum">
-                        <div className="cursor-pointer underline hover:no-underline mb-5">Impressum</div>
+                        <div className="cursor-pointer underline hover:no-underline">Impressum</div>
                     </Link>
                     {isLoggedIn
                         ? <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
-                            <div className="cursor-pointer underline hover:no-underline mb-5">Zum Mitgliedsbereich</div>
+                            <div className="cursor-pointer underline hover:no-underline">Zum Mitgliedsbereich</div>
                         </Link>
                         : <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
                             <Button label="Login"/>

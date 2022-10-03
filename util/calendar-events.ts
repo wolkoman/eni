@@ -1,9 +1,8 @@
 import {calendar_v3, google} from 'googleapis';
 import {cockpit} from './cockpit-sdk';
 import {site} from "./sites";
-import {Permission} from "./verify";
 import {notifyAdmin} from "./telegram";
-import {User} from "./user";
+import {getTimeOfEvent} from "./get-time-of-event";
 
 export const calendarIds = {
     'all': 'admin@tesarekplatz.at',
@@ -166,9 +165,7 @@ export async function getCachedGoogleAuthClient() {
     oauth2Client.setCredentials(config);
     return oauth2Client;
 }
-
 export function getParishEvents(props: { public: boolean }): Promise<CalendarEvent[]> {
-    const getTimeOfEvent = (event: any) => new Date(event!.start?.date ?? event!.start?.dateTime!).getTime();
     return Promise.all(
         Object.entries(calendarIds).filter(([, calendarId]) => site(
             [calendarIds.all, calendarIds.emmaus, calendarIds.inzersdorf, calendarIds.neustift],

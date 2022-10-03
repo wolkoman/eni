@@ -18,7 +18,7 @@ export function getArticleLink(article?: Collections['article']) {
 
 function ArticleCard(props: { article?: Collections['article'] }) {
     return <Link href={getArticleLink(props.article)}>
-        <div className={`flex flex-row cursor-pointer ${!props.article && 'shimmer'} bg-emmaus/20 hover:bg-emmaus/10 rounded`}>
+        <div className={`flex flex-row cursor-pointer ${!props.article && 'shimmer'} bg-emmaus-sec/20 hover:bg-emmaus-sec/10 rounded`}>
             <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded m-3"
                  style={!props.article ? {} : {
                      backgroundImage: `url(${getCockpitImageUrl(props.article.preview_image.path)})`,
@@ -26,7 +26,6 @@ function ArticleCard(props: { article?: Collections['article'] }) {
                      backgroundPosition: '50% 50%'
                  }}/>
             <div className="flex flex-col justify-center overflow-hidden">
-                <div className="uppercase opacity-80 text-sm">{props.article?.resort}</div>
                 <div className="line-clamp-3 font-semibold text-xl">{props.article?.title}</div>
             </div>
         </div>
@@ -34,8 +33,8 @@ function ArticleCard(props: { article?: Collections['article'] }) {
 }
 
 export default function Articles(props: { items: Collections['article'][], sites: Collections['site'][] }) {
-    return <div className="my-20"><Responsive><Section id="aktuelles">
-        <div className="flex flex-col my-20">
+    return <div className="mt-12"><Responsive><Section id="aktuelles">
+        <div className="flex flex-col">
             <div>
                 <div className="text-2xl md:text-5xl mb-20 flex flex-col justify-center text-center max-w-2xl mx-auto">
                     „Am gleichen Tag waren zwei von den Jüngern auf dem Weg in ein Dorf namens Emmaus..“
@@ -46,7 +45,7 @@ export default function Articles(props: { items: Collections['article'][], sites
                     <div><ArticleCard article={props.items[1]}/></div>
                     <div>
                         <ArticleCard article={props.items[2]}/>
-                        <div className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle Beiträge</div>
+                        <div className="p-4 mt-4 rounded bg-emmaus-sec/20 hover:bg-emmaus-sec/10 font-bold text-lg cursor-pointer">Alle Beiträge</div>
                     </div>
                 </div>
             </div>

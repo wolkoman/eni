@@ -41,17 +41,15 @@ export function Instagram(props: { items: any[] }) {
 
 function InstagramItem({item}: { item?: InstagramFeedItem }) {
     return <div
-        className="flex flex-col md:flex-row border-8 border-black/10 rounded-2xl relative md:odd:translate-x-8 md:even:-translate-x-8 overflow-hidden">
+        className="flex flex-col md:flex-row border-4 border-black/10 rounded-2xl relative lg:odd:translate-x-8 lg:even:-translate-x-8 overflow-hidden">
         <div
             style={{backgroundImage: `url(${item?.media_url})`}}
-            className={`bg-cover relative bg-center ${item == null && 'shimmer'} aspect-square h-80 text-right group shadow`}>
+            className={`bg-cover relative bg-center ${item == null && 'shimmer'} aspect-square h-80 text-right`}>
         </div>
-        <div>
-            <div className="text-xl p-5">
-                <div
-                    className="inline-block text-lg px-1 bg-black/10 font-bold rounded mr-4 mb-4">{item == null || new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}</div>
-                <div>{Aesthetically.unformat(item?.caption.normalize() ?? '')}</div>
-            </div>
+        <div className="text-xl p-5">
+            <div
+                className="inline-block text-lg px-1 bg-black/10 font-bold rounded mr-4 mb-4">{item == null || new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}</div>
+            <div>{Aesthetically.unformat(item?.caption.normalize() ?? '')}</div>
         </div>
 
     </div>;

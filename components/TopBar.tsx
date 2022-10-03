@@ -4,7 +4,7 @@ import React from 'react';
 import {Hamburger} from "./Hamburger";
 
 export default function TopBar() {
-    return <div className="flex flex-row justify-between py-4 px-10 lg:px-24 z-10" data-testid="navbar">
+    return <div className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 ${site('','bg-emmaus text-white')}`} data-testid="navbar">
         <Link href="/">
             <div className="text-3xl cursor-pointer" data-testid="title">
                 {site(<div className="flex space-x-4">
