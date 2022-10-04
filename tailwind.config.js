@@ -1,9 +1,5 @@
 module.exports = {
-  purge: {
-    enabled: false,
-    content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}']
-  },
-  darkMode: false,
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     minHeight: {
       '0': '0',

@@ -31,8 +31,7 @@ export interface CalendarEvent {
 export type CalendarEvents = Record<string, CalendarEvent[]>;
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
-const cancelledRegex = /(abgesagt|findet nicht statt)/gi;
-const liturgyRegex = /(Messe|Rorate)/gi;
+const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
 function getGroupFromEvent(event: any): string[] {
     let conditions: ((x: CalendarEvent) => string | false)[] = [
@@ -112,7 +111,6 @@ function mapGoogleEventToEniEvent(calendarName: string): (event: calendar_v3.Sch
                 !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',
                 (event.visibility === 'private') && 'private',
                 (event.summary + (event.description ?? '')).match(cancelledRegex) && 'cancelled',
-                event.summary?.match(liturgyRegex) && 'liturgy',
             ].filter(item => item),
             wholeday: !!event.start?.date,
         } as CalendarEvent);
