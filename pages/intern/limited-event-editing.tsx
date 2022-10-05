@@ -4,9 +4,10 @@ import {usePermission} from '../../util/use-permission';
 import {groupEventsByDate, useCalendarStore} from "../../util/use-calendar-store";
 import {Permission} from "../../util/verify";
 import {useUserStore} from "../../util/use-user-store";
-import {CalendarEvent} from "../../util/calendar-events";
+import {CalendarEvent, CalendarGroup} from "../../util/calendar-events";
 import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
+import {CalendarName} from "../../util/calendar-info";
 
 export const musicDescriptionMatch = /(?<=^Musikal\. Gestaltung: )(.*)(?=$)/m;
 export default function LimitedEventEditing() {
@@ -22,8 +23,8 @@ export default function LimitedEventEditing() {
     }, [jwt, loading, load, loaded]);
     useEffect(() => {
         setRecords(Object.entries(groupEventsByDate(events.filter(event =>
-                event.calendar === 'inzersdorf'
-                && (event.groups.includes('Heilige Messe') || event.groups.includes('Gottesdienst'))
+                event.calendar === CalendarName.INZERSDORF
+                && (event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))
             )))
                 .filter(([, events]) => events.length !== 0)
         );

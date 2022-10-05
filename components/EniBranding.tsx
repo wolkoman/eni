@@ -1,7 +1,6 @@
 import React from 'react';
 import Lottie from 'react-lottie-player'
-import {Calendar} from '../util/calendar-events';
-import {getCalendarInfo} from '../util/calendar-info';
+import {CalendarName, getCalendarInfo} from '../util/calendar-info';
 import {site} from "../util/sites";
 import Responsive from './Responsive';
 import eniAnimation from "../public/eni_animation.json";
@@ -33,7 +32,7 @@ export function EniBranding() {
             >
             </Lottie>
             <div className="flex flex-col md:flex-row justify-center md:space-x-4 relative">
-                {(['emmaus', 'inzersdorf', 'neustift'] as Calendar[])
+                {[CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
                     .map(calendar => getCalendarInfo(calendar))
                     .map((calendar, index) =>
                         <div key={calendar.image}

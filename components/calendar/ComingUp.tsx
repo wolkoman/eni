@@ -1,20 +1,20 @@
 import {CalendarCacheNotice} from './CalendarCacheNotice';
 import React from 'react';
-import {EventsObject} from '../../util/calendar-events';
-import {groupEventsByDateAndGroup} from '../../util/use-calendar-store';
+import {CalendarGroup, EventsObject} from '../../util/calendar-events';
+import {groupEventsByGroupAndDate} from '../../util/use-calendar-store';
 import {Event, EventDateText} from './Event';
 import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 import {useEmmausProd} from "../../utils/use-emmaus-prod";
 
-function getGroupSorting(group: string) {
-    return ['Gebet & Bibel', 'Wallfahrt', 'Gottesdienst', 'Advent', 'Weihnachten', 'Heilige Messe'].indexOf(group);
+function getGroupSorting(group: CalendarGroup) {
+    return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Gottesdienst, CalendarGroup.Weihnachten, CalendarGroup.Messe].indexOf(group);
 }
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const now = new Date().getTime();
-    const groups = groupEventsByDateAndGroup(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000*60*60*24*7));
+    const groups = groupEventsByGroupAndDate(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000 * 60 * 60 * 24 * 7));
     const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
 
     return <Responsive>
@@ -29,7 +29,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 </Link>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
-                {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
+                {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
                     .map(([group, calendar]) => <div
                             key={group}
                             className="max-h-96 overflow-hidden relative rounded-2xl border-2 border-black/10 relative px-4 py-2 pb-12">

@@ -1,8 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
+import {getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";
+import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -23,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const event = await calendar.events.get({
         eventId: req.body.eventId,
-        calendarId: calendarIds.inzersdorf,
+        calendarId: getCalendarInfo(CalendarName.INZERSDORF).calendarId,
         auth: oauth2Client
     });
     const description = event.data.description ?? "";
@@ -35,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     calendar.events.patch({
         auth: oauth2Client,
-        calendarId: calendarIds['inzersdorf'],
+        calendarId: getCalendarInfo(CalendarName.INZERSDORF).calendarId,
         eventId: req.body.eventId,
         requestBody: {description: newDescription.trim()}
     }).then((event) => {

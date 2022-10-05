@@ -1,5 +1,5 @@
 import create from 'zustand';
-import {CalendarEvent, CalendarEvents} from './calendar-events';
+import {CalendarEvent, CalendarGroup} from './calendar-events';
 import {fetchJson} from './fetch-util';
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
@@ -9,8 +9,8 @@ export function groupEventsByDate(events: CalendarEvent[]): Record<string, Calen
     }), {});
 }
 
-export function groupEventsByDateAndGroup(events: CalendarEvent[]): Record<string, Record<string, CalendarEvent[]>> {
-    return Object.fromEntries(Object.entries(events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
+export function groupEventsByGroup(events: CalendarEvent[]): Record<CalendarGroup, CalendarEvent[]> {
+    return events.reduce<Record<CalendarGroup, CalendarEvent[]>>((record, event) => ({
         ...record,
         ...(Object.fromEntries(event.groups.map(group => ([
             group,
@@ -19,7 +19,14 @@ export function groupEventsByDateAndGroup(events: CalendarEvent[]): Record<strin
                 event
             ]
         ]))))
-    }), {})).map(([group, events]) => [group, groupEventsByDate(events)]))
+    }), {} as any)
+}
+
+export function groupEventsByGroupAndDate(events: CalendarEvent[]): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
+    return Object.fromEntries(Object.entries(
+            groupEventsByGroup(events)
+        ).map(([group, events]) => [group, groupEventsByDate(events)])
+    ) as Record<CalendarGroup, Record<string, CalendarEvent[]>>;
 }
 
 export const useCalendarStore = create<{
