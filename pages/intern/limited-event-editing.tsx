@@ -7,8 +7,10 @@ import {useUserStore} from "../../util/use-user-store";
 import {CalendarEvent} from "../../util/calendar-events";
 import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
+import sanitize from "sanitize-html";
+import {sanitizeRawOptions} from "../../components/SanitizeHtml";
 
-export const musicDescriptionMatch = /(?<=^Musikal\. Gestaltung: )(.*)(?=$)/m;
+export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
 export default function LimitedEventEditing() {
     const [music, setMusic] = useState("");
     const [event, setEvent] = useState<CalendarEvent | undefined>();
@@ -30,9 +32,9 @@ export default function LimitedEventEditing() {
     }, [events]);
     useEffect(() => {
         if (!event) return;
-        const match = (event.description ?? "").match(musicDescriptionMatch) ?? [''];
-        console.log(match);
-        setMusic(match[0] ?? "");
+        const match = event.description.match(musicDescriptionMatch) ?? [''];
+        console.log({match});
+        setMusic(match[1] ?? "");
     }, [event]);
 
     function saveMusic() {
@@ -47,9 +49,9 @@ export default function LimitedEventEditing() {
     }
 
     return <Site title="Termine bearbeiten">
-        <div className="mt-8 grid md:grid-cols-2 bg-black/10 rounded-lg md:overflow-y-auto md:flex-[1_0_0]">
+        <div className="mt-8 grid md:grid-cols-2 bg-black/5 rounded-lg md:overflow-y-auto md:flex-[1_0_0]">
             <div
-                className="flex flex-col overflow-y-scroll border-4 border-black/10 bg-white px-4 rounded-lg max-h-96 md:max-h-[none]">
+                className="flex flex-col overflow-y-scroll border-2 border-black/10 bg-white px-4 rounded-lg max-h-96 md:max-h-[none]">
                 {records.map(([date, events]) => <div key={date}>
                     <EventDate date={new Date(date)}/>
                     {events.filter(event => event.calendar === 'inzersdorf').map(event => <div key={event.id} className="cursor-pointer hover:bg-black/5 px-2"
@@ -62,7 +64,7 @@ export default function LimitedEventEditing() {
                 <div className="text-3xl font-bold my-2">{event?.summary}</div>
                 <div className="text-lg my-1"><EventDateText
                     date={new Date(event?.date!)}/>, {new Date(event?.start.dateTime!).toLocaleTimeString()}</div>
-                <div className="text-lg my-1">{event?.description}</div>
+                <div className="text-lg my-1" dangerouslySetInnerHTML={{__html: event?.description}}></div>
                 <div className="flex-grow flex flex-col justify-end">
                     <div>Musikal. Gestaltung</div>
                     <div className="flex">

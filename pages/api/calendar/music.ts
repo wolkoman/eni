@@ -27,10 +27,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         auth: oauth2Client
     });
     const description = event.data.description ?? "";
+
     const newDescription = req.body.music === ""
-        ? description.replace(/^Musikal\. Gestaltung:.*$/gm, "")
+        ? description.replace(musicDescriptionMatch, "")
         : (description.match(musicDescriptionMatch)
-            ? description.replace(musicDescriptionMatch, req.body.music)
+            ? description.replace(musicDescriptionMatch, "Musikal. Gestaltung: "+req.body.music)
             : `${description}${description ? "\n" : ""}Musikal. Gestaltung: ${req.body.music}`)
 
     calendar.events.patch({
