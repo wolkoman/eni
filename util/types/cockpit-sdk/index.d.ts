@@ -40,6 +40,7 @@ declare module 'cockpit-sdk' {
       competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor')[],
       code?: string,
       email?: string,
+      last_login: string,
     } & Object,
     paper_texts: {
       article: Reference,
