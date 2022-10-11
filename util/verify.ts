@@ -30,6 +30,7 @@ export function resolvePermissionsForCompetences(competences: Collections['perso
     [Permission.Articles]: competences.includes("admin"),
     [Permission.PrivateCalendarAccess]: competences.includes("calendar"),
     [Permission.LimitedEventEditing]: competences.includes("limited_event_editing"),
+    [Permission.Editor]: competences.includes("editor"),
     [Permission.Admin]: competences.includes("admin"),
     [Permission.OrganBooking]: competences.includes("organ")
   };

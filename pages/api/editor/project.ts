@@ -11,6 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    res.json((await cockpit.collectionGet('paper_articles', {filter: {project: req.body.projectId}})).entries);
+    res.json({
+        articles: (await cockpit.collectionGet('paper_articles', {filter: {project: req.body.projectId}})).entries,
+        name: (await cockpit.collectionGet('paper_projects', {filter: {_id: req.body.projectId}})).entries[0].name,
+    });
 
 }
