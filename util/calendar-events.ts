@@ -93,7 +93,7 @@ function getGroupFromEvent(event: any): string[] {
 }
 
 
-function mapGoogleEventToEniEvent(calendarName: string): (event: calendar_v3.Schema$Event) => CalendarEvent {
+export function mapGoogleEventToEniEvent(calendarName: string): (event: calendar_v3.Schema$Event) => CalendarEvent {
     return event => {
         const displayPersonen = event?.summary?.split("/", 2)?.[1] ?? null;
         return ({

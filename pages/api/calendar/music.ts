@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
+import {calendarIds, getCachedGoogleAuthClient, mapGoogleEventToEniEvent} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         eventId: req.body.eventId,
         requestBody: {description: newDescription.trim()}
     }).then((event) => {
-        res.status(200).json(event.data);
+        res.status(200).json(mapGoogleEventToEniEvent('inzersdorf')(event.data));
     }).catch((err) => {
         res.status(500).json({err});
     });
