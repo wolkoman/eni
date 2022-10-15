@@ -1,9 +1,9 @@
-import {CalendarEvent, CalendarTag} from '../../util/calendar-events';
 import {Permission, Permissions} from '../../util/verify';
 import {ParishTag} from './ParishTag';
 import {useRouter} from 'next/router';
 import {SanitizeHTML} from '../SanitizeHtml';
 import {getMonthName, getWeekDayName} from './Calendar';
+import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 
 export function Event({event, permissions, noTag}: { event: CalendarEvent, permissions: Permissions, noTag?: boolean }) {
     return <div className={`flex text-lg mb-1 ${event.tags.includes(CalendarTag.cancelled) && 'opacity-50'}`}>

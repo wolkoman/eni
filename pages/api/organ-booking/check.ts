@@ -1,8 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {CalendarTag, getCalendarEvents} from '../../../util/calendar-events';
+import {getCalendarEvents} from '../../../util/calendar-events';
 import {Temporal} from '@js-temporal/polyfill';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {CalendarName} from "../../../util/calendar-info";
+import {CalendarTag} from "../../../util/calendar-types";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

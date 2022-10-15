@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import Site from '../../components/Site';
-import {CalendarEvent} from '../../util/calendar-events';
 import {toast} from 'react-toastify';
 import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
 import {useUserStore} from '../../util/use-user-store';
+import {CalendarEvent} from "../../util/calendar-types";
 
 export default function Orgel() {
   const jwt = useUserStore(state => state.jwt)

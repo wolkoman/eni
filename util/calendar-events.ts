@@ -4,51 +4,13 @@ import {site} from "./sites";
 import {notifyAdmin} from "./telegram";
 import {getTimeOfEvent} from "./get-time-of-event";
 import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
-
-export interface CalendarEvent {
-    id: string,
-    summary: string,
-    mainPerson: string | null,
-    description: string,
-    date: string,
-    start: { dateTime: string },
-    end: { dateTime: string },
-    calendar: CalendarName,
-    visibility: string,
-    wholeday: boolean,
-    groups: CalendarGroup[],
-    tags: CalendarTag[]
-}
-export enum CalendarTag{
-    inChurch = "in-church",
-    private = 'private',
-    cancelled = 'cancelled',
-}
-export enum CalendarGroup{
-    Wallfahrt = "Wallfahrt",
-    Taufe = "Taufe",
-    Grabwache = "Grabwache",
-    Messe = "Heilige Messe",
-    Jungschar = "Jungschar",
-    Ökumene = "Ökumene",
-    Gebet = "Gebet & Bibel",
-    Caritas = "Caritas",
-    Kinder = "Kinder",
-    Gemeinschaft = "Gemeinschaft",
-    Gottesdienst = "Gottesdienst",
-    Weihnachten = "Weihnachten",
-    Invisible = "_",
-    Sprechstunde = "Sprechstunde",
-    Jugend = "Jugend",
-    Gremien = "Gremien",
-    Chor = "Chor",
-}
+import {CalendarEvent, CalendarGroup, CalendarTag, EventsObject} from "./calendar-types";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
 function getGroupFromEvent(event: any): CalendarGroup[] {
-    let conditions: ((x: CalendarEvent) => string | false)[] = [
+    let conditions: ((x: CalendarEvent) => CalendarGroup | false)[] = [
         x => x.summary.toLowerCase().includes("wallfahrt") && CalendarGroup.Wallfahrt,
         x => x.summary.toLowerCase().startsWith("taufe") && CalendarGroup.Taufe,
         x => x.summary.toLowerCase().startsWith("grabwache") && CalendarGroup.Grabwache,
@@ -62,6 +24,9 @@ function getGroupFromEvent(event: any): CalendarGroup[] {
         x => x.summary.toLowerCase().includes("rosenkranz") && CalendarGroup.Gebet,
         x => x.summary.toLowerCase().startsWith("gebetsrunde") && CalendarGroup.Gebet,
         x => x.summary.toLowerCase().startsWith("bibelrunde") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("bibelkreis") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("glaubensabend") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("friedhofsgang") && CalendarGroup.Gebet,
         x => x.summary.toLowerCase().startsWith("sprechstunde mit jesus") && CalendarGroup.Gebet,
         x => x.summary.toLowerCase().includes("maiandacht") && CalendarGroup.Gebet,
         x => x.summary.toLowerCase().includes("klimaoase") && CalendarGroup.Caritas,
@@ -92,18 +57,20 @@ function getGroupFromEvent(event: any): CalendarGroup[] {
         x => x.summary.toLowerCase().includes("chor") && CalendarGroup.Chor,
         x => x.summary.toLowerCase().includes("sprechstunde") && CalendarGroup.Sprechstunde,
         x => x.summary.toLowerCase().includes("woche des lebens") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("erstkommunion") && CalendarGroup.Sakramente,
+        x => x.summary.toLowerCase().includes("firmkurs") && CalendarGroup.Sakramente,
     ];
-    let groups = conditions.reduce<(string | false)[]>((groups, condition) => [
+    let groups = conditions.reduce<(CalendarGroup | false)[]>((groups, condition) => [
         ...groups,
         condition(event)
     ], [])
-        .filter((group): group is string => !!group);
+        .filter((group): group is CalendarGroup => !!group);
 
     if (groups.length === 0 && event.visibility !== "private") {
         //notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
     }
 
-    return groups.length === 0 ? [event.summary] : groups.filter(group => group !== CalendarGroup.Invisible);
+    return groups.filter(group => group !== CalendarGroup.Invisible);
 }
 
 
@@ -189,11 +156,6 @@ export function getParishEvents(props: { public: boolean }): Promise<CalendarEve
         .then(eventList => eventList.flat())
         .then(events => events.filter(event => !!event))
         .then(events => events.sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b)));
-}
-
-export interface EventsObject {
-    events: CalendarEvent[];
-    cache: string | null;
 }
 
 export const getCachedEvents = async (privateAccess: boolean): Promise<EventsObject> => {

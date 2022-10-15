@@ -1,5 +1,5 @@
-import {CalendarEvent, CalendarGroup} from '../../util/calendar-events';
 import {CalendarName} from "../../util/calendar-info";
+import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],

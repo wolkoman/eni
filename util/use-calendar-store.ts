@@ -1,6 +1,6 @@
 import create from 'zustand';
-import {CalendarEvent, CalendarGroup} from './calendar-events';
 import {fetchJson} from './fetch-util';
+import {CalendarEvent, CalendarGroup} from "./calendar-types";
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
     return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({

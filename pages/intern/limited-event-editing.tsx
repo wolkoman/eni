@@ -4,10 +4,10 @@ import {usePermission} from '../../util/use-permission';
 import {groupEventsByDate, useCalendarStore} from "../../util/use-calendar-store";
 import {Permission} from "../../util/verify";
 import {useUserStore} from "../../util/use-user-store";
-import {CalendarEvent, CalendarGroup} from "../../util/calendar-events";
 import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
 import {CalendarName} from "../../util/calendar-info";
+import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
 
 export const musicDescriptionMatch = /(?<=^Musikal\. Gestaltung: )(.*)(?=$)/m;
 export default function LimitedEventEditing() {

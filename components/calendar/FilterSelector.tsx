@@ -1,8 +1,8 @@
 import {Permission, Permissions} from '../../util/verify';
-import {CalendarGroup} from '../../util/calendar-events';
 import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
 import {FilterType} from './Calendar';
 import {ReactNode} from "react";
+import {CalendarGroup} from "../../util/calendar-types";
 
 function FilterButton(props: { active: boolean, onClick: () => void, label: string, activeColor?: string }) {
     return <div

@@ -1,12 +1,12 @@
 import {CalendarCacheNotice} from './CalendarCacheNotice';
 import React from 'react';
-import {CalendarGroup, EventsObject} from '../../util/calendar-events';
 import {groupEventsByGroupAndDate} from '../../util/use-calendar-store';
 import {Event, EventDateText} from './Event';
 import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 import {useEmmausProd} from "../../utils/use-emmaus-prod";
+import {CalendarGroup, EventsObject} from "../../util/calendar-types";
 
 function getGroupSorting(group: CalendarGroup) {
     return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Gottesdienst, CalendarGroup.Weihnachten, CalendarGroup.Messe].indexOf(group);
