@@ -50,7 +50,7 @@ export function EventDescription(props: { event: CalendarEvent, permissions: Per
 
 export const EventDate = ({date}: { date: Date }) => {
     const day = date.getDay();
-    return <div className="sticky md:top-0 relative z-10">
+    return <div className="sticky top-20 md:top-0 relative z-10">
         <div className={`mp-3 leading-5 bg-white pt-4 ${day ? '' : 'underline'}`}>
             <EventDateText date={date}/>
         </div>

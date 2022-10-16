@@ -10,6 +10,7 @@ import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
 import Link from "next/link";
+import Responsive from "../../components/Responsive";
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
@@ -20,7 +21,8 @@ export default function EventPage() {
     useEffect(() => userLoad(), [userLoad]);
     useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
 
-    return <Site>
+    return <Site responsive={false}>
+        <Responsive sides={false}>
         <div data-testid="calendar" className="relative">
             <CalendarCacheNotice/>
             <div className="flex flex-col md:flex-row">
@@ -59,5 +61,6 @@ export default function EventPage() {
                 </div>
             </div>
         </div>
+        </Responsive>
     </Site>;
 }
