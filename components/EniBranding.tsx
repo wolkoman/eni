@@ -25,10 +25,8 @@ export function EniBranding() {
             </div>
             <Lottie
                 animationData={eniAnimation}
-                play
-                
-                loop={false}
-                className="absolute top-24 md:top-16 scale-[450%] md:scale-[200%]"
+                play loop={false}
+                className="absolute top-24 md:top-16 scale-[450%] md:scale-[190%]"
             >
             </Lottie>
             <div className="flex flex-col md:flex-row justify-center md:space-x-4 relative">

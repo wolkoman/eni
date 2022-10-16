@@ -19,7 +19,7 @@ function FilterButtons(props: { children: ReactNode }) {
 }
 
 function FilterLabel(props: { children: ReactNode }) {
-    return <div className="mt-3 opacity-80 uppercase pl-3 text-sm hidden md:block">{props.children}</div>;
+    return <div className="mt-3 opacity-80 uppercase pl-3 text-sm hidden md:block md:-translate-x-2">{props.children}</div>;
 }
 
 export function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions, groups: CalendarGroup[], persons: string[] }) {
