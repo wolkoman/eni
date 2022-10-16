@@ -15,17 +15,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (person !== null && person !== undefined) {
         delete person.code;
         const permissions = resolvePermissionsForCompetences(person.competences);
-        const userlikeObject: User = {...person, permissions, api_key: `person_${person._id}`, is_person:true};
+        const userlikeObject: User = {...person, permissions, api_key: `person_${person._id}`, is_person: true};
+        await cockpit.collectionSave('person', {...person, last_login: new Date().toISOString()})
         res.json({jwt: sign(userlikeObject, secretOrPrivateKey, {algorithm: 'RS256'})});
-    } else if(person === undefined){
+    } else if (person === undefined) {
         const cockpitUser = await cockpit.authUser(body.username, body.password);
         if ('message' in cockpitUser) {
             res.status(401).json({});
             return;
         }
-        const user: User = {...cockpitUser, permissions: resolvePermissionsForGroup(cockpitUser.group), parish: "all", username: cockpitUser.user, is_person:false};
+        const user: User = {
+            ...cockpitUser,
+            permissions: resolvePermissionsForGroup(cockpitUser.group),
+            parish: "all",
+            username: cockpitUser.user,
+            is_person: false
+        };
         res.status('error' in user ? 401 : 200).json({jwt: sign(user, secretOrPrivateKey, {algorithm: 'RS256'})});
-    }else{
+    } else {
         res.status(401).json({});
     }
 }

@@ -1,9 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedGoogleAuthClient} from '../../../util/calendar-events';
+import {getCachedGoogleAuthClient, mapGoogleEventToEniEvent} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";
 import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -28,10 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         auth: oauth2Client
     });
     const description = event.data.description ?? "";
+
     const newDescription = req.body.music === ""
-        ? description.replace(/^Musikal\. Gestaltung:.*$/gm, "")
+        ? description.replace(musicDescriptionMatch, "")
         : (description.match(musicDescriptionMatch)
-            ? description.replace(musicDescriptionMatch, req.body.music)
+            ? description.replace(musicDescriptionMatch, "Musikal. Gestaltung: "+req.body.music)
             : `${description}${description ? "\n" : ""}Musikal. Gestaltung: ${req.body.music}`)
 
     calendar.events.patch({
@@ -40,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         eventId: req.body.eventId,
         requestBody: {description: newDescription.trim()}
     }).then((event) => {
-        res.status(200).json(event.data);
+        res.status(200).json(mapGoogleEventToEniEvent('inzersdorf')(event.data));
     }).catch((err) => {
         res.status(500).json({err});
     });
