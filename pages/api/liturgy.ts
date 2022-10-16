@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       : [...data.slice(0, -1), {...data.at(-1), liturgies: [...data.at(-1).liturgies, transformLiturgy(td)]}]
     , []);
 
-  const liturgyCache = (await cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
+  //const liturgyCache = (await cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
   //await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
 
   res.json(merged[0].date);

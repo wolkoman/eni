@@ -1,20 +1,20 @@
-import {CalendarEvent} from '../../util/calendar-events';
 import {Permission, Permissions} from '../../util/verify';
 import {ParishTag} from './ParishTag';
 import {useRouter} from 'next/router';
 import {SanitizeHTML} from '../SanitizeHtml';
 import {getMonthName, getWeekDayName} from './Calendar';
+import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 
 export function Event({event, permissions, noTag}: { event: CalendarEvent, permissions: Permissions, noTag?: boolean }) {
-    return <div className={`flex text-lg mb-1 ${event.tags.includes('cancelled') && 'opacity-50'}`}>
-        <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes('cancelled') || 'font-semibold'}`}>
+    return <div className={`flex text-lg mb-1 ${event.tags.includes(CalendarTag.cancelled) && 'opacity-50'}`}>
+        <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
             {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
         </div>
         {noTag || <div className="mr-2">
-          <ParishTag calendar={event.calendar} colorless={event.tags.includes('cancelled')}/>
+          <ParishTag calendar={event.calendar} colorless={event.tags.includes(CalendarTag.cancelled)}/>
         </div>}
         <div className="mb-2 leading-5" data-testid="event">
-            <div className={`mt-1 ${event.tags.includes('cancelled') || 'font-semibold'}`}>
+            <div className={`mt-1 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
                 <EventSummary event={event}/>
             </div>
             <EventDescription event={event} permissions={permissions}/>
@@ -24,7 +24,7 @@ export function Event({event, permissions, noTag}: { event: CalendarEvent, permi
 
 export function EventSummary(props: { event: CalendarEvent }) {
     const router = useRouter();
-    const liturgy = props.event.tags.includes('liturgy') && false;
+    const liturgy = false;
     return <span
         className={`${liturgy && 'underline hover:no-underline cursor-pointer'}`}
         onClick={liturgy ? () => router.push(`/termine/${props.event.id}`) : () => {
@@ -37,12 +37,12 @@ export function EventSummary(props: { event: CalendarEvent }) {
 export function EventDescription(props: { event: CalendarEvent, permissions: Permissions }) {
     return <div className="font-normal text-sm leading-4">
         {props.permissions[Permission.PrivateCalendarAccess] && <>
-            {props.event.tags.includes('private') &&
+            {props.event.tags.includes(CalendarTag.private) &&
               <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
-            {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' &&
+            {props.event.tags.includes(CalendarTag.inChurch) && props.event.calendar === 'inzersdorf' &&
               <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
         </>}
-        {!props.event.tags.includes('cancelled') && <>
+        {!props.event.tags.includes(CalendarTag.cancelled) && <>
             {props.event.mainPerson && `mit ${props.event.mainPerson}`}
             {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}</>}
     </div>;
@@ -50,7 +50,7 @@ export function EventDescription(props: { event: CalendarEvent, permissions: Per
 
 export const EventDate = ({date}: { date: Date }) => {
     const day = date.getDay();
-    return <div className="sticky md:top-0 relative z-10">
+    return <div className="sticky top-20 md:top-0 relative z-10">
         <div className={`mp-3 leading-5 bg-white pt-4 ${day ? '' : 'underline'}`}>
             <EventDateText date={date}/>
         </div>

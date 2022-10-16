@@ -4,12 +4,12 @@ import Site from '../../components/Site';
 import Button from '../../components/Button';
 import {Permission} from '../../util/verify';
 import {TemplateHandler} from 'easy-template-x';
-import {CalendarEvent} from '../../util/calendar-events';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
 import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
 import {saveFile} from "../../util/save-file";
+import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
 
 export default function InternArticles() {
     usePermission([Permission.Admin]);
@@ -28,7 +28,7 @@ export default function InternArticles() {
     }
 
     function toCalEevent(event: CalendarEvent) {
-        const special = event.groups.includes("Heilige Messe");
+        const special = event.groups.includes(CalendarGroup.Messe);
         return {
             [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),
             [special ? 'specialtitle' : 'title']: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
@@ -49,7 +49,7 @@ export default function InternArticles() {
                 .map(([date, events]) => ({date, events: events.filter(e => e.visibility === "public")}))
                 .map(({date, events: allEvents}) => {
                     const day = new Date(date).getDay();
-                    const events = allEvents.filter(event => !event.tags.includes('cancelled'));
+                    const events = allEvents.filter(event => !event.tags.includes(CalendarTag.cancelled));
                     return ({
                         sundaydate: day === 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
                         date: day !== 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',

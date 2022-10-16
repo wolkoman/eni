@@ -1,7 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCalendarEvents} from '../../../util/calendar-events';
+import {getCalendarEvents} from '../../../util/calendar-events';
 import {Temporal} from '@js-temporal/polyfill';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
+import {CalendarName} from "../../../util/calendar-info";
+import {CalendarTag} from "../../../util/calendar-types";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -36,10 +38,10 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
     timeMax.setHours(24);
 
     const events = await Promise.all([
-        calendarIds.inzersdorf,
-        calendarIds["inzersdorf-organ"]
-    ].map(calendarId => getCalendarEvents(calendarId, 'Orgel', {timeMin, timeMax})
-    )).then(eventList => eventList.flat().filter(event => event.tags.includes('in-church')))
+        CalendarName.INZERSDORF,
+        CalendarName.INZERSDORF_ORGAN
+    ].map(name => getCalendarEvents(name, {timeMin, timeMax})
+    )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)))
 
     if (events.some(event => event.wholeday)) {
         return [];

@@ -1,16 +1,16 @@
 import React from 'react';
 import Responsive from "./Responsive";
-import {getCalendarInfo} from "../util/calendar-info";
-import {EventsObject} from "../util/calendar-events";
+import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import {getTimeOfEvent} from "../util/get-time-of-event";
 import {getWeekDayName} from "./calendar/Calendar";
+import {CalendarGroup, EventsObject} from "../util/calendar-types";
 
 export function EmmausBranding(props: { eventsObject: EventsObject }) {
 
     const event = props.eventsObject.events
         .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))
         .filter(event => new Date(event.start.dateTime) > new Date())
-        .filter(event => event.groups.includes("Heilige Messe") || event.groups.includes("Gottesdienst"))[0];
+        .filter(event => event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))[0];
 
     return <div className={"bg-emmaus pt-8 md:pt-24 relative overflow-hidden"}>
         <Responsive>
@@ -29,7 +29,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
                         </div>
                     </div>}
                 </div>
-                <img className="self-end h-72 md:h-96 relative" src={getCalendarInfo("emmaus").image}/>
+                <img className="self-end h-72 md:h-96 relative" src={getCalendarInfo(CalendarName.EMMAUS).image}/>
             </div>
         </Responsive>
     </div>;
