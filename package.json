@@ -53,9 +53,6 @@
     "refresh-google": "node scripts/google-refresh-token.ts",
     "lint": "next lint"
   },
-  "eslintConfig": {
-    "extends": "next"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

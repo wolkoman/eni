@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         eventId: req.body.eventId,
         requestBody: {description: newDescription.trim()}
     }).then((event) => {
-        res.status(200).json(mapGoogleEventToEniEvent('inzersdorf')(event.data));
+        res.status(200).json(mapGoogleEventToEniEvent(CalendarName.INZERSDORF)(event.data));
     }).catch((err) => {
         res.status(500).json({err});
     });
