@@ -1,8 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
+import {getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
+import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 
 export default async function handler(req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 
@@ -33,7 +34,7 @@ export default async function handler(req: NextApiRequest & {query: {token: stri
 
   calendar.events.insert({
     auth: oauth2Client,
-    calendarId: calendarIds['inzersdorf-organ'],
+    calendarId: getCalendarInfo(CalendarName.INZERSDORF_ORGAN).calendarId,
     requestBody: {
       summary: user.name,
       description: `Gebucht: ${new Date().toISOString()}`,

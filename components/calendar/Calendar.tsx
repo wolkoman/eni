@@ -1,4 +1,5 @@
-import {Calendar, CalendarEvent} from '../../util/calendar-events';
+import {CalendarName} from "../../util/calendar-info";
+import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
 
 const personWords = {
   brezovski: ['Brezovski', 'Zvonko'],
@@ -8,14 +9,15 @@ const personWords = {
 }
 export type Person = keyof typeof personWords;
 
-export type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
+export type FilterType = { filterType: 'PARISH', parish: CalendarName } | { filterType: 'PERSON', person: string } | { filterType: 'GROUP', group: CalendarGroup } | null;
 
 export function applyFilter(events: CalendarEvent[], filter: FilterType, group?: string) {
   return events
     .filter(event =>
-        ((filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))
+        ((filter?.filterType === 'PERSON' && event.mainPerson === filter.person))
       || (filter?.filterType === 'PARISH' && (event.calendar === filter.parish || event.calendar === "all"))
-      || (filter === null)) && ((event.groups.includes(decodeURI(group ?? ""))) || group === undefined))
+      || (filter?.filterType === 'GROUP' && event.groups.includes(filter.group))
+      || (filter === null))
 
 }
 

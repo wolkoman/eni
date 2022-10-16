@@ -1,7 +1,8 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
+import { getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {google} from 'googleapis';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
+import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 
 export default async function handler(req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {
 
@@ -16,7 +17,7 @@ export default async function handler(req: NextApiRequest & {query: {token: stri
   const calendar = google.calendar('v3');
   calendar.events.delete({
     auth: oauth2Client,
-    calendarId: calendarIds['inzersdorf-organ'],
+    calendarId: getCalendarInfo(CalendarName.INZERSDORF_ORGAN).calendarId,
     eventId: req.query.id
   }).then(() => {
     res.status(200).json({});

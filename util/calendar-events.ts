@@ -3,121 +3,103 @@ import {cockpit} from './cockpit-sdk';
 import {site} from "./sites";
 import {notifyAdmin} from "./telegram";
 import {getTimeOfEvent} from "./get-time-of-event";
-
-export const calendarIds = {
-    'all': 'admin@tesarekplatz.at',
-    'emmaus': 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',
-    'inzersdorf': '4fgiuth4nbbi5uqfa35tidnl84@group.calendar.google.com',
-    'neustift': 'occ77f3f7sderl9e3b4jdnr5ek@group.calendar.google.com',
-    'inzersdorf-organ': '3i1uurj6bgl1q91l1peejmfa80@group.calendar.google.com'
-};
-export type Calendar = keyof typeof calendarIds;
-
-export interface CalendarEvent {
-    id: string,
-    summary: string,
-    mainPerson: string | null,
-    description: string,
-    date: string,
-    start: { dateTime: string },
-    end: { dateTime: string },
-    calendar: Calendar,
-    visibility: string,
-    wholeday: boolean,
-    groups: string[],
-    tags: ('in-church' | 'private' | 'cancelled' | 'liturgy')[]
-}
-
-export type CalendarEvents = Record<string, CalendarEvent[]>;
+import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
+import {CalendarEvent, CalendarGroup, CalendarTag, EventsObject} from "./calendar-types";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
-function getGroupFromEvent(event: any): string[] {
-    let conditions: ((x: CalendarEvent) => string | false)[] = [
-        x => x.summary.toLowerCase().includes("wallfahrt") && "Wallfahrt",
-        x => x.summary.toLowerCase().startsWith("taufe") && "Taufe",
-        x => x.summary.toLowerCase().startsWith("grabwache") && "Grabwache",
-        x => x.summary.toLowerCase().includes("messe") && "Heilige Messe",
-        x => x.summary.toLowerCase().includes("mette") && "Heilige Messe",
-        x => x.summary.includes("Firmung") && "Heilige Messe",
-        x => x.summary.toLowerCase().includes("jungschar") && "Jungschar",
-        x => x.summary.toLowerCase().includes("evangel") && "Ökumene",
-        x => x.summary.toLowerCase().startsWith("friedensgebet") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().startsWith("emmausgebet") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().includes("rosenkranz") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().startsWith("gebetsrunde") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().startsWith("bibelrunde") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().startsWith("sprechstunde mit jesus") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().includes("maiandacht") && "Maiandacht",
-        x => x.summary.toLowerCase().includes("klimaoase") && "Caritas",
-        x => x.summary.toLowerCase().includes("eltern-kind-treff") && "Kinder",
-        x => x.summary.toLowerCase().includes("mädchenabend") && "Kinder",
-        x => x.summary.toLowerCase().includes("ministrantenstunde") && "Kinder",
-        x => x.summary.toLowerCase().startsWith("kinderstunde") && "Kinder",
-        x => x.summary.toLowerCase().includes("ferienspiel") && "Kinder",
-        x => x.summary.toLowerCase().includes("hl. martin") && "Kinder",
-        x => x.summary.toLowerCase().includes("jugendtreffen") && "Jugend",
-        x => x.summary.toLowerCase().startsWith("plauder") && "Gemeinschaft",
-        x => x.summary.toLowerCase().includes("flohmarkt") && "Gemeinschaft",
-        x => x.summary.toLowerCase().includes("50+ treff") && "Gemeinschaft",
-        x => x.summary.toLowerCase().startsWith("bibel aktiv") && "Gebet & Bibel",
-        x => x.summary.toLowerCase().includes("andacht") && "Gottesdienst",
-        x => x.summary.toLowerCase().startsWith("vesper") && "Gottesdienst",
-        x => x.summary.toLowerCase().includes("adventkranz") && "Advent",
-        x => x.summary.toLowerCase().includes("krippenspiel") && "Weihnachten",
-        x => x.summary.toLowerCase().includes("mette") && "Weihnachten",
-        x => x.summary.toLowerCase().includes("worship") && "Gottesdienst",
-        x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && "Gottesdienst",
-        x => x.summary.toLowerCase().includes("taufe") && "_",
-        x => x.summary.toLowerCase().includes(" ehe") && "_",
-        x => x.summary.toLowerCase().includes("firmvorbereitung") && "_",
-        x => x.summary.toLowerCase().includes("motorrad") && "_",
-        x => x.summary.toLowerCase().includes("generalprobe") && "_",
-        x => x.summary.toLowerCase().includes("sitzung") && "Gremien",
-        x => x.summary.toLowerCase().includes("chor") && "Chorprobe",
-        x => x.summary.toLowerCase().includes("sprechstunde") && "Sprechstunde",
-        x => x.summary.toLowerCase().includes("woche des lebens") && "Kinder",
+function getGroupFromEvent(event: any): CalendarGroup[] {
+    let conditions: ((x: CalendarEvent) => CalendarGroup | false)[] = [
+        x => x.summary.toLowerCase().includes("wallfahrt") && CalendarGroup.Wallfahrt,
+        x => x.summary.toLowerCase().startsWith("taufe") && CalendarGroup.Taufe,
+        x => x.summary.toLowerCase().startsWith("grabwache") && CalendarGroup.Grabwache,
+        x => x.summary.toLowerCase().includes("messe") && CalendarGroup.Messe,
+        x => x.summary.toLowerCase().includes("mette") && CalendarGroup.Messe,
+        x => x.summary.includes("Firmung") && CalendarGroup.Messe,
+        x => x.summary.toLowerCase().includes("jungschar") && CalendarGroup.Jungschar,
+        x => x.summary.toLowerCase().includes("evangel") && CalendarGroup.Ökumene,
+        x => x.summary.toLowerCase().startsWith("friedensgebet") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("emmausgebet") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().includes("rosenkranz") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("gebetsrunde") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("bibelrunde") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("bibelkreis") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("glaubensabend") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("friedhofsgang") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().startsWith("sprechstunde mit jesus") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().includes("maiandacht") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().includes("klimaoase") && CalendarGroup.Caritas,
+        x => x.summary.toLowerCase().includes("eltern-kind-treff") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("mädchenabend") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("ministrantenstunde") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().startsWith("kinderstunde") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("ferienspiel") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("hl. martin") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("jugendtreffen") && CalendarGroup.Jugend,
+        x => x.summary.toLowerCase().startsWith("plauder") && CalendarGroup.Gemeinschaft,
+        x => x.summary.toLowerCase().includes("flohmarkt") && CalendarGroup.Gemeinschaft,
+        x => x.summary.toLowerCase().includes("50+ treff") && CalendarGroup.Gemeinschaft,
+        x => x.summary.toLowerCase().startsWith("bibel aktiv") && CalendarGroup.Gebet,
+        x => x.summary.toLowerCase().includes("andacht") && CalendarGroup.Gottesdienst,
+        x => x.summary.toLowerCase().startsWith("vesper") && CalendarGroup.Gottesdienst,
+        x => x.summary.toLowerCase().includes("adventkranz") && CalendarGroup.Weihnachten,
+        x => x.summary.toLowerCase().includes("krippenspiel") && CalendarGroup.Weihnachten,
+        x => x.summary.toLowerCase().includes("mette") && CalendarGroup.Weihnachten,
+        x => x.summary.toLowerCase().includes("worship") && CalendarGroup.Gottesdienst,
+        x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && CalendarGroup.Gottesdienst,
+        x => x.summary.toLowerCase().includes("taufe") && CalendarGroup.Invisible,
+        x => x.summary.toLowerCase().includes(" ehe") && CalendarGroup.Invisible,
+        x => x.summary.toLowerCase().includes("firmvorbereitung") && CalendarGroup.Invisible,
+        x => x.summary.toLowerCase().includes("motorrad") && CalendarGroup.Invisible,
+        x => x.summary.toLowerCase().includes("generalprobe") && CalendarGroup.Invisible,
+        x => x.summary.toLowerCase().includes("sitzung") && CalendarGroup.Gremien,
+        x => x.summary.toLowerCase().includes("chor") && CalendarGroup.Chor,
+        x => x.summary.toLowerCase().includes("sprechstunde") && CalendarGroup.Sprechstunde,
+        x => x.summary.toLowerCase().includes("woche des lebens") && CalendarGroup.Kinder,
+        x => x.summary.toLowerCase().includes("erstkommunion") && CalendarGroup.Sakramente,
+        x => x.summary.toLowerCase().includes("firmkurs") && CalendarGroup.Sakramente,
     ];
-    let groups = conditions.reduce<(string | false)[]>((groups, condition) => [
+    let groups = conditions.reduce<(CalendarGroup | false)[]>((groups, condition) => [
         ...groups,
         condition(event)
     ], [])
-        .filter((group): group is string => !!group);
+        .filter((group): group is CalendarGroup => !!group);
 
     if (groups.length === 0 && event.visibility !== "private") {
         //notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
     }
 
-    return groups.length === 0 ? [event.summary] : groups.filter(group => group !== "_");
+    return groups.filter(group => group !== CalendarGroup.Invisible);
 }
 
 
-export function mapGoogleEventToEniEvent(calendarName: string): (event: calendar_v3.Schema$Event) => CalendarEvent {
-    return event => {
+export function mapGoogleEventToEniEvent(calendarName: CalendarName): (event: calendar_v3.Schema$Event) => CalendarEvent {
+    return (event): CalendarEvent => {
         const displayPersonen = event?.summary?.split("/", 2)?.[1] ?? null;
         return ({
-            id: event.id,
-            summary: event?.summary?.split('/', 2)[0],
+            id: event.id ?? "",
+            summary: event?.summary?.split('/', 2)[0] ?? "",
             mainPerson: displayPersonen,
             description: event.description ?? '',
             date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
-            start: event.start,
-            end: event.end,
+            start: event.start as {dateTime: string},
+            end: event.end as {dateTime: string},
             calendar: calendarName,
             visibility: event.visibility ?? 'public',
             groups: getGroupFromEvent(event),
             tags: [
-                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',
-                (event.visibility === 'private') && 'private',
-                (event.summary + (event.description ?? '')).match(cancelledRegex) && 'cancelled',
-            ].filter(item => item),
+                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && CalendarTag.inChurch,
+                (event.visibility === 'private') && CalendarTag.private,
+                (event.summary + (event.description ?? '')).match(cancelledRegex) && CalendarTag.cancelled,
+            ].filter((item): item is CalendarTag => !!item),
             wholeday: !!event.start?.date,
-        } as CalendarEvent);
+        });
     };
 }
 
-export async function getCalendarEvents(calendarId: string, calendarName: string, options: { public: boolean } | { timeMin: Date, timeMax: Date }): Promise<CalendarEvent[]> {
+export async function getCalendarEvents(calendarName: CalendarName, options: { public: boolean } | { timeMin: Date, timeMax: Date }): Promise<CalendarEvent[]> {
+    const calendarId = CALENDAR_INFOS[calendarName].calendarId;
     const oauth2Client = await getCachedGoogleAuthClient();
     const calendar = google.calendar('v3');
     const todayDate = new Date();
@@ -165,21 +147,15 @@ export async function getCachedGoogleAuthClient() {
 }
 export function getParishEvents(props: { public: boolean }): Promise<CalendarEvent[]> {
     return Promise.all(
-        Object.entries(calendarIds).filter(([, calendarId]) => site(
-            [calendarIds.all, calendarIds.emmaus, calendarIds.inzersdorf, calendarIds.neustift],
-            [calendarIds.all, calendarIds.emmaus]
+        site(
+            [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
+            [CalendarName.ALL, CalendarName.EMMAUS]
         )
-            .includes(calendarId))
-            .map(([name, calendarId]) => getCalendarEvents(calendarId, name, {public: props.public}))
+            .map((name) => getCalendarEvents(name, {public: props.public}))
     )
         .then(eventList => eventList.flat())
         .then(events => events.filter(event => !!event))
         .then(events => events.sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b)));
-}
-
-export interface EventsObject {
-    events: CalendarEvent[];
-    cache: string | null;
 }
 
 export const getCachedEvents = async (privateAccess: boolean): Promise<EventsObject> => {
