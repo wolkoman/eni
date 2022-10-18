@@ -5,7 +5,7 @@ import {Event, EventDateText} from './Event';
 import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
-import {useEmmausProd} from "../../utils/use-emmaus-prod";
+import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarGroup, EventsObject} from "../../util/calendar-types";
 
 export function getGroupSorting(group: CalendarGroup) {

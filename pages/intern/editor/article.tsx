@@ -37,7 +37,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
         </div>;
     }
 
-    const [jwt, user] = useUserStore(store => [store.jwt, store.user]);
+    const [jwt, user, userLoad] = useUserStore(store => [store.jwt, store.user, store.load]);
     const permission = user?.permissions[Permission.Editor] ?? false;
     const editable = permission || props.article.status === "writing";
     const {query: {articleId}} = useRouter();
@@ -65,9 +65,10 @@ export default function Index(props: { article: Collections['paper_articles'], p
         }
     }, [text, props.article.char_max, props.article.char_min, warning.active]);
     useEffect(() => {
+        userLoad();
         const interval = setInterval(() => save(), 10000);
         return () => clearInterval(interval);
-    });
+    }, []);
 
     useBeforeunload(async (event) => {
         if (saved !== 'saved' && editable) {
@@ -101,7 +102,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     function saveStatus(newStatus: typeof props.article.status) {
         setStatusLoading(true);
-        return fetchJson("/api/editor/saveStatus", {json: {status: newStatus}, jwt})
+        return fetchJson("/api/editor/saveStatus", {json: {status: newStatus, articleId}, jwt})
             .then(() => setStatus(newStatus))
             .catch(() => setStatus(status))
             .finally(() => setStatusLoading(false))

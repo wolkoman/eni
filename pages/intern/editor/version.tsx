@@ -5,10 +5,10 @@ import {cockpit} from "../../../util/cockpit-sdk";
 
 export default function Version(props: { versions: Collections['paper_texts'][] }) {
     const [open, setOpen] = useState<string>();
-    return <Site>
-        {props.versions.map(version => <div key={version._id} className="border border-black/1 p-4 cursor-pointer mb-4" onClick={() => setOpen(version._id)}>
+    return <Site title="Versionen">
+        {props.versions.map(version => <div key={version._id} className={`border border-black/10 rounded p-4 cursor-pointer mb-4 ${open === version._id && 'bg-black/5'}`} onClick={() => setOpen(version._id)}>
             <div>{new Date(version._created*1000).toLocaleString()}</div>
-            {open === version._id && <pre>{version.text}</pre>}
+            {open === version._id && <div>{version.text}</div>}
         </div>)}
     </Site>
 }

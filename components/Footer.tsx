@@ -4,7 +4,7 @@ import Responsive from './Responsive';
 import {useUserStore} from '../util/use-user-store';
 import {site} from '../util/sites';
 import Button from "./Button";
-import {useEmmausProd} from "../utils/use-emmaus-prod";
+import {useEmmausProd} from "../util/use-emmaus-prod";
 
 export default function Footer() {
     const [isLoggedIn, load] = useUserStore(state => [state.user?.active, state.load]);

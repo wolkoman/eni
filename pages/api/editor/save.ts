@@ -20,12 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         filter: {article: req.body.articleId},
         sort: {_created: -1}
     })).entries;
-    console.log(entries[0]);
     const latestText = entries?.[0];
     let latestTextId: string | null = latestText?._id;
 
     let createNew = latestText?._created + 60*10 < new Date().getTime()/1000;
-    console.log("new", createNew,"latest text", new Date((latestText?._created + 60*10)*1000), "deadline", new Date(new Date().getTime()))
     if(createNew){
         latestTextId = null;
     }

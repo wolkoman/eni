@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {site} from "../util/sites";
+import {site} from "./sites";
 
 export function useEmmausProd() {
     const [emmausProd, setEmmausProd] = useState(false);
