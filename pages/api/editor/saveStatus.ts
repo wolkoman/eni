@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await cockpit.collectionSave('paper_articles', {...article, status: req.body.status});
 
     if(article.project.display.startsWith("EB")){
-        const channel = 'GALJKBCKW'/*'U0HJVFER4'*/;
+        const channel = process.env.STAGE === "prod" ? 'C047C4D4R7B' : 'U0HJVFER4';
         const articles = (await cockpit.collectionGet('paper_articles', {filter: {project: article.project._id as any}})).entries;
         const sameStatus = {
             writing: articles.filter(a => a.status === 'writing'),
@@ -29,7 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             finished: articles.filter(a => a.status === 'finished'),
         }[req.body.status as typeof article.status];
         const status = {written: ":writing_hand: geschrieben", writing: "gestartet", finished: ":champagne: fertiggestellt", corrected: ":ok_hand: lektoriert"}[req.body.status as typeof article.status];
-        await slack('chat.postMessage', {channel, text: `_${article.name}_ wurde ${status} (${sameStatus.length}/${articles.length})` });
+        console.log(await slack('chat.postMessage', {channel, text: `_${article.name}_ wurde ${status} (${sameStatus.length}/${articles.length})` }));
+        return;
     }
 
 
