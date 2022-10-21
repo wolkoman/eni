@@ -38,7 +38,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     }
 
     const [jwt, user, userLoad] = useUserStore(store => [store.jwt, store.user, store.load]);
-    const permission = user?.permissions[Permission.Editor] ?? false;
+    const permission = user?.permissions?.[Permission.Editor] ?? false;
     const editable = permission || props.article.status === "writing";
     const {query: {articleId}} = useRouter();
     const [text, setText] = useState(props.versions[0]?.text ?? '');
@@ -102,8 +102,14 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     function saveStatus(newStatus: typeof props.article.status) {
         setStatusLoading(true);
-        return fetchJson("/api/editor/saveStatus", {json: {status: newStatus, articleId}, jwt})
-            .then(() => setStatus(newStatus))
+        return fetchJson("/api/editor/saveStatus", {
+            json: {status: newStatus, articleId},
+            jwt
+        }, {
+            pending: "Status wird gespeichert",
+            error: "Status konnte nicht gespeichert werden",
+            success: "Status wurde gespeichert"
+        }).then(() => setStatus(newStatus))
             .catch(() => setStatus(status))
             .finally(() => setStatusLoading(false))
     }
@@ -153,7 +159,9 @@ export default function Index(props: { article: Collections['paper_articles'], p
                                     <div
                                         className="text-2xl mr-2 -mb-2 font-bold line-clamp-1">{props.article.name}</div>
                                 </div>
-                                <div className="text-sm line-clamp-1">{props.article.author} (Redaktionsschluss: {new Date(props.project.deadline).toLocaleDateString()})</div>
+                                <div
+                                    className="text-sm line-clamp-1">{props.article.author} (Redaktionsschluss: {new Date(props.project.deadline).toLocaleDateString()})
+                                </div>
                             </div>
                             <div className="flex flex-row space-x-3 items-center">
                                 {editable && <div className="opacity-80 text-sm whitespace-nowrap">{{
@@ -199,13 +207,15 @@ export default function Index(props: { article: Collections['paper_articles'], p
                 unfinished: ``,
                 perfect: `text-green-700 font-bold`,
                 excess: 'bg-red-600 text-white font-bold',
-            }[note]}`}><Responsive><div className="flex justify-between">
-                <div className="">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
-                <div className={`px-2 rounded`}>{{
-                    unfinished: `${Math.round(200 * length / (+props.article.char_min + +props.article.char_max))}%`,
-                    perfect: `100%`,
-                    excess: `${length - +props.article.char_max} Zeichen Überschuss`,
-                }[note]}</div></div>
+            }[note]}`}><Responsive>
+                <div className="flex justify-between">
+                    <div className="">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
+                    <div className={`px-2 rounded`}>{{
+                        unfinished: `${Math.round(200 * length / (+props.article.char_min + +props.article.char_max))}%`,
+                        perfect: `100%`,
+                        excess: `${length - +props.article.char_max} Zeichen Überschuss`,
+                    }[note]}</div>
+                </div>
             </Responsive></div>
         </div>
     </Site>

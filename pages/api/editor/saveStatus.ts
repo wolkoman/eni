@@ -29,8 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             finished: articles.filter(a => a.status === 'finished'),
         }[req.body.status as typeof article.status];
         const status = {written: ":writing_hand: geschrieben", writing: "gestartet", finished: ":champagne: fertiggestellt", corrected: ":ok_hand: lektoriert"}[req.body.status as typeof article.status];
-        console.log(await slack('chat.postMessage', {channel, text: `_${article.name}_ wurde ${status} (${sameStatus.length}/${articles.length})` }));
-        return;
+        await slack('chat.postMessage', {channel, text: `_${article.name}_ wurde ${status} (${sameStatus.length}/${articles.length})` });
     }
 
 
