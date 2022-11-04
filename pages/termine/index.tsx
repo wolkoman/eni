@@ -9,20 +9,33 @@ import {useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
-import Link from "next/link";
 import Responsive from "../../components/Responsive";
+import {CalendarGroup} from "../../util/calendar-types";
+import {CalendarName} from "../../util/calendar-info";
 
 export default function EventPage() {
     const [filter, setFilter] = useState<FilterType>(null);
+    const [firstFilterUpdate, setFirstFilterUpdate] = useState(true);
     const calendar = useCalendarStore(state => state);
     const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
-    const {query: {q: query}} = useRouter();
+    const {query: {q: groupQuery, p: parishQuery}} = useRouter();
     const router = useRouter();
 
     useEffect(() => userLoad(), [userLoad]);
     useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
     useEffect(() => {
-        router.push({query: {q: filter?.filterType !== "GROUP" ? null : filter.group}})
+        if(groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})
+        if(parishQuery) setFilter({filterType: "PARISH", parish: parishQuery as CalendarName })
+    }, [groupQuery, parishQuery]);
+    useEffect(() => {
+        if (!firstFilterUpdate) {
+            router.push({query: {
+                q: filter?.filterType !== "GROUP" ? null : filter.group,
+                p: filter?.filterType !== "PARISH" ? null : filter.parish
+            }})
+        } else {
+            setFirstFilterUpdate(false);
+        }
     }, [filter]);
 
     return <Site responsive={false}>
@@ -57,7 +70,7 @@ export default function EventPage() {
                             <div className="font-bold text-4xl mb-6">Termine</div>}
                         {calendar.error && <CalendarErrorNotice/>}
                         {calendar.loading && <LoadingEvents/>}
-                        {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, query as string)))
+                        {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter)))
                             .map(([date, events]) => <div key={date} data-date={date}>
                                 <EventDate date={new Date(date)}/>
                                 {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}

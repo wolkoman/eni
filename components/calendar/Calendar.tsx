@@ -11,7 +11,7 @@ export type Person = keyof typeof personWords;
 
 export type FilterType = { filterType: 'PARISH', parish: CalendarName } | { filterType: 'PERSON', person: string } | { filterType: 'GROUP', group: CalendarGroup } | null;
 
-export function applyFilter(events: CalendarEvent[], filter: FilterType, group?: string) {
+export function applyFilter(events: CalendarEvent[], filter: FilterType) {
   return events
     .filter(event =>
         ((filter?.filterType === 'PERSON' && event.mainPerson === filter.person))
