@@ -17,50 +17,54 @@ export default function EventPage() {
     const calendar = useCalendarStore(state => state);
     const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
     const {query: {q: query}} = useRouter();
+    const router = useRouter();
 
     useEffect(() => userLoad(), [userLoad]);
     useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
+    useEffect(() => {
+        router.push({query: {q: filter?.filterType !== "GROUP" ? null : filter.group}})
+    }, [filter]);
 
     return <Site responsive={false}>
         <Responsive sides={false}>
-        <div data-testid="calendar" className="relative">
-            <CalendarCacheNotice/>
-            <div className="flex flex-col md:flex-row">
-                <div
-                    className="w-full self-start p-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-20 bg-white border-b md:border-b-0 md:border-r border-black/20">
-                    <FilterSelector
-                        filter={filter}
-                        setFilter={filter => setFilter(filter)}
-                        userPermissions={permissions}
-                        groups={calendar.items
-                            .flatMap(event => event.groups)
-                            .filter((group, index, groups) => groups.indexOf(group) === index)
-                        }
-                        persons={calendar.items
-                            .map(event => event.mainPerson?.trim())
-                            .filter((person): person is string => !!person && person.includes("."))
-                            .filter((person, index, persons) => persons.indexOf(person) === index)
-                        }
-                    />
-                </div>
-                <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
-                    {query ? <div>
-                            <div className="font-bold text-4xl mb-6">{query}</div>
-                            <Link href="/termine">
-                                <div className="cursor-pointer underline hover:no-underline">Alle Termine anzeigen</div>
-                            </Link>
-                        </div> :
-                        <div className="font-bold text-4xl mb-6">Termine</div>}
-                    {calendar.error && <CalendarErrorNotice/>}
-                    {calendar.loading && <LoadingEvents/>}
-                    {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, query as string)))
-                        .map(([date, events]) => <div key={date} data-date={date}>
-                            <EventDate date={new Date(date)}/>
-                            {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
-                        </div>)}
+            <div data-testid="calendar" className="relative">
+                <CalendarCacheNotice/>
+                <div className="flex flex-col md:flex-row">
+                    <div
+                        className="w-full self-start py-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-20 bg-white border-b md:border-b-0 md:border-r border-black/20">
+                        <FilterSelector
+                            filter={filter}
+                            setFilter={filter => setFilter(filter)}
+                            userPermissions={permissions}
+                            groups={calendar.items
+                                .flatMap(event => event.groups)
+                                .filter((group, index, groups) => groups.indexOf(group) === index)
+                            }
+                            persons={calendar.items
+                                .map(event => event.mainPerson?.trim())
+                                .filter((person): person is string => !!person && person.includes("."))
+                                .filter((person, index, persons) => persons.indexOf(person) === index)
+                            }
+                        />
+                    </div>
+                    <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
+                        {filter !== null ? <div>
+                                <div className="font-bold text-4xl mb-6">{filter.filterType === "GROUP" ? filter.group : "Termine"}</div>
+                                <div className="cursor-pointer underline hover:no-underline"
+                                     onClick={() => setFilter(null)}>Alle Termine anzeigen
+                                </div>
+                            </div> :
+                            <div className="font-bold text-4xl mb-6">Termine</div>}
+                        {calendar.error && <CalendarErrorNotice/>}
+                        {calendar.loading && <LoadingEvents/>}
+                        {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, query as string)))
+                            .map(([date, events]) => <div key={date} data-date={date}>
+                                <EventDate date={new Date(date)}/>
+                                {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
+                            </div>)}
+                    </div>
                 </div>
             </div>
-        </div>
         </Responsive>
     </Site>;
 }

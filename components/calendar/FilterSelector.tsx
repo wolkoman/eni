@@ -7,7 +7,7 @@ import {getGroupSorting} from "./ComingUp";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div
-        className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.active ? (props.activeColor ?? "bg-gray-200") : ""}`}
+        className={`px-3 py-1 mb-1 flex-grow text-center lg:text-left cursor-pointer rounded ${props.active ? (props.activeColor ?? "bg-gray-200") : ""}`}
         onClick={props.onClick}
     >
         {props.label}
@@ -58,9 +58,10 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
             </>}
             <FilterLabel>Termingruppe</FilterLabel>
             <FilterButtons>
-                <div className="animate-pulse">
+                <div className="animate-pulse w-full flex space-x-2">
                     {props.groups.length === 0 && Array.from({length: 3}).map(() => <FilterButton label="​" active={true}/>)}
                 </div>
+                <div className={"hiddens flex  lg:flex-col"}>
                 {props.groups
                     .sort((a, b) => getGroupSorting(b) - getGroupSorting(a))
                     .map(group => <FilterButton
@@ -70,6 +71,7 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
                             active={props.filter?.filterType === "GROUP" && props.filter.group === group}
                         />
                     )}
+                </div>
             </FilterButtons>
         </div>
     </div>
