@@ -102,7 +102,7 @@ export async function getCalendarEvents(calendarName: CalendarName, options: { p
     const calendarId = CALENDAR_INFOS[calendarName].calendarId;
     const oauth2Client = await getCachedGoogleAuthClient();
     const calendar = google.calendar('v3');
-    const todayDate = new Date("2022-10-01");
+    const todayDate = new Date();
     todayDate.setHours(0);
     let isPublic = 'public' in options ? options.public : false;
     let start = todayDate.getTime();
