@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {fetchWeeklies} from "../../util/fetchWeeklies";
-import {getCockpitImageUrl} from "../../components/Articles";
+import {getCockpitResourceUrl} from "../../components/Articles";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
@@ -13,6 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const weeklies = await fetchWeeklies();
     // @ts-ignore
-    const file = getCockpitImageUrl(weeklies.find(weekly => weekly.emmaus && weekly.inzersdorf && weekly.neustift)![parish])
+    const file = getCockpitResourceUrl(weeklies.find(weekly => weekly.emmaus && weekly.inzersdorf && weekly.neustift)![parish])
     res.redirect(file);
 }

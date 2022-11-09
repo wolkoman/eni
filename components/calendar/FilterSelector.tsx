@@ -58,8 +58,8 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
             </>}
             <FilterLabel>Termingruppe</FilterLabel>
             <FilterButtons>
-                <div className="animate-pulse w-full flex space-x-2">
-                    {props.groups.length === 0 && Array.from({length: 3}).map(() => <FilterButton label="​" active={true}/>)}
+                <div className="animate-pulse w-full flex lg:flex-col space-x-2 lg:space-x-0">
+                    {props.groups.length === 0 && Array.from({length: 5}).map(() => <FilterButton label="​" active={true}/>)}
                 </div>
                 <div className={"hiddens flex  lg:flex-col"}>
                 {props.groups

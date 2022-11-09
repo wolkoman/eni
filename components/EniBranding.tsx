@@ -11,9 +11,9 @@ export function EniBranding() {
         <div className="md:pt-12 relative">
             <div className="text-6xl font-bold pt-16 text-center z-10 relative">
                 <div className="relative">
-                    {site('Eine Neue Initiative', 'emmaus am wienerberg')}
+                    Eine Neue Initiative
                     <div className="absolute inset-0 text-stroke">
-                        {site('Eine Neue Initiative', 'emmaus am wienerberg')}
+                        Eine Neue Initiative
                     </div>
                 </div>
             </div>

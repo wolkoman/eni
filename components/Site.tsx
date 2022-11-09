@@ -25,9 +25,17 @@ export default function Site(props: {
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">
             <div className="flex-grow flex flex-col items-stretch">
-                {(props.navbar ?? true) && <TopBar/>}
+                {(props.navbar ?? true) && <>
+                    <TopBar/>
+                    {site(<></>, <div className="bg-emmaus text-6xl font-bold pt-8 mb-16 px-10">
+                        <div className="translate-y-6 max-w-5xl mx-auto relative">
+                            {props.title}
+                            <div className="absolute inset-0 text-stroke">{props.title}</div>
+                        </div>
+                    </div>)}
+                </>}
                 {(props.responsive ?? true) ? <Responsive narrow={props.narrow}>
-                    {props.title ? <div className="font-bold text-2xl my-4">{props.title}</div> : null}
+                    {props.title ? <div className="font-bold text-2xl my-4">{site(props.title, null)}</div> : null}
                     {props.children}
                 </Responsive> : props.children}
             </div>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import Responsive from "./Responsive";
 import {Collections} from "cockpit-sdk";
-import {getCockpitImageUrl} from "./Articles";
+import {getCockpitResourceUrl} from "./Articles";
 import Button from "./Button";
 
 export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
@@ -11,7 +11,7 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
     const blatt = props.weeklies.find(weekly => weekly.emmaus && weekly.inzersdorf && weekly.neustift)!;
     return <Responsive><Section title="Pfarrzeitung" id="pfarrzeitung"><div className=" max-w-2xl my-16 space-y-12">
         <div className="flex flex-col md:flex-row items-start">
-            <img src={getCockpitImageUrl(paper.preview.path)} className="w-48 mr-8 rounded"/>
+            <img src={getCockpitResourceUrl(paper.preview.path)} className="w-48 mr-8 rounded"/>
             <div className="mt-4">
                 <div className="text-3xl font-bold">
                     Der Emmausbote
@@ -21,8 +21,11 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
                     mehr finden Sie im Emmausboten.
                 </div>
                 <div className="flex space-x-2">
-                    <Link href={getCockpitImageUrl(paper.emmaus)}>
+                    <Link href={getCockpitResourceUrl(paper.emmaus)}>
                         <Button label="Aktuelle Ausgabe" className="bg-emmaus"/>
+                    </Link>
+                    <Link href="/archiv">
+                        <Button label="Archiv" className="bg-black/50"/>
                     </Link>
                 </div>
             </div>
@@ -37,8 +40,11 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
                     Wöchentliche Termine und Ankündigungen. Immer was neu, im Wochenblatt!
                 </div>
                 <div className="flex space-x-2">
-                    <Link href={getCockpitImageUrl(blatt.emmaus)}>
+                    <Link href={getCockpitResourceUrl(blatt.emmaus)}>
                         <Button label="Aktuelle Ausgabe" className="bg-emmaus"/>
+                    </Link>
+                    <Link href="https://eni.wien/archiv">
+                        <Button label="Archiv" className="bg-black/50"/>
                     </Link>
                 </div>
             </div>

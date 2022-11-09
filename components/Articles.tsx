@@ -5,7 +5,7 @@ import {Collections} from 'cockpit-sdk';
 import {Section} from './Section';
 import Responsive from "./Responsive";
 
-export function getCockpitImageUrl(url: string) {
+export function getCockpitResourceUrl(url: string) {
     if(url.startsWith('https')) return url;
     if(url.startsWith('/storage')) return `${cockpit.host}${url}`;
     if(url.startsWith('storage')) return `${cockpit.host}/${url}`;
@@ -21,7 +21,7 @@ function ArticleCard(props: { article?: Collections['article'] }) {
         <div className={`flex flex-row cursor-pointer ${!props.article && 'shimmer'} bg-emmaus-sec/20 hover:bg-emmaus-sec/10 rounded`}>
             <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded m-3"
                  style={!props.article ? {} : {
-                     backgroundImage: `url(${getCockpitImageUrl(props.article.preview_image.path)})`,
+                     backgroundImage: `url(${getCockpitResourceUrl(props.article.preview_image.path)})`,
                      backgroundSize: 'cover',
                      backgroundPosition: '50% 50%'
                  }}/>
