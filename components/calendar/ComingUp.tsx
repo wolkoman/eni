@@ -9,7 +9,7 @@ import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarGroup, EventsObject} from "../../util/calendar-types";
 
 export function getGroupSorting(group: CalendarGroup) {
-    return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Gottesdienst, CalendarGroup.Weihnachten, CalendarGroup.Messe].indexOf(group);
+    return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Weihnachten, CalendarGroup.Gottesdienst, CalendarGroup.Messe].indexOf(group);
 }
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
