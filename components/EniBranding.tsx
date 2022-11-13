@@ -5,16 +5,14 @@ import eniAnimation from "../public/eni_animation.json";
 
 export function EniBranding() {
 
-    return <div className="overflow-hidden h-[600px] "><Responsive>
-        <div className="ml-12 mt-12 flex items-center gap-3 justify-center">
-            Pfarre Emmaus am Wienerberg
-            <div className="mt-0.5 w-2 border-t border-black/60"/>
-            Pfarre Inzersdorf (St. Nikolaus)
-            <div className="mt-0.5 w-2 border-t border-black/60"/>
-            Pfarre Inzersdorf-Neustift
+    return <div className="overflow-hidden h-[480px] lg:h-[560px] "><Responsive>
+        <div className="lg:ml-12 mt-12 flex flex-col lg:flex-row items-center lg:gap-8 justify-center">
+            <div>Pfarre Emmaus am Wienerberg</div>
+            <div>Pfarre Inzersdorf (St. Nikolaus)</div>
+            <div>Pfarre Inzersdorf-Neustift</div>
         </div>
         <div className="relative">
-            <div className="pt-32 text-center z-10 relative font-bold">
+            <div className="pt-24 lg:pt-32 text-center z-10 relative font-bold">
                 <div className="relative text-7xl">
                     Eine Neue Initiative
                     <div className="absolute inset-0 text-stroke">
@@ -31,7 +29,7 @@ export function EniBranding() {
             <Lottie
                 animationData={eniAnimation}
                 play loop={false}
-                className="absolute top-24 lg:top-16 -left-24 h-96 scale-[350%] lg:scale-[150%] z-0"
+                className="absolute top-16 lg:top-16 -left-24 h-96 scale-[350%] lg:scale-[150%] z-0"
             />
 
         </div>

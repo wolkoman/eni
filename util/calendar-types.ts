@@ -46,4 +46,5 @@ export enum CalendarGroup {
     Jugend = "Jugend",
     Gremien = "Gremien",
     Chor = "Chor",
+    Ostern = "Ostern",
 }

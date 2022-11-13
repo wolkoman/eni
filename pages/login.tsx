@@ -45,7 +45,7 @@ export default function Events() {
             <div
                 className={`z-10 bg-white borde border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
-                    <div className="font-bold text-2xl mb-5">eine neue initiative</div>
+                    <div className="font-bold text-2xl mb-5">Eine Neue Initiative</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
                            value={data.username}
                            onChange={(event) => setData({...data, username: (event as any).target.value})}/>

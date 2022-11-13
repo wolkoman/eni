@@ -32,7 +32,7 @@ export default function EventPage() {
             router.push({query: {
                 q: filter?.filterType !== "GROUP" ? null : filter.group,
                 p: filter?.filterType !== "PARISH" ? null : filter.parish
-            }})
+            }}, "/termine")
         } else {
             setFirstFilterUpdate(false);
         }

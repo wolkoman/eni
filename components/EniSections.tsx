@@ -6,16 +6,17 @@ import {getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
 
 export function EniSections() {
-    return <Responsive><Section title="Mitteilungen"><div className="space-y-12 my-12 max-w-2xl">
-        <div className="flex flex-col md:flex-row items-start">
-            <img src="./info-01.svg" className="w-32 mr-8"/>
-            <div>
+    return <Responsive><Section title="Mitteilungen">
+        <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center">
+            <div className="flex flex-col items-center">
+                <img src="./Wochenblatt.svg" className="h-44 mb-12"/>
                 <div className="text-3xl font-bold">
                     Wochenmitteilungen
                 </div>
                 <div className="text-lg my-3">
                     Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu.
-                    Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an die kanzlei@eni.wien.
+                    Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit
+                    der gewünschten Pfarre an die kanzlei@eni.wien.
                 </div>
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
@@ -25,15 +26,14 @@ export function EniSections() {
                     )}
                 </div>
             </div>
-        </div>
-        <div className="flex flex-col md:flex-row items-start">
-            <img src="./info-02.svg" className="w-32 mr-8"/>
-            <div>
+            <div className="flex flex-col items-center">
+                <img src="./Zeitungen.svg" className="h-44 mb-12"/>
                 <div className="text-3xl font-bold">
                     Pfarrzeitungen
                 </div>
                 <div className="text-lg my-3">
-                    Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles mehr finden Sie in den Pfarrzeitungen der Pfarren.
+                    Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken
+                    und vieles mehr finden Sie in den Pfarrzeitungen der Pfarren.
                 </div>
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
@@ -52,6 +52,5 @@ export function EniSections() {
                 </div>
             </div>
         </div>
-    </div>
     </Section></Responsive>;
 }
