@@ -20,7 +20,7 @@ export default function HomePage(
             description="Drei Pfarren im Wiener Dekanat 23"
             keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}
         >
-            {site(<>
+            {site(() => <>
                 <div className="text-3xl font-bold">Wochenmitteilungen</div>
                 <div className="my-4 mb-16">
                     <div className="my-0.5 flex font-bold space-x-2">
@@ -39,7 +39,7 @@ export default function HomePage(
                             }
                         </div>)}
                 </div>
-            </>,<>
+            </>, () => <>
                 <div className="text-3xl font-bold">Emmausbote</div>
                 <div className="flex flex-wrap mb-12">
                     {props.eb
@@ -48,7 +48,7 @@ export default function HomePage(
                             className="w-60 rounded m-2 hover:scale-105 cursor-pointer transition"
                         /></Link>)}
                 </div>
-            </>)}
+            </>)()}
         </Site>
     </>;
 }
@@ -56,7 +56,7 @@ export default function HomePage(
 export async function getStaticProps() {
     return {
         props: {
-            weeklies: await site(() => Promise.resolve({}), () => fetchWeeklies())(),
+            weeklies: await fetchWeeklies(),
             eb: await site(() => Promise.resolve({}), () => fetchEmmausbote())(),
         },
         revalidate: 60,
