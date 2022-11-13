@@ -56,7 +56,7 @@ export default function HomePage(
 export async function getStaticProps() {
     return {
         props: {
-            weeklies: await site(() => Promise.resolve({}), () => fetchWeeklies())(),
+            weeklies: await fetchWeeklies(),
             eb: await site(() => Promise.resolve({}), () => fetchEmmausbote())(),
         },
         revalidate: 60,
