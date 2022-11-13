@@ -40,6 +40,7 @@ export enum CalendarGroup {
     Gemeinschaft = "Gemeinschaft",
     Gottesdienst = "Gottesdienst",
     Weihnachten = "Weihnachten",
+    Advent = "Advent",
     Invisible = "_",
     Sprechstunde = "Sprechstunde",
     Jugend = "Jugend",
