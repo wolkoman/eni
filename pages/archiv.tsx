@@ -57,7 +57,7 @@ export async function getStaticProps() {
     return {
         props: {
             weeklies: await fetchWeeklies(),
-            eb: await site(() => Promise.resolve({}), () => fetchEmmausbote())(),
+            eb: await fetchEmmausbote(),
         },
         revalidate: 60,
     }
