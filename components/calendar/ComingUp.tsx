@@ -1,4 +1,3 @@
-import {CalendarCacheNotice} from './CalendarCacheNotice';
 import React from 'react';
 import {groupEventsByGroupAndDate} from '../../util/use-calendar-store';
 import {Event, EventDateText} from './Event';

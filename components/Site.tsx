@@ -18,10 +18,11 @@ export default function Site(props: {
 }) {
     return <>
         <Head>
-            <title>{props.title && `${props.title} | `}{site("eni.wien", "emmaus.wien")}</title>
+            <title>{props.title && `${props.title} | `}{site("Eine Neue Initiative", "Pfarre Emmaus")}</title>
             {props.author && <meta name="author" content={props.author}/>}
             {props.description && <meta name="description" content={props.description}/>}
             {props.keywords && <meta name="keywords" content={props.keywords.join(", ")}/>}
+            <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">
             <div className="flex-grow flex flex-col items-stretch">
