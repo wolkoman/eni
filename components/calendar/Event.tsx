@@ -3,21 +3,23 @@ import {ParishTag} from './ParishTag';
 import {useRouter} from 'next/router';
 import {SanitizeHTML} from '../SanitizeHtml';
 import {getMonthName, getWeekDayName} from './Calendar';
-import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
+import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
+import {Liturgy} from "../../pages/api/liturgy";
 
-export function Event({event, permissions, noTag}: { event: CalendarEvent, permissions: Permissions, noTag?: boolean }) {
+export function Event({event, noTag}: { event: CalendarEvent, noTag?: boolean }) {
+    const link = event.groups.includes(CalendarGroup.Messe) ? `termine/${event.id}` : null;
     return <div className={`flex text-lg mb-1 ${event.tags.includes(CalendarTag.cancelled) && 'opacity-50'}`}>
         <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
             {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
         </div>
         {noTag || <div className="mr-2">
-          <ParishTag calendar={event.calendar} colorless={event.tags.includes(CalendarTag.cancelled)}/>
+            <ParishTag calendar={event.calendar} colorless={event.tags.includes(CalendarTag.cancelled)}/>
         </div>}
         <div className="mb-2 leading-5" data-testid="event">
             <div className={`mt-1 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
                 <EventSummary event={event}/>
             </div>
-            <EventDescription event={event} permissions={permissions}/>
+            <EventDescription event={event}/>
         </div>
     </div>;
 }
@@ -34,14 +36,14 @@ export function EventSummary(props: { event: CalendarEvent }) {
   </span>;
 }
 
-export function EventDescription(props: { event: CalendarEvent, permissions: Permissions }) {
+export function EventDescription(props: { event: CalendarEvent }) {
     return <div className="font-normal text-sm leading-4">
-        {props.permissions[Permission.PrivateCalendarAccess] && <>
+        <div>
             {props.event.tags.includes(CalendarTag.private) &&
-              <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
+                <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
             {props.event.tags.includes(CalendarTag.inChurch) && props.event.calendar === 'inzersdorf' &&
-              <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
-        </>}
+                <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
+        </div>
         {!props.event.tags.includes(CalendarTag.cancelled) && <>
             {props.event.mainPerson && `mit ${props.event.mainPerson}`}
             {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}</>}
@@ -50,11 +52,10 @@ export function EventDescription(props: { event: CalendarEvent, permissions: Per
 
 export const EventDate = ({date}: { date: Date }) => {
     const day = date.getDay();
-    return <div className="sticky top-20 md:top-0 relative z-10">
-        <div className={`mp-3 leading-5 bg-white pt-4 ${day ? '' : 'underline'}`}>
+    return <div className="">
+        <div className={`leading-5 text-lg bg-white py-2 ${day ? '' : 'underline'}`}>
             <EventDateText date={date}/>
         </div>
-        <div className="h-4 to-white bg-gradient-to-t from-transparent"/>
     </div>;
 }
 export const EventDateText = ({date}: { date: Date }) => {

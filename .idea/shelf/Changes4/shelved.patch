@@ -1,0 +1,1125 @@
+Index: components/calendar/FilterSelector.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Permission, Permissions} from '../../util/verify';\r\nimport {Calendar} from '../../util/calendar-events';\r\nimport {getCalendarInfo} from '../../util/calendar-info';\r\nimport {FilterType, Person} from './Calendar';\r\n\r\nexport function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions }) {\r\n    const parishFilters: { label: string, parish: Calendar }[] = [\r\n        {label: 'Emmaus', parish: 'emmaus'},\r\n        {label: 'St. Nikolaus', parish: 'inzersdorf'},\r\n        {label: 'Neustift', parish: 'neustift'},\r\n    ];\r\n    const personFilters: { label: string, person: Person }[] = [\r\n        {label: 'Zvonko', person: 'brezovski'},\r\n        {label: 'David', person: 'campos'},\r\n        {label: 'Gil', person: 'thomas'},\r\n        {label: 'Marcin', person: 'wojciech'},\r\n    ];\r\n    return <>\r\n        <div\r\n            className=\"flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0 \"\r\n            data-testid=\"parish-selector\">\r\n\r\n            <div\r\n                className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter === null ? 'bg-gray-200' : ''}`}\r\n                onClick={() => props.setFilter(null)}\r\n            >\r\n                Alle\r\n            </div>\r\n            {parishFilters.map(filt => <div\r\n                    key={filt.label}\r\n                    className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish ? getCalendarInfo(filt.parish).className : ''}`}\r\n                    onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.parish})}>\r\n                    {filt.label}\r\n                </div>\r\n            )}\r\n        </div>\r\n        {props.userPermissions[Permission.PrivateCalendarAccess] && <div\r\n          className=\"flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0\"\r\n          data-testid=\"parish-selector\">\r\n            {personFilters.map(filt => <div\r\n                    key={filt.label}\r\n                    className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter?.filterType === 'PERSON' && props.filter.person === filt.person ? 'bg-gray-200' : ''}`}\r\n                    onClick={() => props.setFilter({filterType: 'PERSON', person: filt.person})}>\r\n                    {filt.label}\r\n                </div>\r\n            )}\r\n        </div>}\r\n    </>;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/calendar/FilterSelector.tsx b/components/calendar/FilterSelector.tsx
+--- a/components/calendar/FilterSelector.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/calendar/FilterSelector.tsx	(date 1664948203013)
+@@ -1,49 +1,62 @@
+ import {Permission, Permissions} from '../../util/verify';
+-import {Calendar} from '../../util/calendar-events';
+-import {getCalendarInfo} from '../../util/calendar-info';
+-import {FilterType, Person} from './Calendar';
++import {CalendarGroup} from '../../util/calendar-events';
++import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
++import {FilterType} from './Calendar';
++import {ReactNode} from "react";
++
++function FilterButton(props: { active: boolean, onClick: () => void, label: string, activeColor?: string }) {
++    return <div
++        className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.active ? (props.activeColor ?? "bg-gray-200") : ""}`}
++        onClick={props.onClick}
++    >
++        {props.label}
++    </div>;
++}
+ 
+-export function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions }) {
+-    const parishFilters: { label: string, parish: Calendar }[] = [
+-        {label: 'Emmaus', parish: 'emmaus'},
+-        {label: 'St. Nikolaus', parish: 'inzersdorf'},
+-        {label: 'Neustift', parish: 'neustift'},
+-    ];
+-    const personFilters: { label: string, person: Person }[] = [
+-        {label: 'Zvonko', person: 'brezovski'},
+-        {label: 'David', person: 'campos'},
+-        {label: 'Gil', person: 'thomas'},
+-        {label: 'Marcin', person: 'wojciech'},
+-    ];
+-    return <>
+-        <div
+-            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0 "
+-            data-testid="parish-selector">
++function FilterLabel(props: {children: ReactNode}) {
++    return <div className="mt-3 opacity-80 uppercase pl-3 text-sm">{props.children}</div>;
++}
+ 
+-            <div
+-                className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter === null ? 'bg-gray-200' : ''}`}
++export function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions, groups: CalendarGroup[], persons: string[] }) {
++    const calendarNames: CalendarName[] = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
++    const calendarInfos = calendarNames.map(getCalendarInfo);
++
++    return <div className="flex flex-col">
++        <div className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0">
++            <FilterButton
++                label="Alle Termine"
+                 onClick={() => props.setFilter(null)}
+-            >
+-                Alle
+-            </div>
+-            {parishFilters.map(filt => <div
+-                    key={filt.label}
+-                    className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter?.filterType === 'PARISH' && props.filter.parish === filt.parish ? getCalendarInfo(filt.parish).className : ''}`}
+-                    onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.parish})}>
+-                    {filt.label}
+-                </div>
++                active={props.filter === null}
++            />
++            <FilterLabel>Pfarre</FilterLabel>
++            {calendarInfos.map(filt => <FilterButton
++                label={filt.shortName}
++                key={filt.id}
++                onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.id})}
++                active={props.filter?.filterType === "PARISH" && props.filter.parish === filt.id}
++                activeColor={filt.className}
++            />
++            )}
++            <FilterLabel>Termingruppe</FilterLabel>
++            {props.groups.map(group => <FilterButton
++                    label={group}
++                    key={group}
++                    onClick={() => props.setFilter({filterType: 'GROUP', group})}
++                    active={props.filter?.filterType === "GROUP" && props.filter.group === group}
++                />
+             )}
+         </div>
+         {props.userPermissions[Permission.PrivateCalendarAccess] && <div
+-          className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
+-          data-testid="parish-selector">
+-            {personFilters.map(filt => <div
+-                    key={filt.label}
+-                    className={`px-3 py-1 mb-1 cursor-pointer rounded ${props.filter?.filterType === 'PERSON' && props.filter.person === filt.person ? 'bg-gray-200' : ''}`}
+-                    onClick={() => props.setFilter({filterType: 'PERSON', person: filt.person})}>
+-                    {filt.label}
+-                </div>
++            className="flex md:flex-col flex-row justify-around md:justify-start flex-shrink-0"
++            data-testid="parish-selector">
++            {props.persons.map((person, index) => <FilterButton
++                    key={person + index}
++                    active={props.filter?.filterType === "PERSON" && props.filter.person === person}
++                    onClick={() => props.setFilter({filterType: 'PERSON', person})}
++                    label={person}
++                />
++
+             )}
+         </div>}
+-    </>;
++    </div>;
+ }
+\ No newline at end of file
+Index: pages/intern/weekly.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useEffect} from 'react';\r\nimport {usePermission} from '../../util/use-permission';\r\nimport Site from '../../components/Site';\r\nimport Button from '../../components/Button';\r\nimport {Permission} from '../../util/verify';\r\nimport {TemplateHandler} from 'easy-template-x';\r\nimport {CalendarEvent} from '../../util/calendar-events';\r\nimport sanitize from 'sanitize-html';\r\nimport {useState} from '../../util/use-state-util';\r\nimport {getWeekDayName} from '../../components/calendar/Calendar';\r\nimport {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';\r\nimport {saveFile} from \"../../util/save-file\";\r\n\r\nexport default function InternArticles() {\r\n    usePermission([Permission.Admin]);\r\n    const [data, , setPartialData] = useState({start: new Date(), end: new Date()});\r\n    const [events, loaded, load] = useCalendarStore(state => [state.items, state.loaded, state.load])\r\n\r\n    useEffect(() => load(), [load])\r\n\r\n    function pad(num: number) {\r\n        return `${num < 10 ? '0' : ''}${num}`\r\n    }\r\n\r\n    function toTime(dateTime: string) {\r\n        const date = new Date(dateTime);\r\n        return `${pad(date.getHours())}:${pad(date.getMinutes())}`\r\n    }\r\n\r\n    function toCalEevent(event: CalendarEvent) {\r\n        const special = event.groups.includes(\"Heilige Messe\");\r\n        return {\r\n            [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),\r\n            [special ? 'specialtitle' : 'title']: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : \"\"),\r\n            description: event.description.toString().trim().length > 0 ? `\\n${sanitize(event.description.trim())}` : \"\"\r\n        };\r\n    }\r\n\r\n    async function generate() {\r\n        const response = await fetch('/eni.docx');\r\n        const templateFile = await response.blob();\r\n        console.log(data.start.toISOString());\r\n        const from = data.start.toISOString().split(\"T\")[0].split('-').reverse().join('.').substring(0, 5);\r\n        const to = data.end.toISOString().split(\"T\")[0].split('-').reverse().join('.').substring(0, 10);\r\n        const wordData = {\r\n            daterange: `${from}. - ${to}`,\r\n            event: Object.entries(groupEventsByDate(events))\r\n                .filter(([date]) => data.start.getTime() <= new Date(date).getTime() && data.end.getTime() >= new Date(date).getTime())\r\n                .map(([date, events]) => ({date, events: events.filter(e => e.visibility === \"public\")}))\r\n                .map(({date, events: allEvents}) => {\r\n                    const day = new Date(date).getDay();\r\n                    const events = allEvents.filter(event => !event.tags.includes('cancelled'));\r\n                    return ({\r\n                        sundaydate: day === 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',\r\n                        date: day !== 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',\r\n                        emmaus: events.filter(event => event.calendar === 'emmaus').map(toCalEevent),\r\n                        inzersdorf: events.filter(event => event.calendar === 'inzersdorf').map(toCalEevent),\r\n                        neustift: events.filter(event => event.calendar === 'neustift').map(toCalEevent),\r\n                    });\r\n                }),\r\n        };\r\n\r\n        const handler = new TemplateHandler();\r\n        const doc = await handler.process(templateFile, wordData as any);\r\n\r\n        saveFile('wochenmitteilung.docx', doc);\r\n    }\r\n\r\n    return <Site title=\"Wochenmitteilungen\" narrow={true}>\r\n        <div className=\"flex flex-col items-center mx-auto\">\r\n           <div>\r\n                <div className=\"mt-4 text-sm\">Start</div>\r\n                <input type=\"date\" className=\"bg-gray-200 px-3 py-1 rounded\"\r\n                       onChange={(e) => setPartialData({start: new Date(e.target.value)})}/>\r\n            </div>\r\n            <div>\r\n                <div className=\"mt-4 text-sm\">Ende</div>\r\n                <input type=\"date\" className=\"bg-gray-200 px-3 py-1 rounded\"\r\n                       onChange={(e) => setPartialData({end: new Date(e.target.value)})}/>\r\n            </div>\r\n            <Button className=\"mt-4\" label=\"Generieren\" onClick={() => generate()} disabled={!loaded}/>\r\n        </div>\r\n    </Site>;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/intern/weekly.tsx b/pages/intern/weekly.tsx
+--- a/pages/intern/weekly.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/intern/weekly.tsx	(date 1664948650256)
+@@ -4,7 +4,7 @@
+ import Button from '../../components/Button';
+ import {Permission} from '../../util/verify';
+ import {TemplateHandler} from 'easy-template-x';
+-import {CalendarEvent} from '../../util/calendar-events';
++import {CalendarEvent, CalendarGroup, CalendarTag} from '../../util/calendar-events';
+ import sanitize from 'sanitize-html';
+ import {useState} from '../../util/use-state-util';
+ import {getWeekDayName} from '../../components/calendar/Calendar';
+@@ -28,7 +28,7 @@
+     }
+ 
+     function toCalEevent(event: CalendarEvent) {
+-        const special = event.groups.includes("Heilige Messe");
++        const special = event.groups.includes(CalendarGroup.Messe);
+         return {
+             [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),
+             [special ? 'specialtitle' : 'title']: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
+@@ -49,7 +49,7 @@
+                 .map(([date, events]) => ({date, events: events.filter(e => e.visibility === "public")}))
+                 .map(({date, events: allEvents}) => {
+                     const day = new Date(date).getDay();
+-                    const events = allEvents.filter(event => !event.tags.includes('cancelled'));
++                    const events = allEvents.filter(event => !event.tags.includes(CalendarTag.cancelled));
+                     return ({
+                         sundaydate: day === 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
+                         date: day !== 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
+Index: pages/api/organ-booking/my.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {NextApiRequest, NextApiResponse} from 'next';\r\nimport {calendarIds, getCalendarEvents} from '../../../util/calendar-events';\r\nimport {Permission, resolveUserFromRequest} from '../../../util/verify';\r\n\r\nexport default async function handler(req: NextApiRequest, res: NextApiResponse) {\r\n\r\n  const user = resolveUserFromRequest(req);\r\n\r\n  if (user === undefined ||!user.permissions[Permission.OrganBooking]) {\r\n    res.status(401).json({errorMessage: 'No permission'});\r\n    return;\r\n  }\r\n\r\n  res.json((await getCalendarEvents(calendarIds['inzersdorf-organ'], 'Orgel', {public: false})).filter(event => event.summary === user.name));\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/organ-booking/my.ts b/pages/api/organ-booking/my.ts
+--- a/pages/api/organ-booking/my.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/api/organ-booking/my.ts	(date 1664948532513)
+@@ -1,6 +1,7 @@
+ import {NextApiRequest, NextApiResponse} from 'next';
+-import {calendarIds, getCalendarEvents} from '../../../util/calendar-events';
++import {getCalendarEvents} from '../../../util/calendar-events';
+ import {Permission, resolveUserFromRequest} from '../../../util/verify';
++import {CalendarName} from "../../../util/calendar-info";
+ 
+ export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ 
+@@ -11,6 +12,6 @@
+     return;
+   }
+ 
+-  res.json((await getCalendarEvents(calendarIds['inzersdorf-organ'], 'Orgel', {public: false})).filter(event => event.summary === user.name));
++  res.json((await getCalendarEvents(CalendarName.INZERSDORF_ORGAN, {public: false})).filter(event => event.summary === user.name));
+ 
+ }
+Index: pages/termine/index.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useEffect} from 'react';\r\nimport Site from '../../components/Site';\r\nimport {applyFilter, FilterType, LoadingEvents} from '../../components/calendar/Calendar';\r\nimport {useState} from '../../util/use-state-util';\r\nimport {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';\r\nimport {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';\r\nimport {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';\r\nimport {useUserStore} from '../../util/use-user-store';\r\nimport {FilterSelector} from '../../components/calendar/FilterSelector';\r\nimport {Event, EventDate} from '../../components/calendar/Event';\r\nimport {useRouter} from \"next/router\";\r\nimport Link from \"next/link\";\r\nimport {site} from \"../../util/sites\";\r\n\r\nexport default function EventPage() {\r\n    const [filter, setFilter] = useState<FilterType>(null);\r\n    const calendar = useCalendarStore(state => state);\r\n    const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);\r\n    const {query: {q}} = useRouter();\r\n\r\n    useEffect(() => userLoad(), [userLoad]);\r\n    useEffect(() => calendar.load(jwt), [jwt, calendar.load]);\r\n\r\n    return <Site>\r\n        <div data-testid=\"calendar\" className=\"relative\">\r\n            <CalendarCacheNotice/>\r\n            <div className=\"flex flex-col md:flex-row\">\r\n                {site(<div\r\n                    className=\"flex flex-col w-full self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 flex-shrink-0 bg-white rounded-xl border-4 border-black/10 sticky top-0 md:top-5 z-20 bg-white\">\r\n                    <FilterSelector\r\n                        filter={filter}\r\n                        setFilter={filter => setFilter(filter)}\r\n                        userPermissions={permissions}\r\n                    />\r\n                </div>, <div className=\" md:w-36\"></div>)}\r\n                <div className=\"flex-grow events mt-4 pb-4 px-4 lg:px-0 relative\">\r\n                    {q ? <div>\r\n                            <div className=\"font-bold text-4xl mb-6\">{q}</div>\r\n                            <Link href=\"/termine\">\r\n                                <div className=\"cursor-pointer underline hover:no-underline\">Alle Termine anzeigen</div>\r\n                            </Link>\r\n                        </div> :\r\n                        <div className=\"font-bold text-4xl mb-6\">Termine</div>}\r\n                    {calendar.error && <CalendarErrorNotice/>}\r\n                    {calendar.loading && <LoadingEvents/>}\r\n                    {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, q as string)))\r\n                        .map(([date, events]) => <div key={date} data-date={date}>\r\n                            <EventDate date={new Date(date)}/>\r\n                            {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}\r\n                        </div>)}\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </Site>;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/termine/index.tsx b/pages/termine/index.tsx
+--- a/pages/termine/index.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/termine/index.tsx	(date 1664949075014)
+@@ -10,13 +10,12 @@
+ import {Event, EventDate} from '../../components/calendar/Event';
+ import {useRouter} from "next/router";
+ import Link from "next/link";
+-import {site} from "../../util/sites";
+ 
+ export default function EventPage() {
+     const [filter, setFilter] = useState<FilterType>(null);
+     const calendar = useCalendarStore(state => state);
+     const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
+-    const {query: {q}} = useRouter();
++    const {query: {q: query}} = useRouter();
+ 
+     useEffect(() => userLoad(), [userLoad]);
+     useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
+@@ -25,17 +24,26 @@
+         <div data-testid="calendar" className="relative">
+             <CalendarCacheNotice/>
+             <div className="flex flex-col md:flex-row">
+-                {site(<div
+-                    className="flex flex-col w-full self-start p-2 md:p-4 md:mr-8 md:text-lg md:w-52 flex-shrink-0 bg-white rounded-xl border-4 border-black/10 sticky top-0 md:top-5 z-20 bg-white">
++                <div
++                    className="w-full self-start p-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-20 bg-white border-b md:border-b-0 md:border-r border-black/20">
+                     <FilterSelector
+                         filter={filter}
+                         setFilter={filter => setFilter(filter)}
+                         userPermissions={permissions}
++                        groups={calendar.items
++                            .flatMap(event => event.groups)
++                            .filter((group, index, groups) => groups.indexOf(group) === index)
++                        }
++                        persons={calendar.items
++                            .map(event => event.mainPerson?.trim())
++                            .filter((person): person is string => !!person && person.includes("."))
++                            .filter((person, index, persons) => persons.indexOf(person) === index)
++                        }
+                     />
+-                </div>, <div className=" md:w-36"></div>)}
++                </div>
+                 <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
+-                    {q ? <div>
+-                            <div className="font-bold text-4xl mb-6">{q}</div>
++                    {query ? <div>
++                            <div className="font-bold text-4xl mb-6">{query}</div>
+                             <Link href="/termine">
+                                 <div className="cursor-pointer underline hover:no-underline">Alle Termine anzeigen</div>
+                             </Link>
+@@ -43,7 +51,7 @@
+                         <div className="font-bold text-4xl mb-6">Termine</div>}
+                     {calendar.error && <CalendarErrorNotice/>}
+                     {calendar.loading && <LoadingEvents/>}
+-                    {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, q as string)))
++                    {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, query as string)))
+                         .map(([date, events]) => <div key={date} data-date={date}>
+                             <EventDate date={new Date(date)}/>
+                             {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
+Index: components/calendar/Event.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {CalendarEvent} from '../../util/calendar-events';\r\nimport {Permission, Permissions} from '../../util/verify';\r\nimport {ParishTag} from './ParishTag';\r\nimport {useRouter} from 'next/router';\r\nimport {SanitizeHTML} from '../SanitizeHtml';\r\nimport {getMonthName, getWeekDayName} from './Calendar';\r\n\r\nexport function Event({event, permissions, noTag}: { event: CalendarEvent, permissions: Permissions, noTag?: boolean }) {\r\n    return <div className={`flex text-lg mb-1 ${event.tags.includes('cancelled') && 'opacity-50'}`}>\r\n        <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes('cancelled') || 'font-semibold'}`}>\r\n            {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}\r\n        </div>\r\n        {noTag || <div className=\"mr-2\">\r\n          <ParishTag calendar={event.calendar} colorless={event.tags.includes('cancelled')}/>\r\n        </div>}\r\n        <div className=\"mb-2 leading-5\" data-testid=\"event\">\r\n            <div className={`mt-1 ${event.tags.includes('cancelled') || 'font-semibold'}`}>\r\n                <EventSummary event={event}/>\r\n            </div>\r\n            <EventDescription event={event} permissions={permissions}/>\r\n        </div>\r\n    </div>;\r\n}\r\n\r\nexport function EventSummary(props: { event: CalendarEvent }) {\r\n    const router = useRouter();\r\n    const liturgy = props.event.tags.includes('liturgy') && false;\r\n    return <span\r\n        className={`${liturgy && 'underline hover:no-underline cursor-pointer'}`}\r\n        onClick={liturgy ? () => router.push(`/termine/${props.event.id}`) : () => {\r\n        }}\r\n    >\r\n    {props.event.summary}\r\n  </span>;\r\n}\r\n\r\nexport function EventDescription(props: { event: CalendarEvent, permissions: Permissions }) {\r\n    return <div className=\"font-normal text-sm leading-4\">\r\n        {props.permissions[Permission.PrivateCalendarAccess] && <>\r\n            {props.event.tags.includes('private') &&\r\n              <div className=\"text-xs p-0.5 m-1 bg-gray-300 inline-block rounded\">\uD83D\uDD12 Vertraulich</div>}\r\n            {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' &&\r\n              <div className=\"text-xs p-0.5 m-1 bg-gray-300 inline-block rounded\">\uD83C\uDFB9 Orgel-Blocker</div>}\r\n        </>}\r\n        {!props.event.tags.includes('cancelled') && <>\r\n            {props.event.mainPerson && `mit ${props.event.mainPerson}`}\r\n            {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\\n/g, '<br/>')}/>}</>}\r\n    </div>;\r\n}\r\n\r\nexport const EventDate = ({date}: { date: Date }) => {\r\n    const day = date.getDay();\r\n    return <div className=\"sticky md:top-0 relative z-10\">\r\n        <div className={`mp-3 leading-5 bg-white pt-4 ${day ? '' : 'underline'}`}>\r\n            <EventDateText date={date}/>\r\n        </div>\r\n        <div className=\"h-4 to-white bg-gradient-to-t from-transparent\"/>\r\n    </div>;\r\n}\r\nexport const EventDateText = ({date}: { date: Date }) => {\r\n    const day = date.getDay();\r\n    return <>\r\n        {getWeekDayName(day)},{' '}\r\n        {date.getDate()}. {getMonthName(date.getMonth())}\r\n    </>;\r\n}\r\nexport const EventTime = (props: { date: Date }) => {\r\n    const hour = props.date.getHours();\r\n    const minutes = props.date.getMinutes();\r\n    return <>{('0' + hour).slice(-2)}:{('0' + minutes).slice(-2)}</>;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/calendar/Event.tsx b/components/calendar/Event.tsx
+--- a/components/calendar/Event.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/calendar/Event.tsx	(date 1664948007474)
+@@ -1,4 +1,4 @@
+-import {CalendarEvent} from '../../util/calendar-events';
++import {CalendarEvent, CalendarTag} from '../../util/calendar-events';
+ import {Permission, Permissions} from '../../util/verify';
+ import {ParishTag} from './ParishTag';
+ import {useRouter} from 'next/router';
+@@ -6,15 +6,15 @@
+ import {getMonthName, getWeekDayName} from './Calendar';
+ 
+ export function Event({event, permissions, noTag}: { event: CalendarEvent, permissions: Permissions, noTag?: boolean }) {
+-    return <div className={`flex text-lg mb-1 ${event.tags.includes('cancelled') && 'opacity-50'}`}>
+-        <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes('cancelled') || 'font-semibold'}`}>
++    return <div className={`flex text-lg mb-1 ${event.tags.includes(CalendarTag.cancelled) && 'opacity-50'}`}>
++        <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
+             {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
+         </div>
+         {noTag || <div className="mr-2">
+-          <ParishTag calendar={event.calendar} colorless={event.tags.includes('cancelled')}/>
++          <ParishTag calendar={event.calendar} colorless={event.tags.includes(CalendarTag.cancelled)}/>
+         </div>}
+         <div className="mb-2 leading-5" data-testid="event">
+-            <div className={`mt-1 ${event.tags.includes('cancelled') || 'font-semibold'}`}>
++            <div className={`mt-1 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
+                 <EventSummary event={event}/>
+             </div>
+             <EventDescription event={event} permissions={permissions}/>
+@@ -24,7 +24,7 @@
+ 
+ export function EventSummary(props: { event: CalendarEvent }) {
+     const router = useRouter();
+-    const liturgy = props.event.tags.includes('liturgy') && false;
++    const liturgy = false;
+     return <span
+         className={`${liturgy && 'underline hover:no-underline cursor-pointer'}`}
+         onClick={liturgy ? () => router.push(`/termine/${props.event.id}`) : () => {
+@@ -37,12 +37,12 @@
+ export function EventDescription(props: { event: CalendarEvent, permissions: Permissions }) {
+     return <div className="font-normal text-sm leading-4">
+         {props.permissions[Permission.PrivateCalendarAccess] && <>
+-            {props.event.tags.includes('private') &&
++            {props.event.tags.includes(CalendarTag.private) &&
+               <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🔒 Vertraulich</div>}
+-            {props.event.tags.includes('in-church') && props.event.calendar === 'inzersdorf' &&
++            {props.event.tags.includes(CalendarTag.inChurch) && props.event.calendar === 'inzersdorf' &&
+               <div className="text-xs p-0.5 m-1 bg-gray-300 inline-block rounded">🎹 Orgel-Blocker</div>}
+         </>}
+-        {!props.event.tags.includes('cancelled') && <>
++        {!props.event.tags.includes(CalendarTag.cancelled) && <>
+             {props.event.mainPerson && `mit ${props.event.mainPerson}`}
+             {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}</>}
+     </div>;
+Index: components/EmmausBranding.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport Responsive from \"./Responsive\";\r\nimport {getCalendarInfo} from \"../util/calendar-info\";\r\nimport {EventsObject} from \"../util/calendar-events\";\r\nimport {getTimeOfEvent} from \"../util/get-time-of-event\";\r\nimport {getWeekDayName} from \"./calendar/Calendar\";\r\n\r\nexport function EmmausBranding(props: { eventsObject: EventsObject }) {\r\n\r\n    const event = props.eventsObject.events\r\n        .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))\r\n        .filter(event => new Date(event.start.dateTime) > new Date())\r\n        .filter(event => event.groups.includes(\"Heilige Messe\") || event.groups.includes(\"Gottesdienst\"))[0];\r\n\r\n    return <div className={\"bg-emmaus pt-8 md:pt-24 relative overflow-hidden\"}>\r\n        <Responsive>\r\n            <div className=\"flex flex-col md:flex-row justify-around\">\r\n                <div className=\"text-white relative flex flex-col\">\r\n                    <div>\r\n                        <div className=\"text-5xl md:text-7xl font-bold\">Pfarre Emmaus</div>\r\n                        <div className=\"text-4xl\">am Wienerberg</div>\r\n                    </div>\r\n                    {event && <div>\r\n                        <div className=\"bg-emmaus-sec text-black text-xl inline-flex px-4 py-2 rounded my-12\">\r\n                            <div className=\"mr-2\">Nächste {event.summary}:</div>\r\n                            <div className=\"font-bold\">\r\n                                {getWeekDayName(new Date(event.date).getDay())}, {new Date(event.start.dateTime).toLocaleTimeString().substring(0, 5)}\r\n                            </div>\r\n                        </div>\r\n                    </div>}\r\n                </div>\r\n                <img className=\"self-end h-72 md:h-96 relative\" src={getCalendarInfo(\"emmaus\").image}/>\r\n            </div>\r\n        </Responsive>\r\n    </div>;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/EmmausBranding.tsx b/components/EmmausBranding.tsx
+--- a/components/EmmausBranding.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/EmmausBranding.tsx	(date 1664947802343)
+@@ -1,7 +1,7 @@
+ import React from 'react';
+ import Responsive from "./Responsive";
+-import {getCalendarInfo} from "../util/calendar-info";
+-import {EventsObject} from "../util/calendar-events";
++import {CalendarName, getCalendarInfo} from "../util/calendar-info";
++import {CalendarGroup, EventsObject} from "../util/calendar-events";
+ import {getTimeOfEvent} from "../util/get-time-of-event";
+ import {getWeekDayName} from "./calendar/Calendar";
+ 
+@@ -10,7 +10,7 @@
+     const event = props.eventsObject.events
+         .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))
+         .filter(event => new Date(event.start.dateTime) > new Date())
+-        .filter(event => event.groups.includes("Heilige Messe") || event.groups.includes("Gottesdienst"))[0];
++        .filter(event => event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))[0];
+ 
+     return <div className={"bg-emmaus pt-8 md:pt-24 relative overflow-hidden"}>
+         <Responsive>
+@@ -29,7 +29,7 @@
+                         </div>
+                     </div>}
+                 </div>
+-                <img className="self-end h-72 md:h-96 relative" src={getCalendarInfo("emmaus").image}/>
++                <img className="self-end h-72 md:h-96 relative" src={getCalendarInfo(CalendarName.EMMAUS).image}/>
+             </div>
+         </Responsive>
+     </div>;
+Index: pages/api/organ-booking/check.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {NextApiRequest, NextApiResponse} from 'next';\r\nimport {calendarIds, getCalendarEvents} from '../../../util/calendar-events';\r\nimport {Temporal} from '@js-temporal/polyfill';\r\nimport {Permission, resolveUserFromRequest} from '../../../util/verify';\r\n\r\nexport default async function handler(req: NextApiRequest, res: NextApiResponse) {\r\n\r\n    const user = resolveUserFromRequest(req);\r\n\r\n    if (user === undefined || !user.permissions[Permission.OrganBooking]) {\r\n        res.status(401).json({});\r\n        return;\r\n    }\r\n\r\n    const date: Date = new Date(req.query.date as string);\r\n\r\n    res.json({\r\n        slots: slots(date).map(getHour => getHour(0).toInstant().toString()),\r\n        availableSlots: await getAvailableOrganSlotsForDate(date)\r\n    });\r\n}\r\n\r\nconst slots = (day: Date) => [9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(hour => (addedHour: number) => Temporal.ZonedDateTime.from({\r\n    timeZone: 'Europe/Vienna',\r\n    hour: hour + addedHour,\r\n    day: day.getDate(),\r\n    month: day.getMonth() + 1,\r\n    year: day.getFullYear(),\r\n}));\r\n\r\nexport async function getAvailableOrganSlotsForDate(date: Date): Promise<string[]> {\r\n\r\n    const timeMin = new Date(date.toISOString());\r\n    const timeMax = new Date(date.toISOString());\r\n    timeMin.setHours(0);\r\n    timeMax.setHours(24);\r\n\r\n    const events = await Promise.all([\r\n        calendarIds.inzersdorf,\r\n        calendarIds[\"inzersdorf-organ\"]\r\n    ].map(calendarId => getCalendarEvents(calendarId, 'Orgel', {timeMin, timeMax})\r\n    )).then(eventList => eventList.flat().filter(event => event.tags.includes('in-church')))\r\n\r\n    if (events.some(event => event.wholeday)) {\r\n        return [];\r\n    }\r\n    return slots(timeMin).filter(getHour => events.length === 0 || events.every(event => !dateRangeOverlaps(\r\n        new Date(event.start.dateTime).getTime(),\r\n        new Date(event.end.dateTime).getTime(),\r\n        new Date(getHour(0).toInstant().epochMilliseconds).getTime(),\r\n        new Date(getHour(1).toInstant().epochMilliseconds).getTime(),\r\n    ))).map(getHour => getHour(0).toInstant().toString());\r\n}\r\n\r\nfunction dateRangeOverlaps(a_start: number, a_end: number, b_start: number, b_end: number) {\r\n    if (a_start <= b_start && b_start < a_end) return true; // b starts in a\r\n    if (a_start < b_end && b_end <= a_end) return true; // b ends in a\r\n    if (b_start < a_start && a_end < b_end) return true; // a in b\r\n    return false;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/organ-booking/check.ts b/pages/api/organ-booking/check.ts
+--- a/pages/api/organ-booking/check.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/api/organ-booking/check.ts	(date 1664945972538)
+@@ -1,7 +1,8 @@
+ import {NextApiRequest, NextApiResponse} from 'next';
+-import {calendarIds, getCalendarEvents} from '../../../util/calendar-events';
++import {CalendarTag, getCalendarEvents} from '../../../util/calendar-events';
+ import {Temporal} from '@js-temporal/polyfill';
+ import {Permission, resolveUserFromRequest} from '../../../util/verify';
++import {CalendarName} from "../../../util/calendar-info";
+ 
+ export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ 
+@@ -36,10 +37,10 @@
+     timeMax.setHours(24);
+ 
+     const events = await Promise.all([
+-        calendarIds.inzersdorf,
+-        calendarIds["inzersdorf-organ"]
+-    ].map(calendarId => getCalendarEvents(calendarId, 'Orgel', {timeMin, timeMax})
+-    )).then(eventList => eventList.flat().filter(event => event.tags.includes('in-church')))
++        CalendarName.INZERSDORF,
++        CalendarName.INZERSDORF_ORGAN
++    ].map(name => getCalendarEvents(name, {timeMin, timeMax})
++    )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)))
+ 
+     if (events.some(event => event.wholeday)) {
+         return [];
+Index: util/calendar-info.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Calendar} from \"./calendar-events\";\r\nimport React from \"react\";\r\n\r\nexport interface CalendarInfo {\r\n  id: Calendar,\r\n  borderColor: string,\r\n  className: string,\r\n  fullName: string,\r\n  shortName: string,\r\n  tagName: string,\r\n  address: string,\r\n  image: string,\r\n  websiteUrl: string,\r\n  websiteDisplay: string,\r\n  imageColor: string,\r\n  description: (x: string) => React.ReactNode,\r\n}\r\n\r\nexport const getCalendarInfo = (calendar: Calendar): CalendarInfo => {\r\n  let infos: Record<Calendar, CalendarInfo> = {\r\n    'all': {\r\n      id: 'all',\r\n      className: '',\r\n      borderColor: '',\r\n      fullName: '',\r\n      shortName: '',\r\n      tagName: '',\r\n      address: '',\r\n      websiteUrl: 'https://eni.wien',\r\n      websiteDisplay: 'https://eni.wien',\r\n      description: () => '',\r\n      image: '',\r\n      imageColor: ''\r\n    },\r\n    'emmaus': {\r\n      id: 'emmaus',\r\n      borderColor: 'border-emmaus',\r\n      className: 'bg-emmaus text-white',\r\n      fullName: 'Pfarre Emmaus am Wienerberg',\r\n      shortName: 'Emmaus',\r\n      tagName: 'Emmaus',\r\n      address: 'Tesarekplatz 2, 1100 Wien',\r\n      image: '/logos_Emmaus Stroke.svg',\r\n      imageColor: '/logos_Emmaus Fade.svg',\r\n      websiteUrl: 'https://emmaus.wien/',\r\n      websiteDisplay: 'emmaus.wien',\r\n      description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik\r\n        errichtet.</>,\r\n    },\r\n    'inzersdorf': {\r\n      id: 'inzersdorf',\r\n      className: 'bg-inzersdorf text-white',\r\n      borderColor: 'border-inzersdorf',\r\n      fullName: 'Pfarre Inzersdorf (St. Nikolaus)',\r\n      shortName: 'St. Nikolaus',\r\n      tagName: 'Nikolaus',\r\n      address: 'Inzersdorf Kirchenplatz 1, 1230 Wien',\r\n      image: '/logos_Inzersdorf Stroke.svg',\r\n      imageColor: '/logos_Inzersdorf Fade.svg',\r\n      websiteUrl: 'https://pfarresanktnikolaus.at',\r\n      websiteDisplay: 'pfarresanktnikolaus.at',\r\n      description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der\r\n        Erzdiözese Wien.</>,\r\n    },\r\n    'neustift': {\r\n      id: 'neustift',\r\n      className: 'bg-neustift',\r\n      borderColor: 'border-neustift',\r\n      fullName: 'Pfarre Inzersdorf - Neustift',\r\n      shortName: 'Neustift',\r\n      tagName: 'Neustift',\r\n      address: 'Don-Bosco-Gasse 14, 1230 Wien',\r\n      image: '/logos_Neustift Stroke.svg',\r\n      imageColor: '/logos_Neustift Fade.svg',\r\n      websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',\r\n      websiteDisplay: 'pfarreinzersdorfneustift.at',\r\n      description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,\r\n        Hilfe der Christen geweiht.</>,\r\n    },\r\n    'inzersdorf-organ': {\r\n      id: 'inzersdorf-organ',\r\n      className: 'bg-inzersdorf',\r\n      fullName: '',\r\n      borderColor: 'border-inzersdorf',\r\n      shortName: '',\r\n      tagName: '',\r\n      address: '',\r\n      websiteUrl: '',\r\n      websiteDisplay: '',\r\n      description: () => '',\r\n      image: '',\r\n      imageColor: ''\r\n    },\r\n  };\r\n  return infos[calendar];\r\n};
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/util/calendar-info.tsx b/util/calendar-info.tsx
+--- a/util/calendar-info.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/util/calendar-info.tsx	(date 1664946017520)
+@@ -1,8 +1,8 @@
+-import {Calendar} from "./calendar-events";
+ import React from "react";
+ 
+ export interface CalendarInfo {
+-  id: Calendar,
++  id: CalendarName,
++  calendarId: string,
+   borderColor: string,
+   className: string,
+   fullName: string,
+@@ -15,82 +15,94 @@
+   imageColor: string,
+   description: (x: string) => React.ReactNode,
+ }
+-
+-export const getCalendarInfo = (calendar: Calendar): CalendarInfo => {
+-  let infos: Record<Calendar, CalendarInfo> = {
+-    'all': {
+-      id: 'all',
+-      className: '',
+-      borderColor: '',
+-      fullName: '',
+-      shortName: '',
+-      tagName: '',
+-      address: '',
+-      websiteUrl: 'https://eni.wien',
+-      websiteDisplay: 'https://eni.wien',
+-      description: () => '',
+-      image: '',
+-      imageColor: ''
+-    },
+-    'emmaus': {
+-      id: 'emmaus',
+-      borderColor: 'border-emmaus',
+-      className: 'bg-emmaus text-white',
+-      fullName: 'Pfarre Emmaus am Wienerberg',
+-      shortName: 'Emmaus',
+-      tagName: 'Emmaus',
+-      address: 'Tesarekplatz 2, 1100 Wien',
+-      image: '/logos_Emmaus Stroke.svg',
+-      imageColor: '/logos_Emmaus Fade.svg',
+-      websiteUrl: 'https://emmaus.wien/',
+-      websiteDisplay: 'emmaus.wien',
+-      description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik
+-        errichtet.</>,
+-    },
+-    'inzersdorf': {
+-      id: 'inzersdorf',
+-      className: 'bg-inzersdorf text-white',
+-      borderColor: 'border-inzersdorf',
+-      fullName: 'Pfarre Inzersdorf (St. Nikolaus)',
+-      shortName: 'St. Nikolaus',
+-      tagName: 'Nikolaus',
+-      address: 'Inzersdorf Kirchenplatz 1, 1230 Wien',
+-      image: '/logos_Inzersdorf Stroke.svg',
+-      imageColor: '/logos_Inzersdorf Fade.svg',
+-      websiteUrl: 'https://pfarresanktnikolaus.at',
+-      websiteDisplay: 'pfarresanktnikolaus.at',
+-      description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der
+-        Erzdiözese Wien.</>,
+-    },
+-    'neustift': {
+-      id: 'neustift',
+-      className: 'bg-neustift',
+-      borderColor: 'border-neustift',
+-      fullName: 'Pfarre Inzersdorf - Neustift',
+-      shortName: 'Neustift',
+-      tagName: 'Neustift',
+-      address: 'Don-Bosco-Gasse 14, 1230 Wien',
+-      image: '/logos_Neustift Stroke.svg',
+-      imageColor: '/logos_Neustift Fade.svg',
+-      websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
+-      websiteDisplay: 'pfarreinzersdorfneustift.at',
+-      description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,
+-        Hilfe der Christen geweiht.</>,
+-    },
+-    'inzersdorf-organ': {
+-      id: 'inzersdorf-organ',
+-      className: 'bg-inzersdorf',
+-      fullName: '',
+-      borderColor: 'border-inzersdorf',
+-      shortName: '',
+-      tagName: '',
+-      address: '',
+-      websiteUrl: '',
+-      websiteDisplay: '',
+-      description: () => '',
+-      image: '',
+-      imageColor: ''
+-    },
+-  };
+-  return infos[calendar];
++export enum CalendarName{
++  ALL = 'all',
++  EMMAUS = 'emmaus',
++  INZERSDORF = 'inzersdorf',
++  NEUSTIFT = 'neustift',
++  INZERSDORF_ORGAN = 'inzersdorf-organ',
++};
++export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
++  [CalendarName.ALL]: {
++    id: CalendarName.ALL,
++    calendarId: 'admin@tesarekplatz.at',
++    className: '',
++    borderColor: '',
++    fullName: '',
++    shortName: '',
++    tagName: '',
++    address: '',
++    websiteUrl: 'https://eni.wien',
++    websiteDisplay: 'https://eni.wien',
++    description: () => '',
++    image: '',
++    imageColor: ''
++  },
++  [CalendarName.EMMAUS]: {
++    id: CalendarName.EMMAUS,
++    borderColor: 'border-emmaus',
++    calendarId: 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',
++    className: 'bg-emmaus text-white',
++    fullName: 'Pfarre Emmaus am Wienerberg',
++    shortName: 'Emmaus',
++    tagName: 'Emmaus',
++    address: 'Tesarekplatz 2, 1100 Wien',
++    image: '/logos_Emmaus Stroke.svg',
++    imageColor: '/logos_Emmaus Fade.svg',
++    websiteUrl: 'https://emmaus.wien/',
++    websiteDisplay: 'emmaus.wien',
++    description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik
++      errichtet.</>,
++  },
++  [CalendarName.INZERSDORF]: {
++    id: CalendarName.INZERSDORF,
++    calendarId: '4fgiuth4nbbi5uqfa35tidnl84@group.calendar.google.com',
++    className: 'bg-inzersdorf text-white',
++    borderColor: 'border-inzersdorf',
++    fullName: 'Pfarre Inzersdorf (St. Nikolaus)',
++    shortName: 'St. Nikolaus',
++    tagName: 'Nikolaus',
++    address: 'Inzersdorf Kirchenplatz 1, 1230 Wien',
++    image: '/logos_Inzersdorf Stroke.svg',
++    imageColor: '/logos_Inzersdorf Fade.svg',
++    websiteUrl: 'https://pfarresanktnikolaus.at',
++    websiteDisplay: 'pfarresanktnikolaus.at',
++    description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der
++      Erzdiözese Wien.</>,
++  },
++  [CalendarName.NEUSTIFT]: {
++    id: CalendarName.NEUSTIFT,
++    calendarId: 'occ77f3f7sderl9e3b4jdnr5ek@group.calendar.google.com',
++    className: 'bg-neustift',
++    borderColor: 'border-neustift',
++    fullName: 'Pfarre Inzersdorf - Neustift',
++    shortName: 'Neustift',
++    tagName: 'Neustift',
++    address: 'Don-Bosco-Gasse 14, 1230 Wien',
++    image: '/logos_Neustift Stroke.svg',
++    imageColor: '/logos_Neustift Fade.svg',
++    websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
++    websiteDisplay: 'pfarreinzersdorfneustift.at',
++    description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,
++      Hilfe der Christen geweiht.</>,
++  },
++  [CalendarName.INZERSDORF_ORGAN]: {
++    id: CalendarName.INZERSDORF_ORGAN,
++    calendarId: '3i1uurj6bgl1q91l1peejmfa80@group.calendar.google.com',
++    className: 'bg-inzersdorf',
++    fullName: '',
++    borderColor: 'border-inzersdorf',
++    shortName: '',
++    tagName: '',
++    address: '',
++    websiteUrl: '',
++    websiteDisplay: '',
++    description: () => '',
++    image: '',
++    imageColor: ''
++  },
++};
++
++export const getCalendarInfo = (calendar: CalendarName): CalendarInfo => {
++  return CALENDAR_INFOS[calendar];
+ };
+\ No newline at end of file
+Index: pages/api/organ-booking/delete.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {NextApiRequest, NextApiResponse} from 'next';\r\nimport {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';\r\nimport {google} from 'googleapis';\r\nimport {Permission, resolveUserFromRequest} from '../../../util/verify';\r\n\r\nexport default async function handler(req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {\r\n\r\n  const user = resolveUserFromRequest(req);\r\n\r\n  if (user === undefined ||!user.permissions[Permission.OrganBooking]) {\r\n    res.status(401).json({errorMessage: 'No permission'});\r\n    return;\r\n  }\r\n\r\n  const oauth2Client = await getCachedGoogleAuthClient();\r\n  const calendar = google.calendar('v3');\r\n  calendar.events.delete({\r\n    auth: oauth2Client,\r\n    calendarId: calendarIds['inzersdorf-organ'],\r\n    eventId: req.query.id\r\n  }).then(() => {\r\n    res.status(200).json({});\r\n  }).catch((err) => {\r\n    res.status(500).json({err});\r\n  });\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/organ-booking/delete.ts b/pages/api/organ-booking/delete.ts
+--- a/pages/api/organ-booking/delete.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/api/organ-booking/delete.ts	(date 1664948467484)
+@@ -1,7 +1,8 @@
+ import {NextApiRequest, NextApiResponse} from 'next';
+-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
++import { getCachedGoogleAuthClient} from '../../../util/calendar-events';
+ import {google} from 'googleapis';
+ import {Permission, resolveUserFromRequest} from '../../../util/verify';
++import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+ 
+ export default async function handler(req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {
+ 
+@@ -16,7 +17,7 @@
+   const calendar = google.calendar('v3');
+   calendar.events.delete({
+     auth: oauth2Client,
+-    calendarId: calendarIds['inzersdorf-organ'],
++    calendarId: getCalendarInfo(CalendarName.INZERSDORF_ORGAN).calendarId,
+     eventId: req.query.id
+   }).then(() => {
+     res.status(200).json({});
+Index: components/calendar/Calendar.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Calendar, CalendarEvent} from '../../util/calendar-events';\r\n\r\nconst personWords = {\r\n  brezovski: ['Brezovski', 'Zvonko'],\r\n  thomas: ['Thomas', 'Gil'],\r\n  campos: ['David', 'Campos'],\r\n  wojciech: ['Wojciech', 'Marcin']\r\n}\r\nexport type Person = keyof typeof personWords;\r\n\r\nexport type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;\r\n\r\nexport function applyFilter(events: CalendarEvent[], filter: FilterType, group?: string) {\r\n  return events\r\n    .filter(event =>\r\n        ((filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))\r\n      || (filter?.filterType === 'PARISH' && (event.calendar === filter.parish || event.calendar === \"all\"))\r\n      || (filter === null)) && ((event.groups.includes(decodeURI(group ?? \"\"))) || group === undefined))\r\n\r\n}\r\n\r\nexport const LoadingEvents = () => <div className=\"animate-pulse\">\r\n  <ShadowEventDate/>\r\n  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===0}/>)}\r\n  <ShadowEventDate/>\r\n  {[180, 120].map((width, index) => <ShadowEvent key={index} width={width} description={index===2}/>)}\r\n</div>\r\nconst ShadowEventDate = () => <div className=\"w-36 h-4 mb-1.5 mt-4 rounded bg-black/10\"/>\r\nexport const ShadowEvent = ({width, description}: { width: number, description?: boolean }) => <div className=\"flex mb-3\">\r\n  <div className=\"w-10 h-5 bg-black/10 rounded mr-2\"/>\r\n  <div className=\"w-14 h-5 bg-black/20 rounded mr-2\"/>\r\n  <div>\r\n    <div className=\"h-5 bg-black/10 rounded mr-2\" style={{width}}/>\r\n    <div className=\"h-3 bg-black/10 rounded mt-0.5\" style={{width, display: description ? '':'none'}}/>\r\n    <div className=\"h-3 bg-black/10 rounded mt-0.5\" style={{width: width / 2, display: description ? '':'none'}}/>\r\n  </div>\r\n</div>\r\n\r\nexport function getWeekDayName(day: number) {\r\n  return ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'][day];\r\n}\r\nexport function getMonthName(month: number) {\r\n  return ['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][month];\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/calendar/Calendar.tsx b/components/calendar/Calendar.tsx
+--- a/components/calendar/Calendar.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/calendar/Calendar.tsx	(date 1664947887786)
+@@ -1,4 +1,5 @@
+-import {Calendar, CalendarEvent} from '../../util/calendar-events';
++import {CalendarEvent, CalendarGroup} from '../../util/calendar-events';
++import {CalendarName} from "../../util/calendar-info";
+ 
+ const personWords = {
+   brezovski: ['Brezovski', 'Zvonko'],
+@@ -8,14 +9,15 @@
+ }
+ export type Person = keyof typeof personWords;
+ 
+-export type FilterType = { filterType: 'PARISH', parish: Calendar } | { filterType: 'PERSON', person: Person } | null;
++export type FilterType = { filterType: 'PARISH', parish: CalendarName } | { filterType: 'PERSON', person: string } | { filterType: 'GROUP', group: CalendarGroup } | null;
+ 
+ export function applyFilter(events: CalendarEvent[], filter: FilterType, group?: string) {
+   return events
+     .filter(event =>
+-        ((filter?.filterType === 'PERSON' && personWords[filter.person].some(word => event.mainPerson?.match(word)))
++        ((filter?.filterType === 'PERSON' && event.mainPerson === filter.person))
+       || (filter?.filterType === 'PARISH' && (event.calendar === filter.parish || event.calendar === "all"))
+-      || (filter === null)) && ((event.groups.includes(decodeURI(group ?? ""))) || group === undefined))
++      || (filter?.filterType === 'GROUP' && event.groups.includes(filter.group))
++      || (filter === null))
+ 
+ }
+ 
+Index: pages/api/organ-booking/book.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {NextApiRequest, NextApiResponse} from 'next';\r\nimport {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';\r\nimport {google} from 'googleapis';\r\nimport {getAvailableOrganSlotsForDate} from './check';\r\nimport {Permission, resolveUserFromRequest} from '../../../util/verify';\r\n\r\nexport default async function handler(req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {\r\n\r\n  const user = resolveUserFromRequest(req);\r\n\r\n  if (user === undefined ||!user.permissions[Permission.OrganBooking]) {\r\n    res.status(401).json({errorMessage: 'No permission'});\r\n    return;\r\n  }\r\n\r\n  const date = () => new Date(req.query.slot as string);\r\n  const slots = await getAvailableOrganSlotsForDate(date());\r\n  if (!slots.includes(req.query.slot as string)) {\r\n    res.status(400).json({errorMessage: 'Slot nicht verfügbar'});\r\n    return;\r\n  }\r\n  if (date().getTime() < new Date().getTime()) {\r\n    res.status(400).json({errorMessage: 'Slot liegt in der Vergangenheit'});\r\n    return;\r\n  }\r\n\r\n  const startDateTime = date();\r\n  const endDateTime = date();\r\n  endDateTime.setMinutes(endDateTime.getMinutes() + 60);\r\n\r\n  const oauth2Client = await getCachedGoogleAuthClient();\r\n  const calendar = google.calendar('v3');\r\n\r\n  calendar.events.insert({\r\n    auth: oauth2Client,\r\n    calendarId: calendarIds['inzersdorf-organ'],\r\n    requestBody: {\r\n      summary: user.name,\r\n      description: `Gebucht: ${new Date().toISOString()}`,\r\n      start: {dateTime: startDateTime.toISOString()},\r\n      end: {dateTime: endDateTime.toISOString()},\r\n    }\r\n  }).then((event) => {\r\n    res.status(200).json(event.data);\r\n  }).catch((err) => {\r\n    res.status(500).json({err});\r\n  });\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/organ-booking/book.ts b/pages/api/organ-booking/book.ts
+--- a/pages/api/organ-booking/book.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/api/organ-booking/book.ts	(date 1664948436190)
+@@ -1,8 +1,9 @@
+ import {NextApiRequest, NextApiResponse} from 'next';
+-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
++import {getCachedGoogleAuthClient} from '../../../util/calendar-events';
+ import {google} from 'googleapis';
+ import {getAvailableOrganSlotsForDate} from './check';
+ import {Permission, resolveUserFromRequest} from '../../../util/verify';
++import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+ 
+ export default async function handler(req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
+ 
+@@ -33,7 +34,7 @@
+ 
+   calendar.events.insert({
+     auth: oauth2Client,
+-    calendarId: calendarIds['inzersdorf-organ'],
++    calendarId: getCalendarInfo(CalendarName.INZERSDORF_ORGAN).calendarId,
+     requestBody: {
+       summary: user.name,
+       description: `Gebucht: ${new Date().toISOString()}`,
+Index: util/calendar-events.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {calendar_v3, google} from 'googleapis';\r\nimport {cockpit} from './cockpit-sdk';\r\nimport {site} from \"./sites\";\r\nimport {notifyAdmin} from \"./telegram\";\r\nimport {getTimeOfEvent} from \"./get-time-of-event\";\r\n\r\nexport const calendarIds = {\r\n    'all': 'admin@tesarekplatz.at',\r\n    'emmaus': 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',\r\n    'inzersdorf': '4fgiuth4nbbi5uqfa35tidnl84@group.calendar.google.com',\r\n    'neustift': 'occ77f3f7sderl9e3b4jdnr5ek@group.calendar.google.com',\r\n    'inzersdorf-organ': '3i1uurj6bgl1q91l1peejmfa80@group.calendar.google.com'\r\n};\r\nexport type Calendar = keyof typeof calendarIds;\r\n\r\nexport interface CalendarEvent {\r\n    id: string,\r\n    summary: string,\r\n    mainPerson: string | null,\r\n    description: string,\r\n    date: string,\r\n    start: { dateTime: string },\r\n    end: { dateTime: string },\r\n    calendar: Calendar,\r\n    visibility: string,\r\n    wholeday: boolean,\r\n    groups: string[],\r\n    tags: ('in-church' | 'private' | 'cancelled' | 'liturgy')[]\r\n}\r\n\r\nexport type CalendarEvents = Record<string, CalendarEvent[]>;\r\n\r\nconst notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;\r\nconst cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;\r\n\r\nfunction getGroupFromEvent(event: any): string[] {\r\n    let conditions: ((x: CalendarEvent) => string | false)[] = [\r\n        x => x.summary.toLowerCase().includes(\"wallfahrt\") && \"Wallfahrt\",\r\n        x => x.summary.toLowerCase().startsWith(\"taufe\") && \"Taufe\",\r\n        x => x.summary.toLowerCase().startsWith(\"grabwache\") && \"Grabwache\",\r\n        x => x.summary.toLowerCase().includes(\"messe\") && \"Heilige Messe\",\r\n        x => x.summary.toLowerCase().includes(\"mette\") && \"Heilige Messe\",\r\n        x => x.summary.includes(\"Firmung\") && \"Heilige Messe\",\r\n        x => x.summary.toLowerCase().includes(\"jungschar\") && \"Jungschar\",\r\n        x => x.summary.toLowerCase().includes(\"evangel\") && \"Ökumene\",\r\n        x => x.summary.toLowerCase().startsWith(\"friedensgebet\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().startsWith(\"emmausgebet\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().includes(\"rosenkranz\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().startsWith(\"gebetsrunde\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().startsWith(\"bibelrunde\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().startsWith(\"sprechstunde mit jesus\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().includes(\"maiandacht\") && \"Maiandacht\",\r\n        x => x.summary.toLowerCase().includes(\"klimaoase\") && \"Caritas\",\r\n        x => x.summary.toLowerCase().includes(\"eltern-kind-treff\") && \"Kinder\",\r\n        x => x.summary.toLowerCase().includes(\"mädchenabend\") && \"Kinder\",\r\n        x => x.summary.toLowerCase().includes(\"ministrantenstunde\") && \"Kinder\",\r\n        x => x.summary.toLowerCase().startsWith(\"kinderstunde\") && \"Kinder\",\r\n        x => x.summary.toLowerCase().includes(\"ferienspiel\") && \"Kinder\",\r\n        x => x.summary.toLowerCase().includes(\"hl. martin\") && \"Kinder\",\r\n        x => x.summary.toLowerCase().includes(\"jugendtreffen\") && \"Jugend\",\r\n        x => x.summary.toLowerCase().startsWith(\"plauder\") && \"Gemeinschaft\",\r\n        x => x.summary.toLowerCase().includes(\"flohmarkt\") && \"Gemeinschaft\",\r\n        x => x.summary.toLowerCase().includes(\"50+ treff\") && \"Gemeinschaft\",\r\n        x => x.summary.toLowerCase().startsWith(\"bibel aktiv\") && \"Gebet & Bibel\",\r\n        x => x.summary.toLowerCase().includes(\"andacht\") && \"Gottesdienst\",\r\n        x => x.summary.toLowerCase().startsWith(\"vesper\") && \"Gottesdienst\",\r\n        x => x.summary.toLowerCase().includes(\"adventkranz\") && \"Advent\",\r\n        x => x.summary.toLowerCase().includes(\"krippenspiel\") && \"Weihnachten\",\r\n        x => x.summary.toLowerCase().includes(\"mette\") && \"Weihnachten\",\r\n        x => x.summary.toLowerCase().includes(\"worship\") && \"Gottesdienst\",\r\n        x => x.summary.toLowerCase().includes(\"gottesdienst\") && !x.summary.toLowerCase().includes(\"evang\") && \"Gottesdienst\",\r\n        x => x.summary.toLowerCase().includes(\"taufe\") && \"_\",\r\n        x => x.summary.toLowerCase().includes(\" ehe\") && \"_\",\r\n        x => x.summary.toLowerCase().includes(\"firmvorbereitung\") && \"_\",\r\n        x => x.summary.toLowerCase().includes(\"motorrad\") && \"_\",\r\n        x => x.summary.toLowerCase().includes(\"generalprobe\") && \"_\",\r\n        x => x.summary.toLowerCase().includes(\"sitzung\") && \"Gremien\",\r\n        x => x.summary.toLowerCase().includes(\"chor\") && \"Chorprobe\",\r\n        x => x.summary.toLowerCase().includes(\"sprechstunde\") && \"Sprechstunde\",\r\n        x => x.summary.toLowerCase().includes(\"woche des lebens\") && \"Kinder\",\r\n    ];\r\n    let groups = conditions.reduce<(string | false)[]>((groups, condition) => [\r\n        ...groups,\r\n        condition(event)\r\n    ], [])\r\n        .filter((group): group is string => !!group);\r\n\r\n    if (groups.length === 0 && event.visibility !== \"private\") {\r\n        //notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);\r\n    }\r\n\r\n    return groups.length === 0 ? [event.summary] : groups.filter(group => group !== \"_\");\r\n}\r\n\r\n\r\nfunction mapGoogleEventToEniEvent(calendarName: string): (event: calendar_v3.Schema$Event) => CalendarEvent {\r\n    return event => {\r\n        const displayPersonen = event?.summary?.split(\"/\", 2)?.[1] ?? null;\r\n        return ({\r\n            id: event.id,\r\n            summary: event?.summary?.split('/', 2)[0],\r\n            mainPerson: displayPersonen,\r\n            description: event.description ?? '',\r\n            date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),\r\n            start: event.start,\r\n            end: event.end,\r\n            calendar: calendarName,\r\n            visibility: event.visibility ?? 'public',\r\n            groups: getGroupFromEvent(event),\r\n            tags: [\r\n                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',\r\n                (event.visibility === 'private') && 'private',\r\n                (event.summary + (event.description ?? '')).match(cancelledRegex) && 'cancelled',\r\n            ].filter(item => item),\r\n            wholeday: !!event.start?.date,\r\n        } as CalendarEvent);\r\n    };\r\n}\r\n\r\nexport async function getCalendarEvents(calendarId: string, calendarName: string, options: { public: boolean } | { timeMin: Date, timeMax: Date }): Promise<CalendarEvent[]> {\r\n    const oauth2Client = await getCachedGoogleAuthClient();\r\n    const calendar = google.calendar('v3');\r\n    const todayDate = new Date();\r\n    todayDate.setHours(0);\r\n    let isPublic = 'public' in options ? options.public : false;\r\n    let start = todayDate.getTime();\r\n    let end = start + 3600000 * 24 * 30 * (isPublic ? 1 : 6);\r\n    if (!('public' in options)) {\r\n        start = options.timeMin.getTime();\r\n        end = options.timeMax.getTime();\r\n    }\r\n\r\n    const eventsList = await calendar.events.list({\r\n        maxResults: 1000,\r\n        calendarId,\r\n        auth: oauth2Client,\r\n        timeMin: new Date(start).toISOString(),\r\n        timeMax: new Date(end).toISOString(),\r\n        singleEvents: true,\r\n        timeZone: 'Europa/Vienna',\r\n        orderBy: 'startTime'\r\n    });\r\n\r\n    return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName)).filter(event => event.summary)\r\n        .filter(event => !isPublic || event?.visibility === 'public')\r\n        .map(event => !isPublic ? event : ({\r\n            ...event,\r\n            summary: event.summary.replace(/\\[.*?]/g, ''),\r\n            description: event.description?.replace(/\\[.*?]/g, ''),\r\n        }));\r\n}\r\n\r\nlet oauth2Client: any;\r\n\r\nexport async function getCachedGoogleAuthClient() {\r\n    if (oauth2Client) return oauth2Client;\r\n    const configResponse = await cockpit.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});\r\n    const config = configResponse.entries[0].data;\r\n    oauth2Client = new google.auth.OAuth2(\r\n        process.env.CLIENT_ID,\r\n        process.env.CLIENT_KEY,\r\n    );\r\n    oauth2Client.setCredentials(config);\r\n    return oauth2Client;\r\n}\r\nexport function getParishEvents(props: { public: boolean }): Promise<CalendarEvent[]> {\r\n    return Promise.all(\r\n        Object.entries(calendarIds).filter(([, calendarId]) => site(\r\n            [calendarIds.all, calendarIds.emmaus, calendarIds.inzersdorf, calendarIds.neustift],\r\n            [calendarIds.all, calendarIds.emmaus]\r\n        )\r\n            .includes(calendarId))\r\n            .map(([name, calendarId]) => getCalendarEvents(calendarId, name, {public: props.public}))\r\n    )\r\n        .then(eventList => eventList.flat())\r\n        .then(events => events.filter(event => !!event))\r\n        .then(events => events.sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b)));\r\n}\r\n\r\nexport interface EventsObject {\r\n    events: CalendarEvent[];\r\n    cache: string | null;\r\n}\r\n\r\nexport const getCachedEvents = async (privateAccess: boolean): Promise<EventsObject> => {\r\n    const calendarCacheId = '61b335996165305292000383';\r\n    const events = await getParishEvents({public: !privateAccess}).catch(() => null);\r\n    if (events !== null) {\r\n        if (!privateAccess && site(true, false)) {\r\n            cockpit.collectionSave('internal-data', {\r\n                _id: calendarCacheId,\r\n                data: {events, cache: new Date().toISOString()}\r\n            }).catch();\r\n        }\r\n        return {events, cache: null};\r\n    } else {\r\n        const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}});\r\n        await notifyAdmin('Google Calendar failed');\r\n        return cachedEvents.entries[0].data;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/util/calendar-events.ts b/util/calendar-events.ts
+--- a/util/calendar-events.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/util/calendar-events.ts	(date 1664949342322)
+@@ -3,15 +3,7 @@
+ import {site} from "./sites";
+ import {notifyAdmin} from "./telegram";
+ import {getTimeOfEvent} from "./get-time-of-event";
+-
+-export const calendarIds = {
+-    'all': 'admin@tesarekplatz.at',
+-    'emmaus': 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',
+-    'inzersdorf': '4fgiuth4nbbi5uqfa35tidnl84@group.calendar.google.com',
+-    'neustift': 'occ77f3f7sderl9e3b4jdnr5ek@group.calendar.google.com',
+-    'inzersdorf-organ': '3i1uurj6bgl1q91l1peejmfa80@group.calendar.google.com'
+-};
+-export type Calendar = keyof typeof calendarIds;
++import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
+ 
+ export interface CalendarEvent {
+     id: string,
+@@ -21,63 +13,85 @@
+     date: string,
+     start: { dateTime: string },
+     end: { dateTime: string },
+-    calendar: Calendar,
++    calendar: CalendarName,
+     visibility: string,
+     wholeday: boolean,
+-    groups: string[],
+-    tags: ('in-church' | 'private' | 'cancelled' | 'liturgy')[]
++    groups: CalendarGroup[],
++    tags: CalendarTag[]
++}
++export enum CalendarTag{
++    inChurch = "in-church",
++    private = 'private',
++    cancelled = 'cancelled',
+ }
+-
+-export type CalendarEvents = Record<string, CalendarEvent[]>;
++export enum CalendarGroup{
++    Wallfahrt = "Wallfahrt",
++    Taufe = "Taufe",
++    Grabwache = "Grabwache",
++    Messe = "Heilige Messe",
++    Jungschar = "Jungschar",
++    Ökumene = "Ökumene",
++    Gebet = "Gebet & Bibel",
++    Caritas = "Caritas",
++    Kinder = "Kinder",
++    Gemeinschaft = "Gemeinschaft",
++    Gottesdienst = "Gottesdienst",
++    Weihnachten = "Weihnachten",
++    Invisible = "_",
++    Sprechstunde = "Sprechstunde",
++    Jugend = "Jugend",
++    Gremien = "Gremien",
++    Chor = "Chor",
++}
+ 
+ const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
+ const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
+ 
+-function getGroupFromEvent(event: any): string[] {
++function getGroupFromEvent(event: any): CalendarGroup[] {
+     let conditions: ((x: CalendarEvent) => string | false)[] = [
+-        x => x.summary.toLowerCase().includes("wallfahrt") && "Wallfahrt",
+-        x => x.summary.toLowerCase().startsWith("taufe") && "Taufe",
+-        x => x.summary.toLowerCase().startsWith("grabwache") && "Grabwache",
+-        x => x.summary.toLowerCase().includes("messe") && "Heilige Messe",
+-        x => x.summary.toLowerCase().includes("mette") && "Heilige Messe",
+-        x => x.summary.includes("Firmung") && "Heilige Messe",
+-        x => x.summary.toLowerCase().includes("jungschar") && "Jungschar",
+-        x => x.summary.toLowerCase().includes("evangel") && "Ökumene",
+-        x => x.summary.toLowerCase().startsWith("friedensgebet") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().startsWith("emmausgebet") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().includes("rosenkranz") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().startsWith("gebetsrunde") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().startsWith("bibelrunde") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().startsWith("sprechstunde mit jesus") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().includes("maiandacht") && "Maiandacht",
+-        x => x.summary.toLowerCase().includes("klimaoase") && "Caritas",
+-        x => x.summary.toLowerCase().includes("eltern-kind-treff") && "Kinder",
+-        x => x.summary.toLowerCase().includes("mädchenabend") && "Kinder",
+-        x => x.summary.toLowerCase().includes("ministrantenstunde") && "Kinder",
+-        x => x.summary.toLowerCase().startsWith("kinderstunde") && "Kinder",
+-        x => x.summary.toLowerCase().includes("ferienspiel") && "Kinder",
+-        x => x.summary.toLowerCase().includes("hl. martin") && "Kinder",
+-        x => x.summary.toLowerCase().includes("jugendtreffen") && "Jugend",
+-        x => x.summary.toLowerCase().startsWith("plauder") && "Gemeinschaft",
+-        x => x.summary.toLowerCase().includes("flohmarkt") && "Gemeinschaft",
+-        x => x.summary.toLowerCase().includes("50+ treff") && "Gemeinschaft",
+-        x => x.summary.toLowerCase().startsWith("bibel aktiv") && "Gebet & Bibel",
+-        x => x.summary.toLowerCase().includes("andacht") && "Gottesdienst",
+-        x => x.summary.toLowerCase().startsWith("vesper") && "Gottesdienst",
+-        x => x.summary.toLowerCase().includes("adventkranz") && "Advent",
+-        x => x.summary.toLowerCase().includes("krippenspiel") && "Weihnachten",
+-        x => x.summary.toLowerCase().includes("mette") && "Weihnachten",
+-        x => x.summary.toLowerCase().includes("worship") && "Gottesdienst",
+-        x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && "Gottesdienst",
+-        x => x.summary.toLowerCase().includes("taufe") && "_",
+-        x => x.summary.toLowerCase().includes(" ehe") && "_",
+-        x => x.summary.toLowerCase().includes("firmvorbereitung") && "_",
+-        x => x.summary.toLowerCase().includes("motorrad") && "_",
+-        x => x.summary.toLowerCase().includes("generalprobe") && "_",
+-        x => x.summary.toLowerCase().includes("sitzung") && "Gremien",
+-        x => x.summary.toLowerCase().includes("chor") && "Chorprobe",
+-        x => x.summary.toLowerCase().includes("sprechstunde") && "Sprechstunde",
+-        x => x.summary.toLowerCase().includes("woche des lebens") && "Kinder",
++        x => x.summary.toLowerCase().includes("wallfahrt") && CalendarGroup.Wallfahrt,
++        x => x.summary.toLowerCase().startsWith("taufe") && CalendarGroup.Taufe,
++        x => x.summary.toLowerCase().startsWith("grabwache") && CalendarGroup.Grabwache,
++        x => x.summary.toLowerCase().includes("messe") && CalendarGroup.Messe,
++        x => x.summary.toLowerCase().includes("mette") && CalendarGroup.Messe,
++        x => x.summary.includes("Firmung") && CalendarGroup.Messe,
++        x => x.summary.toLowerCase().includes("jungschar") && CalendarGroup.Jungschar,
++        x => x.summary.toLowerCase().includes("evangel") && CalendarGroup.Ökumene,
++        x => x.summary.toLowerCase().startsWith("friedensgebet") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().startsWith("emmausgebet") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().includes("rosenkranz") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().startsWith("gebetsrunde") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().startsWith("bibelrunde") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().startsWith("sprechstunde mit jesus") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().includes("maiandacht") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().includes("klimaoase") && CalendarGroup.Caritas,
++        x => x.summary.toLowerCase().includes("eltern-kind-treff") && CalendarGroup.Kinder,
++        x => x.summary.toLowerCase().includes("mädchenabend") && CalendarGroup.Kinder,
++        x => x.summary.toLowerCase().includes("ministrantenstunde") && CalendarGroup.Kinder,
++        x => x.summary.toLowerCase().startsWith("kinderstunde") && CalendarGroup.Kinder,
++        x => x.summary.toLowerCase().includes("ferienspiel") && CalendarGroup.Kinder,
++        x => x.summary.toLowerCase().includes("hl. martin") && CalendarGroup.Kinder,
++        x => x.summary.toLowerCase().includes("jugendtreffen") && CalendarGroup.Jugend,
++        x => x.summary.toLowerCase().startsWith("plauder") && CalendarGroup.Gemeinschaft,
++        x => x.summary.toLowerCase().includes("flohmarkt") && CalendarGroup.Gemeinschaft,
++        x => x.summary.toLowerCase().includes("50+ treff") && CalendarGroup.Gemeinschaft,
++        x => x.summary.toLowerCase().startsWith("bibel aktiv") && CalendarGroup.Gebet,
++        x => x.summary.toLowerCase().includes("andacht") && CalendarGroup.Gottesdienst,
++        x => x.summary.toLowerCase().startsWith("vesper") && CalendarGroup.Gottesdienst,
++        x => x.summary.toLowerCase().includes("adventkranz") && CalendarGroup.Weihnachten,
++        x => x.summary.toLowerCase().includes("krippenspiel") && CalendarGroup.Weihnachten,
++        x => x.summary.toLowerCase().includes("mette") && CalendarGroup.Weihnachten,
++        x => x.summary.toLowerCase().includes("worship") && CalendarGroup.Gottesdienst,
++        x => x.summary.toLowerCase().includes("gottesdienst") && !x.summary.toLowerCase().includes("evang") && CalendarGroup.Gottesdienst,
++        x => x.summary.toLowerCase().includes("taufe") && CalendarGroup.Invisible,
++        x => x.summary.toLowerCase().includes(" ehe") && CalendarGroup.Invisible,
++        x => x.summary.toLowerCase().includes("firmvorbereitung") && CalendarGroup.Invisible,
++        x => x.summary.toLowerCase().includes("motorrad") && CalendarGroup.Invisible,
++        x => x.summary.toLowerCase().includes("generalprobe") && CalendarGroup.Invisible,
++        x => x.summary.toLowerCase().includes("sitzung") && CalendarGroup.Gremien,
++        x => x.summary.toLowerCase().includes("chor") && CalendarGroup.Chor,
++        x => x.summary.toLowerCase().includes("sprechstunde") && CalendarGroup.Sprechstunde,
++        x => x.summary.toLowerCase().includes("woche des lebens") && CalendarGroup.Kinder,
+     ];
+     let groups = conditions.reduce<(string | false)[]>((groups, condition) => [
+         ...groups,
+@@ -89,35 +103,36 @@
+         //notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
+     }
+ 
+-    return groups.length === 0 ? [event.summary] : groups.filter(group => group !== "_");
++    return groups.length === 0 ? [event.summary] : groups.filter(group => group !== CalendarGroup.Invisible);
+ }
+ 
+ 
+-function mapGoogleEventToEniEvent(calendarName: string): (event: calendar_v3.Schema$Event) => CalendarEvent {
+-    return event => {
++function mapGoogleEventToEniEvent(calendarName: CalendarName): (event: calendar_v3.Schema$Event) => CalendarEvent {
++    return (event): CalendarEvent => {
+         const displayPersonen = event?.summary?.split("/", 2)?.[1] ?? null;
+         return ({
+-            id: event.id,
+-            summary: event?.summary?.split('/', 2)[0],
++            id: event.id ?? "",
++            summary: event?.summary?.split('/', 2)[0] ?? "",
+             mainPerson: displayPersonen,
+             description: event.description ?? '',
+             date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
+-            start: event.start,
+-            end: event.end,
++            start: event.start as {dateTime: string},
++            end: event.end as {dateTime: string},
+             calendar: calendarName,
+             visibility: event.visibility ?? 'public',
+             groups: getGroupFromEvent(event),
+             tags: [
+-                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && 'in-church',
+-                (event.visibility === 'private') && 'private',
+-                (event.summary + (event.description ?? '')).match(cancelledRegex) && 'cancelled',
+-            ].filter(item => item),
++                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && CalendarTag.inChurch,
++                (event.visibility === 'private') && CalendarTag.private,
++                (event.summary + (event.description ?? '')).match(cancelledRegex) && CalendarTag.cancelled,
++            ].filter((item): item is CalendarTag => !!item),
+             wholeday: !!event.start?.date,
+-        } as CalendarEvent);
++        });
+     };
+ }
+ 
+-export async function getCalendarEvents(calendarId: string, calendarName: string, options: { public: boolean } | { timeMin: Date, timeMax: Date }): Promise<CalendarEvent[]> {
++export async function getCalendarEvents(calendarName: CalendarName, options: { public: boolean } | { timeMin: Date, timeMax: Date }): Promise<CalendarEvent[]> {
++    const calendarId = CALENDAR_INFOS[calendarName].calendarId;
+     const oauth2Client = await getCachedGoogleAuthClient();
+     const calendar = google.calendar('v3');
+     const todayDate = new Date();
+@@ -165,12 +180,11 @@
+ }
+ export function getParishEvents(props: { public: boolean }): Promise<CalendarEvent[]> {
+     return Promise.all(
+-        Object.entries(calendarIds).filter(([, calendarId]) => site(
+-            [calendarIds.all, calendarIds.emmaus, calendarIds.inzersdorf, calendarIds.neustift],
+-            [calendarIds.all, calendarIds.emmaus]
++        site(
++            [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
++            [CalendarName.ALL, CalendarName.EMMAUS]
+         )
+-            .includes(calendarId))
+-            .map(([name, calendarId]) => getCalendarEvents(calendarId, name, {public: props.public}))
++            .map((name) => getCalendarEvents(name, {public: props.public}))
+     )
+         .then(eventList => eventList.flat())
+         .then(events => events.filter(event => !!event))
+Index: util/use-calendar-store.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import create from 'zustand';\r\nimport {CalendarEvent, CalendarEvents} from './calendar-events';\r\nimport {fetchJson} from './fetch-util';\r\n\r\nexport function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {\r\n    return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({\r\n        ...record,\r\n        [event.date]: [...(record[event.date] ?? []), event]\r\n    }), {});\r\n}\r\n\r\nexport function groupEventsByDateAndGroup(events: CalendarEvent[]): Record<string, Record<string, CalendarEvent[]>> {\r\n    return Object.fromEntries(Object.entries(events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({\r\n        ...record,\r\n        ...(Object.fromEntries(event.groups.map(group => ([\r\n            group,\r\n            [\r\n                ...(record[group] ?? []),\r\n                event\r\n            ]\r\n        ]))))\r\n    }), {})).map(([group, events]) => [group, groupEventsByDate(events)]))\r\n}\r\n\r\nexport const useCalendarStore = create<{\r\n    items: CalendarEvent[];\r\n    cache?: string;\r\n    loading: boolean;\r\n    loaded: boolean;\r\n    error: boolean;\r\n    load: (token?: string) => void;\r\n    lastLoadedWithToken?: string,\r\n}>((set, get) => ({\r\n    items: [],\r\n    loaded: false,\r\n    loading: false,\r\n    error: false,\r\n    lastLoadedWithToken: 'none',\r\n    load: (jwt?: string) => {\r\n        if (get().loading && jwt === get().lastLoadedWithToken) return;\r\n        if (get().loaded && jwt === get().lastLoadedWithToken) return;\r\n        set(state => ({...state, loading: true}));\r\n        fetchJson('/api/calendar', {jwt})\r\n            .then(data => set(state => ({\r\n                ...state,\r\n                items: data.events,\r\n                loaded: true,\r\n                loading: false,\r\n                error: false,\r\n                cache: data.cache,\r\n                lastLoadedWithToken: jwt\r\n            })))\r\n            .catch(() => {\r\n                setTimeout(() => {\r\n                    set(state => ({...state, loaded: false}));\r\n                    get().load(jwt);\r\n                }, 3000);\r\n                set(state => ({...state, items: [], loaded: true, loading: false, error: true}));\r\n            });\r\n    }\r\n}));
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/util/use-calendar-store.ts b/util/use-calendar-store.ts
+--- a/util/use-calendar-store.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/util/use-calendar-store.ts	(date 1664948986287)
+@@ -1,5 +1,5 @@
+ import create from 'zustand';
+-import {CalendarEvent, CalendarEvents} from './calendar-events';
++import {CalendarEvent, CalendarGroup} from './calendar-events';
+ import {fetchJson} from './fetch-util';
+ 
+ export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
+@@ -9,8 +9,8 @@
+     }), {});
+ }
+ 
+-export function groupEventsByDateAndGroup(events: CalendarEvent[]): Record<string, Record<string, CalendarEvent[]>> {
+-    return Object.fromEntries(Object.entries(events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
++export function groupEventsByGroup(events: CalendarEvent[]): Record<CalendarGroup, CalendarEvent[]> {
++    return events.reduce<Record<CalendarGroup, CalendarEvent[]>>((record, event) => ({
+         ...record,
+         ...(Object.fromEntries(event.groups.map(group => ([
+             group,
+@@ -19,7 +19,14 @@
+                 event
+             ]
+         ]))))
+-    }), {})).map(([group, events]) => [group, groupEventsByDate(events)]))
++    }), {} as any)
++}
++
++export function groupEventsByGroupAndDate(events: CalendarEvent[]): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
++    return Object.fromEntries(Object.entries(
++            groupEventsByGroup(events)
++        ).map(([group, events]) => [group, groupEventsByDate(events)])
++    ) as Record<CalendarGroup, Record<string, CalendarEvent[]>>;
+ }
+ 
+ export const useCalendarStore = create<{
+Index: components/calendar/ComingUp.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {CalendarCacheNotice} from './CalendarCacheNotice';\r\nimport React from 'react';\r\nimport {EventsObject} from '../../util/calendar-events';\r\nimport {groupEventsByDateAndGroup} from '../../util/use-calendar-store';\r\nimport {Event, EventDateText} from './Event';\r\nimport Responsive from '../Responsive';\r\nimport {SectionHeader} from \"../SectionHeader\";\r\nimport Link from \"next/link\";\r\nimport {useEmmausProd} from \"../../utils/use-emmaus-prod\";\r\n\r\nfunction getGroupSorting(group: string) {\r\n    return ['Gebet & Bibel', 'Wallfahrt', 'Gottesdienst', 'Advent', 'Weihnachten', 'Heilige Messe'].indexOf(group);\r\n}\r\n\r\nexport function ComingUp(props: { eventsObject: EventsObject }) {\r\n    const now = new Date().getTime();\r\n    const groups = groupEventsByDateAndGroup(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000*60*60*24*7));\r\n    const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';\r\n\r\n    return <Responsive>\r\n        <div className=\"my-20\">\r\n            <div className=\"flex justify-between\">\r\n                <SectionHeader id=\"termine\">Die nächsten 7 Tage</SectionHeader>\r\n                <Link href={`${urlPrefix}/termine`}>\r\n                    <div\r\n                        className=\"my-9 px-3 py-1 bg-white rounded-lg cursor-pointer bg-black/10 hover:bg-black/5 transition-all\">\r\n                        Alle Termine\r\n                    </div>\r\n                </Link>\r\n            </div>\r\n            <div className=\"grid md:grid-cols-2 gap-4\">\r\n                {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))\r\n                    .map(([group, calendar]) => <div\r\n                            key={group}\r\n                            className=\"max-h-96 overflow-hidden relative rounded-2xl border-2 border-black/10 relative px-4 py-2 pb-12\">\r\n                            <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}>\r\n                                <div className=\"absolute w-full h-10 left-0 bottom-0 bg-[#fff]\">\r\n                                    <div\r\n                                        className=\"w-full h-full bg-black/10 hover:pl-5 transition-all hover:bg-black/5 pt-2 cursor-pointer\">\r\n                                        <div className=\"flex justify-center items-center space-x-2\">\r\n                                            <div>Alle {group} Termine</div>\r\n                                            <Icon/>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </Link>\r\n                            <div className=\"text-2xl font-bold text-center\">{group}</div>\r\n                            <div>{Object.entries(calendar).map(([date, events]) =>\r\n                                <div key={date}>\r\n                                    <div className=\"my-2\"><EventDateText date={new Date(date)}/></div>\r\n                                    {(events ?? []).map(event => <Event key={event.id} event={event} permissions={{}}/>)}\r\n                                </div>\r\n                            )}\r\n                            </div>\r\n                        </div>\r\n                    )}\r\n                <Link href={`${urlPrefix}/termine`}>\r\n                    <div\r\n                        className=\"rounded-2xl text-3xl font-bold bg-black/10 hover:bg-black/5 p-12 cursor-pointer transition-all\">\r\n                        Alle Termine\r\n                    </div>\r\n                </Link>\r\n                <CalendarCacheNotice/>\r\n            </div>\r\n        </div>\r\n    </Responsive>;\r\n}\r\n\r\nexport function Icon() {\r\n    return <svg width=\"16\" height=\"13\" viewBox=\"0 0 16 13\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\r\n                className=\"mx-1\">\r\n        <path d=\"M1 6.5H15M15 6.5L9.25641 1M15 6.5L9.25641 12\" stroke=\"#474747\" strokeWidth=\"1.5\"\r\n              strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\r\n    </svg>\r\n\r\n        ;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/calendar/ComingUp.tsx b/components/calendar/ComingUp.tsx
+--- a/components/calendar/ComingUp.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/calendar/ComingUp.tsx	(date 1664947736314)
+@@ -1,20 +1,20 @@
+ import {CalendarCacheNotice} from './CalendarCacheNotice';
+ import React from 'react';
+-import {EventsObject} from '../../util/calendar-events';
+-import {groupEventsByDateAndGroup} from '../../util/use-calendar-store';
++import {CalendarGroup, EventsObject} from '../../util/calendar-events';
++import {groupEventsByGroupAndDate} from '../../util/use-calendar-store';
+ import {Event, EventDateText} from './Event';
+ import Responsive from '../Responsive';
+ import {SectionHeader} from "../SectionHeader";
+ import Link from "next/link";
+ import {useEmmausProd} from "../../utils/use-emmaus-prod";
+ 
+-function getGroupSorting(group: string) {
+-    return ['Gebet & Bibel', 'Wallfahrt', 'Gottesdienst', 'Advent', 'Weihnachten', 'Heilige Messe'].indexOf(group);
++function getGroupSorting(group: CalendarGroup) {
++    return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Gottesdienst, CalendarGroup.Weihnachten, CalendarGroup.Messe].indexOf(group);
+ }
+ 
+ export function ComingUp(props: { eventsObject: EventsObject }) {
+     const now = new Date().getTime();
+-    const groups = groupEventsByDateAndGroup(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000*60*60*24*7));
++    const groups = groupEventsByGroupAndDate(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000 * 60 * 60 * 24 * 7));
+     const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
+ 
+     return <Responsive>
+@@ -29,7 +29,7 @@
+                 </Link>
+             </div>
+             <div className="grid md:grid-cols-2 gap-4">
+-                {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2) - getGroupSorting(group1))
++                {Object.entries(groups).sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
+                     .map(([group, calendar]) => <div
+                             key={group}
+                             className="max-h-96 overflow-hidden relative rounded-2xl border-2 border-black/10 relative px-4 py-2 pb-12">
+Index: pages/api/calendar/music.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {NextApiRequest, NextApiResponse} from 'next';\r\nimport {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';\r\nimport {Permission, resolveUserFromRequest} from '../../../util/verify';\r\nimport {google} from \"googleapis\";\r\nimport {musicDescriptionMatch} from \"../../intern/limited-event-editing\";\r\n\r\nexport default async function handler(req: NextApiRequest, res: NextApiResponse) {\r\n\r\n    if (req.method !== \"POST\") {\r\n        res.status(402).json({error: \"POST is needed\"});\r\n        return;\r\n    }\r\n\r\n    const user = resolveUserFromRequest(req)!;\r\n    const access = user.permissions[Permission.LimitedEventEditing];\r\n    if (!access) {\r\n        res.status(401).json({error: \"No access right\"});\r\n        return;\r\n    }\r\n\r\n    const oauth2Client = await getCachedGoogleAuthClient();\r\n    const calendar = google.calendar('v3');\r\n\r\n    const event = await calendar.events.get({\r\n        eventId: req.body.eventId,\r\n        calendarId: calendarIds.inzersdorf,\r\n        auth: oauth2Client\r\n    });\r\n    const description = event.data.description ?? \"\";\r\n    const newDescription = req.body.music === \"\"\r\n        ? description.replace(/^Musikal\\. Gestaltung:.*$/gm, \"\")\r\n        : (description.match(musicDescriptionMatch)\r\n            ? description.replace(musicDescriptionMatch, req.body.music)\r\n            : `${description}${description ? \"\\n\" : \"\"}Musikal. Gestaltung: ${req.body.music}`)\r\n\r\n    calendar.events.patch({\r\n        auth: oauth2Client,\r\n        calendarId: calendarIds['inzersdorf'],\r\n        eventId: req.body.eventId,\r\n        requestBody: {description: newDescription.trim()}\r\n    }).then((event) => {\r\n        res.status(200).json(event.data);\r\n    }).catch((err) => {\r\n        res.status(500).json({err});\r\n    });\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/calendar/music.ts b/pages/api/calendar/music.ts
+--- a/pages/api/calendar/music.ts	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/api/calendar/music.ts	(date 1664948405976)
+@@ -1,8 +1,9 @@
+ import {NextApiRequest, NextApiResponse} from 'next';
+-import {calendarIds, getCachedGoogleAuthClient} from '../../../util/calendar-events';
++import {getCachedGoogleAuthClient} from '../../../util/calendar-events';
+ import {Permission, resolveUserFromRequest} from '../../../util/verify';
+ import {google} from "googleapis";
+ import {musicDescriptionMatch} from "../../intern/limited-event-editing";
++import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+ 
+ export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ 
+@@ -23,7 +24,7 @@
+ 
+     const event = await calendar.events.get({
+         eventId: req.body.eventId,
+-        calendarId: calendarIds.inzersdorf,
++        calendarId: getCalendarInfo(CalendarName.INZERSDORF).calendarId,
+         auth: oauth2Client
+     });
+     const description = event.data.description ?? "";
+@@ -35,7 +36,7 @@
+ 
+     calendar.events.patch({
+         auth: oauth2Client,
+-        calendarId: calendarIds['inzersdorf'],
++        calendarId: getCalendarInfo(CalendarName.INZERSDORF).calendarId,
+         eventId: req.body.eventId,
+         requestBody: {description: newDescription.trim()}
+     }).then((event) => {
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"name\": \"eni\",\r\n  \"version\": \"1.0.0\",\r\n  \"private\": true,\r\n  \"dependencies\": {\r\n    \"@js-temporal/polyfill\": \"^0.4.1\",\r\n    \"@tailwindcss/line-clamp\": \"^0.4.0\",\r\n    \"@types/jsonwebtoken\": \"^8.5.8\",\r\n    \"@types/node\": \"^17.0.40\",\r\n    \"@types/react\": \"^18.0.12\",\r\n    \"@types/react-beforeunload\": \"^2.1.1\",\r\n    \"@types/react-dom\": \"^18.0.5\",\r\n    \"@types/react-router-dom\": \"^5.3.3\",\r\n    \"@types/sanitize-html\": \"^2.6.2\",\r\n    \"aesthetically\": \"^0.0.5\",\r\n    \"bufferutil\": \"^4.0.6\",\r\n    \"cockpit-sdk\": \"^0.15.1\",\r\n    \"easy-template-x\": \"^3.0.0\",\r\n    \"fast-xml-parser\": \"^4.0.8\",\r\n    \"googleapis\": \"^100.0.0\",\r\n    \"jsonwebtoken\": \"^8.5.1\",\r\n    \"msw\": \"^0.42.0\",\r\n    \"next\": \"^12.1.6\",\r\n    \"node-fetch\": \"^3.2.5\",\r\n    \"pdf-merger-js\": \"^3.4.0\",\r\n    \"react\": \"^18.1.0\",\r\n    \"react-beforeunload\": \"^2.5.3\",\r\n    \"react-dom\": \"^18.1.0\",\r\n    \"react-html-renderer\": \"^0.3.3\",\r\n    \"react-lottie-player\": \"^1.4.3\",\r\n    \"react-markdown\": \"^8.0.3\",\r\n    \"react-redux\": \"^8.0.2\",\r\n    \"react-router-dom\": \"^6.3.0\",\r\n    \"react-scripts\": \"^5.0.1\",\r\n    \"react-toastify\": \"^9.0.3\",\r\n    \"rss-parser\": \"^3.12.0\",\r\n    \"sanitize-html\": \"^2.7.0\",\r\n    \"sass\": \"^1.52.2\",\r\n    \"swiper\": \"^8.2.2\",\r\n    \"typescript\": \"^4.7.3\",\r\n    \"utf-8-validate\": \"^5.0.9\",\r\n    \"zustand\": \"^3.7.2\"\r\n  },\r\n  \"scripts\": {\r\n    \"dev\": \"next dev\",\r\n    \"test\": \"playwright test\",\r\n    \"test:skipbuild\": \"SKIP_BUILD=1 playwright test\",\r\n    \"test:headed\": \"playwright test --headed\",\r\n    \"build\": \"next build\",\r\n    \"start\": \"next start\",\r\n    \"refresh-google\": \"node scripts/google-refresh-token.ts\"\r\n  },\r\n  \"eslintConfig\": {\r\n    \"extends\": \"react-app\"\r\n  },\r\n  \"browserslist\": {\r\n    \"production\": [\r\n      \">0.2%\",\r\n      \"not dead\",\r\n      \"not op_mini all\"\r\n    ],\r\n    \"development\": [\r\n      \"last 1 chrome version\",\r\n      \"last 1 firefox version\",\r\n      \"last 1 safari version\",\r\n      \"ie 11\"\r\n    ]\r\n  },\r\n  \"devDependencies\": {\r\n    \"@playwright/test\": \"^1.22.2\",\r\n    \"autoprefixer\": \"^10.4.7\",\r\n    \"dotenv\": \"^16.0.1\",\r\n    \"postcss\": \"^8.4.14\",\r\n    \"tailwindcss\": \"^3.0.24\"\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/package.json	(date 1664949479082)
+@@ -48,7 +48,8 @@
+     "test:headed": "playwright test --headed",
+     "build": "next build",
+     "start": "next start",
+-    "refresh-google": "node scripts/google-refresh-token.ts"
++    "refresh-google": "node scripts/google-refresh-token.ts",
++    "lint": "next lint"
+   },
+   "eslintConfig": {
+     "extends": "react-app"
+Index: components/calendar/ParishTag.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import {Calendar} from '../../util/calendar-events';\r\nimport {getCalendarInfo} from '../../util/calendar-info';\r\n\r\nexport function ParishTag(props: { calendar: Calendar, colorless?: boolean }) {\r\n    const info = getCalendarInfo(props.calendar);\r\n    return <div\r\n        className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/calendar/ParishTag.tsx b/components/calendar/ParishTag.tsx
+--- a/components/calendar/ParishTag.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/calendar/ParishTag.tsx	(date 1664948260043)
+@@ -1,7 +1,6 @@
+-import {Calendar} from '../../util/calendar-events';
+-import {getCalendarInfo} from '../../util/calendar-info';
++import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
+ 
+-export function ParishTag(props: { calendar: Calendar, colorless?: boolean }) {
++export function ParishTag(props: { calendar: CalendarName, colorless?: boolean }) {
+     const info = getCalendarInfo(props.calendar);
+     return <div
+         className={`w-14 text-xs leading-4 inline-block px-1 py-0.5 text-center rounded cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
+Index: pages/intern/limited-event-editing.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useEffect, useState} from 'react';\r\nimport Site from '../../components/Site';\r\nimport {usePermission} from '../../util/use-permission';\r\nimport {groupEventsByDate, useCalendarStore} from \"../../util/use-calendar-store\";\r\nimport {Permission} from \"../../util/verify\";\r\nimport {useUserStore} from \"../../util/use-user-store\";\r\nimport {CalendarEvent} from \"../../util/calendar-events\";\r\nimport {Event, EventDate, EventDateText} from \"../../components/calendar/Event\";\r\nimport {fetchJson} from \"../../util/fetch-util\";\r\n\r\nexport const musicDescriptionMatch = /(?<=^Musikal\\. Gestaltung: )(.*)(?=$)/m;\r\nexport default function LimitedEventEditing() {\r\n    const [music, setMusic] = useState(\"\");\r\n    const [event, setEvent] = useState<CalendarEvent | undefined>();\r\n    const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);\r\n    const [loading, loaded, load, events] = useCalendarStore(state => [state.loading, state.loaded, state.load, state.items]);\r\n    const jwt = useUserStore(state => state.jwt);\r\n    usePermission([Permission.LimitedEventEditing]);\r\n    useEffect(() => {\r\n        if (!jwt) return;\r\n        if (!loaded && !loading) load(jwt);\r\n    }, [jwt, loading, load, loaded]);\r\n    useEffect(() => {\r\n        setRecords(Object.entries(groupEventsByDate(events.filter(event =>\r\n                event.calendar === 'inzersdorf'\r\n                && (event.groups.includes('Heilige Messe') || event.groups.includes('Gottesdienst'))\r\n            )))\r\n                .filter(([, events]) => events.length !== 0)\r\n        );\r\n    }, [events]);\r\n    useEffect(() => {\r\n        if (!event) return;\r\n        const match = (event.description ?? \"\").match(musicDescriptionMatch) ?? [''];\r\n        console.log(match);\r\n        setMusic(match[0] ?? \"\");\r\n    }, [event]);\r\n\r\n    function saveMusic() {\r\n        fetchJson(\"/api/calendar/music\", {json: {music, eventId: event?.id}, jwt}, {\r\n            success: \"Musik wurde gespeichert\",\r\n            error: \"Ein Fehler hat das Speichern verhindert\",\r\n            pending: \"Musik wird gespeichert...\"\r\n        }).then(event => {\r\n            load(jwt);\r\n            setEvent(event);\r\n        });\r\n    }\r\n\r\n    return <Site title=\"Termine bearbeiten\">\r\n        <div className=\"mt-8 grid md:grid-cols-2 bg-black/10 rounded-lg md:overflow-y-auto md:flex-[1_0_0]\">\r\n            <div\r\n                className=\"flex flex-col overflow-y-scroll border-4 border-black/10 bg-white px-4 rounded-lg max-h-96 md:max-h-[none]\">\r\n                {records.map(([date, events]) => <div key={date}>\r\n                    <EventDate date={new Date(date)}/>\r\n                    {events.filter(event => event.calendar === 'inzersdorf').map(event => <div key={event.id} className=\"cursor-pointer hover:bg-black/5 px-2\"\r\n                        onClick={() => setEvent(event)}\r\n                    ><Event\r\n                        event={event} permissions={{}}/></div>)}\r\n                </div>)}\r\n            </div>\r\n            {event && <div className=\"flex flex-col my-8 px-8\">\r\n                <div className=\"text-3xl font-bold my-2\">{event?.summary}</div>\r\n                <div className=\"text-lg my-1\"><EventDateText\r\n                    date={new Date(event?.date!)}/>, {new Date(event?.start.dateTime!).toLocaleTimeString()}</div>\r\n                <div className=\"text-lg my-1\">{event?.description}</div>\r\n                <div className=\"flex-grow flex flex-col justify-end\">\r\n                    <div>Musikal. Gestaltung</div>\r\n                    <div className=\"flex\">\r\n                        <input className=\"text-lg px-2 py-1\" value={music}\r\n                               onChange={({target}) => setMusic(target.value)}></input>\r\n                        <button className=\"bg-emmaus text-white px-4 hover:opacity-80\" onClick={saveMusic}>Speichern\r\n                        </button>\r\n                    </div>\r\n                </div>\r\n            </div>}\r\n        </div>\r\n    </Site>\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/intern/limited-event-editing.tsx b/pages/intern/limited-event-editing.tsx
+--- a/pages/intern/limited-event-editing.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/pages/intern/limited-event-editing.tsx	(date 1664948612083)
+@@ -4,9 +4,10 @@
+ import {groupEventsByDate, useCalendarStore} from "../../util/use-calendar-store";
+ import {Permission} from "../../util/verify";
+ import {useUserStore} from "../../util/use-user-store";
+-import {CalendarEvent} from "../../util/calendar-events";
++import {CalendarEvent, CalendarGroup} from "../../util/calendar-events";
+ import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
+ import {fetchJson} from "../../util/fetch-util";
++import {CalendarName} from "../../util/calendar-info";
+ 
+ export const musicDescriptionMatch = /(?<=^Musikal\. Gestaltung: )(.*)(?=$)/m;
+ export default function LimitedEventEditing() {
+@@ -22,8 +23,8 @@
+     }, [jwt, loading, load, loaded]);
+     useEffect(() => {
+         setRecords(Object.entries(groupEventsByDate(events.filter(event =>
+-                event.calendar === 'inzersdorf'
+-                && (event.groups.includes('Heilige Messe') || event.groups.includes('Gottesdienst'))
++                event.calendar === CalendarName.INZERSDORF
++                && (event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))
+             )))
+                 .filter(([, events]) => events.length !== 0)
+         );
+Index: components/EniBranding.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport Lottie from 'react-lottie-player'\r\nimport {Calendar} from '../util/calendar-events';\r\nimport {getCalendarInfo} from '../util/calendar-info';\r\nimport {site} from \"../util/sites\";\r\nimport Responsive from './Responsive';\r\nimport eniAnimation from \"../public/eni_animation.json\";\r\n\r\nexport function EniBranding() {\r\n\r\n    return <div className=\"overflow-hidden\"><Responsive>\r\n        <div className=\"md:pt-12 relative\">\r\n            <div className=\"text-6xl font-bold pt-16 text-center z-10 relative\">\r\n                <div className=\"relative\">\r\n                    {site('Eine Neue Initiative', 'emmaus am wienerberg')}\r\n                    <div className=\"absolute inset-0 text-stroke\">\r\n                        {site('Eine Neue Initiative', 'emmaus am wienerberg')}\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div className=\"text-xl pb-16 text-center z-10 relative\">\r\n                Drei katholische Pfarren im Dekanat 23, Wien\r\n                <div className=\"absolute inset-0 text-stroke-sm\">\r\n                    Drei katholische Pfarren im Dekanat 23, Wien\r\n                </div>\r\n            </div>\r\n            <Lottie\r\n                animationData={eniAnimation}\r\n                play\r\n                \r\n                loop={false}\r\n                className=\"absolute top-24 md:top-16 scale-[450%] md:scale-[200%]\"\r\n            >\r\n            </Lottie>\r\n            <div className=\"flex flex-col md:flex-row justify-center md:space-x-4 relative\">\r\n                {(['emmaus', 'inzersdorf', 'neustift'] as Calendar[])\r\n                    .map(calendar => getCalendarInfo(calendar))\r\n                    .map((calendar, index) =>\r\n                        <div key={calendar.image}\r\n                             style={{animationDelay: (0.25+index* 0.25) + \"s\"}}\r\n                             className={`rounded-xl md:w-64 flex flex-row md:flex-col bg-white border-8 border-white z-10 animate-wiggle`}>\r\n                            <div className={`${calendar.className} flex-shrink-0 rounded-lg w-32 md:w-auto`}>\r\n                                <div\r\n                                    className=\"flex justify-center items-end from-white to-transparent bg-gradient-to-l sm:bg-gradient-to-t w-full h-full\">\r\n                                    <img src={calendar.image} className=\"sm:h-36 sm:w-auto\"\r\n                                         alt={calendar.fullName}/>\r\n                                </div>\r\n                            </div>\r\n                            <div className=\"p-4 m:p-6 flex flex-col justify-center\">\r\n                                <div className=\"text-lg font-semibold leading-5\">{calendar.fullName}</div>\r\n                                <div\r\n                                    className=\"leading-5 text-center mt-2 italic md:text-left\">{calendar.address}</div>\r\n                                <a href={calendar.websiteUrl}>\r\n                                    <div\r\n                                        className=\"leading-4 text-center mt-2 underline md:text-left\">{calendar.websiteDisplay}</div>\r\n                                </a>\r\n                            </div>\r\n                        </div>)}\r\n            </div>\r\n        </div>\r\n    </Responsive></div>;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/components/EniBranding.tsx b/components/EniBranding.tsx
+--- a/components/EniBranding.tsx	(revision d684e190113a2b28b1d50152a32c8fb50ad5bcf4)
++++ b/components/EniBranding.tsx	(date 1664948328778)
+@@ -1,7 +1,6 @@
+ import React from 'react';
+ import Lottie from 'react-lottie-player'
+-import {Calendar} from '../util/calendar-events';
+-import {getCalendarInfo} from '../util/calendar-info';
++import {CalendarName, getCalendarInfo} from '../util/calendar-info';
+ import {site} from "../util/sites";
+ import Responsive from './Responsive';
+ import eniAnimation from "../public/eni_animation.json";
+@@ -33,7 +32,7 @@
+             >
+             </Lottie>
+             <div className="flex flex-col md:flex-row justify-center md:space-x-4 relative">
+-                {(['emmaus', 'inzersdorf', 'neustift'] as Calendar[])
++                {[CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
+                     .map(calendar => getCalendarInfo(calendar))
+                     .map((calendar, index) =>
+                         <div key={calendar.image}

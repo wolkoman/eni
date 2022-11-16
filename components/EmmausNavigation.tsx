@@ -15,7 +15,7 @@ export function EmmausNavigation() {
         </div>
         <div className="flex-wrap hidden md:flex">
             <Button href="#termine" name="Termine"/>
-            <Button href="#pfarrzeitung" name="Pfarrzeitung"/>
+            <Button href="#mitteilungen" name="Pfarrzeitung"/>
             <Button href="#pfarrleben" name="Pfarrleben"/>
             <Button href="#kontakt" name="Kontakt"/>
         </div>

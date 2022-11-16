@@ -9,22 +9,24 @@ export function groupEventsByDate(events: CalendarEvent[]): Record<string, Calen
     }), {});
 }
 
-export function groupEventsByGroup(events: CalendarEvent[]): Record<CalendarGroup, CalendarEvent[]> {
+export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolean): Record<CalendarGroup, CalendarEvent[]> {
     return events.reduce<Record<CalendarGroup, CalendarEvent[]>>((record, event) => ({
         ...record,
-        ...(Object.fromEntries(event.groups.map(group => ([
-            group,
-            [
-                ...(record[group] ?? []),
-                event
-            ]
-        ]))))
+        ...(Object.fromEntries(event.groups
+            .map(group => !separateMass && group === CalendarGroup.Messe ? CalendarGroup.Gottesdienst : group)
+            .map(group => ([
+                group,
+                [
+                    ...(record[group] ?? []),
+                    event
+                ]
+            ]))))
     }), {} as any)
 }
 
-export function groupEventsByGroupAndDate(events: CalendarEvent[]): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
+export function groupEventsByGroupAndDate(events: CalendarEvent[], separateMass: boolean): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
     return Object.fromEntries(Object.entries(
-            groupEventsByGroup(events)
+            groupEventsByGroup(events, separateMass)
         ).map(([group, events]) => [group, groupEventsByDate(events)])
     ) as Record<CalendarGroup, Record<string, CalendarEvent[]>>;
 }

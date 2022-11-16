@@ -10,29 +10,44 @@ import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
-import {CalendarGroup} from "../../util/calendar-types";
+import {CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
 import {CalendarName} from "../../util/calendar-info";
+import {getLiturgyData, LiturgyData} from "../api/liturgy";
+import {getCachedEvents} from "../../util/calendar-events";
+import {Settings} from "../../components/Settings";
+import {Preference, usePreference} from "../../util/use-preference";
 
-export default function EventPage() {
+export default function EventPage(props: {
+    liturgy: LiturgyData,
+    eventsObject: EventsObject,
+}) {
     const [filter, setFilter] = useState<FilterType>(null);
     const [firstFilterUpdate, setFirstFilterUpdate] = useState(true);
-    const calendar = useCalendarStore(state => state);
+    const calendarStore = useCalendarStore(state => state);
     const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
+    const calendar = jwt ? calendarStore : {items: props.eventsObject.events, error: false, loading: false};
     const {query: {q: groupQuery, p: parishQuery}} = useRouter();
     const router = useRouter();
+    const [liturgyInformation] = usePreference(Preference.LiturgyInformation);
+    const [separateMass] = usePreference(Preference.SeparateMass);
 
     useEffect(() => userLoad(), [userLoad]);
-    useEffect(() => calendar.load(jwt), [jwt, calendar.load]);
     useEffect(() => {
-        if(groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})
-        if(parishQuery) setFilter({filterType: "PARISH", parish: parishQuery as CalendarName })
+        if (jwt)
+            calendarStore.load(jwt);
+    }, [jwt, calendarStore.load]);
+    useEffect(() => {
+        if (groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})
+        if (parishQuery) setFilter({filterType: "PARISH", parish: parishQuery as CalendarName})
     }, [groupQuery, parishQuery]);
     useEffect(() => {
         if (!firstFilterUpdate) {
-            router.push({query: {
-                q: filter?.filterType !== "GROUP" ? null : filter.group,
-                p: filter?.filterType !== "PARISH" ? null : filter.parish
-            }}, "/termine")
+            router.push({
+                query: {
+                    q: filter?.filterType !== "GROUP" ? null : filter.group,
+                    p: filter?.filterType !== "PARISH" ? null : filter.parish
+                }
+            }, "/termine")
         } else {
             setFirstFilterUpdate(false);
         }
@@ -52,8 +67,10 @@ export default function EventPage() {
                             groups={calendar.items
                                 .flatMap(event => event.groups)
                                 .filter((group, index, groups) => groups.indexOf(group) === index)
+                                .filter(group => separateMass || group !== CalendarGroup.Messe)
                             }
                             persons={calendar.items
+                                .filter(event => !event.tags.includes(CalendarTag.cancelled))
                                 .map(event => event.mainPerson?.trim())
                                 .filter((person): person is string => !!person && person.includes("."))
                                 .filter((person, index, persons) => persons.indexOf(person) === index)
@@ -61,23 +78,43 @@ export default function EventPage() {
                         />
                     </div>
                     <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
-                        {filter !== null ? <div>
-                                <div className="font-bold text-4xl mb-6">{filter.filterType === "GROUP" ? filter.group : "Termine"}</div>
-                                <div className="cursor-pointer underline hover:no-underline"
-                                     onClick={() => setFilter(null)}>Alle Termine anzeigen
-                                </div>
-                            </div> :
-                            <div className="font-bold text-4xl mb-6">Termine</div>}
+                        <div className="flex justify-between items-center">
+                            {filter !== null ? <div>
+                                    <div
+                                        className="font-bold text-4xl mb-6">{filter.filterType === "GROUP" ? filter.group : "Termine"}</div>
+                                    <div className="cursor-pointer underline hover:no-underline"
+                                         onClick={() => setFilter(null)}>Alle Termine anzeigen
+                                    </div>
+                                </div> :
+                                <div className="font-bold text-4xl mb-6">Termine</div>
+                            }
+                            <Settings/>
+                        </div>
                         {calendar.error && <CalendarErrorNotice/>}
                         {calendar.loading && <LoadingEvents/>}
-                        {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter)))
-                            .map(([date, events]) => <div key={date} data-date={date}>
+                        {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, separateMass)))
+                            .map(([date, events]) => <div key={date} data-date={date} className="py-2">
                                 <EventDate date={new Date(date)}/>
-                                {events.map(event => (<Event key={event.id} event={event} permissions={permissions}/>))}
+                                <div className="mb-3 text-sm relative z-10">
+                                    {liturgyInformation && props.liturgy[date]?.map((liturgy, index, arr) =>
+                                        <div className="-my-0.5 italic">{arr[arr.length - 1 - index].name}</div>
+                                    )}
+                                </div>
+                                {events.map(event => <Event key={event.id} event={event}/>)}
                             </div>)}
                     </div>
                 </div>
             </div>
         </Responsive>
     </Site>;
+}
+
+export async function getStaticProps() {
+    return {
+        props: {
+            liturgy: await getLiturgyData(),
+            eventsObject: await getCachedEvents(false),
+        },
+        revalidate: 60,
+    }
 }

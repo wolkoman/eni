@@ -39,8 +39,8 @@ export const useUserStore = create<{
         if (get().loaded) return;
         set(state => ({
             ...state,
-            user: JSON.parse(sessionStorage.getItem('user') ?? '{}'),
-            jwt: JSON.parse(sessionStorage.getItem('jwt') ?? '{}'),
+            user: JSON.parse(sessionStorage.getItem('user') ?? 'null'),
+            jwt: JSON.parse(sessionStorage.getItem('jwt') ?? 'null'),
             loaded: true
         }));
     }

@@ -2,8 +2,9 @@ import {Section} from './Section';
 import Link from 'next/link';
 import React from 'react';
 import Responsive from "./Responsive";
-import {getCalendarInfo} from "../util/calendar-info";
+import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
+import {SectionHeader} from "./SectionHeader";
 
 export function EniSections() {
     return <Responsive><Section title="Mitteilungen">
@@ -16,7 +17,7 @@ export function EniSections() {
                 <div className="text-lg my-3">
                     Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu.
                     Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit
-                    der gewünschten Pfarre an die kanzlei@eni.wien.
+                    der gewünschten Pfarre an kanzlei@eni.wien.
                 </div>
                 <div className="flex space-x-2">
                     {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
@@ -52,5 +53,27 @@ export function EniSections() {
                 </div>
             </div>
         </div>
-    </Section></Responsive>;
+    </Section>
+        <SectionHeader id="personal">Pfarren</SectionHeader>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
+            <Parish name={CalendarName.EMMAUS}/>
+            <Parish name={CalendarName.INZERSDORF}/>
+            <Parish name={CalendarName.NEUSTIFT}/>
+        </div>
+    </Responsive>;
+}
+
+function Parish(props: { name: CalendarName }) {
+    const info = getCalendarInfo(props.name);
+    return <div className="flex flex-col items-center text-center w-full">
+        <div className={"rounded-lg overflow-hidden h-44 relative w-full " + info.className}>
+            <div style={{backgroundImage: `url(${info.image})`}}
+                 className="w-full h-full rounded-lg bg-contain bg-no-repeat bg-center"/>
+        </div>
+        <div className="text-xl font-bold mt-4">{info.fullName}</div>
+        <div className="italic">{info.address}</div>
+        <Link href={`${info.websiteUrl}`}>
+            <div className="underline hover:no-underline cursor-pointer">{info.websiteDisplay}</div>
+        </Link>
+    </div>
 }

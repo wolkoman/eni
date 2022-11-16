@@ -31,7 +31,6 @@ export enum CalendarGroup {
     Taufe = "Taufe",
     Grabwache = "Grabwache",
     Messe = "Heilige Messe",
-    Jungschar = "Jungschar",
     Ökumene = "Ökumene",
     Gebet = "Gebet & Bibel",
     Caritas = "Caritas",

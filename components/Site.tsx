@@ -13,6 +13,7 @@ export default function Site(props: {
     children: ReactNode,
     responsive?: boolean,
     narrow?: boolean,
+    showTitle?: boolean,
     navbar?: boolean,
     footer?: boolean
 }) {
@@ -28,7 +29,7 @@ export default function Site(props: {
             <div className="flex-grow flex flex-col items-stretch">
                 {(props.navbar ?? true) && <>
                     <TopBar/>
-                    {site(<></>, <div className="bg-emmaus text-6xl font-bold pt-8 mb-16 px-10">
+                    {site(<></>, props.showTitle && <div className="bg-emmaus text-6xl font-bold pt-8 mb-16 px-10">
                         <div className="translate-y-6 max-w-5xl mx-auto relative">
                             {props.title}
                             <div className="absolute inset-0 text-stroke">{props.title}</div>

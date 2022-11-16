@@ -6,6 +6,7 @@ import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarGroup, EventsObject} from "../../util/calendar-types";
+import {Preference, usePreference} from "../../util/use-preference";
 
 export function getGroupSorting(group: CalendarGroup) {
     return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Advent, CalendarGroup.Gottesdienst, CalendarGroup.Messe, CalendarGroup.Weihnachten].indexOf(group);
@@ -13,7 +14,8 @@ export function getGroupSorting(group: CalendarGroup) {
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const now = new Date().getTime();
-    const groups = Object.entries(groupEventsByGroupAndDate(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000 * 60 * 60 * 24 * 7)))
+    const [separateMass] = usePreference(Preference.SeparateMass);
+    const groups = Object.entries(groupEventsByGroupAndDate(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000 * 60 * 60 * 24 * 7), separateMass))
         .sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
     const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
 
@@ -32,8 +34,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                 <div>{Object.entries(calendar).map(([date, events]) =>
                                     <div key={date}>
                                         <div className="my-2"><EventDateText date={new Date(date)}/></div>
-                                        {(events ?? []).map(event => <Event key={event.id} event={event}
-                                                                            permissions={{}}/>)}
+                                        {(events ?? []).map(event => <Event key={event.id} event={event}/>)}
                                     </div>
                                 )}
                                 </div>
@@ -42,7 +43,8 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                     )}
             </div>
             <div className="flex gap-4 pb-4">
-                {groups.slice(7).map(([group]) => <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}>
+                {groups.slice(7).map(([group]) => <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
+                                                        key={group}>
                     <div
                         className="flex-1 rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer">
                         {group}

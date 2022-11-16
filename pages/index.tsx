@@ -21,6 +21,7 @@ import {getCachedEvents} from "../util/calendar-events";
 import {EventsObject} from "../util/calendar-types";
 import {SectionHeader} from "../components/SectionHeader";
 import Link from "next/link";
+import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 
 function Personal() {
     return <>
@@ -35,7 +36,6 @@ function Personal() {
         </Responsive>
     </>
 }
-
 function Person(props: { img: string, name: string, role: string, mail: string }) {
     return <div className="flex flex-col items-center text-center">
         <div className="rounded-full aspect-square w-36 bg-black/20 relative">
@@ -43,9 +43,7 @@ function Person(props: { img: string, name: string, role: string, mail: string }
         </div>
         <div className="text-xl font-bold mt-4">{props.name}</div>
         <div className="italic">{props.role}</div>
-        <Link href={`mailto:${props.mail}@eni.wien`}>
-            <div className="underline hover:no-underline cursor-pointer">{props.mail}@eni.wien</div>
-        </Link>
+        <div className="underline ">{props.mail}@eni.wien</div>
     </div>
 }
 

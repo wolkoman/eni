@@ -14,7 +14,6 @@ export default function Events() {
     const router = useRouter();
 
     useEffect(() => {
-        console.log({user});
         if (!user?.active) {
             setData({username: '', password: ''});
         }else{
@@ -43,7 +42,7 @@ export default function Events() {
         <div
             className="w-full h-screen relative flex flex-col justify-center items-center bg-[url(/bg-login.svg)] bg-cover bg-center">
             <div
-                className={`z-10 bg-white borde border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none opacity-50 select-none' : ''}`}>
+                className={`z-10 bg-white borde border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
                     <div className="font-bold text-2xl mb-5">Eine Neue Initiative</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
@@ -56,8 +55,10 @@ export default function Events() {
                                if (e.key === "Enter" && !buttonDisabled()) login()
                            }}
                     />
-                    <Button className="mt-4 w-full text-center" onClick={() => login()} label="Anmelden"
-                            disabled={buttonDisabled()}/>
+                    <div className={`${loading ? "animate-pulse" : ""} mt-4 w-full text-center grid`}>
+                        <Button className="" onClick={() => login()} label="Anmelden"
+                                disabled={buttonDisabled()}/>
+                    </div>
                     <div className="text-xs mt-2">
                         oder{" "}
                         <Link href="https://forms.gle/TJZjvqbvq688J57h7"><span className="text-blue-600 cursor-pointer">weitere Optionen</span></Link>
