@@ -173,12 +173,14 @@ export const getCachedEvents = async (privateAccess: boolean): Promise<EventsObj
     const calendarCacheId = '61b335996165305292000383';
     const events = await getParishEvents({public: !privateAccess}).catch(() => null);
     if (events !== null) {
+/*
         if (!privateAccess && site(true, false)) {
             cockpit.collectionSave('internal-data', {
                 _id: calendarCacheId,
                 data: {events, cache: new Date().toISOString()}
             }).catch();
         }
+*/
         return {events, cache: null};
     } else {
         const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}});
