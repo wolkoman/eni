@@ -18,6 +18,7 @@ export type LiturgyData = Record<string, Liturgy[]>;
 export interface Liturgy{
   name: string;
   color: string;
+  rank: string;
   reading1: string;
   reading2: string;
   psalm: string;
@@ -62,6 +63,7 @@ function transformLiturgy(td: Cell): Liturgy[]{
     ) : cell["#text"]
   )].map(texts => ({
     name: texts[0],
+    rank: texts[1],
     color: texts[2],
     reading1: texts[3],
     reading2: texts[5],

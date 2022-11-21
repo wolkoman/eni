@@ -15,6 +15,7 @@ export default function Intern() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             <InternButton href="/" label="Startseite"/>
             <InternButton href="/termine" label="Termine"/>
+            {permissions?.[Permission.PrivateCalendarAccess] && <InternButton href="intern/reader" label="Lektor:innen"/>}
             {permissions?.[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
             {permissions?.[Permission.Editor] && <InternButton href="intern/editor" label="Redaktion"/>}
             {permissions?.[Permission.LimitedEventEditing] && <InternButton href="intern/limited-event-editing" label="Musik Inzersdorf"/>}

@@ -75,12 +75,12 @@ export function Instagram(props: { items: any[] }) {
                             <InstagramSmall key={item.id} item={item}/>
                         </div>)}
                     {feed.length > 0 &&
-                        <Link href="//instagram.com/eni.wien/">
+                        <a href="//instagram.com/eni.wien/">
                             <div
                                 className="w-full py-8 text-xl text-center flex items-center justify-center bg-black/5 hover:bg-black/10 font-bold rounded-lg cursor-pointer">
                                 Mehr auf Instagram
                             </div>
-                        </Link>}
+                        </a>}
                 </div>
             </div>
 

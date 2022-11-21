@@ -1,6 +1,7 @@
-import create from 'zustand';
+import create, {StoreApi, UseBoundStore} from 'zustand';
 import {fetchJson} from './fetch-util';
 import {CalendarEvent, CalendarGroup} from "./calendar-types";
+import {useEffect} from "react";
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
     return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
@@ -31,15 +32,17 @@ export function groupEventsByGroupAndDate(events: CalendarEvent[], separateMass:
     ) as Record<CalendarGroup, Record<string, CalendarEvent[]>>;
 }
 
-export const useCalendarStore = create<{
+interface CalendarState {
     items: CalendarEvent[];
     cache?: string;
     loading: boolean;
     loaded: boolean;
     error: boolean;
     load: (token?: string) => void;
-    lastLoadedWithToken?: string,
-}>((set, get) => ({
+    lastLoadedWithToken?: string;
+}
+
+export const useCalendarStore = create<CalendarState>((set, get) => ({
     items: [],
     loaded: false,
     loading: false,

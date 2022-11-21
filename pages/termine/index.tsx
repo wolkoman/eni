@@ -16,6 +16,7 @@ import {getLiturgyData, LiturgyData} from "../api/liturgy";
 import {getCachedEvents} from "../../util/calendar-events";
 import {Settings} from "../../components/Settings";
 import {Preference, usePreference} from "../../util/use-preference";
+import {compareLiturgy} from "../intern/reader";
 
 export default function EventPage(props: {
     liturgy: LiturgyData,
@@ -59,7 +60,7 @@ export default function EventPage(props: {
                 <CalendarCacheNotice/>
                 <div className="flex flex-col md:flex-row">
                     <div
-                        className="w-full self-start py-4 lg:px-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-20 bg-black/5 rounded-xl">
+                        className="w-full self-start py-4 lg:px-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-50 bg-[#eee] rounded-xl">
                         <FilterSelector
                             filter={filter}
                             setFilter={filter => setFilter(filter)}
@@ -96,8 +97,11 @@ export default function EventPage(props: {
                             .map(([date, events]) => <div key={date} data-date={date} className="py-2">
                                 <EventDate date={new Date(date)}/>
                                 <div className="mb-3 text-sm relative z-10">
-                                    {liturgyInformation && props.liturgy[date]?.map((liturgy, index, arr) =>
-                                        <div className="-my-0.5 italic">{arr[arr.length - 1 - index].name}</div>
+                                    {liturgyInformation && props.liturgy[date]?.sort(compareLiturgy).map((liturgy) =>
+                                        <div className="-my-0.5 italic flex gap-2">
+                                            <div className={`w-3 my-1 rounded ${{v: "bg-[#f0f]", w : "bg-[#ddd]", g: "bg-[#0c0]", r: "bg-[#f00]"}[liturgy.color]}`}/>
+                                            <div>{liturgy.name} [{liturgy.rank}]</div>
+                                        </div>
                                     )}
                                 </div>
                                 {events.map(event => <Event key={event.id} event={event}/>)}

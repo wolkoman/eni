@@ -1,10 +1,8 @@
-//import {Credentials} from 'googleapis';
-
 declare module 'cockpit-sdk' {
 
   type Object = { _id: string, _created: number }
   export type Collections = {
-    'internal-data': { data: Credentials, id: string } & Object,
+    'internal-data': { data: any, id: string } & Object,
     'Emmausbote': {
       date: string,
       preview: { path: string },
@@ -14,7 +12,6 @@ declare module 'cockpit-sdk' {
       date: string,
       emmaus: string,
       inzersdorf: string,
-      neustift: string,
       neustift: string,
       preview: { path: string },
     } & Object,
@@ -42,7 +39,7 @@ declare module 'cockpit-sdk' {
       name: string,
       username: string,
       parish: 'emmaus' | 'inzersdorf' | 'neustift' | 'all',
-      competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor')[],
+      competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader')[],
       code?: string,
       email?: string,
       last_login: string,

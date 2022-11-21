@@ -33,7 +33,7 @@ export function Settings() {
             <RiveComponent/>
         </div>
         <div
-            className={`absolute top-0 right-0 w-screen max-w-md rounded-lg p-6 bg-[#eee] flex flex-col gap-4 z-20 ${!open && "max-w-0 max-h-0 opacity-0"} transition-all overflow-hidden`}>
+            className={`absolute top-0 right-0 w-screen max-w-sm rounded-lg p-6 bg-[#eee] flex flex-col gap-4 z-20 ${!open && "max-w-0 max-h-0 opacity-0"} transition-all overflow-hidden`}>
             <SettingsOption
                 name={Preference.SeparateMass}
                 title="Separate heilige Messen"

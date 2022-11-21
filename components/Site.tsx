@@ -19,7 +19,7 @@ export default function Site(props: {
 }) {
     return <>
         <Head>
-            <title>{props.title && `${props.title} | `}{site("Eine Neue Initiative", "Pfarre Emmaus")}</title>
+            <title>{(props.title ? `${props.title} | ` : '')+ (site("Eine Neue Initiative", "Pfarre Emmaus"))}</title>
             {props.author && <meta name="author" content={props.author}/>}
             {props.description && <meta name="description" content={props.description}/>}
             {props.keywords && <meta name="keywords" content={props.keywords.join(", ")}/>}
