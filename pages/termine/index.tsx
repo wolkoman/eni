@@ -34,8 +34,9 @@ export default function EventPage(props: {
 
     useEffect(() => userLoad(), [userLoad]);
     useEffect(() => {
-        if (jwt)
+        if (jwt){
             calendarStore.load(jwt);
+        }
     }, [jwt, calendarStore.load]);
     useEffect(() => {
         if (groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})

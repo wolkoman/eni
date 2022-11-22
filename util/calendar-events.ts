@@ -6,20 +6,23 @@ import {getTimeOfEvent} from "./get-time-of-event";
 import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
 import {CalendarEvent, CalendarTag, EventsObject} from "./calendar-types";
 import {getGroupFromEvent} from "./calendar-group";
+import {ReaderData} from "./reader";
+import {getCachedReaderData} from "../pages/api/reader";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
-export function mapGoogleEventToEniEvent(calendarName: CalendarName, isPublic: boolean): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
+export function mapGoogleEventToEniEvent(calendarName: CalendarName, isPublic: boolean, readerData?: ReaderData): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
     return (event): CalendarEvent | null => {
         const displayPersonen = event?.summary?.split("/", 2)?.[1] ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
+        const readerInfo = (readerData?.[event.id!]?.reader1 ? `<br/>1.Lesung: ${readerData?.[event.id!]?.reader1.name}` :'') + (readerData?.[event.id!]?.reader2 ? `<br/>2.Lesung: ${readerData?.[event.id!]?.reader2.name}` :'');
         if(event.visibility === 'private' && isPublic) return null;
         return ({
             id: event.id ?? "",
             mainPerson: displayPersonen,
             summary: isPublic ? summary.replace(/\[.*?]/g, '') : summary ,
-            description:( isPublic ? event.description?.replace(/\[.*?]/g, '') : event.description) ?? '',
+            description:(( isPublic ? event.description?.replace(/\[.*?]/g, '') : event.description) ?? ' ') + readerInfo,
             date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
             start: event.start as {dateTime: string},
             end: event.end as {dateTime: string},
@@ -60,8 +63,9 @@ export async function getCalendarEvents(calendarName: CalendarName, options: { p
         timeZone: 'Europa/Vienna',
         orderBy: 'startTime'
     });
+    const readerData = await (('public' in options && options.public) ? Promise.resolve(undefined) : getCachedReaderData());
 
-    return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName, isPublic))
+    return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName, isPublic, readerData))
         .filter((event): event is CalendarEvent => !!event?.summary)
 }
 
@@ -103,8 +107,8 @@ export const getCachedEvents = async (privateAccess: boolean): Promise<EventsObj
         }
         return {events, cache: null};
     } else {
-        const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}});
+        const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
         await notifyAdmin('Google Calendar failed');
-        return cachedEvents.entries[0].data;
+        return cachedEvents;
     }
 }
