@@ -14,7 +14,7 @@ const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
 export function mapGoogleEventToEniEvent(calendarName: CalendarName, isPublic: boolean, readerData?: ReaderData): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
     return (event): CalendarEvent | null => {
-        const displayPersonen = event?.summary?.split("/", 2)?.[1] ?? null;
+        const displayPersonen = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
         const readerInfo = (readerData?.[event.id!]?.reader1 ? `<br/>1.Lesung: ${readerData?.[event.id!]?.reader1.name}` :'') + (readerData?.[event.id!]?.reader2 ? `<br/>2.Lesung: ${readerData?.[event.id!]?.reader2.name}` :'');
         if(event.visibility === 'private' && isPublic) return null;

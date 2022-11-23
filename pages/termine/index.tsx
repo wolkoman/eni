@@ -71,11 +71,14 @@ export default function EventPage(props: {
                                 .filter((group, index, groups) => groups.indexOf(group) === index)
                                 .filter(group => separateMass || group !== CalendarGroup.Messe)
                             }
-                            persons={calendar.items
+                            persons={Object.entries(calendar.items
                                 .filter(event => !event.tags.includes(CalendarTag.cancelled))
-                                .map(event => event.mainPerson?.trim())
-                                .filter((person): person is string => !!person && person.includes("."))
-                                .filter((person, index, persons) => persons.indexOf(person) === index)
+                                .map(event => event.mainPerson)
+                                .filter((person): person is string => !!person)
+                                .reduce<{[name: string]: number}>((p,c) => ({...p, [c]: (p[c] ?? 0) + 1}), {}))
+                                .filter(([name, count]) => !["Pfr. Zluwa Pfarre Neuerlaa","Ukrani. Priester","Prälat Rühringer","Kpl. Hannes Grabner"].includes(name))
+                                .map(([name, count]) => name)
+                                .sort((a,b) => ["Pedro","Kpl. David","Kpl. Gil","Pfv. Marcin","Pfr. Dr. Brezovski"].indexOf(b) - ["Pedro","Kpl. David","Kpl. Gil","Pfv. Marcin","Pfr. Dr. Brezovski"].indexOf(a))
                             }
                         />
                     </div>

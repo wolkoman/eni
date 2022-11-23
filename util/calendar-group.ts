@@ -5,13 +5,11 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
     const sum = event.summary.toLowerCase();
     let conditions: (CalendarGroup | false)[] = [
         sum.includes("wallfahrt") && CalendarGroup.Wallfahrt,
-        sum.startsWith("taufe") && CalendarGroup.Taufe,
         sum.startsWith("grabwache") && CalendarGroup.Grabwache,
         sum.includes("hochamt") && CalendarGroup.Messe,
         sum.includes("messe") && CalendarGroup.Messe,
         sum.includes("mette") && CalendarGroup.Messe,
-        sum.includes("firmung") && !sum.includes("anmeldung") && CalendarGroup.Messe,
-        sum.includes("evangel") && CalendarGroup.Ökumene,
+        sum.includes("firmung") && !sum.includes("anmeldung") && !sum.includes("info") && CalendarGroup.Messe,
         sum.startsWith("friedensgebet") && CalendarGroup.Gebet,
         sum.includes("emmausgebet") && CalendarGroup.Gebet,
         sum.includes("rosenkranz") && CalendarGroup.Gebet,
@@ -58,6 +56,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("auferstehungsfeier") && CalendarGroup.Ostern,
         sum.includes("jesu am kreuz") && CalendarGroup.Ostern,
         sum.includes("gründonnerstag") && CalendarGroup.Ostern,
+        sum.includes("evangel") && CalendarGroup.Invisible,
         sum.includes("taufe") && CalendarGroup.Invisible,
         sum.includes(" ehe") && CalendarGroup.Invisible,
         sum.includes("firmvorbereitung") && CalendarGroup.Invisible,
@@ -72,9 +71,12 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("chor") && CalendarGroup.Chor,
         sum.includes("vokalensemble") && CalendarGroup.Chor,
         sum.includes("sprechstunde") && CalendarGroup.Sprechstunde,
+        sum.includes("lima") && CalendarGroup.Gemeinschaft,
         sum.includes("erstkommunion") && CalendarGroup.Sakramente,
+        sum.startsWith("taufe") && CalendarGroup.Sakramente,
         sum.includes("firmkurs") && CalendarGroup.Sakramente,
         sum.includes("firmung") && sum.includes("anmeldung") && CalendarGroup.Sakramente,
+        sum.includes("firmung") && sum.includes("info") && CalendarGroup.Sakramente,
     ];
     let groups = conditions.filter((group): group is CalendarGroup => !!group);
 
