@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCalendarEvents} from '../../../util/calendar-events';
+import {getCalendarEvents, GetEventPermission} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {CalendarName} from "../../../util/calendar-info";
 
@@ -12,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  res.json((await getCalendarEvents(CalendarName.INZERSDORF_ORGAN, {public: false})).filter(event => event.summary === user.name));
+  res.json((await getCalendarEvents(CalendarName.INZERSDORF_ORGAN, {permission: GetEventPermission.PRIVATE_ACCESS}))
+      .filter(event => event.summary === user.name));
 
 }

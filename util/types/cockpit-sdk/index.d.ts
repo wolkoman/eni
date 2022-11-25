@@ -1,5 +1,6 @@
 declare module 'cockpit-sdk' {
 
+  import {CalendarName} from "../../calendar-info";
   type Object = { _id: string, _created: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
@@ -38,7 +39,7 @@ declare module 'cockpit-sdk' {
       active: boolean,
       name: string,
       username: string,
-      parish: 'emmaus' | 'inzersdorf' | 'neustift' | 'all',
+      parish: CalendarName,
       competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning')[],
       code?: string,
       email?: string,

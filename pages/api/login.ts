@@ -4,6 +4,7 @@ import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from '../.
 import {sign} from 'jsonwebtoken';
 import {User} from '../../util/user';
 import {getPerson} from './change-password';
+import {CalendarName} from "../../util/calendar-info";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -15,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (person !== null && person !== undefined) {
         delete person.code;
         const permissions = resolvePermissionsForCompetences(person.competences);
-        const userlikeObject: User = {...person, permissions, api_key: `person_${person._id}`, is_person: true};
+        const userlikeObject: User = {...person, permissions, api_key: `person_${person._id}`,  is_person: true};
         await cockpit.collectionSave('person', {...person, last_login: new Date().toISOString()})
         res.json({jwt: sign(userlikeObject, secretOrPrivateKey, {algorithm: 'RS256'})});
     } else if (person === undefined) {
@@ -27,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const user: User = {
             ...cockpitUser,
             permissions: resolvePermissionsForGroup(cockpitUser.group),
-            parish: "all",
+            parish: CalendarName.ALL,
             username: cockpitUser.user,
             is_person: false
         };

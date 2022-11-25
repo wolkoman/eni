@@ -6,6 +6,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
     let conditions: (CalendarGroup | false)[] = [
         sum.includes("wallfahrt") && CalendarGroup.Wallfahrt,
         sum.startsWith("grabwache") && CalendarGroup.Grabwache,
+        sum.includes("auferstehungsfeier") && CalendarGroup.Messe,
         sum.includes("hochamt") && CalendarGroup.Messe,
         sum.includes("messe") && CalendarGroup.Messe,
         sum.includes("mette") && CalendarGroup.Messe,
@@ -37,6 +38,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("flohmarkt") && CalendarGroup.Gemeinschaft,
         sum.includes("50+ treff") && CalendarGroup.Gemeinschaft,
         sum.startsWith("bibel aktiv") && CalendarGroup.Gebet,
+        sum.includes("liturgie") && CalendarGroup.Gottesdienst,
         sum.includes("andacht") && CalendarGroup.Gottesdienst,
         sum.startsWith("vesper") && CalendarGroup.Gottesdienst,
         sum.includes("worship") && CalendarGroup.Gottesdienst,

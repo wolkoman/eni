@@ -16,9 +16,9 @@ export function compareLiturgy(a: Liturgy, b: Liturgy) {
 export default function Index(props: { liturgy: LiturgyData }) {
 
     const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
-    const [userId, jwt] = useUserStore(state => [state.user?._id, state.jwt]);
+    const [user, jwt] = useUserStore(state => [state.user, state.jwt]);
     const myTasks = getTasksFromReaderData(readerData, eventId => events.find(e => e.id === eventId)!)
-        .filter(task => task.data.userId === userId && task.event.calendar === reader.parish)
+        .filter(task => task.data.userId === user?._id && task.event.calendar === reader.parish)
         .sort((a, b) => new Date(a.event.date).getTime() - new Date(b.event.date).getTime());
 
     function cancel(eventId: string, role: 'reading1' | 'reading2') {
@@ -31,7 +31,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
 
     return <ReaderSite>
         <div className="flex flex-col gap-2">
-            <div className="my-4 text-lg font-bold">Meine Lesungen</div>
+            <div className="my-4 text-lg font-bold">Lesungen von {user?.name}</div>
             {myTasks.length === 0 && <div>
                 Keine Lesungen eingeteilt.
             </div>}
