@@ -51,13 +51,14 @@ export async function getCalendarEvents(calendarName: CalendarName, options: Get
         [GetEventPermission.READER]: 6,
         [GetEventPermission.PRIVATE_ACCESS]: 6,
     }[options.permission]);
+    const hasTimeframe = options.permission === GetEventPermission.PRIVATE_ACCESS && options.timeFrame;
 
     const eventsList = await calendar.events.list({
         maxResults: 1000,
         calendarId,
         auth: oauth2Client,
-        timeMin: new Date(start).toISOString(),
-        timeMax: new Date(end).toISOString(),
+        timeMin: (hasTimeframe ? options.timeFrame!.min : new Date(start)).toISOString(),
+        timeMax: (hasTimeframe ? options.timeFrame!.max : new Date(end)).toISOString(),
         singleEvents: true,
         timeZone: 'Europa/Vienna',
         orderBy: 'startTime'
@@ -115,7 +116,7 @@ export enum GetEventPermission {
 
 export type GetEventOptions =
     { permission: GetEventPermission.PUBLIC }
-    | { permission: GetEventPermission.PRIVATE_ACCESS }
+    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: {min: Date, max: Date } }
     | { permission: GetEventPermission.READER, ids: string[] }
 
 export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {
