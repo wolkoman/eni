@@ -10,11 +10,11 @@ export const usePermission = (requiredPermissions: Permission[] = []) => {
   useEffect(() => {
     if(loaded){
       if (!user?.active) {
-        router.push('/');
+        router.push('/login');
       }else {
         const unauthorized = requiredPermissions.some(p => !permissions[p]);
         if (unauthorized) {
-          router.push('/');
+          router.push('/login');
         }
         if (user && user.group === "PrivateCalendarAccess" && router.asPath !== "/intern/move-user") {
           router.push("/intern/move-user");
