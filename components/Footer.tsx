@@ -28,10 +28,10 @@ export default function Footer() {
                         <div className="cursor-pointer underline hover:no-underline">Impressum</div>
                     </Link>
                     {isLoggedIn
-                        ? <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
+                        ? <Link href={emmausProd ? "https://eni.wien/intern" : "/intern"}>
                             <div className="cursor-pointer underline hover:no-underline">Zum Mitgliedsbereich</div>
                         </Link>
-                        : <Link href={emmausProd ? "https://eni.wien/login" : "/login"}>
+                        : <Link href={emmausProd ? "https://eni.wien/intern" : "/intern"}>
                             <Button label="Login"/>
                         </Link>}
                 </div>
