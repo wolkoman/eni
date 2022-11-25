@@ -13,10 +13,10 @@ import Responsive from "../../components/Responsive";
 import {CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
 import {CalendarName} from "../../util/calendar-info";
 import {getLiturgyData, LiturgyData} from "../api/liturgy";
-import {getCachedEvents} from "../../util/calendar-events";
+import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {Settings} from "../../components/Settings";
 import {Preference, usePreference} from "../../util/use-preference";
-import {compareLiturgy} from "../intern/reader";
+import {compareLiturgy} from "../intern/reader/my";
 
 export default function EventPage(props: {
     liturgy: LiturgyData,
@@ -121,7 +121,7 @@ export async function getStaticProps() {
     return {
         props: {
             liturgy: await getLiturgyData(),
-            eventsObject: await getCachedEvents(false),
+            eventsObject: await getCachedEvents({permission: GetEventPermission.PUBLIC}),
         },
         revalidate: 60,
     }

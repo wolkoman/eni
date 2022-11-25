@@ -10,7 +10,9 @@ export enum Permission {
   OrganBooking = "ORGAN_BOOKING",
   Editor = "EDITOR",
   LimitedEventEditing = "LIMITING_EVENT_EDITING",
-  Admin = "ADMIN"
+  Admin = "ADMIN",
+  Reader = "READER",
+  ReaderPlanning = "READER_PLANNING",
 }
 export type Permissions = Partial<Record<Permission, boolean>>;
 
@@ -19,6 +21,8 @@ export function resolvePermissionsForGroup(group: CockpitUser['group'] = ''): Pe
     [Permission.Articles]: ['admin', 'master'].includes(group),
     [Permission.PrivateCalendarAccess]: ['PrivateCalendarAccess', 'OrganMaster', 'admin', 'master'].includes(group),
     [Permission.Admin]: ['admin', 'master'].includes(group),
+    [Permission.Reader]: ['admin', 'master'].includes(group),
+    [Permission.ReaderPlanning]: ['admin', 'master'].includes(group),
     [Permission.Editor]: ['admin', 'master', 'ArticleEditor'].includes(group),
     [Permission.OrganBooking]: ['admin', 'OrganAccess', 'OrganMaster'].includes(group),
     [Permission.LimitedEventEditing]: ['admin', 'master', 'OrganMaster'].includes(group),
@@ -32,6 +36,8 @@ export function resolvePermissionsForCompetences(competences: Collections['perso
     [Permission.LimitedEventEditing]: competences.includes("limited_event_editing"),
     [Permission.Editor]: competences.includes("editor"),
     [Permission.Admin]: competences.includes("admin"),
+    [Permission.Reader]: competences.includes("reader"),
+    [Permission.ReaderPlanning]: competences.includes("reader_planning"),
     [Permission.OrganBooking]: competences.includes("organ")
   };
 }

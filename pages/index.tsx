@@ -17,11 +17,9 @@ import {EmmausSections} from "../components/EmmausSections";
 import {EmmausNavigation} from "../components/EmmausNavigation";
 import {Section} from "../components/Section";
 import Responsive from "../components/Responsive";
-import {getCachedEvents} from "../util/calendar-events";
+import {getCachedEvents, GetEventPermission} from "../util/calendar-events";
 import {EventsObject} from "../util/calendar-types";
 import {SectionHeader} from "../components/SectionHeader";
-import Link from "next/link";
-import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 
 function Personal() {
     return <>
@@ -102,7 +100,7 @@ export async function getStaticProps() {
     return {
         props: {
             instagram: await fetchInstagramFeed(),
-            eventsObject: await getCachedEvents(false),
+            eventsObject: await getCachedEvents({permission: GetEventPermission.PUBLIC}),
             articles: await site(() => Promise.resolve({}), () => fetchArticles())(),
             sites: await site(() => Promise.resolve({}), () => fetchEmmausSites())(),
             weeklies: await site(() => Promise.resolve({}), () => fetchWeeklies())(),

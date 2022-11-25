@@ -2,6 +2,16 @@ import create from 'zustand';
 import {fetchJson} from './fetch-util';
 import {verify} from 'jsonwebtoken';
 import {User} from './user';
+import {useEffect} from "react";
+
+export function useAuthenticatedUserStore(){
+
+    const [load, user, jwt] = useUserStore(state => [state.load, state.user, state.jwt]);
+    useEffect(() => {
+        load();
+    }, [])
+    return {user, jwt};
+}
 
 export const useUserStore = create<{
     jwt?: string,

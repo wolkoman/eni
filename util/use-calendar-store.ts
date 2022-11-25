@@ -2,6 +2,7 @@ import create, {StoreApi, UseBoundStore} from 'zustand';
 import {fetchJson} from './fetch-util';
 import {CalendarEvent, CalendarGroup} from "./calendar-types";
 import {useEffect} from "react";
+import {useUserStore} from "./use-user-store";
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
     return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
@@ -40,6 +41,19 @@ interface CalendarState {
     error: boolean;
     load: (token?: string) => void;
     lastLoadedWithToken?: string;
+}
+
+
+export function useAuthenticatedCalendarStore() {
+    const [jwt, userLoad] = useUserStore(state => [state.jwt, state.load]);
+    const [load, loading, error, items] = useCalendarStore(state => [state.load, state.loading, state.error, state.items]);
+    useEffect(() => {
+        userLoad();
+    }, []);
+    useEffect(() => {
+        if(jwt) load(jwt);
+    }, [jwt]);
+    return {loading, error, items};
 }
 
 export const useCalendarStore = create<CalendarState>((set, get) => ({

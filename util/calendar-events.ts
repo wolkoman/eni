@@ -12,46 +12,45 @@ import {getCachedReaderData} from "../pages/api/reader";
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
-export function mapGoogleEventToEniEvent(calendarName: CalendarName, isPublic: boolean, readerData?: ReaderData): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
+export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: GetEventOptions): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
     return (event): CalendarEvent | null => {
         const displayPersonen = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
-        const readerInfo = (readerData?.[event.id!]?.reader1 ? `<br/>1.Lesung: ${readerData?.[event.id!]?.reader1.name}` :'') + (readerData?.[event.id!]?.reader2 ? `<br/>2.Lesung: ${readerData?.[event.id!]?.reader2.name}` :'');
-        if(event.visibility === 'private' && isPublic) return null;
-        return ({
+        const privateAccess = options.permission === GetEventPermission.PRIVATE_ACCESS;
+        if (event.visibility === 'private' && privateAccess) return null;
+        return {
             id: event.id ?? "",
             mainPerson: displayPersonen,
-            summary: isPublic ? summary.replace(/\[.*?]/g, '') : summary ,
-            description:(( isPublic ? event.description?.replace(/\[.*?]/g, '') : event.description) ?? ' ') + readerInfo,
-            date: (event.start?.date ?? event.start?.dateTime ?? '').substr(0, 10),
-            start: event.start as {dateTime: string},
-            end: event.end as {dateTime: string},
+            summary: privateAccess ? summary : summary.replace(/\[.*?]/g, ''),
+            description: privateAccess ? event.description ?? '' : event.description?.replace(/\[.*?]/g, '') ?? '',
+            date: (event.start?.date ?? event.start?.dateTime ?? '').substring(0, 10),
+            start: event.start as { dateTime: string },
+            end: event.end as { dateTime: string },
             calendar: calendarName,
             visibility: event.visibility ?? 'public',
             groups: getGroupFromEvent(event),
             tags: [
-                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && !isPublic && CalendarTag.inChurch,
-                (event.visibility === 'private') && CalendarTag.private,
+                !(event.summary + (event.description ?? '')).match(notInChurchRegex) && privateAccess && CalendarTag.inChurch,
+                event.visibility === 'private' && CalendarTag.private,
                 (event.summary + (event.description ?? '')).match(cancelledRegex) && CalendarTag.cancelled,
             ].filter((item): item is CalendarTag => !!item),
             wholeday: !!event.start?.date,
-        });
+        };
     };
 }
 
-export async function getCalendarEvents(calendarName: CalendarName, options: { public: boolean } | { timeMin: Date, timeMax: Date }): Promise<CalendarEvent[]> {
+export async function getCalendarEvents(calendarName: CalendarName, options: GetEventOptions): Promise<CalendarEvent[]> {
     const calendarId = CALENDAR_INFOS[calendarName].calendarId;
     const oauth2Client = await getCachedGoogleAuthClient();
     const calendar = google.calendar('v3');
     const todayDate = new Date();
     todayDate.setHours(0);
-    let isPublic = 'public' in options ? options.public : false;
     let start = todayDate.getTime();
-    let end = start + 3600000 * 24 * 30 * (isPublic ? 1 : 6);
-    if (!('public' in options)) {
-        start = options.timeMin.getTime();
-        end = options.timeMax.getTime();
-    }
+    let end = start + 3600000 * 24 * 30 * ({
+        [GetEventPermission.PUBLIC]: 1,
+        [GetEventPermission.READER]: 6,
+        [GetEventPermission.PRIVATE_ACCESS]: 6,
+    }[options.permission]);
 
     const eventsList = await calendar.events.list({
         maxResults: 1000,
@@ -63,10 +62,22 @@ export async function getCalendarEvents(calendarName: CalendarName, options: { p
         timeZone: 'Europa/Vienna',
         orderBy: 'startTime'
     });
-    const readerData = await (('public' in options && options.public) ? Promise.resolve(undefined) : getCachedReaderData());
+    const readerData = await ([GetEventPermission.PRIVATE_ACCESS, GetEventPermission.READER].includes(options.permission)
+            ? getCachedReaderData()
+            : Promise.resolve({})
+    );
 
-    return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName, isPublic, readerData))
+
+    function getReaderInfo(event: CalendarEvent) {
+        const readerInfo = readerData?.[event.id!] ?? {reading1: null, reading2: null};
+        return (readerInfo.reading1 ? `<br/>1.Lesung: ${readerInfo.reading1?.name}` :'') + (readerInfo.reading2 ? `<br/>2.Lesung: ${readerInfo.reading2?.name}` :'');
+
+    }
+
+    return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName, options))
         .filter((event): event is CalendarEvent => !!event?.summary)
+        .filter(event => options.permission !== GetEventPermission.READER || options.ids.includes(event.id))
+        .map(event => ({...event, description: event.description + getReaderInfo(event)}))
 }
 
 let oauth2Client: any;
@@ -82,24 +93,36 @@ export async function getCachedGoogleAuthClient() {
     oauth2Client.setCredentials(config);
     return oauth2Client;
 }
-export function getParishEvents(props: { public: boolean }): Promise<CalendarEvent[]> {
+
+export function getCalendarsEvents(options: GetEventOptions): Promise<CalendarEvent[]> {
     return Promise.all(
         site(
             [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
             [CalendarName.ALL, CalendarName.EMMAUS]
         )
-            .map((name) => getCalendarEvents(name, {public: props.public}))
+            .map((name) => getCalendarEvents(name, options))
     )
         .then(eventList => eventList.flat())
         .then(events => events.filter(event => !!event))
         .then(events => events.sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b)));
 }
 
-export const getCachedEvents = async (privateAccess: boolean): Promise<EventsObject> => {
+export enum GetEventPermission {
+    PUBLIC = "PUBLIC",
+    PRIVATE_ACCESS = "PRIVATE_ACCESS",
+    READER = "READER",
+}
+
+export type GetEventOptions =
+    { permission: GetEventPermission.PUBLIC }
+    | { permission: GetEventPermission.PRIVATE_ACCESS }
+    | { permission: GetEventPermission.READER, ids: string[] }
+
+export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {
     const calendarCacheId = '61b335996165305292000383';
-    const events = await getParishEvents({public: !privateAccess}).catch(() => null);
+    const events = await getCalendarsEvents(options).catch(() => null);
     if (events !== null) {
-        if (!privateAccess && site(true, false)) {
+        if (options.permission === GetEventPermission.PUBLIC && site(true, false)) {
             cockpit.collectionSave('internal-data', {
                 _id: calendarCacheId,
                 data: {events, cache: new Date().toISOString()}

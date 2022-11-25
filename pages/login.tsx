@@ -16,8 +16,6 @@ export default function Events() {
     useEffect(() => {
         if (!user?.active) {
             setData({username: '', password: ''});
-        }else{
-            router.push("/intern");
         }
     }, [user, router, setData]);
 
@@ -28,7 +26,7 @@ export default function Events() {
             success: 'Anmeldung erfolgreich'
         }).then(() => {
             setDisabled(true);
-            router.push('/intern');
+            router.push(router.query.redirect ? router.query.redirect as string : '/intern');
         }).catch(() => {
             setPartialData({password: ''});
         });

@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {cockpit} from "../../../util/cockpit-sdk";
 import {getTasksForPerson, getTasksFromReaderData, getUninformedTasks, ReaderData} from "../../../util/reader";
-import {getCachedEvents} from "../../../util/calendar-events";
+import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
 import {getWeekDayName} from "../../../components/calendar/Calendar";
 import {CalendarTag} from "../../../util/calendar-types";
 import {LiturgyData} from "../liturgy";
@@ -13,12 +13,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = resolveUserFromRequest(req);
 
-    if (user === undefined || !user.permissions[Permission.Admin]) {
+    if (user === undefined || !user.permissions[Permission.ReaderPlanning]) {
         res.status(401).json({errorMessage: 'No permission'});
         return;
     }
 
-    const events = await getCachedEvents(true).then(x => x.events);
+    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS}).then(x => x.events);
     const data: ReaderData = await cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
     const liturgy: LiturgyData = await cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await cockpit.collectionGet('person').then(x => x.entries);
@@ -65,17 +65,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 task,
                                 date: new Date(task.event.date),
                                 liturgy: liturgy[task.event.date].find(liturgy => data[task.event.id].liturgy === liturgy.name)!,
-                                reading: {reader1: "reading1", reader2: "reading2"}[task.data.role] as 'reading1' | 'reading2'
                             }))
-                            .map(({task, date, liturgy, reading}) => ({
+                            .map(({task, date, liturgy}) => ({
                                 date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}`,
                                 summary: task.event.summary?.replace(/\[.*?]/g, ''),
                                 description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')) + "<br>" + liturgy.name,
                                 info: `${{
-                                    reader1: "1. Lesung",
-                                    reader2: "2. Lesung"
-                                }[task.data.role]} ${liturgy[reading]}`,
-                                link: `https://www.bibleserver.com/EU/${encodeURI(liturgy[reading])}`,
+                                    reading1: "1. Lesung",
+                                    reading2: "2. Lesung"
+                                }[task.data.role]} ${liturgy[task.data.role]}`,
+                                link: `https://www.bibleserver.com/EU/${encodeURI(liturgy[task.data.role])}`,
                             }))
                     }
                 }

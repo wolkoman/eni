@@ -1,6 +1,6 @@
 import React from 'react';
 import {EventDateText, EventSummary, EventTime} from '../../components/calendar/Event';
-import {getCachedEvents} from "../../util/calendar-events";
+import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {EventsObject} from "../../util/calendar-types";
 
 export default function EventPage(props: {eventsObject: EventsObject}) {
@@ -36,7 +36,7 @@ export default function EventPage(props: {eventsObject: EventsObject}) {
 export async function getStaticProps() {
     return {
         props: {
-            eventsObject: await getCachedEvents(false),
+            eventsObject: await getCachedEvents({permission: GetEventPermission.PUBLIC}),
         },
         revalidate: 60,
     }
