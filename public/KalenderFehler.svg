@@ -1,0 +1,13 @@
+<svg width="205" height="223" viewBox="0 0 205 223" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect y="33" width="174" height="190" fill="#D9D9D9"/>
+<rect y="33" width="174" height="33" fill="#DB5F5F"/>
+<path d="M38 213L38 76" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M70 213L70 76" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M103 213L103 76" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M135 213L135 76" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M10 100L163 100" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M10 130L163 130" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M10 159L163 159" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M10 189L163 189" stroke="black" stroke-opacity="0.2" stroke-width="3"/>
+<path d="M147.5 3C146.282 3 145.185 3.73629 144.724 4.86338L114.224 79.3634C113.845 80.2886 113.952 81.3417 114.509 82.1718C115.066 83.002 116 83.5 117 83.5H155.711L136.182 136.971C135.669 138.377 136.27 139.946 137.591 140.648C138.912 141.351 140.549 140.973 141.428 139.762L200.928 57.7619C201.59 56.8491 201.685 55.6419 201.173 54.6372C200.66 53.6325 199.628 53 198.5 53H155.182L176.225 7.25372C176.653 6.32488 176.578 5.24239 176.026 4.38154C175.474 3.52068 174.522 3 173.5 3H147.5Z" fill="#F4AC11" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+</svg>

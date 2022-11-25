@@ -28,11 +28,8 @@ export enum CalendarTag {
 
 export enum CalendarGroup {
     Wallfahrt = "Wallfahrt",
-    Taufe = "Taufe",
     Grabwache = "Grabwache",
     Messe = "Heilige Messe",
-    Jungschar = "Jungschar",
-    Ökumene = "Ökumene",
     Gebet = "Gebet & Bibel",
     Caritas = "Caritas",
     Kinder = "Kinder",
@@ -46,4 +43,5 @@ export enum CalendarGroup {
     Jugend = "Jugend",
     Gremien = "Gremien",
     Chor = "Chor",
+    Ostern = "Ostern",
 }

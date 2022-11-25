@@ -11,21 +11,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const year = 2024;
-  const xml = await fetch(`https://www.eucharistiefeier.de/lk/api.php?jahr==${year}`)
-    .then(response => response.text())
-    .then(response => response.replace(/<br>/g, ""))
-    .then(response => new XMLParser({alwaysCreateTextNode: true}).parse(response).html.body.table.tbody.tr);
+  res.json(await getLiturgyData());
 
-  const merged = xml.reduce((data: any, {td}: { td: Cell }) => isNewDate(td)
-      ? [...data, {date: transformDate(td[0] as TextNode), liturgies: [transformLiturgy(td.slice(1))]}]
-      : [...data.slice(0, -1), {...data.at(-1), liturgies: [...data.at(-1).liturgies, transformLiturgy(td)]}]
-    , []);
+}
+export type LiturgyData = Record<string, Liturgy[]>;
+export interface Liturgy{
+  name: string;
+  color: string;
+  rank: string;
+  reading1: string;
+  reading2: string;
+  psalm: string;
+  evangelium: string;
+}
+export async function getLiturgyData(): Promise<LiturgyData>{
 
-  //const liturgyCache = (await cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
-  //await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
+  const year = new Date().getFullYear()+1;
+  const xml = await fetch(`https://www.eucharistiefeier.de/lk/api.php?jahr=${year}`)
+      .then(response => response.text())
+      .then(response => response.replace(/<br>/g, ""))
+      .then(response => new XMLParser({alwaysCreateTextNode: true}).parse(response).html.head.body.table.tbody.tr);
 
-  res.json(merged[0].date);
+  const merged: LiturgyData = Object.fromEntries(xml.reduce((data: any, {td}: { td: Cell }) => isNewDate(td)
+          ? [...data, {date: transformDate(td[0] as TextNode), liturgies: transformLiturgy(td.slice(1))}]
+          : [...data.slice(0, -1), {...data.at(-1), liturgies: [...data.at(-1)!.liturgies, ...transformLiturgy(td)]}]
+      , []).map(({date, liturgies}: any) => [date, liturgies]));
+
+  const liturgyCache = (await cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
+  await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
+
+  return {...merged, ...liturgyCache.data};
 
 }
 
@@ -39,7 +54,7 @@ function isNewDate(td: any){
 function transformDate(date: TextNode){
   return date['#text'].split(".").reverse().join("-");
 }
-function transformLiturgy(td: Cell){
+function transformLiturgy(td: Cell): Liturgy[]{
   return [td.map(cell => 'span' in cell
     ? (
       Array.isArray(cell.span)
@@ -48,6 +63,7 @@ function transformLiturgy(td: Cell){
     ) : cell["#text"]
   )].map(texts => ({
     name: texts[0],
+    rank: texts[1],
     color: texts[2],
     reading1: texts[3],
     reading2: texts[5],

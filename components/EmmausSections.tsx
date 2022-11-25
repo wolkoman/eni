@@ -5,50 +5,51 @@ import Responsive from "./Responsive";
 import {Collections} from "cockpit-sdk";
 import {getCockpitResourceUrl} from "./Articles";
 import Button from "./Button";
+import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 
 export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
     const paper = props.weeklies.find(weekly => weekly.emmaus && weekly.preview)!;
     const blatt = props.weeklies.find(weekly => weekly.emmaus && weekly.inzersdorf && weekly.neustift)!;
-    return <Responsive><Section title="Pfarrzeitung" id="pfarrzeitung"><div className=" max-w-2xl my-16 space-y-12">
-        <div className="flex flex-col md:flex-row items-start">
-            <img src={getCockpitResourceUrl(paper.preview.path)} className="w-48 mr-8 rounded"/>
-            <div className="mt-4">
-                <div className="text-3xl font-bold">
-                    Der Emmausbote
+    return <Responsive>
+        <Section title="Mitteilungen" id="mitteilungen">
+            <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center">
+                <div className="flex flex-col items-center">
+                    <img src="./Wochenblatt.svg" className="h-44 mb-12"/>
+                    <div className="text-3xl font-bold">
+                        Wochenmitteilungen
+                    </div>
+                    <div className="text-lg my-3">
+                        Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu.
+                        Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit
+                        dem Betreff "Wochenmitteilung Emmaus" an kanzlei@eni.wien.
+                    </div>
+                    <div className="flex space-x-2">
+                        {['emmaus'].map(id => getCalendarInfo(id as any)).map(info =>
+                            <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
+                                <Button label="Ansehen" className={info.className}/>
+                            </Link>
+                        )}
+                    </div>
                 </div>
-                <div className="text-lg my-3">
-                    Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken und vieles
-                    mehr finden Sie im Emmausboten.
-                </div>
-                <div className="flex space-x-2">
-                    <Link href={getCockpitResourceUrl(paper.emmaus)}>
-                        <Button label="Aktuelle Ausgabe" className="bg-emmaus"/>
-                    </Link>
-                    <Link href="/archiv">
-                        <Button label="Archiv" className="bg-black/50"/>
-                    </Link>
+                <div className="flex flex-col items-center">
+                    <img src={getCockpitResourceUrl(paper.preview.path)} className="w-44 p-4 rounded"/>
+                    <div className="text-3xl font-bold">
+                        Der Emmausbote
+                    </div>
+                    <div className="text-lg my-3">
+                        Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken
+                        und vieles mehr finden Sie im Emmausboten.
+                    </div>
+                    <div className="flex space-x-2">
+                        <Link href={getCockpitResourceUrl(paper.emmaus)}>
+                            <Button label="Ansehen" className={getCalendarInfo(CalendarName.EMMAUS).className}/>
+                        </Link>
+                        <Link href="/archiv">
+                            <Button label="Archiv"/>
+                        </Link>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div className="flex flex-col md:flex-row items-start">
-            <img src="/wochenblatt.webp" className="w-48 mr-8 rounded"/>
-            <div className="mt-4">
-                <div className="text-3xl font-bold">
-                    Das Wochenblatt
-                </div>
-                <div className="text-lg my-3">
-                    Wöchentliche Termine und Ankündigungen. Immer was neu, im Wochenblatt!
-                </div>
-                <div className="flex space-x-2">
-                    <Link href={getCockpitResourceUrl(blatt.emmaus)}>
-                        <Button label="Aktuelle Ausgabe" className="bg-emmaus"/>
-                    </Link>
-                    <Link href="https://eni.wien/archiv">
-                        <Button label="Archiv" className="bg-black/50"/>
-                    </Link>
-                </div>
-            </div>
-        </div>
-    </div>
-    </Section></Responsive>;
+        </Section>
+        </Responsive>;
 }

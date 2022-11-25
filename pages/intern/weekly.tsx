@@ -39,7 +39,6 @@ export default function InternArticles() {
     async function generate() {
         const response = await fetch('/eni.docx');
         const templateFile = await response.blob();
-        console.log(data.start.toISOString());
         const from = data.start.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 5);
         const to = data.end.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 10);
         const wordData = {

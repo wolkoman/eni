@@ -18,15 +18,15 @@ export function getArticleLink(article?: Collections['article']) {
 
 function ArticleCard(props: { article?: Collections['article'] }) {
     return <Link href={getArticleLink(props.article)}>
-        <div className={`flex flex-row cursor-pointer ${!props.article && 'shimmer'} bg-emmaus-sec/20 hover:bg-emmaus-sec/10 rounded`}>
-            <div className="w-32 mr-4 aspect-square flex-shrink-0 rounded m-3"
+        <div className={`flex flex-row cursor-pointer ${!props.article && 'shimmer'} bg-emmaus-sec/20 hover:bg-emmaus-sec/10 rounded-lg p-3 gap-3`}>
+            <div className="w-32 aspect-square flex-shrink-0 rounded-lg"
                  style={!props.article ? {} : {
                      backgroundImage: `url(${getCockpitResourceUrl(props.article.preview_image.path)})`,
                      backgroundSize: 'cover',
                      backgroundPosition: '50% 50%'
                  }}/>
             <div className="flex flex-col justify-center overflow-hidden">
-                <div className="line-clamp-3 font-semibold text-xl">{props.article?.title}</div>
+                <div className="line-clamp-3 font-semibold text-lg">{props.article?.title}</div>
             </div>
         </div>
     </Link>;

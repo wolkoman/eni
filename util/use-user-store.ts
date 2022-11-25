@@ -2,12 +2,22 @@ import create from 'zustand';
 import {fetchJson} from './fetch-util';
 import {verify} from 'jsonwebtoken';
 import {User} from './user';
+import {useEffect} from "react";
+
+export function useAuthenticatedUserStore() {
+
+    const [load, user, jwt] = useUserStore(state => [state.load, state.user, state.jwt]);
+    useEffect(() => {
+        load();
+    }, [])
+    return {user, jwt};
+}
 
 export const useUserStore = create<{
     jwt?: string,
     user?: User,
     load: () => void,
-    login: (data: { username: string, password: string }) => Promise<any>,
+    login: (data: { username: string, password: string } | { jwt: string }) => Promise<any>,
     logout: () => void,
     loaded: boolean,
     loading: boolean,
@@ -17,6 +27,15 @@ export const useUserStore = create<{
     login: (data) => {
         if (get().loading) return Promise.resolve();
         set(state => ({...state, loading: true}));
+        if ('jwt' in data) {
+            return new Promise((res) => {
+                const user = verify(data.jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User;
+                set(state => ({...state, user, jwt: data.jwt, loaded: true, loading: false}));
+                sessionStorage.setItem('user', JSON.stringify(user));
+                sessionStorage.setItem('jwt', JSON.stringify(data.jwt));
+                res(undefined);
+            });
+        }
         return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
             .then(({jwt}) => {
                 const user = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User;
@@ -39,8 +58,8 @@ export const useUserStore = create<{
         if (get().loaded) return;
         set(state => ({
             ...state,
-            user: JSON.parse(sessionStorage.getItem('user') ?? '{}'),
-            jwt: JSON.parse(sessionStorage.getItem('jwt') ?? '{}'),
+            user: JSON.parse(sessionStorage.getItem('user') ?? 'null'),
+            jwt: JSON.parse(sessionStorage.getItem('jwt') ?? 'null'),
             loaded: true
         }));
     }

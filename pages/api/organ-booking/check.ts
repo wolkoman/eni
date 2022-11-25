@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCalendarEvents} from '../../../util/calendar-events';
+import {getCalendarEvents, GetEventPermission} from '../../../util/calendar-events';
 import {Temporal} from '@js-temporal/polyfill';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {CalendarName} from "../../../util/calendar-info";
@@ -40,7 +40,7 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
     const events = await Promise.all([
         CalendarName.INZERSDORF,
         CalendarName.INZERSDORF_ORGAN
-    ].map(name => getCalendarEvents(name, {timeMin, timeMax})
+    ].map(name => getCalendarEvents(name, {permission: GetEventPermission.PRIVATE_ACCESS, timeFrame:{min: timeMin, max: timeMax}})
     )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)))
 
     if (events.some(event => event.wholeday)) {

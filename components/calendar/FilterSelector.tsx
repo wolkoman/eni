@@ -7,7 +7,7 @@ import {getGroupSorting} from "./ComingUp";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div
-        className={`px-3 py-1 mb-1 flex-grow text-center lg:text-left cursor-pointer rounded ${props.active ? (props.activeColor ?? "bg-gray-200") : ""}`}
+        className={`px-4 py-1 mb-1 flex-grow text-center lg:text-left cursor-pointer rounded-xl ${props.active ? ((props.activeColor ?? "bg-black/5") + " font-bold") : ""}`}
         onClick={props.onClick}
     >
         {props.label}
@@ -19,7 +19,7 @@ function FilterButtons(props: { children: ReactNode }) {
 }
 
 function FilterLabel(props: { children: ReactNode }) {
-    return <div className="mt-3 opacity-80 uppercase pl-3 text-sm hidden md:block md:-translate-x-2">{props.children}</div>;
+    return <div className="mt-3 mb-1 opacity-80 uppercase pl-3 text-sm hidden md:block">{props.children}</div>;
 }
 
 export function FilterSelector(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions, groups: CalendarGroup[], persons: string[] }) {

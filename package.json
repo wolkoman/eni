@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.2",
+    "@rive-app/canvas": "^1.0.95",
+    "@rive-app/react-canvas": "^3.0.33",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.8.2",

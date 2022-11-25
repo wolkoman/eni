@@ -1,0 +1,329 @@
+Index: pages/api/instagram.ts
+===================================================================
+diff --git a/pages/api/instagram.ts b/pages/api/instagram.ts
+deleted file mode 100644
+--- a/pages/api/instagram.ts	(revision 50cf461105ff779d25a896a4ef5e6e298bf439cd)
++++ /dev/null	(revision 50cf461105ff779d25a896a4ef5e6e298bf439cd)
+@@ -1,6 +0,0 @@
+-import {NextApiRequest, NextApiResponse} from 'next';
+-import {fetchInstagramFeed} from "../../util/fetchInstagram";
+-
+-export default async function handler(req: NextApiRequest, res: NextApiResponse){
+-  res.json(fetchInstagramFeed());
+-}
+Index: util/types/cockpit-sdk/index.d.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//import {Credentials} from 'googleapis';\r\n\r\ndeclare module 'cockpit-sdk' {\r\n\r\n  type Object = { _id: string, _created: number }\r\n  export type Collections = {\r\n    'internal-data': { data: Credentials, id: string } & Object,\r\n    'weekly': {\r\n      date: string,\r\n      emmaus: string,\r\n      inzersdorf: string,\r\n      neustift: string,\r\n      neustift: string,\r\n      preview: { path: string },\r\n    } & Object,\r\n    'site': {\r\n      name: string,\r\n      slug: string,\r\n      layout: {component: string, settings: {text: string}}[]\r\n      children: Collections['site'][],\r\n      level: number\r\n    } & Object,\r\n    'article': {\r\n      title: string,\r\n      preview_image: { path: string },\r\n      author: string,\r\n      content: string,\r\n      resort: string,\r\n      external_url: string,\r\n      external_image: string,\r\n      slug: string,\r\n      platform: string[] | string,\r\n      layout: {component: string, settings: {text: string}}[],\r\n    } & Object,\r\n    'person': {\r\n      active: boolean,\r\n      name: string,\r\n      username: string,\r\n      parish: 'emmaus' | 'inzersdorf' | 'neustift' | 'all',\r\n      competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing')[],\r\n      code?: string,\r\n      email?: string,\r\n    } & Object,\r\n    paper_texts: {\r\n      article: Reference,\r\n      text: string,\r\n    } & Object,\r\n    paper_projects: {\r\n      name: string,\r\n      guideline_link: string,\r\n      deadline: string\r\n    } & Object,\r\n    paper_articles: {\r\n      name: string,\r\n      project: Reference,\r\n      author: string,\r\n      email: string,\r\n      char_min: string,\r\n      char_max: string\r\n      status: 'finished' | 'corrected' | 'written' | 'writing'\r\n    } & Object,\r\n  }\r\n  type Reference = {\r\n    _id: string,\r\n    link: string,\r\n    display: string\r\n  }\r\n  type Singletons = {\r\n    impressum: { content: string } & Object\r\n  }\r\n  type CollectionResponse<T> = {\r\n    entries: T[]\r\n  }\r\n\r\n  export type User = {\r\n    _id: string;\r\n    group: '' | 'PrivateCalendarAccess' | 'OrganAccess' | 'admin',\r\n    user: string,\r\n    api_key: string,\r\n    name: string,\r\n    email: string,\r\n    active: boolean,\r\n    permissions: Record<string, boolean>,\r\n  }\r\n  type Error = {\r\n    message: string\r\n  }\r\n\r\n  type CollectionGetProps<T> = { filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }\r\n\r\n  class CockpitSDK {\r\n    public host: string;\r\n\r\n    constructor(props: { host: string, accessToken?: string })\r\n\r\n    collectionGet<T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>>\r\n\r\n    collectionSave<T extends keyof Collections>(collectionName: T, object: Optional<Collections[T], '_id'>)\r\n    collectionSave<T extends keyof Collections>(collectionName: T, object: Collections[T])\r\n\r\n    singletonGet<T extends keyof Singletons>(singletonName: T): Promise<Singletons[T]>\r\n\r\n    authUser(username: string, password: string): Promise<User | Error>\r\n\r\n    listUsers(): Promise<User[]>\r\n  }\r\n\r\n  export = CockpitSDK;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/util/types/cockpit-sdk/index.d.ts b/util/types/cockpit-sdk/index.d.ts
+--- a/util/types/cockpit-sdk/index.d.ts	(revision 50cf461105ff779d25a896a4ef5e6e298bf439cd)
++++ b/util/types/cockpit-sdk/index.d.ts	(date 1664285947822)
+@@ -57,7 +57,8 @@
+       email: string,
+       char_min: string,
+       char_max: string
+-      status: 'finished' | 'corrected' | 'written' | 'writing'
++      status: 'finished' | 'corrected' | 'written' | 'writing',
++      files: {value: string}[]
+     } & Object,
+   }
+   type Reference = {
+Index: pages/intern/editor/photos.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/intern/editor/photos.tsx b/pages/intern/editor/photos.tsx
+new file mode 100644
+--- /dev/null	(date 1664286542316)
++++ b/pages/intern/editor/photos.tsx	(date 1664286542316)
+@@ -0,0 +1,39 @@
++import {Collections} from 'cockpit-sdk';
++import React, {useEffect, useState} from 'react';
++import Site from '../../../components/Site';
++import Link from "next/link";
++import {fetchJson} from "../../../util/fetch-util";
++import {useUserStore} from "../../../util/use-user-store";
++import {useRouter} from "next/router";
++import Button from "../../../components/Button";
++import {createReadStream, statSync} from "fs";
++import {cockpit} from "../../../util/cockpit-sdk";
++import {GetServerSideProps, GetServerSidePropsContext} from "next";
++
++export default function Photos(props: {article: Collections['paper_articles']}) {
++
++    const [file, setFile] = useState();
++    const jwt = useUserStore(state => state.jwt)
++    const {query: {articleId}} = useRouter();
++
++    useEffect(() => {
++        if(!file) return;
++        const form = new FormData();
++        form.append('files[]', file);
++        fetchJson(`/api/upload?articleId=${articleId}`, {
++            method: 'POST', jwt,
++            body: form as unknown as undefined
++        });
++    }, file);
++
++
++    return <Site title="Projekte der Redaktionen" footer={false} navbar={false}>
++        <input type="file" onChange={({target}) => setFile(target.value as any)}/>
++        {props.article.files.map(({value}) => value)}
++    </Site>
++}
++
++export async function getServerSideProps(context: GetServerSidePropsContext) {
++    const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: context.query.articleId}})).entries[0];
++    return {props: {article}};
++}
+\ No newline at end of file
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package-lock.json b/package-lock.json
+--- a/package-lock.json	(revision 50cf461105ff779d25a896a4ef5e6e298bf439cd)
++++ b/package-lock.json	(date 1664286751081)
+@@ -48,8 +48,10 @@
+       },
+       "devDependencies": {
+         "@playwright/test": "^1.22.2",
++        "@types/formidable": "^2.0.5",
+         "autoprefixer": "^10.4.7",
+         "dotenv": "^16.0.1",
++        "formidable": "^2.0.1",
+         "postcss": "^8.4.14",
+         "tailwindcss": "^3.0.24"
+       }
+@@ -3778,6 +3780,15 @@
+         "@types/range-parser": "*"
+       }
+     },
++    "node_modules/@types/formidable": {
++      "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/@types/formidable/-/formidable-2.0.5.tgz",
++      "integrity": "sha512-uvMcdn/KK3maPOaVUAc3HEYbCEhjaGFwww4EsX6IJfWIJ1tzHtDHczuImH3GKdusPnAAmzB07St90uabZeCKPA==",
++      "dev": true,
++      "dependencies": {
++        "@types/node": "*"
++      }
++    },
+     "node_modules/@types/graceful-fs": {
+       "version": "4.1.5",
+       "resolved": "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz",
+@@ -6812,6 +6823,16 @@
+         "node": ">=0.8.0"
+       }
+     },
++    "node_modules/dezalgo": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/dezalgo/-/dezalgo-1.0.3.tgz",
++      "integrity": "sha512-K7i4zNfT2kgQz3GylDw40ot9GAE47sFZ9EXHFSPP6zONLgH6kWXE0KWJchkbQJLBkRazq4APwZ4OwiFFlT95OQ==",
++      "dev": true,
++      "dependencies": {
++        "asap": "^2.0.0",
++        "wrappy": "1"
++      }
++    },
+     "node_modules/didyoumean": {
+       "version": "1.2.2",
+       "resolved": "https://registry.npmjs.org/didyoumean/-/didyoumean-1.2.2.tgz",
+@@ -8787,6 +8808,33 @@
+         "node": ">=12.20.0"
+       }
+     },
++    "node_modules/formidable": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/formidable/-/formidable-2.0.1.tgz",
++      "integrity": "sha512-rjTMNbp2BpfQShhFbR3Ruk3qk2y9jKpvMW78nJgx8QKtxjDVrwbZG+wvDOmVbifHyOUOQJXxqEy6r0faRrPzTQ==",
++      "dev": true,
++      "dependencies": {
++        "dezalgo": "1.0.3",
++        "hexoid": "1.0.0",
++        "once": "1.4.0",
++        "qs": "6.9.3"
++      },
++      "funding": {
++        "url": "https://ko-fi.com/tunnckoCore/commissions"
++      }
++    },
++    "node_modules/formidable/node_modules/qs": {
++      "version": "6.9.3",
++      "resolved": "https://registry.npmjs.org/qs/-/qs-6.9.3.tgz",
++      "integrity": "sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==",
++      "dev": true,
++      "engines": {
++        "node": ">=0.6"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/ljharb"
++      }
++    },
+     "node_modules/forwarded": {
+       "version": "0.2.0",
+       "resolved": "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz",
+@@ -9363,6 +9411,15 @@
+       "resolved": "https://registry.npmjs.org/headers-polyfill/-/headers-polyfill-3.0.7.tgz",
+       "integrity": "sha512-JoLCAdCEab58+2/yEmSnOlficyHFpIl0XJqwu3l+Unkm1gXpFUYsThz6Yha3D6tNhocWkCPfyW0YVIGWFqTi7w=="
+     },
++    "node_modules/hexoid": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/hexoid/-/hexoid-1.0.0.tgz",
++      "integrity": "sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==",
++      "dev": true,
++      "engines": {
++        "node": ">=8"
++      }
++    },
+     "node_modules/history": {
+       "version": "5.3.0",
+       "resolved": "https://registry.npmjs.org/history/-/history-5.3.0.tgz",
+@@ -22960,6 +23017,15 @@
+         "@types/range-parser": "*"
+       }
+     },
++    "@types/formidable": {
++      "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/@types/formidable/-/formidable-2.0.5.tgz",
++      "integrity": "sha512-uvMcdn/KK3maPOaVUAc3HEYbCEhjaGFwww4EsX6IJfWIJ1tzHtDHczuImH3GKdusPnAAmzB07St90uabZeCKPA==",
++      "dev": true,
++      "requires": {
++        "@types/node": "*"
++      }
++    },
+     "@types/graceful-fs": {
+       "version": "4.1.5",
+       "resolved": "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz",
+@@ -25221,6 +25287,16 @@
+         "minimist": "^1.1.1"
+       }
+     },
++    "dezalgo": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/dezalgo/-/dezalgo-1.0.3.tgz",
++      "integrity": "sha512-K7i4zNfT2kgQz3GylDw40ot9GAE47sFZ9EXHFSPP6zONLgH6kWXE0KWJchkbQJLBkRazq4APwZ4OwiFFlT95OQ==",
++      "dev": true,
++      "requires": {
++        "asap": "^2.0.0",
++        "wrappy": "1"
++      }
++    },
+     "didyoumean": {
+       "version": "1.2.2",
+       "resolved": "https://registry.npmjs.org/didyoumean/-/didyoumean-1.2.2.tgz",
+@@ -26647,6 +26723,26 @@
+         "fetch-blob": "^3.1.2"
+       }
+     },
++    "formidable": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/formidable/-/formidable-2.0.1.tgz",
++      "integrity": "sha512-rjTMNbp2BpfQShhFbR3Ruk3qk2y9jKpvMW78nJgx8QKtxjDVrwbZG+wvDOmVbifHyOUOQJXxqEy6r0faRrPzTQ==",
++      "dev": true,
++      "requires": {
++        "dezalgo": "1.0.3",
++        "hexoid": "1.0.0",
++        "once": "1.4.0",
++        "qs": "6.9.3"
++      },
++      "dependencies": {
++        "qs": {
++          "version": "6.9.3",
++          "resolved": "https://registry.npmjs.org/qs/-/qs-6.9.3.tgz",
++          "integrity": "sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==",
++          "dev": true
++        }
++      }
++    },
+     "forwarded": {
+       "version": "0.2.0",
+       "resolved": "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz",
+@@ -27067,6 +27163,12 @@
+       "resolved": "https://registry.npmjs.org/headers-polyfill/-/headers-polyfill-3.0.7.tgz",
+       "integrity": "sha512-JoLCAdCEab58+2/yEmSnOlficyHFpIl0XJqwu3l+Unkm1gXpFUYsThz6Yha3D6tNhocWkCPfyW0YVIGWFqTi7w=="
+     },
++    "hexoid": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/hexoid/-/hexoid-1.0.0.tgz",
++      "integrity": "sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==",
++      "dev": true
++    },
+     "history": {
+       "version": "5.3.0",
+       "resolved": "https://registry.npmjs.org/history/-/history-5.3.0.tgz",
+Index: pages/api/upload.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/api/upload.ts b/pages/api/upload.ts
+new file mode 100644
+--- /dev/null	(date 1664287319011)
++++ b/pages/api/upload.ts	(date 1664287319011)
+@@ -0,0 +1,39 @@
++import {NextApiRequest, NextApiResponse} from 'next';
++import {cockpit} from '../../util/cockpit-sdk';
++import {doubleHash, resolveUserFromRequest} from '../../util/verify';
++import {Collections} from 'cockpit-sdk';
++import formidable, {File} from "formidable";
++
++type ProcessedFiles = Array<[string, File]>;
++export default async function handler(req: NextApiRequest, res: NextApiResponse) {
++
++    /*
++    const user = resolveUserFromRequest(req);
++    if (user === undefined) {
++        res.status(401).json({errorMessage: 'No permission'});
++        return;
++    }
++     */
++
++    console.log("sadasd");
++    const files = await new Promise<ProcessedFiles | undefined>((resolve, reject) => {
++        const form = new formidable.IncomingForm();
++        const files: ProcessedFiles = [];
++        form.on('file', (field, file: File) => {
++            console.log({field})
++            files.push([field, file]);
++        })
++        form.on('end', () => resolve(files));
++        form.on('error', err => reject(err));
++        form.parse(req, () => {
++            //
++        });
++    }).catch(e => {
++        console.log(500, e);
++    });
++
++    console.log(files);
++
++    res.json({file: ""})
++
++}
+\ No newline at end of file
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"name\": \"eni\",\r\n  \"version\": \"1.0.0\",\r\n  \"private\": true,\r\n  \"dependencies\": {\r\n    \"@js-temporal/polyfill\": \"^0.4.1\",\r\n    \"@tailwindcss/line-clamp\": \"^0.4.0\",\r\n    \"@types/jsonwebtoken\": \"^8.5.8\",\r\n    \"@types/node\": \"^17.0.40\",\r\n    \"@types/react\": \"^18.0.12\",\r\n    \"@types/react-beforeunload\": \"^2.1.1\",\r\n    \"@types/react-dom\": \"^18.0.5\",\r\n    \"@types/react-router-dom\": \"^5.3.3\",\r\n    \"@types/sanitize-html\": \"^2.6.2\",\r\n    \"aesthetically\": \"^0.0.5\",\r\n    \"bufferutil\": \"^4.0.6\",\r\n    \"cockpit-sdk\": \"^0.15.1\",\r\n    \"easy-template-x\": \"^3.0.0\",\r\n    \"fast-xml-parser\": \"^4.0.8\",\r\n    \"googleapis\": \"^100.0.0\",\r\n    \"jsonwebtoken\": \"^8.5.1\",\r\n    \"msw\": \"^0.42.0\",\r\n    \"next\": \"^12.1.6\",\r\n    \"node-fetch\": \"^3.2.5\",\r\n    \"pdf-merger-js\": \"^3.4.0\",\r\n    \"react\": \"^18.1.0\",\r\n    \"react-beforeunload\": \"^2.5.3\",\r\n    \"react-dom\": \"^18.1.0\",\r\n    \"react-html-renderer\": \"^0.3.3\",\r\n    \"react-lottie-player\": \"^1.4.3\",\r\n    \"react-markdown\": \"^8.0.3\",\r\n    \"react-redux\": \"^8.0.2\",\r\n    \"react-router-dom\": \"^6.3.0\",\r\n    \"react-scripts\": \"^5.0.1\",\r\n    \"react-toastify\": \"^9.0.3\",\r\n    \"rss-parser\": \"^3.12.0\",\r\n    \"sanitize-html\": \"^2.7.0\",\r\n    \"sass\": \"^1.52.2\",\r\n    \"swiper\": \"^8.2.2\",\r\n    \"typescript\": \"^4.7.3\",\r\n    \"utf-8-validate\": \"^5.0.9\",\r\n    \"zustand\": \"^3.7.2\"\r\n  },\r\n  \"scripts\": {\r\n    \"dev\": \"next dev\",\r\n    \"test\": \"playwright test\",\r\n    \"test:skipbuild\": \"SKIP_BUILD=1 playwright test\",\r\n    \"test:headed\": \"playwright test --headed\",\r\n    \"build\": \"next build\",\r\n    \"start\": \"next start\",\r\n    \"refresh-google\": \"node scripts/google-refresh-token.ts\"\r\n  },\r\n  \"eslintConfig\": {\r\n    \"extends\": \"react-app\"\r\n  },\r\n  \"browserslist\": {\r\n    \"production\": [\r\n      \">0.2%\",\r\n      \"not dead\",\r\n      \"not op_mini all\"\r\n    ],\r\n    \"development\": [\r\n      \"last 1 chrome version\",\r\n      \"last 1 firefox version\",\r\n      \"last 1 safari version\",\r\n      \"ie 11\"\r\n    ]\r\n  },\r\n  \"devDependencies\": {\r\n    \"@playwright/test\": \"^1.22.2\",\r\n    \"autoprefixer\": \"^10.4.7\",\r\n    \"dotenv\": \"^16.0.1\",\r\n    \"postcss\": \"^8.4.14\",\r\n    \"tailwindcss\": \"^3.0.24\"\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision 50cf461105ff779d25a896a4ef5e6e298bf439cd)
++++ b/package.json	(date 1664286751102)
+@@ -68,8 +68,10 @@
+   },
+   "devDependencies": {
+     "@playwright/test": "^1.22.2",
++    "@types/formidable": "^2.0.5",
+     "autoprefixer": "^10.4.7",
+     "dotenv": "^16.0.1",
++    "formidable": "^2.0.1",
+     "postcss": "^8.4.14",
+     "tailwindcss": "^3.0.24"
+   }

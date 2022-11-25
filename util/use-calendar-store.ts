@@ -1,6 +1,8 @@
-import create from 'zustand';
+import create, {StoreApi, UseBoundStore} from 'zustand';
 import {fetchJson} from './fetch-util';
 import {CalendarEvent, CalendarGroup} from "./calendar-types";
+import {useEffect} from "react";
+import {useUserStore} from "./use-user-store";
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
     return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
@@ -9,35 +11,52 @@ export function groupEventsByDate(events: CalendarEvent[]): Record<string, Calen
     }), {});
 }
 
-export function groupEventsByGroup(events: CalendarEvent[]): Record<CalendarGroup, CalendarEvent[]> {
+export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolean): Record<CalendarGroup, CalendarEvent[]> {
     return events.reduce<Record<CalendarGroup, CalendarEvent[]>>((record, event) => ({
         ...record,
-        ...(Object.fromEntries(event.groups.map(group => ([
-            group,
-            [
-                ...(record[group] ?? []),
-                event
-            ]
-        ]))))
+        ...(Object.fromEntries(event.groups
+            .map(group => !separateMass && group === CalendarGroup.Messe ? CalendarGroup.Gottesdienst : group)
+            .map(group => ([
+                group,
+                [
+                    ...(record[group] ?? []),
+                    event
+                ]
+            ]))))
     }), {} as any)
 }
 
-export function groupEventsByGroupAndDate(events: CalendarEvent[]): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
+export function groupEventsByGroupAndDate(events: CalendarEvent[], separateMass: boolean): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
     return Object.fromEntries(Object.entries(
-            groupEventsByGroup(events)
+            groupEventsByGroup(events, separateMass)
         ).map(([group, events]) => [group, groupEventsByDate(events)])
     ) as Record<CalendarGroup, Record<string, CalendarEvent[]>>;
 }
 
-export const useCalendarStore = create<{
+interface CalendarState {
     items: CalendarEvent[];
     cache?: string;
     loading: boolean;
     loaded: boolean;
     error: boolean;
     load: (token?: string) => void;
-    lastLoadedWithToken?: string,
-}>((set, get) => ({
+    lastLoadedWithToken?: string;
+}
+
+
+export function useAuthenticatedCalendarStore() {
+    const [jwt, userLoad] = useUserStore(state => [state.jwt, state.load]);
+    const [load, loading, error, items] = useCalendarStore(state => [state.load, state.loading, state.error, state.items]);
+    useEffect(() => {
+        userLoad();
+    }, []);
+    useEffect(() => {
+        if(jwt) load(jwt);
+    }, [jwt]);
+    return {loading, error, items};
+}
+
+export const useCalendarStore = create<CalendarState>((set, get) => ({
     items: [],
     loaded: false,
     loading: false,

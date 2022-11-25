@@ -30,7 +30,7 @@ export default function EventPage() {
         date={new Date(event?.start.dateTime)}/> Uhr
       </div>
       <div className="text-4xl my-2">{event?.summary}</div>
-      <div className="text-4xl my-2"><EventDescription event={event} permissions={permissions}/></div>
+      <div className="text-4xl my-2"><EventDescription event={event}/></div>
     </>}
   </Site>
 }
