@@ -17,7 +17,7 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
         const displayPersonen = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
         const privateAccess = options.permission === GetEventPermission.PRIVATE_ACCESS;
-        if (event.visibility === 'private' && privateAccess) return null;
+        if (event.visibility === 'private' && !privateAccess) return null;
         return {
             id: event.id ?? "",
             mainPerson: displayPersonen,
