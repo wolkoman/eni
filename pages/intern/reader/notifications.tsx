@@ -53,6 +53,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
             success: "Status wurde gespeichert"
         }).then(() => setReaderData(changes(readerData)))
     }
+    console.log({tasks});
 
 
     return <ReaderSite>
@@ -64,8 +65,8 @@ export default function Index(props: { liturgy: LiturgyData }) {
                     <div key={person._id} className="flex flex-col gap-2 px-4 py-2 rounded-lg bg-black/5">
                         <div className="font-bold">{person.name}</div>
                         <div>
-                            {tasks.map(({event, data}) =>
-                                <div key={event.id + data.role} className="flex gap-1 items-center">
+                            {tasks.filter(({event}) => event).map(({event, data}) =>
+                                <div key={event?.id + data.role} className="flex gap-1 items-center">
                                     <div className={`w-3 h-3 mr-1 grow-0 rounded ${{
                                         cancelled: "bg-red-600",
                                         assigned: "bg-blue-500",

@@ -9,6 +9,7 @@ import Link from "next/link";
 import {useAuthenticatedCalendarStore} from "../../../util/use-calendar-store";
 import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {Permission} from "../../../util/verify";
+import {EniLoading} from "../../../components/Loading";
 
 export default function Index(props: { liturgy: LiturgyData }) {
 
@@ -52,7 +53,7 @@ export function ReaderSite(props: { children: ReactNode }) {
             </div>
             <Responsive>
                 {reader.loading || reader.error
-                    ? <>Daten werden geladen...</>
+                    ? <><EniLoading/></>
                     : <>{props.children} </>
                 }
             </Responsive>

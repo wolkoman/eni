@@ -10,7 +10,7 @@ import {site} from '../util/sites';
 import TopBar from '../components/TopBar';
 import {fetchInstagramFeed} from "../util/fetchInstagram";
 import {fetchArticles} from "../util/fetchArticles";
-import {fetchWeeklies} from "../util/fetchWeeklies";
+import {fetchEmmausbote, fetchWeeklies} from "../util/fetchWeeklies";
 import {Collections} from "cockpit-sdk";
 import {fetchEmmausSites} from "../util/fetchEmmausSites";
 import {EmmausSections} from "../components/EmmausSections";
@@ -51,6 +51,7 @@ export default function HomePage(
         instagram: InstagramFeedItem[],
         articles: any[],
         weeklies: Collections['weekly'][],
+        emmausbote: Collections['Emmausbote'][],
         sites: Collections['site'][]
     }
 ) {
@@ -79,7 +80,7 @@ export default function HomePage(
                 <EmmausNavigation/>
                 <Articles items={props.articles} sites={props.sites}/>
                 <ComingUp eventsObject={props.eventsObject}/>
-                <EmmausSections weeklies={props.weeklies}/>
+                <EmmausSections weeklies={props.weeklies} emmausbote={props.emmausbote}/>
                 <Instagram items={props.instagram}/>
                 <Responsive>
                     <Section title="Kontakt" id="kontakt">
@@ -104,6 +105,7 @@ export async function getStaticProps() {
             articles: await site(() => Promise.resolve({}), () => fetchArticles())(),
             sites: await site(() => Promise.resolve({}), () => fetchEmmausSites())(),
             weeklies: await site(() => Promise.resolve({}), () => fetchWeeklies())(),
+            emmausbote: await site(() => Promise.resolve({}), () => fetchEmmausbote())(),
         },
         revalidate: 60,
     }

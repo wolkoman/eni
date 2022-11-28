@@ -7,9 +7,8 @@ import {getCockpitResourceUrl} from "./Articles";
 import Button from "./Button";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 
-export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
-    const paper = props.weeklies.find(weekly => weekly.emmaus && weekly.preview)!;
-    const blatt = props.weeklies.find(weekly => weekly.emmaus && weekly.inzersdorf && weekly.neustift)!;
+export function EmmausSections(props: { weeklies: Collections['weekly'][], emmausbote: Collections['Emmausbote'][] }) {
+    const paper = props.emmausbote.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
     return <Responsive>
         <Section title="Mitteilungen" id="mitteilungen">
             <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center">
@@ -41,7 +40,7 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][] }) {
                         und vieles mehr finden Sie im Emmausboten.
                     </div>
                     <div className="flex space-x-2">
-                        <Link href={getCockpitResourceUrl(paper.emmaus)}>
+                        <Link href={getCockpitResourceUrl(paper.file)}>
                             <Button label="Ansehen" className={getCalendarInfo(CalendarName.EMMAUS).className}/>
                         </Link>
                         <Link href="/archiv">

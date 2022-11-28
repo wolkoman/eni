@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import Site from '../../components/Site';
-import {applyFilter, FilterType, LoadingEvents} from '../../components/calendar/Calendar';
+import {applyFilter, FilterType} from '../../components/calendar/Calendar';
 import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
@@ -17,6 +17,8 @@ import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {Settings} from "../../components/Settings";
 import {Preference, usePreference} from "../../util/use-preference";
 import {compareLiturgy} from "../intern/reader/my";
+import {EniLoading} from "../../components/Loading";
+
 
 export default function EventPage(props: {
     liturgy: LiturgyData,
@@ -34,7 +36,7 @@ export default function EventPage(props: {
 
     useEffect(() => userLoad(), [userLoad]);
     useEffect(() => {
-        if (jwt){
+        if (jwt) {
             calendarStore.load(jwt);
         }
     }, [jwt, calendarStore.load]);
@@ -75,10 +77,10 @@ export default function EventPage(props: {
                                 .filter(event => !event.tags.includes(CalendarTag.cancelled))
                                 .map(event => event.mainPerson)
                                 .filter((person): person is string => !!person)
-                                .reduce<{[name: string]: number}>((p,c) => ({...p, [c]: (p[c] ?? 0) + 1}), {}))
-                                .filter(([name, count]) => !["Pfr. Zluwa Pfarre Neuerlaa","Ukrani. Priester","Prälat Rühringer","Kpl. Hannes Grabner"].includes(name))
+                                .reduce<{ [name: string]: number }>((p, c) => ({...p, [c]: (p[c] ?? 0) + 1}), {}))
+                                .filter(([name, count]) => !["Pfr. Zluwa Pfarre Neuerlaa", "Ukrani. Priester", "Prälat Rühringer", "Kpl. Hannes Grabner"].includes(name))
                                 .map(([name, count]) => name)
-                                .sort((a,b) => ["Pedro","Kpl. David","Kpl. Gil","Pfv. Marcin","Pfr. Dr. Brezovski"].indexOf(b) - ["Pedro","Kpl. David","Kpl. Gil","Pfv. Marcin","Pfr. Dr. Brezovski"].indexOf(a))
+                                .sort((a, b) => ["Pedro", "Kpl. David", "Kpl. Gil", "Pfv. Marcin", "Pfr. Dr. Brezovski"].indexOf(b) - ["Pedro", "Kpl. David", "Kpl. Gil", "Pfv. Marcin", "Pfr. Dr. Brezovski"].indexOf(a))
                             }
                         />
                     </div>
@@ -96,14 +98,19 @@ export default function EventPage(props: {
                             <Settings/>
                         </div>
                         {calendar.error && <CalendarErrorNotice/>}
-                        {calendar.loading && <LoadingEvents/>}
+                        {calendar.loading && <EniLoading/>}
                         {calendar.loading || Object.entries(groupEventsByDate(applyFilter(calendar.items, filter, separateMass)))
                             .map(([date, events]) => <div key={date} data-date={date} className="py-2">
                                 <EventDate date={new Date(date)}/>
                                 <div className="mb-3 text-sm relative z-10">
                                     {liturgyInformation && props.liturgy[date]?.sort(compareLiturgy).map((liturgy) =>
                                         <div className="-my-0.5 italic flex gap-2">
-                                            <div className={`w-3 my-1 rounded ${{v: "bg-[#f0f]", w : "bg-[#ddd]", g: "bg-[#0c0]", r: "bg-[#f00]"}[liturgy.color]}`}/>
+                                            <div className={`w-3 my-1 rounded ${{
+                                                v: "bg-[#f0f]",
+                                                w: "bg-[#ddd]",
+                                                g: "bg-[#0c0]",
+                                                r: "bg-[#f00]"
+                                            }[liturgy.color]}`}/>
                                             <div>{liturgy.name} [{liturgy.rank}]</div>
                                         </div>
                                     )}
