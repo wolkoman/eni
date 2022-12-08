@@ -1,10 +1,8 @@
-import {Permission, Permissions} from '../../util/verify';
-import {ParishTag} from './ParishTag';
-import {useRouter} from 'next/router';
-import {SanitizeHTML} from '../SanitizeHtml';
-import {getMonthName, getWeekDayName} from './Calendar';
-import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
-import {Liturgy} from "../../pages/api/liturgy";
+import { useRouter } from 'next/router';
+import { CalendarEvent, CalendarGroup, CalendarTag } from "../../util/calendar-types";
+import { SanitizeHTML } from '../SanitizeHtml';
+import { getMonthName, getWeekDayName } from './Calendar';
+import { ParishTag } from './ParishTag';
 
 export function Event({event, noTag}: { event: CalendarEvent, noTag?: boolean }) {
     const link = event.groups.includes(CalendarGroup.Messe) ? `termine/${event.id}` : null;
