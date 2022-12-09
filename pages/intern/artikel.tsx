@@ -40,36 +40,38 @@ export default function InternArticles() {
       .then(({link}) => window.location.replace(link));
   }
 
-  return <Site title="Artikel Importer">
-    <div className="">
-      {newsItems.map((item: any) => <div key={item.title} className="flex flex-row my-6">
-        <div className="bg-gray-200 w-24 h-24 flex-shrink-0 mr-4 rounded overflow-hidden">
-          {images[item.link] !== undefined
-            ? <div className="h-full" style={{
-              backgroundImage: `url(${images[item.link]})`,
-              backgroundSize: 'cover',
-              backgroundPosition: '50% 50%'
-            }}/>
-            : <div className="flex justify-center items-center underline hover:no-underline cursor-pointer h-full"
-                   onClick={() => loadImage(item)}>laden</div>
-          }
-        </div>
-        <div className="w-full">
-          <div className="flex">
-            <div className="flex w-full">
-              <div className="uppercase bg-gray-200 text-sm px-1 py-0.5 mr-2 rounded">{item.type}</div>
-              <Link href={item.link}>
-                <div className="underline hover:no-underline">{item.title.trim()} </div>
-              </Link>
+  return (
+    <Site title="Artikel Importer">
+      <div className="">
+        {newsItems.map((item: any) => <div key={item.title} className="flex flex-row my-6">
+          <div className="bg-gray-200 w-24 h-24 flex-shrink-0 mr-4 rounded overflow-hidden">
+            {images[item.link] !== undefined
+              ? <div className="h-full" style={{
+                backgroundImage: `url(${images[item.link]})`,
+                backgroundSize: 'cover',
+                backgroundPosition: '50% 50%'
+              }}/>
+              : <div className="flex justify-center items-center underline hover:no-underline cursor-pointer h-full"
+                     onClick={() => loadImage(item)}>laden</div>
+            }
+          </div>
+          <div className="w-full">
+            <div className="flex">
+              <div className="flex w-full">
+                <div className="uppercase bg-gray-200 text-sm px-1 py-0.5 mr-2 rounded">{item.type}</div>
+                <Link href={item.link} legacyBehavior>
+                  <div className="underline hover:no-underline">{item.title.trim()} </div>
+                </Link>
+              </div>
+              <div>{new Date(item.isoDate).toLocaleDateString("de-AT")}</div>
             </div>
-            <div>{new Date(item.isoDate).toLocaleDateString("de-AT")}</div>
+            <div>{item.content.trim()}</div>
+            <div className="flex justify-end">
+              <Button label="Artikel laden" onClick={() => addArticle(item)}/>
+            </div>
           </div>
-          <div>{item.content.trim()}</div>
-          <div className="flex justify-end">
-            <Button label="Artikel laden" onClick={() => addArticle(item)}/>
-          </div>
-        </div>
-      </div>) ?? 'lädt' /* */}
-    </div>
-  </Site>
+        </div>) ?? 'lädt' /* */}
+      </div>
+    </Site>
+  );
 }

@@ -43,7 +43,7 @@ export default function HomePage(
                 <div className="text-3xl font-bold">Emmausbote</div>
                 <div className="flex flex-wrap mb-12">
                     {props.eb
-                        .map(issue => <Link href={getCockpitResourceUrl(issue.file)}><img
+                        .map(issue => <Link href={getCockpitResourceUrl(issue.file)} legacyBehavior><img
                             src={getCockpitResourceUrl(issue.preview.path)}
                             className="w-60 rounded m-2 hover:scale-105 cursor-pointer transition"
                         /></Link>)}

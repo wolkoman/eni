@@ -52,33 +52,35 @@ export default function Events() {
         return data.username.length === 0 || data.password.length === 0;
     }
 
-    return <Site navbar={false} responsive={false} footer={false} title="Login">
-        <div
-            className="w-full h-screen relative flex flex-col justify-center items-center bg-[url(/bg-login.svg)] bg-cover bg-center">
+    return (
+        <Site navbar={false} responsive={false} footer={false} title="Login">
             <div
-                className={`z-10 bg-white borde border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
-                <div className="p-8 flex flex-col items-center">
-                    <div className="font-bold text-2xl mb-5">Eine Neue Initiative</div>
-                    <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
-                           value={data.username}
-                           onChange={(event) => setData({...data, username: (event as any).target.value})}/>
-                    <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-gray-200" type="password"
-                           value={data.password}
-                           onChange={(event) => setData({...data, password: (event as any).target.value})}
-                           onKeyDown={(e) => {
-                               if (e.key === "Enter" && !buttonDisabled()) login()
-                           }}
-                    />
-                    <div className={`${loading ? "animate-pulse" : ""} mt-4 w-full text-center grid`}>
-                        <Button className="" onClick={() => login()} label="Anmelden"
-                                disabled={buttonDisabled()}/>
-                    </div>
-                    <div className="text-xs mt-2">
-                        oder{" "}
-                        <Link href="https://forms.gle/TJZjvqbvq688J57h7"><span className="text-blue-600 cursor-pointer">weitere Optionen</span></Link>
+                className="w-full h-screen relative flex flex-col justify-center items-center bg-[url(/bg-login.svg)] bg-cover bg-center">
+                <div
+                    className={`z-10 bg-white borde border-gray-200 shadow-lg rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
+                    <div className="p-8 flex flex-col items-center">
+                        <div className="font-bold text-2xl mb-5">Eine Neue Initiative</div>
+                        <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
+                               value={data.username}
+                               onChange={(event) => setData({...data, username: (event as any).target.value})}/>
+                        <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-gray-200" type="password"
+                               value={data.password}
+                               onChange={(event) => setData({...data, password: (event as any).target.value})}
+                               onKeyDown={(e) => {
+                                   if (e.key === "Enter" && !buttonDisabled()) login()
+                               }}
+                        />
+                        <div className={`${loading ? "animate-pulse" : ""} mt-4 w-full text-center grid`}>
+                            <Button className="" onClick={() => login()} label="Anmelden"
+                                    disabled={buttonDisabled()}/>
+                        </div>
+                        <div className="text-xs mt-2">
+                            oder{" "}
+                            <Link href="https://forms.gle/TJZjvqbvq688J57h7" legacyBehavior><span className="text-blue-600 cursor-pointer">weitere Optionen</span></Link>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </Site>;
+        </Site>
+    );
 }

@@ -9,11 +9,11 @@ import Link from "next/link";
 export default function HomePage(props: { site: Collections['site'] & {parent: Collections['site']}}) {
     return siteDif(<></>, <Article title={props.site.name}>
             {(props.site.children.length > 0 || props.site.parent) && <div className="mb-12 flex font-sans flex-wrap bg-emmaus/20 rounded-xl p-2 text-center">
-                {!!props.site.parent && <Link href={`/${props.site.parent.slug}`}>
+                {!!props.site.parent && <Link href={`/${props.site.parent.slug}`} legacyBehavior>
                     <div
                         className="p-5 rounded-lg md:px-4 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">Zurück zu {props.site.parent.name}</div>
                 </Link>}
-                {props.site.children.map(child => <Link href={`/${child.slug}`}>
+                {props.site.children.map(child => <Link href={`/${child.slug}`} legacyBehavior>
                     <div
                         className="p-5 rounded-lg md:px-4 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">{child.name}</div>
                 </Link>)}
