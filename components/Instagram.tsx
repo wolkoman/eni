@@ -1,3 +1,4 @@
+"use client";
 import {SectionHeader} from './SectionHeader';
 import Responsive from "./Responsive";
 // @ts-ignore

@@ -1,6 +1,5 @@
+"use client";
 import create from 'zustand';
-import {fetchJson} from './fetch-util';
-import {CalendarEvent, CalendarGroup} from "./calendar-types";
 import {useEffect} from "react";
 
 export enum Preference{

@@ -3,7 +3,7 @@ import Responsive from "./Responsive";
 import { SectionHeader } from "./SectionHeader";
 import { CalendarName, getCalendarInfo } from '../util/calendar-info';
 import { EventsObject } from '../util/calendar-types';
-import { groupEventsByDate } from '../util/use-calendar-store';
+import {groupEventsByDate} from "../util/group-events-by-group-and-date";
 
 export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
     const events = props.eventsObject.events.filter(event => ["12-24", "12-25"].includes(event.date.slice(5)));

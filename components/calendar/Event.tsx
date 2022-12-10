@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
 import { CalendarEvent, CalendarGroup, CalendarTag } from "../../util/calendar-types";
 import { SanitizeHTML } from '../SanitizeHtml';
 import { getMonthName, getWeekDayName } from './Calendar';
 import { ParishTag } from './ParishTag';
+import {useRouter} from "next/navigation";
 
 export function Event({event, noTag}: { event: CalendarEvent, noTag?: boolean }) {
     const link = event.groups.includes(CalendarGroup.Messe) ? `termine/${event.id}` : null;

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Site from '../../../components/Site';
-import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../../util/use-calendar-store";
+import {useAuthenticatedCalendarStore} from "../../../util/use-calendar-store";
 import {useUserStore} from "../../../util/use-user-store";
 import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
@@ -18,6 +18,7 @@ import {
 import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
+import {groupEventsByDate} from "../../../util/group-events-by-group-and-date";
 
 function PersonSelector(props: { persons: Collections['person'][], person: string, onChange: (id: string) => any }) {
     function onChange(name: string) {

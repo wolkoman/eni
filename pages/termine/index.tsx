@@ -4,7 +4,7 @@ import {applyFilter, FilterType} from '../../components/calendar/Calendar';
 import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
-import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
+import {useCalendarStore} from '../../util/use-calendar-store';
 import {useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
@@ -18,6 +18,7 @@ import {Settings} from "../../components/Settings";
 import {Preference, usePreference} from "../../util/use-preference";
 import {compareLiturgy} from "../intern/reader/my";
 import {EniLoading} from "../../components/Loading";
+import {groupEventsByDate} from "../../util/group-events-by-group-and-date";
 
 
 export default function EventPage(props: {

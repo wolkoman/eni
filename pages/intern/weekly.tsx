@@ -7,9 +7,10 @@ import {TemplateHandler} from 'easy-template-x';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
-import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
+import {useCalendarStore} from '../../util/use-calendar-store';
 import {saveFile} from "../../util/save-file";
 import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
+import {groupEventsByDate} from "../../util/group-events-by-group-and-date";
 
 export default function InternArticles() {
     usePermission([Permission.Admin]);

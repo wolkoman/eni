@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
-import {groupEventsByDate, useCalendarStore} from "../../util/use-calendar-store";
+import {useCalendarStore} from "../../util/use-calendar-store";
 import {Permission} from "../../util/verify";
 import {useUserStore} from "../../util/use-user-store";
 import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
@@ -9,6 +9,7 @@ import {fetchJson} from "../../util/fetch-util";
 import {CalendarName} from "../../util/calendar-info";
 import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
 import {SanitizeHTML} from "../../components/SanitizeHtml";
+import {groupEventsByDate} from "../../util/group-events-by-group-and-date";
 
 export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
 export default function LimitedEventEditing() {

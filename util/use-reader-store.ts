@@ -1,3 +1,4 @@
+"use client";
 import create from 'zustand';
 import {fetchJson} from './fetch-util';
 import {Collections} from 'cockpit-sdk';

@@ -1,21 +1,22 @@
-import React from 'react';
-import {groupEventsByGroupAndDate} from '../../util/use-calendar-store';
+import React, {use} from 'react';
 import {Event, EventDateText} from './Event';
 import Responsive from '../Responsive';
 import {SectionHeader} from "../SectionHeader";
 import Link from "next/link";
 import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarGroup, EventsObject} from "../../util/calendar-types";
-import {Preference, usePreference} from "../../util/use-preference";
+import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
+import {groupEventsByGroupAndDate} from "../../util/group-events-by-group-and-date";
 
 export function getGroupSorting(group: CalendarGroup) {
     return [CalendarGroup.Gebet, CalendarGroup.Wallfahrt, CalendarGroup.Advent, CalendarGroup.Gottesdienst, CalendarGroup.Messe, CalendarGroup.Weihnachten].indexOf(group);
 }
 
-export function ComingUp(props: { eventsObject: EventsObject }) {
+export function ComingUp() {
     const now = new Date().getTime();
-    const [separateMass] = usePreference(Preference.SeparateMass);
-    const groups = Object.entries(groupEventsByGroupAndDate(props.eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000 * 60 * 60 * 24 * 7), separateMass))
+    const [separateMass] = [false];// usePreference(Preference.SeparateMass);
+    const eventsObject: EventsObject = use(getCachedEvents({permission: GetEventPermission.PUBLIC}));
+    const groups = Object.entries(groupEventsByGroupAndDate(eventsObject.events.filter(event => new Date(event.date).getTime() < now + 1000 * 60 * 60 * 24 * 7), separateMass))
         .sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
     const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
 
@@ -31,6 +32,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                         <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}>
                             <div className={(index < 2 ? "max-h-96" : "max-h-64") + " overflow-hidden rounded-2xl bg-black/5 hover:bg-black/10 relative p-6 cursor-pointer"}>
                                 <div className="text-2xl font-bold text-center">{group}</div>
+                                {/*
                                 <div>{Object.entries(calendar).map(([date, events]) =>
                                     <div key={date}>
                                         <div className="my-2"><EventDateText date={new Date(date)}/></div>
@@ -38,6 +40,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                     </div>
                                 )}
                                 </div>
+                                */}
                             </div>
                         </Link>
                     )}
