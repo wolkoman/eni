@@ -28,6 +28,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("eltern-kind-treff") && CalendarGroup.Kinder,
         sum.includes("mädchenabend") && CalendarGroup.Kinder,
         sum.includes("ministrantenstunde") && CalendarGroup.Kinder,
+        sum.includes("sternsing") && CalendarGroup.Kinder,
         sum.startsWith("kinderstunde") && CalendarGroup.Kinder,
         sum.includes("ferienspiel") && CalendarGroup.Kinder,
         sum.includes("hl. martin") && CalendarGroup.Kinder,
@@ -66,7 +67,6 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("evangel") && CalendarGroup.Invisible,
         sum.includes("taufe") && CalendarGroup.Invisible,
         sum.includes(" ehe") && CalendarGroup.Invisible,
-        sum.includes("firmvorbereitung") && CalendarGroup.Invisible,
         sum.includes("priesternotruf") && CalendarGroup.Invisible,
         sum.includes("vokalenmsemble") && CalendarGroup.Invisible,
         sum.includes("junschar") && CalendarGroup.Invisible,
@@ -82,6 +82,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("erstkommunion") && CalendarGroup.Sakramente,
         sum.startsWith("taufe") && CalendarGroup.Sakramente,
         sum.includes("firmkurs") && CalendarGroup.Sakramente,
+        sum.includes("firmvorbereitung") && CalendarGroup.Sakramente,
         sum.includes("firmung") && sum.includes("anmeldung") && CalendarGroup.Sakramente,
         sum.includes("firmung") && sum.includes("info") && CalendarGroup.Sakramente,
     ];
