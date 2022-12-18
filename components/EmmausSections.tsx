@@ -23,7 +23,7 @@ export function EmmausSections(props: { weeklies: Collections['weekly'][], emmau
                         dem Betreff "Wochenmitteilung Emmaus" an kanzlei@eni.wien.
                     </div>
                     <div className="flex space-x-2">
-                        {['emmaus'].map(id => getCalendarInfo(id as any)).map(info =>
+                        {[CalendarName.EMMAUS].map(id => getCalendarInfo(id as any)).map(info =>
                             <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
                                 <Button label="Ansehen" className={info.className}/>
                             </Link>

@@ -47,6 +47,7 @@
   },
   "scripts": {
     "dev": "next dev",
+    "doppler-dev": "doppler run --forward-signals -- npm run dev",
     "test": "playwright test",
     "test:skipbuild": "SKIP_BUILD=1 playwright test",
     "test:headed": "playwright test --headed",

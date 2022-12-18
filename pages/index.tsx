@@ -55,7 +55,6 @@ export default function HomePage(
                 <EmmausBranding eventsObject={props.eventsObject} />
             </div>
             <div className="relative z-10 bg-white">
-                <EmmausNavigation />
                 <Articles items={props.articles} sites={props.sites} />
                 <ComingUp eventsObject={props.eventsObject} />
                 <EmmausSections weeklies={props.weeklies} emmausbote={props.emmausbote} />

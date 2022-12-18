@@ -28,8 +28,10 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 {groups
                     .slice(0, 6)
                     .map(([group, calendar], index) =>
-                        <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}>
-                            <div className={(index < 2 ? "max-h-96" : "max-h-64") + " overflow-hidden rounded-2xl bg-black/5 hover:bg-black/10 relative p-6 cursor-pointer"}>
+                        <Link
+                            href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
+                            className={(index < 2 ? "max-h-96" : "max-h-64") + " overflow-hidden rounded-2xl bg-black/5 hover:bg-black/10 relative p-6 cursor-pointer"}>
+                            <div>
                                 <div className="text-2xl font-bold text-center">{group}</div>
                                 <div>{Object.entries(calendar).map(([date, events]) =>
                                     <div key={date}>
@@ -42,13 +44,12 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                         </Link>
                     )}
             </div>
-            <div className="flex gap-4 pb-4">
-                {groups.slice(7).map(([group]) => <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                                                        key={group}>
-                    <div
-                        className="flex-1 rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer">
-                        {group}
-                    </div>
+            <div className="flex gap-4 pb-4 flex-wrap">
+                {groups.slice(7).map(([group]) => <Link
+                    href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
+                    className={"flex-grow rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer"}
+                    key={group}>
+                    {group}
                 </Link>)}
             </div>
             <Link href={`${urlPrefix}/termine`}>

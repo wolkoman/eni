@@ -4,11 +4,12 @@ import {cockpit} from '../util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
 import {Section} from './Section';
 import Responsive from "./Responsive";
+import {SectionHeader} from "./SectionHeader";
 
 export function getCockpitResourceUrl(url: string) {
-    if(url.startsWith('https')) return url;
-    if(url.startsWith('/storage')) return `${cockpit.host}${url}`;
-    if(url.startsWith('storage')) return `${cockpit.host}/${url}`;
+    if (url.startsWith('https')) return url;
+    if (url.startsWith('/storage')) return `${cockpit.host}${url}`;
+    if (url.startsWith('storage')) return `${cockpit.host}/${url}`;
     return `${cockpit.host}/storage/uploads/${url}`
 }
 
@@ -18,7 +19,8 @@ export function getArticleLink(article?: Collections['article']) {
 
 function ArticleCard(props: { article?: Collections['article'] }) {
     return <Link href={getArticleLink(props.article)}>
-        <div className={`flex flex-row cursor-pointer ${!props.article && 'shimmer'} bg-emmaus-sec/20 hover:bg-emmaus-sec/10 rounded-lg p-3 gap-3`}>
+        <div
+            className={`flex flex-row cursor-pointer bg-emmaus/20 hover:bg-emmaus/5 rounded-lg p-2 gap-3`}>
             <div className="w-32 aspect-square flex-shrink-0 rounded-lg"
                  style={!props.article ? {} : {
                      backgroundImage: `url(${getCockpitResourceUrl(props.article.preview_image.path)})`,
@@ -33,33 +35,32 @@ function ArticleCard(props: { article?: Collections['article'] }) {
 }
 
 export default function Articles(props: { items: Collections['article'][], sites: Collections['site'][] }) {
-    return <div className="mt-12"><Responsive><Section id="aktuelles">
-        <div className="flex flex-col">
-            <div>
-                <div className="text-2xl md:text-5xl mb-20 flex flex-col justify-center text-center max-w-2xl mx-auto">
-                    „Am gleichen Tag waren zwei von den Jüngern auf dem Weg in ein Dorf namens Emmaus..“
-                    <div className="text-lg font-bold text-emmaus">Lukas, 24:13</div>
-                </div>
-                <div className="grid md:grid-cols-3 gap-4 my-6">
+    return <div className="flex flex-col">
+            <div className="bg-emmauss/30 py-6"><Responsive>
+                <SectionHeader>Artikel</SectionHeader>
+                <div className="grid md:grid-cols-3 gap-4">
                     <div><ArticleCard article={props.items[0]}/></div>
                     <div><ArticleCard article={props.items[1]}/></div>
                     <div>
                         <ArticleCard article={props.items[2]}/>
-                        <div className="p-4 mt-4 rounded bg-emmaus-sec/20 hover:bg-emmaus-sec/10 font-bold text-lg cursor-pointer">Alle Beiträge</div>
+                        <div
+                            className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle
+                            Beiträge
+                        </div>
                     </div>
-                </div>
+                </div></Responsive>
             </div>
 
-            <div>
+            <div><Responsive>
+                <SectionHeader>Über uns</SectionHeader>
                 <div className="grid md:grid-cols-3 gap-4 my-6">
                     {props.sites.filter(site => site.level === 0).map(site =>
-                        <Link href={"/"+site.slug}>
-                        <div className="p-4 py-6 rounded border border-emmaus/20 hover:bg-emmaus/5 font-bold text-lg cursor-pointer text-center">{site.name}</div>
+                        <Link href={"/" + site.slug}>
+                            <div
+                                className="p-4 py-6 rounded border border-emmaus/20 hover:bg-emmaus/5 font-bold text-lg cursor-pointer text-center">{site.name}</div>
                         </Link>
                     )}
-                </div>
+                </div></Responsive>
             </div>
-        </div>
-    </Section>
-    </Responsive></div>;
+    </div>;
 }
