@@ -28,35 +28,31 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 {groups
                     .slice(0, 6)
                     .map(([group, calendar], index) =>
-                        <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}>
-                            <div
-                                className={(index < 2 ? "max-h-96" : "max-h-64") + " overflow-hidden rounded-2xl bg-black/5 hover:bg-black/10 relative p-6 cursor-pointer"}>
-                                <div className="text-2xl font-bold text-center">{group}</div>
-                                <div>{Object.entries(calendar).map(([date, events]) =>
-                                    <div key={date}>
-                                        <div className="my-2"><EventDateText date={new Date(date)}/></div>
-                                        {(events ?? []).map(event => <Event key={event.id} event={event}/>)}
-                                    </div>
-                                )}
+                        <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
+                              className={(index < 2 ? "max-h-96" : "max-h-64") + " overflow-hidden rounded-2xl bg-black/5 hover:bg-black/10 relative p-6 cursor-pointer"}
+                        >
+                            <div className="text-2xl font-bold text-center">{group}</div>
+                            <div>{Object.entries(calendar).map(([date, events]) =>
+                                <div key={date}>
+                                    <div className="my-2"><EventDateText date={new Date(date)}/></div>
+                                    {(events ?? []).map(event => <Event key={event.id} event={event}/>)}
                                 </div>
+                            )}
                             </div>
                         </Link>
                     )}
             </div>
-            <div className="flex gap-4 pb-4">
+            <div className="flex flex-wrap gap-4 pb-4">
                 {groups.slice(7).map(([group]) => <Link
                     href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
+                    className={"flex-grow rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer"}
                     key={group}>
-                    <div className={"flex-grow rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer"}>
-                        {group}
-                    </div>
+                    {group}
                 </Link>)}
             </div>
-            <Link href={`${urlPrefix}/termine`}>
-                <div
-                    className="rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer">
-                    Alle Termine
-                </div>
+            <Link href={`${urlPrefix}/termine`}
+                  className="rounded-2xl text-xl text-center font-bold bg-black/5 hover:bg-black/10 p-4 cursor-pointer block">
+                Alle Termine
             </Link>
         </div>
     </Responsive>;
