@@ -17,6 +17,7 @@
     "aesthetically": "^0.0.5",
     "bufferutil": "^4.0.7",
     "cockpit-sdk": "^0.15.1",
+    "cookies-next": "^2.1.1",
     "easy-template-x": "^3.0.4",
     "eslint": "^8.30.0",
     "fast-xml-parser": "^4.0.12",
@@ -47,14 +48,16 @@
   },
   "scripts": {
     "dev": "next dev",
-    "doppler-dev": "doppler run --forward-signals -- npm run dev",
     "test": "playwright test",
     "test:skipbuild": "SKIP_BUILD=1 playwright test",
     "test:headed": "playwright test --headed",
     "build": "next build",
     "start": "next start",
-    "refresh-google": "node scripts/google-refresh-token.ts",
-    "lint": "next lint"
+    "lint": "next lint",
+    "doppler-build": "doppler run --forward-signals -- npm run build",
+    "doppler-dev": "doppler run --forward-signals -- npm run dev",
+    "doppler-test": "doppler run --forward-signals -- npm run test",
+    "doppler-test:headed": "doppler run --forward-signals -- npm run test:headed"
   },
   "browserslist": {
     "production": [

@@ -98,10 +98,9 @@ export default function Index(props: { liturgy: LiturgyData }) {
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
     const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
-    const jwt = useUserStore(state => state.jwt);
 
     async function selectLiturgy(eventId: string, liturgy: string) {
-        fetchJson("/api/reader/save", {jwt, json: {[eventId]: {liturgy}}}, {
+        fetchJson("/api/reader/save", {json: {[eventId]: {liturgy}}}, {
             pending: "Liturgie wird gespeichert",
             error: "Liturgie wurde nicht gespeichert",
             success: "Liturgie wurde gespeichert"
@@ -111,7 +110,6 @@ export default function Index(props: { liturgy: LiturgyData }) {
     async function selectPerson(eventId: string, role: 'reading1' | 'reading2', userId: string) {
         const userName = readers.find(reader => reader._id === userId)?.name ?? 'Unbekannt';
         fetchJson("/api/reader/save", {
-            jwt,
             json: {[eventId]: {[role]: {id: userId, name: userName, status: "assigned"}}}
         }, {
             pending: "Person wird gespeichert",

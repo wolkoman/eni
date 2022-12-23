@@ -13,7 +13,6 @@ export interface CalendarInfo {
   websiteUrl: string,
   websiteDisplay: string,
   imageColor: string,
-  description: (x: string) => React.ReactNode,
 }
 export enum CalendarName{
   ALL = 'all',
@@ -34,7 +33,6 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     address: '',
     websiteUrl: 'https://eni.wien',
     websiteDisplay: 'https://eni.wien',
-    description: () => '',
     image: '',
     imageColor: ''
   },
@@ -51,8 +49,6 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     imageColor: '/logos_Emmaus Fade.svg',
     websiteUrl: 'https://emmaus.wien/',
     websiteDisplay: 'emmaus.wien',
-    description: (x: string) => <>Die <b>{x}</b> wurde aus den Überresten der ehemaligen Wienerberger Ziegelfabrik
-      errichtet.</>,
   },
   [CalendarName.INZERSDORF]: {
     id: CalendarName.INZERSDORF,
@@ -67,8 +63,6 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     imageColor: '/logos_Inzersdorf Fade.svg',
     websiteUrl: 'https://pfarresanktnikolaus.at',
     websiteDisplay: 'pfarresanktnikolaus.at',
-    description: (x: string) => <>Die <b>{x}</b> ist mit dem Gründungsjahr 1217 eine der ältesten Pfarren der
-      Erzdiözese Wien.</>,
   },
   [CalendarName.NEUSTIFT]: {
     id: CalendarName.NEUSTIFT,
@@ -83,8 +77,6 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     imageColor: '/logos_Neustift Fade.svg',
     websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
     websiteDisplay: 'pfarreinzersdorfneustift.at',
-    description: (x: string) => <>Die <b>{x}</b> entstand aus einer Teilung von der Pfarre Inzersdorf und wurde Maria,
-      Hilfe der Christen geweiht.</>,
   },
   [CalendarName.INZERSDORF_ORGAN]: {
     id: CalendarName.INZERSDORF_ORGAN,
@@ -97,7 +89,6 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     address: '',
     websiteUrl: '',
     websiteDisplay: '',
-    description: () => '',
     image: '',
     imageColor: ''
   },

@@ -19,22 +19,6 @@ export default function Events() {
         }
     }, [user, router, setData]);
 
-    useEffect(() => {
-        if(router.query.jwt){
-            setDisabled(true);
-            toast.promise(_login({jwt: router.query.jwt as string}), {
-                error: 'Anmeldedaten sind nicht korrekt',
-                pending: 'Anmeldung läuft...',
-                success: 'Anmeldung erfolgreich'
-            }).then(() => {
-                setDisabled(true);
-                router.push(router.query.redirect ? router.query.redirect as string : '/intern');
-            }).catch(() => {
-                setPartialData({password: ''});
-            });
-        }
-    }, [router.query.jwt]);
-
     function login() {
         toast.promise(_login(data), {
             error: 'Anmeldedaten sind nicht korrekt',

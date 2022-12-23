@@ -1,23 +1,22 @@
 import create from 'zustand';
 import {fetchJson} from './fetch-util';
-import {verify} from 'jsonwebtoken';
 import {User} from './user';
 import {useEffect} from "react";
+import {deleteCookie} from "cookies-next";
 
 export function useAuthenticatedUserStore() {
 
-    const [load, user, jwt] = useUserStore(state => [state.load, state.user, state.jwt]);
+    const [load, loaded, user] = useUserStore(state => [state.load, state.loaded, state.user]);
     useEffect(() => {
         load();
     }, [])
-    return {user, jwt};
+    return {user, loaded};
 }
 
 export const useUserStore = create<{
-    jwt?: string,
     user?: User,
     load: () => void,
-    login: (data: { username: string, password: string } | { jwt: string }) => Promise<any>,
+    login: (data: { username: string, password: string }) => Promise<any>,
     logout: () => void,
     loaded: boolean,
     loading: boolean,
@@ -27,39 +26,28 @@ export const useUserStore = create<{
     login: (data) => {
         if (get().loading) return Promise.resolve();
         set(state => ({...state, loading: true}));
-        if ('jwt' in data) {
-            return new Promise((res) => {
-                const user = verify(data.jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User;
-                set(state => ({...state, user, jwt: data.jwt, loaded: true, loading: false}));
-                sessionStorage.setItem('user', JSON.stringify(user));
-                sessionStorage.setItem('jwt', JSON.stringify(data.jwt));
-                res(undefined);
-            });
-        }
         return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
-            .then(({jwt}) => {
-                const user = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User;
-                if (user) {
-                    set(state => ({...state, user, jwt, loaded: true, loading: false}));
-                    sessionStorage.setItem('user', JSON.stringify(user));
-                    sessionStorage.setItem('jwt', JSON.stringify(jwt));
-                }
+            .then(({user, expires}) => {
+                set(state => ({...state, user, loaded: true, loading: false}));
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('expires', JSON.stringify(expires));
             }).catch(() => {
                 set(state => ({...state, loading: false}));
                 throw new Error();
             })
     },
     logout: () => {
-        set(state => ({...state, user: undefined, jwt: undefined, loaded: false}));
-        sessionStorage.clear();
+        set(state => ({...state, user: undefined, loaded: false}));
+        localStorage.clear();
+        deleteCookie('jwt');
         location.href = '/';
     },
     load: () => {
         if (get().loaded) return;
+        const expired = JSON.parse(localStorage.getItem('user') ?? '0') < new Date().getTime();
         set(state => ({
             ...state,
-            user: JSON.parse(sessionStorage.getItem('user') ?? 'null'),
-            jwt: JSON.parse(sessionStorage.getItem('jwt') ?? 'null'),
+            user: expired ? null : (JSON.parse(localStorage.getItem('user') ?? 'null')),
             loaded: true
         }));
     }

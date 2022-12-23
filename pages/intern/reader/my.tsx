@@ -16,13 +16,13 @@ export function compareLiturgy(a: Liturgy, b: Liturgy) {
 export default function Index(props: { liturgy: LiturgyData }) {
 
     const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
-    const [user, jwt] = useUserStore(state => [state.user, state.jwt]);
+    const [user] = useUserStore(state => [state.user]);
     const myTasks = getTasksFromReaderData(readerData, eventId => events.find(e => e.id === eventId)!)
         .filter(task => task.data.userId === user?._id && task.event.calendar === reader.parish)
         .sort((a, b) => new Date(a.event.date).getTime() - new Date(b.event.date).getTime());
 
     function cancel(eventId: string, role: 'reading1' | 'reading2') {
-        fetchJson("/api/reader/cancel", {jwt, json: {eventId, role}}, {
+        fetchJson("/api/reader/cancel", {json: {eventId, role}}, {
             pending: "Trage aus...",
             success: "Lesung ist ausgetragen!",
             error: "Ein Fehler ist aufgetreten"

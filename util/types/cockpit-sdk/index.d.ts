@@ -87,7 +87,7 @@ declare module 'cockpit-sdk' {
     permissions: Record<string, boolean>,
   }
   type Error = {
-    message: string
+    error: string
   }
 
   type CollectionGetProps<T> = { filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }

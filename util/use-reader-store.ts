@@ -2,20 +2,14 @@ import create from 'zustand';
 import {fetchJson} from './fetch-util';
 import {Collections} from 'cockpit-sdk';
 import {ReaderData} from "./reader";
-import {useUserStore} from "./use-user-store";
+import {useAuthenticatedUserStore, useUserStore} from "./use-user-store";
 import {useEffect} from "react";
 import {CalendarName} from "./calendar-info";
 import {CalendarEvent} from "./calendar-types";
 
 export function useAuthenticatedReaderStore() {
-    const [jwt, user, userLoad] = useUserStore(state => [state.jwt, state.user, state.load]);
-    const [load, loading, error, readers, readerData, events, setReaderData, parish, setParish] = useReaderStore(state => [state.load, state.loading, state.error, state.readers, state.readerData, state.events, state.setReaderData, state.parish, state.setParish]);
-    useEffect(() => {
-        userLoad();
-    }, []);
-    useEffect(() => {
-        if (jwt) load(jwt);
-    }, [jwt]);
+    const {user} = useAuthenticatedUserStore();
+    const [loading, error, readers, readerData, events, setReaderData, parish, setParish] = useReaderStore(state => [state.loading, state.error, state.readers, state.readerData, state.events, state.setReaderData, state.parish, state.setParish]);
     useEffect(() => {
         if (user?.parish && user.parish !== CalendarName.ALL) setParish(user.parish);
     }, [user?.parish]);

@@ -1,25 +1,21 @@
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
-import { useUserStore } from './use-user-store';
+import {useAuthenticatedUserStore} from './use-user-store';
 import {Permission} from './verify';
 
 export const usePermission = (requiredPermissions: Permission[] = []) => {
-  const [user, permissions, load, loaded] = useUserStore(state => [state.user, state.user?.permissions ?? {}, state.load, state.loaded]);
-  const router = useRouter();
-  useEffect(() => load(), []);
-  useEffect(() => {
-    if(loaded){
-      if (!user?.active) {
-        router.push('/login');
-      }else {
-        const unauthorized = requiredPermissions.some(p => !permissions[p]);
-        if (unauthorized) {
-          router.push('/login');
-        }
+    const {user, loaded} = useAuthenticatedUserStore()
+    const router = useRouter();
+    useEffect(() => {
+        console.log({loaded,user});
+        if (!loaded) return;
+        const unauthorized = requiredPermissions.some(p => !user?.permissions[p]);
         if (user && user.group === "PrivateCalendarAccess" && router.asPath !== "/intern/move-user") {
-          router.push("/intern/move-user");
+            router.push("/intern/move-user");
+        }else if (unauthorized) {
+            router.push('/login');
+        }else if (!user) {
+            router.push('/login');
         }
-      }
-    }
-  }, [user, load, loaded]);
+    }, [loaded]);
 };

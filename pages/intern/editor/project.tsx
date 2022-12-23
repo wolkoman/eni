@@ -10,12 +10,10 @@ import Button from "../../../components/Button";
 export default function Index() {
 
     const [project, setProject] = useState<{articles: Collections['paper_articles'][], name: string}>();
-    const jwt = useUserStore(state => state.jwt)
     const {query: {projectId}} = useRouter();
     useEffect(() => {
-        if (jwt === undefined) return;
-        fetchJson("/api/editor/project", {jwt, json: {projectId}}).then(projects => setProject(projects));
-    }, [projectId, jwt])
+        fetchJson("/api/editor/project", {json: {projectId}}).then(projects => setProject(projects));
+    }, [projectId])
 
     return <Site title={`Projekt ${project?.name}`}>
         <div className="flex mb-4">

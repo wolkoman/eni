@@ -5,9 +5,9 @@ import {Hamburger} from "./Hamburger";
 import {useAuthenticatedUserStore} from "../util/use-user-store";
 
 export default function TopBar() {
-    const {jwt} = useAuthenticatedUserStore();
+    const {user} = useAuthenticatedUserStore();
     return <div className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 ${site('','bg-emmaus text-white')}`} data-testid="navbar">
-        <Link href={jwt ? "/intern" : "/"}>
+        <Link href={user ? "/intern" : "/"}>
             <div className="text-3xl cursor-pointer" data-testid="title">
                 {site(<div className="flex space-x-4">
                         <div>eni.wien</div>

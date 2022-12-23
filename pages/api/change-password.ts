@@ -24,10 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 }
 
-export async function getPerson(username: string, password: string): Promise<Collections['person'] | undefined | null>{
+export async function getPerson(username: string, password: string): Promise<Collections['person'] | undefined >{
     const hashed = doubleHash(password ?? "");
     const personsWithName = (await cockpit.collectionGet('person', {filter: {username}})).entries;
     const persons = personsWithName
-        .filter(person => ((person.code === password || person.code === hashed)) || password === undefined);
-    return persons.length === 1 ? persons[0] : (personsWithName.length === 0 ? undefined : null);
+        .filter(person => person.active)
+        .filter(person => person.code === password || person.code === hashed || password === undefined);
+    return persons.length === 1 ? persons[0] : undefined;
 }

@@ -15,13 +15,11 @@ function Input(props: { label: string, value: string, onChange: (text: string) =
 
 export default function ChangePassword() {
     const [state, setState] = useState({current: '', neo: '', neoRepeat: '', loading: false});
-    const jwt = useUserStore(store => store.jwt);
     usePermission([]);
 
     function save() {
         setState(x => ({...x, loading: true}));
         fetchJson('/api/change-password', {
-            jwt,
             json: {password: state.current, neo: state.neo}
         }, {
             pending: 'Ändere Passwort',

@@ -5,6 +5,7 @@ import {sign} from 'jsonwebtoken';
 import {User} from '../../util/user';
 import {getPerson} from './change-password';
 import {CalendarName} from "../../util/calendar-info";
+import {setCookie} from "cookies-next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -13,27 +14,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const person = await getPerson(body.username, body.password);
     const secretOrPrivateKey = Buffer.from(process.env.PRIVATE_KEY!, 'base64');
 
-    if (person !== null && person !== undefined) {
+    let user: User;
+    if (person) {
         delete person.code;
-        const permissions = resolvePermissionsForCompetences(person.competences);
-        const userlikeObject: User = {...person, permissions, api_key: `person_${person._id}`,  is_person: true};
+        user = {
+            ...person,
+            permissions: resolvePermissionsForCompetences(person.competences),
+            api_key: `person_${person._id}`,
+            is_person: true
+        };
         await cockpit.collectionSave('person', {...person, last_login: new Date().toISOString()})
-        res.json({jwt: sign(userlikeObject, secretOrPrivateKey, {algorithm: 'RS256'})});
-    } else if (person === undefined) {
+    } else {
         const cockpitUser = await cockpit.authUser(body.username, body.password);
-        if ('message' in cockpitUser) {
+        if ('error' in cockpitUser) {
             res.status(401).json({});
             return;
         }
-        const user: User = {
+        user = {
             ...cockpitUser,
             permissions: resolvePermissionsForGroup(cockpitUser.group),
             parish: CalendarName.ALL,
             username: cockpitUser.user,
             is_person: false
         };
-        res.status('error' in user ? 401 : 200).json({jwt: sign(user, secretOrPrivateKey, {algorithm: 'RS256'})});
-    } else {
-        res.status(401).json({});
     }
+
+    const jwt = sign(user, secretOrPrivateKey, {algorithm: 'RS256', expiresIn: "30 days"});
+    const expires = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30);
+    setCookie("jwt", jwt, {req, res, expires});
+    res.status(200).json({user, expires});
 }

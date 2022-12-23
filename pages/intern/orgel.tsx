@@ -7,7 +7,6 @@ import {useUserStore} from '../../util/use-user-store';
 import {CalendarEvent} from "../../util/calendar-types";
 
 export default function Orgel() {
-  const jwt = useUserStore(state => state.jwt)
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
   }>({
     date: '',
@@ -19,29 +18,23 @@ export default function Orgel() {
   });
 
   useEffect(() => {
-
-    function loadMyBooking() {
       setPartialData({bookingLoading: true});
-      fetchJson(`/api/organ-booking/my`, {jwt})
+      fetchJson(`/api/organ-booking/my`)
           .then(myBookings => setPartialData({myBookings}))
           .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}))
           .finally(() => setPartialData({bookingLoading: false}));
-    }
-
-    if (jwt)
-      loadMyBooking();
-  }, [jwt]);
+  }, []);
 
 
   function loadAvailableHours(value: string) {
     setPartialData({date: value, slots: [], slotsLoading: true});
-    fetchJson(`/api/organ-booking/check?date=${value}`, {jwt})
+    fetchJson(`/api/organ-booking/check?date=${value}`)
       .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots, slotsLoading: false}));
   }
 
   function bookHour(hour: string) {
     setPartialData(data => ({availableSlots: data.availableSlots.filter(h => h !== hour)}))
-    fetchJson(`/api/organ-booking/book?slot=${hour}`, {jwt},
+    fetchJson(`/api/organ-booking/book?slot=${hour}`, {},
       {pending: 'Buche Orgel...', success: 'Buchung erfolgreich', error: 'Buchung war nicht erfolgreich'})
       .then((booking) => setPartialData(data => ({
         availableSlots: data.availableSlots.filter(h => h !== hour),
@@ -61,7 +54,7 @@ export default function Orgel() {
 
   function unbookHour(booking: CalendarEvent) {
     setMyBookingStatus(booking, false);
-    fetchJson(`/api/organ-booking/delete?id=${booking.id}`, {jwt},
+    fetchJson(`/api/organ-booking/delete?id=${booking.id}`, {},
       {pending: 'Lösche Buchung', success: 'Buchung gelöscht', error: 'Fehler ist aufgetreten'})
       .then(() => {
         const myBookings = data.myBookings.filter(b => b.id !== booking.id);

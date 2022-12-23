@@ -4,8 +4,8 @@ import {applyFilter, FilterType} from '../../components/calendar/Calendar';
 import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
-import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
-import {useUserStore} from '../../util/use-user-store';
+import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from '../../util/use-calendar-store';
+import {useAuthenticatedUserStore, useUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
@@ -26,20 +26,14 @@ export default function EventPage(props: {
 }) {
     const [filter, setFilter] = useState<FilterType>(null);
     const [firstFilterUpdate, setFirstFilterUpdate] = useState(true);
-    const calendarStore = useCalendarStore(state => state);
-    const [permissions, jwt, userLoad] = useUserStore(state => [state.user?.permissions ?? {}, state.jwt, state.load]);
-    const calendar = jwt ? calendarStore : {items: props.eventsObject.events, error: false, loading: false};
+    const calendarStore = useAuthenticatedCalendarStore();
+    const {user} = useAuthenticatedUserStore();
+    const calendar = user ? calendarStore : {items: props.eventsObject.events, error: false, loading: false};
     const {query: {q: groupQuery, p: parishQuery}} = useRouter();
     const router = useRouter();
     const [liturgyInformation] = usePreference(Preference.LiturgyInformation);
     const [separateMass] = usePreference(Preference.SeparateMass);
 
-    useEffect(() => userLoad(), [userLoad]);
-    useEffect(() => {
-        if (jwt) {
-            calendarStore.load(jwt);
-        }
-    }, [jwt, calendarStore.load]);
     useEffect(() => {
         if (groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})
         if (parishQuery) setFilter({filterType: "PARISH", parish: parishQuery as CalendarName})
@@ -67,7 +61,7 @@ export default function EventPage(props: {
                         <FilterSelector
                             filter={filter}
                             setFilter={filter => setFilter(filter)}
-                            userPermissions={permissions}
+                            userPermissions={user?.permissions ?? {}}
                             groups={calendar.items
                                 .flatMap(event => event.groups)
                                 .filter((group, index, groups) => groups.indexOf(group) === index)

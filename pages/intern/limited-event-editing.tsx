@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
-import {groupEventsByDate, useCalendarStore} from "../../util/use-calendar-store";
+import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from "../../util/use-calendar-store";
 import {Permission} from "../../util/verify";
 import {useUserStore} from "../../util/use-user-store";
 import {Event, EventDate, EventDateText} from "../../components/calendar/Event";
@@ -15,13 +15,9 @@ export default function LimitedEventEditing() {
     const [music, setMusic] = useState("");
     const [currentEvent, setCurrentEvent] = useState<CalendarEvent | undefined>();
     const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);
-    const [loading, loaded, load, events] = useCalendarStore(state => [state.loading, state.loaded, state.load, state.items]);
-    const jwt = useUserStore(state => state.jwt);
+    const load = useCalendarStore(state => state.load);
+    const {items: events} = useAuthenticatedCalendarStore();
     usePermission([Permission.LimitedEventEditing]);
-    useEffect(() => {
-        if (!jwt) return;
-        if (!loaded && !loading) load(jwt);
-    }, [jwt, loading, load, loaded]);
     useEffect(() => {
         setRecords(Object.entries(groupEventsByDate(events.filter(event =>
                 event.calendar === CalendarName.INZERSDORF
@@ -37,12 +33,12 @@ export default function LimitedEventEditing() {
     }, [currentEvent]);
 
     function saveMusic() {
-        fetchJson("/api/calendar/music", {json: {music, eventId: currentEvent?.id}, jwt}, {
+        fetchJson("/api/calendar/music", {json: {music, eventId: currentEvent?.id}}, {
             success: "Musik wurde gespeichert",
             error: "Ein Fehler hat das Speichern verhindert",
             pending: "Musik wird gespeichert..."
         }).then(event => {
-            load(jwt);
+            load();
             setCurrentEvent(event);
         });
     }

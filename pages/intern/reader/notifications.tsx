@@ -21,14 +21,12 @@ import {ReaderSite} from "./index";
 export default function Index(props: { liturgy: LiturgyData }) {
 
     const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
-    const jwt = useUserStore(state => state.jwt);
 
     const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!);
     const parishReaders = readers.filter(person => person.parish === reader.parish || person.parish === "all");
 
     async function informPersonPerMail(tasks: ReaderTask<CalendarEvent>[]) {
         await fetchJson("/api/reader/mail", {
-            jwt,
             json: {eventIds: tasks.map(job => job.event.id), personId: tasks[0].data.userId}
         }, {
             pending: "Mails wird gesendet",
@@ -47,7 +45,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                 status: 'informed'
             }
         }]));
-        return fetchJson("/api/reader/save", {jwt, json: changes({})}, {
+        return fetchJson("/api/reader/save", {json: changes({})}, {
             pending: "Status wird gespeichert",
             error: "Status wurde nicht gespeichert",
             success: "Status wurde gespeichert"

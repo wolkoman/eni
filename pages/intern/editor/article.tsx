@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
 import {saveFile} from "../../../util/save-file";
-import {useUserStore} from "../../../util/use-user-store";
+import {useAuthenticatedUserStore, useUserStore} from "../../../util/use-user-store";
 import {Permission} from "../../../util/verify";
 import Button from "../../../components/Button";
 import Responsive from "../../../components/Responsive";
@@ -37,7 +37,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
         </div>;
     }
 
-    const [jwt, user, userLoad] = useUserStore(store => [store.jwt, store.user, store.load]);
+    const {user} = useAuthenticatedUserStore();
     const permission = user?.permissions?.[Permission.Editor] ?? false;
     const editable = permission || props.article.status === "writing";
     const {query: {articleId}} = useRouter();
@@ -65,7 +65,6 @@ export default function Index(props: { article: Collections['paper_articles'], p
         }
     }, [text, props.article.char_max, props.article.char_min, warning.active]);
     useEffect(() => {
-        userLoad();
         const interval = setInterval(() => save(), 10000);
         return () => clearInterval(interval);
     }, []);
@@ -85,7 +84,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
         if (!editable) return Promise.reject();
         if (saved === 'saved') return Promise.resolve();
         setSaved('saving');
-        return fetchJson("/api/editor/save", {json: {articleId, text}, jwt})
+        return fetchJson("/api/editor/save", {json: {articleId, text}})
             .then(() => setSaved('saved'))
             .catch(() => {
                 setSaved('error');
@@ -104,7 +103,6 @@ export default function Index(props: { article: Collections['paper_articles'], p
         setStatusLoading(true);
         return fetchJson("/api/editor/saveStatus", {
             json: {status: newStatus, articleId},
-            jwt
         }, {
             pending: "Status wird gespeichert",
             error: "Status konnte nicht gespeichert werden",

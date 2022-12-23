@@ -2,11 +2,13 @@ import React from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {useUserStore} from '../../util/use-user-store';
+import {useAuthenticatedUserStore, useUserStore} from '../../util/use-user-store';
 import {InternButton} from "../../components/InternButton";
 
 export default function Intern() {
-    const [permissions, user, logout] = useUserStore(state => [state.user?.permissions, state.user, state.logout]);
+    const {user} = useAuthenticatedUserStore();
+    const permissions = user?.permissions;
+    const [logout] = useUserStore(state => [state.logout]);
     usePermission([]);
     return <Site title="Mitgliedsbereich">
         <div>

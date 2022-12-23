@@ -7,16 +7,14 @@ import {TemplateHandler} from 'easy-template-x';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
-import {groupEventsByDate, useCalendarStore} from '../../util/use-calendar-store';
+import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from '../../util/use-calendar-store';
 import {saveFile} from "../../util/save-file";
 import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
 
 export default function InternArticles() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
-    const [events, loaded, load] = useCalendarStore(state => [state.items, state.loaded, state.load])
-
-    useEffect(() => load(), [load])
+    const {items: events, loaded} = useAuthenticatedCalendarStore()
 
     function pad(num: number) {
         return `${num < 10 ? '0' : ''}${num}`
