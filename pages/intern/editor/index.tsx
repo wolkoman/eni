@@ -25,7 +25,7 @@ export default function Index() {
                 .map(project => <InternButton href={`editor/project?projectId=${project._id}`} key={project._id}>
                     <div className="text-2xl font-bold">{project.name}</div>
                     <div
-                        className="text-lg">Redaktionsschluss: {new Date(project.deadline).toLocaleDateString("de-AT")}</div>
+                        className="text-lg font-medium">Redaktionsschluss: {new Date(project.deadline).toLocaleDateString("de-AT")}</div>
                 </InternButton>)}
         </div>
     </Site>

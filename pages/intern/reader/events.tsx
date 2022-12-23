@@ -27,7 +27,7 @@ function PersonSelector(props: { persons: Collections['person'][], person: strin
     }
 
     return <input
-        list="persons" className="px-3 py-1 rounded"
+        list="persons" className="px-3 py-1 rounded print:p-0"
         defaultValue={props.persons.find(p => p._id === props.person)?.name}
         onChange={({target}) => onChange(target.value)}
     />;
@@ -44,20 +44,21 @@ function LiturgyEvent(props: {
     selectPerson: (role: 'reading1' | 'reading2', userId: string) => any
 }) {
     const activeLiturgy = props.liturgies.find(liturgy => liturgy.name === props.readerData?.liturgy);
-    return <div className="bg-black/5 rounded-lg  overflow-hidden">
+    const statusColors = {assigned: 'bg-blue-500', informed: 'bg-green-600', cancelled: 'bg-red-600'};
+    return <div className={`bg-black/5 rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"}`}>
         <div
-            className={`flex gap-2  px-3 py-0.5 w-full ${!props.active ? 'hover:bg-black/10 cursor-pointer ' : "text-lg font-bold"}`}
+            className={`flex gap-2 px-3 py-0.5 w-full print:p-0 print:hidden ${!props.active ? 'hover:bg-black/5 cursor-pointer ' : 'bg-black/5'}`}
             onClick={props.setActive}>
-            <div className={`w-3 h-3 my-1.5 rounded ${{assigned: 'bg-blue-500', informed: 'bg-green-600', cancelled: 'bg-red-600'}[props.readerData?.reading1?.status]}`} />
-            <div className={`w-3 h-3 my-1.5 rounded ${{assigned: 'bg-blue-500', informed: 'bg-green-600', cancelled: 'bg-red-600'}[props.readerData?.reading2?.status]}`} />
+            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.reading1?.status]}`} />
+            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.reading2?.status]}`} />
             <div className="w-12">
                 {new Date(props.event.start.dateTime).toLocaleTimeString().substring(0, 5)}
             </div>
             <div>{props.event.summary}</div>
         </div>
-        {props.active && <div className="p-3 flex flex-col gap-3">
+        <div className={`p-3 flex flex-col gap-3  print:p-0 ${!props.active && 'hidden print:block'}`}>
             <div className="flex flex-col lg:flex-row">
-                <div className="w-32">Liturgien:</div>
+                <div className="w-64 print:hidden">Liturgien:</div>
                 <div className="flex flex-col">
                     {props.liturgies
                         .sort(compareLiturgy)
@@ -65,30 +66,36 @@ function LiturgyEvent(props: {
                         .map(({liturgy, active}) => <div
                             key={liturgy.name}
                             onClick={!active ? () => props.selectLiturgy(liturgy.name) : undefined}
-                            className={`px-2 py-0.5 rounded ${active ? 'font-bold' : ' cursor-pointer hover:bg-black/5'}`}
+                            className={`px-2 py-0.5 rounded ${active ? 'font-bold' : 'cursor-pointer hover:bg-black/5 print:hidden'}`}
                         >
                             {liturgy.name} {liturgy.rank && `[${liturgy.rank}]`}
                         </div>)}
                 </div>
             </div>
             {activeLiturgy && <>
-                <div className="flex flex-col lg:flex-row">
-                    <div className="w-52">1. Lesung ({activeLiturgy.reading1}):</div>
+                <div className="flex flex-col lg:flex-row print:flex-row">
+                    <div className="w-64">1. Lesung ({activeLiturgy.reading1}):</div>
                     <PersonSelector
                         persons={props.readers}
                         person={props.readerData?.reading1?.id}
                         onChange={personId => props.selectPerson('reading1', personId)}/>
                 </div>
-                {activeLiturgy.reading2 && <div className="flex flex-col lg:flex-row">
-                    <div className="w-52">2. Lesung ({activeLiturgy.reading2}):</div>
+                {activeLiturgy.reading2 && <div className="flex flex-col lg:flex-row print:flex-row">
+                    <div className="w-64">2. Lesung ({activeLiturgy.reading2}):</div>
                     <PersonSelector
                         persons={props.readers}
                         person={props.readerData?.reading2?.id}
                         onChange={personId => props.selectPerson('reading2', personId)}/>
                 </div>}
+                {props.readerData.cancelledBy && <div className="flex flex-col lg:flex-row print:flex-row">
+                    <div className="w-64">Abgesagt:</div>
+                    <div className="flex flex-col">
+                        {props.readerData.cancelledBy.map(id => <div>{props.readers.find(reader => reader._id === id)!.name}</div>)}
+                    </div>
+                </div>}
             </>}
 
-        </div>}
+        </div>
 
     </div>;
 }
@@ -100,7 +107,8 @@ export default function Index(props: { liturgy: LiturgyData }) {
     const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
 
     async function selectLiturgy(eventId: string, liturgy: string) {
-        fetchJson("/api/reader/save", {json: {[eventId]: {liturgy}}}, {
+        const date = events.find(event => event.id === eventId)!.date;
+        fetchJson("/api/reader/save", {json: {[eventId]: {liturgy, date}}}, {
             pending: "Liturgie wird gespeichert",
             error: "Liturgie wurde nicht gespeichert",
             success: "Liturgie wurde gespeichert"
@@ -136,7 +144,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
             {parishReaders.map(person => <option key={person._id}>{person.name}</option>)}
         </datalist>
         <div className="flex flex-col gap-2">
-            <div>
+            <div className="print:hidden">
                 <input
                     type="checkbox"
                     defaultChecked={showOnlySpecial}

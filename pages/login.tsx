@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function Events() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
     const [disabled, setDisabled] = useState(false);
-    const [user, _login, loading] = useUserStore(state => [state.user, state.login, state.loading])
+    const [user, _login, setJwt, loading] = useUserStore(state => [state.user, state.login, state.setJwt, state.loading])
     const router = useRouter();
 
     useEffect(() => {
@@ -18,18 +18,23 @@ export default function Events() {
             setData({username: '', password: ''});
         }
     }, [user, router, setData]);
+    useEffect(() => {
+        if (router.query.jwt) setJwt(router.query.jwt as string).then(onLogin);
+    }, [router.query.jwt])
+
+    function onLogin() {
+        setDisabled(true);
+        router.push(router.query.redirect ? router.query.redirect as string : '/intern');
+    }
 
     function login() {
         toast.promise(_login(data), {
             error: 'Anmeldedaten sind nicht korrekt',
             pending: 'Anmeldung läuft...',
             success: 'Anmeldung erfolgreich'
-        }).then(() => {
-            setDisabled(true);
-            router.push(router.query.redirect ? router.query.redirect as string : '/intern');
-        }).catch(() => {
-            setPartialData({password: ''});
-        });
+        })
+            .then(() => onLogin())
+            .catch(() => setPartialData({password: ''}));
     }
 
     function buttonDisabled() {
@@ -45,9 +50,11 @@ export default function Events() {
                     <div className="font-bold text-2xl mb-5">Eine Neue Initiative</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
                            value={data.username}
+                           disabled={loading}
                            onChange={(event) => setData({...data, username: (event as any).target.value})}/>
                     <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-gray-200" type="password"
                            value={data.password}
+                           disabled={loading}
                            onChange={(event) => setData({...data, password: (event as any).target.value})}
                            onKeyDown={(e) => {
                                if (e.key === "Enter" && !buttonDisabled()) login()

@@ -2,7 +2,9 @@ import create from 'zustand';
 import {fetchJson} from './fetch-util';
 import {User} from './user';
 import {useEffect} from "react";
-import {deleteCookie} from "cookies-next";
+import {deleteCookie, getCookie, setCookie} from "cookies-next";
+import {JwtPayload, verify} from "jsonwebtoken";
+import {type} from "os";
 
 export function useAuthenticatedUserStore() {
 
@@ -13,7 +15,13 @@ export function useAuthenticatedUserStore() {
     return {user, loaded};
 }
 
+function decodeJwt(jwt: string): { user: User, exp: number } {
+    const payload = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as JwtPayload;
+    return {user: payload as User, exp: payload.exp!};
+}
+
 export const useUserStore = create<{
+    setJwt: (jwt: string) => Promise<any>,
     user?: User,
     load: () => void,
     login: (data: { username: string, password: string }) => Promise<any>,
@@ -23,31 +31,34 @@ export const useUserStore = create<{
 }>((set, get) => ({
     loaded: false,
     loading: false,
+    setJwt: async (jwt) => {
+        if (get().loading) return;
+        set(state => ({...state, loading: true}));
+        setCookie("jwt", jwt);
+        const {user} = decodeJwt(jwt);
+        set({user, loaded: true, loading: false});
+    },
     login: (data) => {
         if (get().loading) return Promise.resolve();
         set(state => ({...state, loading: true}));
         return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
-            .then(({user, expires}) => {
-                set(state => ({...state, user, loaded: true, loading: false}));
-                localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('expires', JSON.stringify(expires));
+            .then(() => {
+                const {user} = decodeJwt(getCookie("jwt") as string);
+                set({user, loaded: true, loading: false});
             }).catch(() => {
-                set(state => ({...state, loading: false}));
+                set({loading: false});
                 throw new Error();
             })
     },
     logout: () => {
         set(state => ({...state, user: undefined, loaded: true}));
-        localStorage.clear();
         deleteCookie('jwt');
     },
     load: () => {
         if (get().loaded) return;
-        const expired = JSON.parse(localStorage.getItem('user') ?? '0') < new Date().getTime();
-        set(state => ({
-            ...state,
-            user: expired ? null : (JSON.parse(localStorage.getItem('user') ?? 'null')),
-            loaded: true
-        }));
+        set({loaded: true});
+        const jwt = getCookie('jwt');
+        if(typeof jwt !== "string") return;
+        set({user: decodeJwt(jwt).user, loaded: true});
     }
 }));

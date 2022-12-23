@@ -20,13 +20,13 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     function MoreOptions(cprops: { editable: any, onSave: () => Promise<void>, saved: "saving" | "saved" | "justnow" | "error", permission: any, value: any, disabled: boolean, onSaveStatusChange: (status: Collections['paper_articles']['status']) => any, onFinish: () => void }) {
         return <div className="flex space-x-2 text-black/80">
-            {cprops.editable && <Button label="Speichern" secondary={true} onClick={cprops.onSave}
+            {cprops.editable && <Button label="Speichern" onClick={cprops.onSave}
                                         disabled={cprops.saved === "saving" || cprops.saved === "saved"}/>}
             {cprops.permission ? <>
-                <Button label="Versionen" secondary={true}
+                <Button label="Versionen"
                         onClick={() => router.push(`/intern/editor/version?articleId=${props.article._id}`)}/>
                 <select
-                    className="px-3 py-1 border border-black/60 bg-black/5 rounded cursor-pointer"
+                    className="px-3 py-1 bg-black/5 rounded-lg cursor-pointer"
                     value={cprops.value} disabled={cprops.disabled}
                     onChange={event => cprops.onSaveStatusChange(event.target?.value as any)}>
                     <option value="writing">In Arbeit</option>

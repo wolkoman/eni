@@ -54,16 +54,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         body: JSON.stringify({
             Messages: [
                 {
-                    From: {
-                        Email: "admin@tesarekplatz.at",
-                        Name: user.name
-                    },
-                    To: [
-                        {
-                            Email: person.email,
-                            Name: person.name
-                        }
-                    ],
+                    From: {Email: "admin@tesarekplatz.at", Name: user.name},
+                    To: [{Email: person.email, Name: person.name}],
                     TemplateID: 4375769,
                     TemplateLanguage: true,
                     Subject: "Lesetermine",
@@ -97,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         return response.json();
     }).then(response => console.log("MJ", response))
+    console.log("MAIL SENT OK");
     res.json({ok: true});
 
 }

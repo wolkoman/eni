@@ -2,18 +2,30 @@ import create from 'zustand';
 import {fetchJson} from './fetch-util';
 import {Collections} from 'cockpit-sdk';
 import {ReaderData} from "./reader";
-import {useAuthenticatedUserStore, useUserStore} from "./use-user-store";
+import {useAuthenticatedUserStore} from "./use-user-store";
 import {useEffect} from "react";
 import {CalendarName} from "./calendar-info";
 import {CalendarEvent} from "./calendar-types";
 
 export function useAuthenticatedReaderStore() {
     const {user} = useAuthenticatedUserStore();
-    const [loading, error, readers, readerData, events, setReaderData, parish, setParish] = useReaderStore(state => [state.loading, state.error, state.readers, state.readerData, state.events, state.setReaderData, state.parish, state.setParish]);
+    const store = useReaderStore(state => state);
     useEffect(() => {
-        if (user?.parish && user.parish !== CalendarName.ALL) setParish(user.parish);
+        if (user?.parish && user.parish !== CalendarName.ALL) store.setParish(user.parish);
     }, [user?.parish]);
-    return {loading, error, readers, readerData, setReaderData, parish, setParish, events};
+    useEffect(() => {
+        if (!store.loaded) store.load();
+    }, [store.loaded])
+    return {
+        loading: store.loading,
+        error: store.error,
+        readers: store.readers,
+        readerData: store.readerData,
+        setReaderData: store.setReaderData,
+        parish: store.parish,
+        setParish: store.setParish,
+        events: store.events
+    };
 }
 
 export const useReaderStore = create<{
@@ -42,11 +54,11 @@ export const useReaderStore = create<{
             readerData: {...data.readerData, ...x}
         }))
     },
-    load: (jwt?: string) => {
+    load: () => {
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
-        fetchJson('/api/reader', {jwt})
+        fetchJson('/api/reader')
             .then(data => set(state => ({
                 ...state,
                 loading: false,
@@ -58,7 +70,7 @@ export const useReaderStore = create<{
             .catch(() => {
                 setTimeout(() => {
                     set(state => ({...state, loaded: false}));
-                    get().load(jwt);
+                    get().load();
                 }, 3000);
                 set({loaded: true, loading: false, error: true});
             });

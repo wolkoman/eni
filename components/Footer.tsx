@@ -10,7 +10,7 @@ export default function Footer() {
     const {user} = useAuthenticatedUserStore();
     const emmausProd = useEmmausProd();
     return <>
-        <div className="pt-6 text-neutral-600 mt-6">
+        <div className="pt-6 text-neutral-600 mt-6 print:hidden">
             <Responsive>
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 justify-between md:items-center mb-5">
                     <div>

@@ -59,16 +59,10 @@ export default function Orgel() {
       .then(() => {
         const myBookings = data.myBookings.filter(b => b.id !== booking.id);
         if(data.date === booking.start.dateTime.substring(0, 10)){
-          setPartialData(data => {
-            console.log({
-              myBookings,
-              availableSlots: [...data.availableSlots, new Date(booking.start.dateTime).toISOString()]
-            })
-            return ({
-              myBookings,
-              availableSlots: [...data.availableSlots, new Date(booking.start.dateTime).toISOString().replace(".000Z","Z")]
-            });
-          });
+          setPartialData(data => ({
+                myBookings,
+                availableSlots: [...data.availableSlots, new Date(booking.start.dateTime).toISOString().replace(".000Z", "Z")]
+              }));
         }else{
           setPartialData({myBookings});
         }

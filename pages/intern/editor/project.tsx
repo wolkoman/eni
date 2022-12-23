@@ -21,12 +21,12 @@ export default function Index() {
 
     return <Site title={`Projekt ${project?.name ?? ''}`}>
         <div className="flex mb-4">
-            <Link href="."><Button label="Zurück" secondary={true}/></Link>
+            <Link href="."><Button label="Zurück"/></Link>
         </div>
         {!project && <EniLoading/>}
         <table className="table-auto border-collapse">
             <tbody>
-            {project?.articles.map(article => <tr className="border-b border-black/10 md:text-lg">
+            {project?.articles.sort((a,b) => a.name.localeCompare(b.name)).map(article => <tr className="border-b border-black/10 md:text-lg">
                 <td className="font-bold p-2">
                     <Link href={`article?articleId=${article._id}`}
                           key={article._id} className="">

@@ -1,9 +1,8 @@
 import React from "react";
 
 export function Hamburger(props: {onClick?: () => any}) {
-    return <div className="flex flex-col justify-center items-center md:hidden" onClick={props.onClick}>
-        <div className="bg-white h-1 w-8 mb-1.5 mt-2"/>
-        <div className="bg-white h-1 w-8 mb-1.5"/>
-        <div className="bg-white h-1 w-8 mb-1.5"/>
+    return <div className="flex flex-col justify-center items-center md:hidden gap-2" onClick={props.onClick}>
+        <div className="bg-black/60 h-1 w-6 rounded"/>
+        <div className="bg-black/60 h-1 w-6 rounded"/>
     </div>;
 }

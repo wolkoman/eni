@@ -26,7 +26,7 @@ export function ReaderSite(props: { children: ReactNode }) {
     const inactive = 'grayscale opacity-20 contrast-50 cursor-pointer';
     return <Site title="Lektor:innen" responsive={false}>
         <div className="flex flex-col lg:flex-row">
-            <div>
+            <div className="print:hidden">
                 <div
                     className="flex lg:flex-col h-20 lg:h-auto lg:w-20 p-4 gap-2 bg-black/5 rounded-r-xl grow-0 lg:sticky top-0">
                     <img src="/logo/emmaus.svg"
@@ -38,14 +38,14 @@ export function ReaderSite(props: { children: ReactNode }) {
                     <img src="/logo/neustift.svg"
                          onClick={() => setParish(CalendarName.NEUSTIFT)}
                          className={`${parish === CalendarName.NEUSTIFT ? '' : inactive} ${belongsTo(CalendarName.NEUSTIFT) || 'hidden'}`}/>
-                    <Link href="/intern/reader/my">
+                    <Link href="/intern/reader/my" legacyBehavior={true}>
                         <img src="/logo/persons.svg" className="cursor-pointer"/>
                     </Link>
                     {user?.permissions[Permission.Admin] && <>
-                        <Link href="/intern/reader/events">
+                        <Link href="/intern/reader/events" legacyBehavior={true}>
                             <img src="/logo/events.svg" className="cursor-pointer"/>
                         </Link>
-                        <Link href="/intern/reader/notifications">
+                        <Link href="/intern/reader/notifications" legacyBehavior={true}>
                             <img src="/logo/notifications.svg" className="cursor-pointer"/>
                         </Link>
                     </>}

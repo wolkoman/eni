@@ -22,7 +22,8 @@ export default function Index(props: { liturgy: LiturgyData }) {
 
     const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
 
-    const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!);
+    const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!)
+        .filter(task => new Date(task.event?.date) > new Date());
     const parishReaders = readers.filter(person => person.parish === reader.parish || person.parish === "all");
 
     async function informPersonPerMail(tasks: ReaderTask<CalendarEvent>[]) {
@@ -51,8 +52,6 @@ export default function Index(props: { liturgy: LiturgyData }) {
             success: "Status wurde gespeichert"
         }).then(() => setReaderData(changes(readerData)))
     }
-    console.log({tasks});
-
 
     return <ReaderSite>
         <div className="flex flex-col gap-3">

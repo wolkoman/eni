@@ -1,10 +1,12 @@
 export interface ReaderTask<T> {
     event: T;
-    data: { role: 'reading1' | 'reading2', userId: string, status: string };
+    data: { role: ReaderRole, userId: string, status: string };
 }
+
+export type ReaderRole = 'reading1' | 'reading2';
 export type ReaderStatus = 'assigned' | 'informed' | 'cancelled';
 export type ReaderInfo = { id: string, name: string, status: ReaderStatus };
-export type ReaderData = { [eventId: string]: { liturgy: string, reading1: ReaderInfo, reading2: ReaderInfo }}
+export type ReaderData = { [eventId: string]: { liturgy: string, reading1: ReaderInfo, reading2: ReaderInfo, cancelledBy?: string[] }}
 
 export function getTasksFromReaderData<T>(readerData: ReaderData, eventMapper: (eventId: string) => T): ReaderTask<T>[] {
     return Object.entries(readerData)

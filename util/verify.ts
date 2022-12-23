@@ -45,7 +45,6 @@ export function resolvePermissionsForCompetences(competences: Collections['perso
 
 export function resolveUserFromRequest(req: NextApiRequest): User | undefined{
   const jwt = getCookie('jwt', {req})
-  console.log({jwt})
   if(!jwt || jwt === true) return undefined;
   return resolveUser(jwt);
 }
@@ -54,7 +53,6 @@ export function resolveUser(jwt: string): User | undefined{
   try{
     const user = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as User | undefined;
     if(user === undefined) return undefined;
-    console.log({user})
     return {...user};
   }catch (e){
     return undefined;

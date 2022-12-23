@@ -8,6 +8,8 @@ import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events
 
 const READER_ID = "637b85bc376231d51500018d";
 
+export const revalidate = 0;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const user = resolveUserFromRequest(req);
