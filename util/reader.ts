@@ -11,6 +11,7 @@ export type ReaderData = { [eventId: string]: { liturgy: string, reading1: Reade
 export function getTasksFromReaderData<T>(readerData: ReaderData, eventMapper: (eventId: string) => T): ReaderTask<T>[] {
     return Object.entries(readerData)
         .map(([eventId, data]) => ({event: eventMapper(eventId), data}))
+        .filter(({event}) => event)
         .flatMap(({event, data}) => [
             {
                 event,
