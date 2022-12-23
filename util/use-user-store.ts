@@ -37,10 +37,9 @@ export const useUserStore = create<{
             })
     },
     logout: () => {
-        set(state => ({...state, user: undefined, loaded: false}));
+        set(state => ({...state, user: undefined, loaded: true}));
         localStorage.clear();
         deleteCookie('jwt');
-        location.href = '/';
     },
     load: () => {
         if (get().loaded) return;

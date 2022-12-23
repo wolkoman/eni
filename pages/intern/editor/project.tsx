@@ -6,19 +6,24 @@ import {fetchJson} from "../../../util/fetch-util";
 import {useUserStore} from "../../../util/use-user-store";
 import {useRouter} from "next/router";
 import Button from "../../../components/Button";
+import {usePermission} from "../../../util/use-permission";
+import {Permission} from "../../../util/verify";
+import {EniLoading} from "../../../components/Loading";
 
 export default function Index() {
 
     const [project, setProject] = useState<{articles: Collections['paper_articles'][], name: string}>();
     const {query: {projectId}} = useRouter();
+    usePermission([Permission.Editor]);
     useEffect(() => {
         fetchJson("/api/editor/project", {json: {projectId}}).then(projects => setProject(projects));
     }, [projectId])
 
-    return <Site title={`Projekt ${project?.name}`}>
+    return <Site title={`Projekt ${project?.name ?? ''}`}>
         <div className="flex mb-4">
             <Link href="."><Button label="Zurück" secondary={true}/></Link>
         </div>
+        {!project && <EniLoading/>}
         <table className="table-auto border-collapse">
             <tbody>
             {project?.articles.map(article => <tr className="border-b border-black/10 md:text-lg">

@@ -2,13 +2,16 @@ import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import {fetchJson} from "../../../util/fetch-util";
-import {useAuthenticatedUserStore, useUserStore} from "../../../util/use-user-store";
+import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {InternButton} from "../../../components/InternButton";
+import {usePermission} from "../../../util/use-permission";
+import {Permission} from "../../../util/verify";
 
 export default function Index() {
 
     const [projects, setProjects] = useState<Collections['paper_projects'][]>();
     const {user} = useAuthenticatedUserStore();
+    usePermission([Permission.Editor]);
     useEffect(() => {
         fetchJson("/api/editor/projects").then(projects => setProjects(projects));
     }, [setProjects])

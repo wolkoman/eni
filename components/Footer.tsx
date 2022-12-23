@@ -7,7 +7,7 @@ import Button from "./Button";
 import {useEmmausProd} from "../util/use-emmaus-prod";
 
 export default function Footer() {
-    const user = useAuthenticatedUserStore();
+    const {user} = useAuthenticatedUserStore();
     const emmausProd = useEmmausProd();
     return <>
         <div className="pt-6 text-neutral-600 mt-6">
