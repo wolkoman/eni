@@ -63,8 +63,8 @@ export async function getCalendarEvents(calendarName: CalendarName, options: Get
         timeZone: 'Europa/Vienna',
         orderBy: 'startTime'
     });
-    const readerData = await ([GetEventPermission.PRIVATE_ACCESS, GetEventPermission.READER].includes(options.permission)
-            ? getCachedReaderData()
+    const readerData = await (options.permission === GetEventPermission.PRIVATE_ACCESS
+            ? options.getReaderData()
             : Promise.resolve({})
     );
 
@@ -116,7 +116,7 @@ export enum GetEventPermission {
 
 export type GetEventOptions =
     { permission: GetEventPermission.PUBLIC }
-    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: {min: Date, max: Date } }
+    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: {min: Date, max: Date }, getReaderData: () => Promise<ReaderData> }
     | { permission: GetEventPermission.READER, ids: string[] }
 
 export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {

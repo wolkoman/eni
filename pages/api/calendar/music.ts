@@ -4,6 +4,7 @@ import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";
 import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -42,7 +43,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         eventId: req.body.eventId,
         requestBody: {description: newDescription.trim()}
     }).then((event) => {
-        res.status(200).json(mapGoogleEventToEniEvent(CalendarName.INZERSDORF, {permission: GetEventPermission.PRIVATE_ACCESS})(event.data));
+        const eniEvent = mapGoogleEventToEniEvent(CalendarName.INZERSDORF, {
+            permission: GetEventPermission.PRIVATE_ACCESS,
+            getReaderData: getCachedReaderData
+        })(event.data);
+        invalidateCachedReaderData();
+        res.status(200).json(eniEvent);
     }).catch((err) => {
         res.status(500).json({err});
     });

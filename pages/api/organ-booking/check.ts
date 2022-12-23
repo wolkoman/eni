@@ -4,6 +4,7 @@ import {Temporal} from '@js-temporal/polyfill';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {CalendarName} from "../../../util/calendar-info";
 import {CalendarTag} from "../../../util/calendar-types";
+import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -40,8 +41,9 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
     const events = await Promise.all([
         CalendarName.INZERSDORF,
         CalendarName.INZERSDORF_ORGAN
-    ].map(name => getCalendarEvents(name, {permission: GetEventPermission.PRIVATE_ACCESS, timeFrame:{min: timeMin, max: timeMax}})
-    )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)))
+    ].map(name => getCalendarEvents(name, {permission: GetEventPermission.PRIVATE_ACCESS, timeFrame:{min: timeMin, max: timeMax}, getReaderData: getCachedReaderData})
+    )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)));
+    invalidateCachedReaderData();
 
     if (events.some(event => event.wholeday)) {
         return [];

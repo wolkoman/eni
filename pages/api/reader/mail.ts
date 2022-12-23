@@ -8,6 +8,7 @@ import {CalendarTag} from "../../../util/calendar-types";
 import {LiturgyData} from "../liturgy";
 import {sign} from "jsonwebtoken";
 import {User} from "../../../util/user";
+import {getCachedReaderData, invalidateCachedReaderData} from "./index";
 
 const READER_ID = "637b85bc376231d51500018d";
 
@@ -20,7 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS}).then(x => x.events);
+    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS, getReaderData: getCachedReaderData}).then(x => x.events);
+    invalidateCachedReaderData();
     const data: ReaderData = await cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
     const liturgy: LiturgyData = await cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await cockpit.collectionGet('person').then(x => x.entries);

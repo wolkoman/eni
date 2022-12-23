@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {getCalendarEvents, GetEventPermission} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {CalendarName} from "../../../util/calendar-info";
+import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -12,7 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  res.json((await getCalendarEvents(CalendarName.INZERSDORF_ORGAN, {permission: GetEventPermission.PRIVATE_ACCESS}))
-      .filter(event => event.summary === user.name));
+  const events = await getCalendarEvents(CalendarName.INZERSDORF_ORGAN, {permission: GetEventPermission.PRIVATE_ACCESS, getReaderData: getCachedReaderData})
+      .then(events => events.filter(event => event.summary === user.name));
+  invalidateCachedReaderData();
+  res.json(events);
 
 }

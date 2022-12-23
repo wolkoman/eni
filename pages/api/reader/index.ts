@@ -21,9 +21,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const readerData = await getCachedReaderData();
     const events = await getCachedEvents(user.permissions[Permission.ReaderPlanning]
-        ? {permission: GetEventPermission.PRIVATE_ACCESS}
+        ? {permission: GetEventPermission.PRIVATE_ACCESS, getReaderData: getCachedReaderData}
         : {permission: GetEventPermission.READER, ids: Object.keys(readerData)}
     );
+    invalidateCachedReaderData();
     const readers = await cockpit.collectionGet("person").then(x => x.entries
         .filter(person => person.competences?.includes('reader') && person.active)
         .filter(person => user.parish === CalendarName.ALL || user.parish === person.parish)
@@ -46,8 +47,6 @@ export const getCachedReaderData = async (): Promise<ReaderData> => {
         cachedReadingData = await cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data)
     return cachedReadingData!;
 }
-export const getCachedPersonData = async (): Promise<Collections['person'][]> => {
-    if (!cachedPersonData)
-        cachedPersonData = await cockpit.collectionGet("person").then(x => x.entries)
-    return cachedPersonData!;
+export const invalidateCachedReaderData = () => {
+    cachedReadingData = undefined;
 }
