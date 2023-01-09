@@ -1,8 +1,9 @@
 import {CalendarEvent, CalendarGroup} from "./calendar-types";
 import {notifyAdmin} from "./telegram";
+import {calendar_v3} from "googleapis";
 
-export function getGroupFromEvent(event: any): CalendarGroup[] {
-    const sum = event.summary.toLowerCase();
+export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGroup[] {
+    const sum = event.summary!.toLowerCase();
     let conditions: (CalendarGroup | false)[] = [
         sum.includes("wallfahrt") && CalendarGroup.Wallfahrt,
         sum.startsWith("grabwache") && CalendarGroup.Grabwache,
@@ -35,6 +36,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("woche des lebens") && CalendarGroup.Kinder,
         sum.includes("jugendtreffen") && CalendarGroup.Jugend,
         sum.startsWith("plauder") && CalendarGroup.Gemeinschaft,
+        sum.includes("sommerfest") && CalendarGroup.Gemeinschaft,
         sum.includes("workshop") && CalendarGroup.Gemeinschaft,
         sum.includes("punschstand") && CalendarGroup.Gemeinschaft,
         sum.includes("liedersingen") && CalendarGroup.Gemeinschaft,
@@ -43,6 +45,7 @@ export function getGroupFromEvent(event: any): CalendarGroup[] {
         sum.includes("offene kirche") && CalendarGroup.Gebet,
         sum.startsWith("bibel aktiv") && CalendarGroup.Gebet,
         sum.includes("liturgie") && CalendarGroup.Gottesdienst,
+        sum.includes("kreuzweg") && CalendarGroup.Gottesdienst,
         sum.includes("andacht") && CalendarGroup.Gottesdienst,
         sum.startsWith("vesper") && CalendarGroup.Gottesdienst,
         sum.includes("worship") && CalendarGroup.Gottesdienst,

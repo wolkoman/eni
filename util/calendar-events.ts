@@ -7,7 +7,6 @@ import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
 import {CalendarEvent, CalendarTag, EventsObject} from "./calendar-types";
 import {getGroupFromEvent} from "./calendar-group";
 import {ReaderData} from "./reader";
-import {getCachedReaderData} from "../pages/api/reader";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
@@ -28,11 +27,15 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
             end: event.end as { dateTime: string },
             calendar: calendarName,
             visibility: event.visibility ?? 'public',
-            groups: getGroupFromEvent(event),
+            groups: (calendarName !== CalendarName.INZERSDORF_ORGAN
+                    ? () => getGroupFromEvent(event)
+                    : () => []
+            )(),
             tags: [
                 !(event.summary + (event.description ?? '')).match(notInChurchRegex) && privateAccess && CalendarTag.inChurch,
                 event.visibility === 'private' && CalendarTag.private,
                 (event.summary + (event.description ?? '')).match(cancelledRegex) && CalendarTag.cancelled,
+                (event.description ?? '').toLowerCase().includes("[ankündigung]") && CalendarTag.announcement,
             ].filter((item): item is CalendarTag => !!item),
             wholeday: !!event.start?.date,
         };
@@ -71,7 +74,7 @@ export async function getCalendarEvents(calendarName: CalendarName, options: Get
 
     function getReaderInfo(event: CalendarEvent) {
         const readerInfo = readerData?.[event.id!] ?? {reading1: null, reading2: null};
-        return (readerInfo.reading1 ? `<br/>1.Lesung: ${readerInfo.reading1?.name}` :'') + (readerInfo.reading2 ? `<br/>2.Lesung: ${readerInfo.reading2?.name}` :'');
+        return (readerInfo.reading1 ? `<br/>1.Lesung: ${readerInfo.reading1?.name}` : '') + (readerInfo.reading2 ? `<br/>2.Lesung: ${readerInfo.reading2?.name}` : '');
 
     }
 
@@ -116,7 +119,7 @@ export enum GetEventPermission {
 
 export type GetEventOptions =
     { permission: GetEventPermission.PUBLIC }
-    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: {min: Date, max: Date }, getReaderData: () => Promise<ReaderData> }
+    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: { min: Date, max: Date }, getReaderData: () => Promise<ReaderData> }
     | { permission: GetEventPermission.READER, ids: string[] }
 
 export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {

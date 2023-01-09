@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import {site} from '../util/sites';
-import React from 'react';
-import {Hamburger} from "./Hamburger";
+import React, {useEffect, useState} from 'react';
 import {useAuthenticatedUserStore} from "../util/use-user-store";
 
 export default function TopBar(props: {title?: string}) {
     const {user} = useAuthenticatedUserStore();
+    const [isFrontpage, setIsFrontpage] = useState(false);
+    useEffect(() => {
+        setIsFrontpage(location.pathname === "/");
+    }, [])
     return <div className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 ${site('','bg-emmaus text-white')}`} data-testid="navbar">
         <Link href={user ? "/intern" : "/"}>
             <div className="text-3xl cursor-pointer" data-testid="title">
@@ -14,7 +17,7 @@ export default function TopBar(props: {title?: string}) {
                         <div className="hidden print:block ml-2 font-bold">{props.title}</div>
                         <img src={site('/logo.svg', '/logo_emmaus.svg')} className="w-32 hidden"/>
                     </div>,
-                    <div className="flex space-x-4">
+                    isFrontpage ? <></> : <div className="flex space-x-4">
                         <div>Pfarre Emmaus</div>
                     </div>
                 )}

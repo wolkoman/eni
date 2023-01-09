@@ -24,6 +24,7 @@ export enum CalendarTag {
     inChurch = "in-church",
     private = 'private',
     cancelled = 'cancelled',
+    announcement = 'announcement',
 }
 
 export enum CalendarGroup {
