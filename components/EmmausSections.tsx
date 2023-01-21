@@ -7,7 +7,7 @@ import {getCockpitResourceUrl} from "./Articles";
 import Button from "./Button";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 
-export function EmmausSections(props: { weeklies: Collections['weekly'][], emmausbote: Collections['Emmausbote'][] }) {
+export function EmmausSections(props: { emmausbote: Collections['Emmausbote'][] }) {
     const paper = props.emmausbote.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
     return <Responsive>
         <Section title="Mitteilungen" id="mitteilungen">
