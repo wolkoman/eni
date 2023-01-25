@@ -26,11 +26,14 @@ export default function EventPage() {
             });
     }
 
-    return <Site title="Ankündigung erstellen">
+    return <Site title="Ankündigung erstellen" showTitle={false}>
         {state === 'success' ? <div className="flex flex-col gap-4 items-start">
             Ihre Ankündigung wurde erfolgreich gespeichert.
             <Button label="Nochmals" onClick={() => setState("form")}/>
-        </div> : <div className="flex flex-col w-full max-w-lg">
+        </div> : <div className="flex flex-col w-full max-w-lg mx-auto">
+            <div className="text-2xl font-bold">
+                Ankündigung erstellen
+            </div>
             <div className="my-6">
                 Diese Ankündigung wird nach erfolgreicher Sichtung in den Wochenmitteilungen der Pfarren erscheinen.
             </div>

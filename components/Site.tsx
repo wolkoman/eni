@@ -37,7 +37,7 @@ export default function Site(props: {
                     </div>)}
                 </>}
                 {(props.responsive ?? true) ? <Responsive narrow={props.narrow}>
-                    {props.title ? <div className="font-bold text-2xl my-4">{site(props.title, null)}</div> : null}
+                    {props.title && props.showTitle ? <div className="font-bold text-2xl my-4">{site(props.title, null)}</div> : null}
                     {props.children}
                 </Responsive> : props.children}
             </div>
