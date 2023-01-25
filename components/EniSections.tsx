@@ -55,13 +55,13 @@ export function EniSections() {
                 </div>
             </div>
         </Section>
-        <Section title="Selbstbedienung">
+        {false && <Section title="Selbstbedienung">
             <div className="flex text-lg">
                 <Link href="/self-service/event" legacyBehavior={true}>
                     <Button label="Termin anmelden" big={true}/>
                 </Link>
             </div>
-        </Section>
+        </Section>}
         <Section title="Pfarren">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
                 <Parish name={CalendarName.EMMAUS}/>
