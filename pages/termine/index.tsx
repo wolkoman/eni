@@ -4,8 +4,8 @@ import {applyFilter, FilterType} from '../../components/calendar/Calendar';
 import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice';
-import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from '../../util/use-calendar-store';
-import {useAuthenticatedUserStore, useUserStore} from '../../util/use-user-store';
+import {groupEventsByDate, useAuthenticatedCalendarStore} from '../../util/use-calendar-store';
+import {useAuthenticatedUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
@@ -33,6 +33,7 @@ export default function EventPage(props: {
     const router = useRouter();
     const [liturgyInformation] = usePreference(Preference.LiturgyInformation);
     const [separateMass] = usePreference(Preference.SeparateMass);
+    const personOrdering = ["Pedro", "Kpl. David", "Kpl. Gil", "Pfv. Marcin", "Pfr. Dr. Brezovski"];
 
     useEffect(() => {
         if (groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})
@@ -40,12 +41,12 @@ export default function EventPage(props: {
     }, [groupQuery, parishQuery]);
     useEffect(() => {
         if (!firstFilterUpdate) {
-            router.push({
+            router.replace({
                 query: {
                     q: filter?.filterType !== "GROUP" ? null : filter.group,
                     p: filter?.filterType !== "PARISH" ? null : filter.parish
                 }
-            }, "/termine")
+            })
         } else {
             setFirstFilterUpdate(false);
         }
@@ -67,14 +68,12 @@ export default function EventPage(props: {
                                 .filter((group, index, groups) => groups.indexOf(group) === index)
                                 .filter(group => separateMass || group !== CalendarGroup.Messe)
                             }
-                            persons={Object.entries(calendar.items
+                            persons={[...new Set(calendar.items
                                 .filter(event => !event.tags.includes(CalendarTag.cancelled))
                                 .map(event => event.mainPerson)
                                 .filter((person): person is string => !!person)
-                                .reduce<{ [name: string]: number }>((p, c) => ({...p, [c]: (p[c] ?? 0) + 1}), {}))
-                                .filter(([name, count]) => !["Pfr. Zluwa Pfarre Neuerlaa", "Ukrani. Priester", "Prälat Rühringer", "Kpl. Hannes Grabner"].includes(name))
-                                .map(([name, count]) => name)
-                                .sort((a, b) => ["Pedro", "Kpl. David", "Kpl. Gil", "Pfv. Marcin", "Pfr. Dr. Brezovski"].indexOf(b) - ["Pedro", "Kpl. David", "Kpl. Gil", "Pfv. Marcin", "Pfr. Dr. Brezovski"].indexOf(a))
+                            )]
+                                .sort((a, b) => personOrdering.indexOf(b) - personOrdering.indexOf(a))
                             }
                         />
                     </div>

@@ -5,9 +5,10 @@ import {Preference, usePreference} from "../util/use-preference";
 
 function SettingsOption(props: { title: string, description: string, name: Preference }) {
     const [preference, setPreference] = usePreference(props.name);
-    return <div className="flex items-start cursor-pointer select-none" onClick={({target}) => setPreference(!preference)}>
+    return <div className="flex items-start cursor-pointer select-none" onClick={() => setPreference(!preference)}>
         <input
             type="checkbox" className="mt-2 mr-4 pointer-events-none" checked={preference}
+            onChange={() => {}}
         />
         <div>
             <div className="font-bold">{props.title}</div>
