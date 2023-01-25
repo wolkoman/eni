@@ -31,6 +31,9 @@ export default function EventPage() {
             Ihre Ankündigung wurde erfolgreich gespeichert.
             <Button label="Nochmals" onClick={() => setState("form")}/>
         </div> : <div className="flex flex-col w-full max-w-lg">
+            <div className="my-6">
+                Diese Ankündigung wird nach erfolgreicher Sichtung in den Wochenmitteilungen der Pfarren erscheinen.
+            </div>
             <Field label="Ihre E-Mail Adresse (wird nicht veröffentlicht)">
                 <SelfServiceInput name="mail" form={form}/>
             </Field>
