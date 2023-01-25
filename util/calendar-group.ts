@@ -1,4 +1,4 @@
-import {CalendarEvent, CalendarGroup} from "./calendar-types";
+import {CalendarGroup} from "./calendar-types";
 import {notifyAdmin} from "./telegram";
 import {calendar_v3} from "googleapis";
 
@@ -65,10 +65,10 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("mette") && CalendarGroup.Weihnachten,
         sum.includes("karfreitag") && CalendarGroup.Ostern,
         sum.includes("speisensegnung") && CalendarGroup.Ostern,
-        sum.includes("aschermittwoch") && CalendarGroup.Ostern,
+        sum.includes("aschermittwoch") && CalendarGroup.Fastenzeit,
         sum.includes("auferstehungsfeier") && CalendarGroup.Ostern,
-        sum.includes("jesu am kreuz") && CalendarGroup.Ostern,
-        sum.includes("gründonnerstag") && CalendarGroup.Ostern,
+        sum.includes("jesu am kreuz") && CalendarGroup.Fastenzeit,
+        sum.includes("gründonnerstag") && CalendarGroup.Karwoche,
         sum.includes("evangel") && CalendarGroup.Invisible,
         sum.includes("taufe") && CalendarGroup.Invisible,
         sum.includes(" ehe") && CalendarGroup.Invisible,
@@ -98,4 +98,18 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
     }
 
     return groups.filter(group => group !== CalendarGroup.Invisible);
+}
+
+export function getGroupSorting(group: CalendarGroup) {
+    return [
+        CalendarGroup.Gebet,
+        CalendarGroup.Wallfahrt,
+        CalendarGroup.Advent,
+        CalendarGroup.Fastenzeit,
+        CalendarGroup.Karwoche,
+        CalendarGroup.Gottesdienst,
+        CalendarGroup.Messe,
+        CalendarGroup.Weihnachten,
+        CalendarGroup.Ostern
+    ].indexOf(group);
 }

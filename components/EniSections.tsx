@@ -5,6 +5,7 @@ import Responsive from "./Responsive";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
 import {InternButton} from "./InternButton";
+import {Personal} from "./Personal";
 
 export function EniSections() {
     return <Responsive>
@@ -55,13 +56,14 @@ export function EniSections() {
                 </div>
             </div>
         </Section>
-        {false && <Section title="Selbstbedienung">
+        {true && <Section title="Selbstbedienung">
             <div className="flex text-lg">
-                <Link href="/self-service/event" legacyBehavior={true}>
+                <Link href="/self-service/announcment" legacyBehavior={true}>
                     <Button label="Termin anmelden" big={true}/>
                 </Link>
             </div>
         </Section>}
+        <Personal/>
         <Section title="Pfarren">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
                 <Parish name={CalendarName.EMMAUS}/>

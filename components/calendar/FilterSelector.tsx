@@ -3,7 +3,7 @@ import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
 import {FilterType} from './Calendar';
 import {ReactNode} from "react";
 import {CalendarGroup} from "../../util/calendar-types";
-import {getGroupSorting} from "./ComingUp";
+import {getGroupSorting} from "../../util/calendar-group";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div

@@ -54,6 +54,12 @@ declare module 'cockpit-sdk' {
       guideline_link: string,
       deadline: string
     } & Object,
+    announcements:{
+      "files": string[],
+      "mail": string,
+      "description": string,
+      hidden: boolean
+    } & Object
     paper_articles: {
       name: string,
       project: Reference,
@@ -90,7 +96,7 @@ declare module 'cockpit-sdk' {
     error: string
   }
 
-  type CollectionGetProps<T> = { filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
+  type CollectionGetProps<T> = { token?: string, filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
 
   class CockpitSDK {
     public host: string;

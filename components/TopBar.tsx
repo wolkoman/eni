@@ -14,16 +14,18 @@ export default function TopBar(props: { title?: string }) {
     return site(<div className="my-2 lg:my-10 overflow-hidden">
         <Responsive>
             <div className="flex justify-between text-sm">
-                <div className=" font-bold">
-                    Zusammenarbeit der Pfarren Emmaus am Wienerberg, Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
-                </div>
+                <Link href="/">
+                    <div className="font-bold">
+                        Zusammenarbeit der Pfarren Emmaus am Wienerberg, Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
+                    </div>
+                </Link>
                 <div className="hidden lg:block">
                     kanzlei@eni.wien
                 </div>
             </div>
-            <div className="relative -mx-16">
+            {isFrontpage ? <></> : <div className="relative -mx-16">
                 <Hero/>
-            </div>
+            </div>}
         </Responsive>
     </div>, <div
         className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 bg-emmaus text-white`} data-testid="navbar">

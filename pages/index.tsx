@@ -57,7 +57,6 @@ export default function HomePage(
                 </Responsive>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
-                <Personal/>
                 <Instagram items={props.instagram}/>
                 <EniSections/>
             </Site>
