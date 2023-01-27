@@ -7,10 +7,11 @@ import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {Preference, usePreference} from "../../util/use-preference";
 import {CalendarName} from "../../util/calendar-info";
-import {Event2, EventDateText, ParishTag2} from "./Event";
+import {Event, EventDateText, ParishTag2} from "./Event";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 
+export const clickable = "bg-black/[2%] hover:bg-black/[4%] cursor-pointer";
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
@@ -32,17 +33,19 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 {groups.slice(0,8).map(([group, eventsObject]) =>
                     <Link
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`overflow-hidden rounded-2xl bg-black/[2%] hover:bg-black/[4%] relative py-6 ${site('', 'px-6')} cursor-pointer`}
+                        className={`overflow-hidden rounded-2xl ${clickable} relative py-6 ${site('px-2 lg:px-0', 'px-6')}`}
                     >
                         <div className="text-2xl font-bold text-center">{group}</div>
                         <div>
                             {Object.entries(eventsObject).map(([date, events]) => <>
-                                    <div className={`${site('ml-24', '')} pl-2 mt-2`}><EventDateText date={new Date(date)}/>
+                                    <div className={`${site('lg:ml-24 lg:pl-2', '')} mt-2`}><EventDateText date={new Date(date)}/>
                                     </div>
                                     {events.map(event => <div key={event.id} className="flex items-start gap-2">
-                                        {site(<ParishTag2 calendar={event.calendar}/>, <div/>)}
+                                        <div className="hidden lg:block">
+                                            {site(<ParishTag2 calendar={event.calendar}/>, <div/>)}
+                                        </div>
                                         <div className="my-1">
-                                            <Event2 key={event.id} event={event}/>
+                                            <Event key={event.id} event={event} hideTagOnLarge={true}/>
                                         </div>
                                     </div>)}
                                 </>
@@ -54,13 +57,13 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             <div className="flex flex-wrap gap-4 pb-4">
                 {groups.slice(8).map(([group]) => <Link
                     href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                    className={"flex-grow rounded-2xl text-xl text-center font-bold bg-black/[2%] hover:bg-black/[4%] p-4 cursor-pointer"}
+                    className={`flex-grow rounded-2xl text-xl text-center font-bold ${clickable} p-4`}
                     key={group}>
                     {group}
                 </Link>)}
             </div>
             <Link href={`${urlPrefix}/termine`}
-                  className="rounded-2xl text-xl text-center font-bold bg-black/[2%] hover:bg-black/[4%] p-4 cursor-pointer block">
+                  className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}>
                 Alle Termine
             </Link>
         </div>

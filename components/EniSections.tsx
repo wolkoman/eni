@@ -14,14 +14,14 @@ export function EniSections() {
                 <div className="flex flex-col items-center">
                     <img src="./Wochenblatt.svg" className="h-44 mb-12"/>
                     <div className="text-3xl font-bold">
-                        Wochenmitteilungen
+                        Wochen&shy;mitteilungen
                     </div>
                     <div className="text-lg my-3">
                         Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu.
                         Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit
                         der gewünschten Pfarre an kanzlei@eni.wien.
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col lg:flex-row gap-2">
                         {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                             <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
                                 <Button label={info.shortName} className={info.className}/>
@@ -32,13 +32,13 @@ export function EniSections() {
                 <div className="flex flex-col items-center">
                     <img src="./Zeitungen.svg" className="h-44 mb-12"/>
                     <div className="text-3xl font-bold">
-                        Pfarrzeitungen
+                        Pfarr&shy;zeitungen
                     </div>
                     <div className="text-lg my-3">
                         Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken
                         und vieles mehr finden Sie in den Pfarrzeitungen der Pfarren.
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col lg:flex-row gap-2">
                         {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                             <Link key={info.id} href={{
                                 emmaus: "https://emmaus.wien/#pfarrzeitung",

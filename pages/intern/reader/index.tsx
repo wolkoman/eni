@@ -11,13 +11,12 @@ import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
 
-export default function Index(props: { liturgy: LiturgyData }) {
+export default function Index() {
 
-    return <ReaderSite>
-    </ReaderSite>;
+    return <ReaderSite/>;
 }
 
-export function ReaderSite(props: { children: ReactNode }) {
+export function ReaderSite(props: { children?: ReactNode }) {
 
     const {user} = useAuthenticatedUserStore();
     const {parish, setParish, ...reader} = useAuthenticatedReaderStore();

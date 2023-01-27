@@ -20,7 +20,7 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
     const announcement = announcements[0];
 
     return <div className="flex flex-col items-center gap-2 my-8">
-            <div className="text-lg flex flex-col justify-center items-center md:flex-row md:gap-8 uppercase">
+            <div className="text-lg flex justify-center items-center flex-row flex-wrap space-x-4 uppercase">
                 <div>{announcement.liturgy ? "Kirchliches Fest" : "Ankündigung"}</div>
                 <div className="flex gap-8">
                     <div><EventDateText date={new Date(announcement.date)}/></div>

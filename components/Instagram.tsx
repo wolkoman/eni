@@ -3,7 +3,9 @@ import Responsive from "./Responsive";
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
-import {useState} from "react";
+import React, {MouseEventHandler, useEffect, useRef} from "react";
+import ScrollContainer from "react-indiana-drag-scroll";
+import {Mouse} from "@playwright/test";
 
 export interface InstagramFeedItem {
     id: string,
@@ -16,8 +18,8 @@ export interface InstagramFeedItem {
     calendar?: CalendarInfo,
 }
 
-function InstagramBig(props: { item: any }) {
-    return <div className="w-screen rounded-lg bg-black/5 max-w-lg">
+function InstagramBig(props: { item: any, onClick: MouseEventHandler<HTMLDivElement> }) {
+    return <div className="rounded-lg bg-black/5 max-w-lg lg:w-screen cursor-pointer" onClick={props.onClick}>
         <div
             style={{backgroundImage: `url(${props.item?.media_url})`}}
             className={`bg-cover relative bg-center aspect-square rounded-lg`}>
@@ -43,32 +45,34 @@ export function Instagram(props: { items: any[] }) {
         text: Aesthetically.unformat(item?.caption.normalize() ?? ''),
     })).map(item => ({
         ...item,
-        calendar: item.text.includes("Emmaus") ? getCalendarInfo(CalendarName.EMMAUS) : (item.text.includes("Nikolaus") ? getCalendarInfo(CalendarName.INZERSDORF) : (item.text.includes("Neustift") ? getCalendarInfo(CalendarName.NEUSTIFT) : null))
+        calendar: item.text.includes("Emmaus")
+            ? getCalendarInfo(CalendarName.EMMAUS)
+            : (item.text.includes("Nikolaus")
+                ? getCalendarInfo(CalendarName.INZERSDORF)
+                : (item.text.includes("Neustift")
+                        ? getCalendarInfo(CalendarName.NEUSTIFT)
+                        : null
+                ))
     }));
-    const [activeIndex, setActiveIndex] = useState(0);
+    const ref = useRef<HTMLElement>();
+    const headerRef = useRef<HTMLElement>();
     return <>
         <Responsive>
+            <div ref={headerRef as any}/>
             <SectionHeader id="pfarrleben">Einblick ins Pfarrleben</SectionHeader>
         </Responsive>
-        <div data-testid="instagram" className="overflow-auto snap-x snap-mandatory">
+        <div className="overflow-auto snap-x snap-mandatory scroll-smooth" ref={ref as any}>
             <Responsive>
-                <div className="lg:hidden">
-                    <div className="flex">
-                        {
-                            feed.map(item => <div className="shrink-0 p-4 -mx-2 w-full snap-center"><InstagramBig
-                                item={item}/></div>)
-                        }
-                    </div>
-
-                </div>
-                <div className="hidden lg:block -mx-4 snap-x snap-mandatory">
-                    <div className="flex">
-                        {
-                            feed.map(item => <div className="shrink-0 p-4 -mx-2 snap-center"><InstagramBig item={item}/>
-                            </div>)
-                        }
-                    </div>
-
+                <div className="flex">
+                    {feed.map(item => <div className="shrink-0 p-4 -mx-2 w-full lg:w-auto snap-center">
+                        <InstagramBig item={item} onClick={({target}) => {
+                            const t = target as HTMLDivElement;
+                            const x = t.getBoundingClientRect().left
+                            const x2 = ref.current!.scrollLeft;
+                            const x3 = headerRef.current!.getBoundingClientRect().left
+                            ref.current!.scrollTo({left: x2+x-x3})
+                        }}/>
+                    </div>)}
                 </div>
             </Responsive>
         </div>

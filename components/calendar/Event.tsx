@@ -5,15 +5,15 @@ import { getMonthName, getWeekDayName } from './Calendar';
 import { ParishTag } from './ParishTag';
 import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 
-export function Event({event, noTag}: { event: CalendarEvent, noTag?: boolean }) {
+export function Event({event, noTag, hideTagOnLarge}: { event: CalendarEvent, noTag?: boolean, hideTagOnLarge?: boolean }) {
     const link = event.groups.includes(CalendarGroup.Messe) ? `termine/${event.id}` : null;
     return <div className={`flex text-lg mb-1 ${event.tags.includes(CalendarTag.cancelled) && 'opacity-50'}`}>
         <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
             {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
         </div>
-        {noTag || <div className="mr-2">
+        <div className={`mr-2 ${noTag && "hidden"} ${hideTagOnLarge && "lg:hidden"}`}>
             <ParishTag calendar={event.calendar} colorless={event.tags.includes(CalendarTag.cancelled)}/>
-        </div>}
+        </div>
         <div className="mb-2 leading-5" data-testid="event">
             <div className={`mt-1 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
                 <EventSummary event={event}/>
@@ -28,20 +28,6 @@ export function ParishTag2(props: { calendar: CalendarName, colorless?: boolean 
     const info = getCalendarInfo(props.calendar);
     return <div
         className={`w-24 leading-4 inline-block p-2 text-center rounded-r-lg cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
-}
-
-export function Event2({event}: { event: CalendarEvent }) {
-    return <div className={`flex text-lg mb-1 ${event.tags.includes(CalendarTag.cancelled) && 'opacity-50'}`}>
-        <div className={`w-10 flex-shrink-0 mr-2 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
-            {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
-        </div>
-        <div className="mb-2 leading-5" data-testid="event">
-            <div className={`mt-1 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
-                <EventSummary event={event}/>
-            </div>
-            <EventDescription event={event}/>
-        </div>
-    </div>;
 }
 
 export function EventSummary(props: { event: CalendarEvent }) {

@@ -22,17 +22,6 @@ import {EmmausSections} from "../components/EmmausSections";
 import {News} from "../components/News";
 
 
-function ShortInstagram(props: { items: InstagramFeedItem[] }) {
-    return <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 my-4 lg:-mx-12">
-        {props.items
-            .slice(0, 4)
-            .map(item => <div
-                className="aspect-square bg-center bg-contain rounded-xl"
-                style={{backgroundImage: `url(${item.media_url})`}}
-            />)}
-    </div>;
-}
-
 export default function HomePage(
     props: {
         eventsObject: EventsObject,
@@ -49,12 +38,14 @@ export default function HomePage(
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
                 <TopBar/>
-                <Responsive>
-                    <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
-                    <div className="flex justify-center mt-12">
-                        <img src="/logo/dreipfarren.svg"/>
-                    </div>
-                </Responsive>
+                <div className=" overflow-hidden pb-12">
+                    <Responsive>
+                        <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
+                        <div className="flex justify-center mt-12 w-full">
+                            <img src="/logo/dreipfarren.svg" className="scale-[150%] lg:scale-110"/>
+                        </div>
+                    </Responsive>
+                </div>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
                 <Instagram items={props.instagram}/>
