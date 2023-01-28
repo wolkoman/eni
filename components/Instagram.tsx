@@ -3,9 +3,7 @@ import Responsive from "./Responsive";
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
-import React, {MouseEventHandler, useEffect, useRef} from "react";
-import ScrollContainer from "react-indiana-drag-scroll";
-import {Mouse} from "@playwright/test";
+import React, {MouseEventHandler, useRef} from "react";
 
 export interface InstagramFeedItem {
     id: string,
