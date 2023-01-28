@@ -1,8 +1,9 @@
-import create, {StoreApi, UseBoundStore} from 'zustand';
+import create from 'zustand';
 import {fetchJson} from './fetch-util';
-import {CalendarEvent, CalendarGroup} from "./calendar-types";
+import {CalendarEvent, CalendarEventWithSuggestion, CalendarGroup, EventsObject} from "./calendar-types";
 import {useEffect} from "react";
-import {useAuthenticatedUserStore, useUserStore} from "./use-user-store";
+import {useAuthenticatedUserStore} from "./use-user-store";
+import {Collections} from "cockpit-sdk";
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
     return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
@@ -26,58 +27,97 @@ export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolea
     }), {} as any)
 }
 
-export function groupEventsByGroupAndDate(events: CalendarEvent[], separateMass: boolean): Record<CalendarGroup, Record<string, CalendarEvent[]>> {
-    return Object.fromEntries(Object.entries(
-            groupEventsByGroup(events, separateMass)
-        ).map(([group, events]) => [group, groupEventsByDate(events)])
-    ) as Record<CalendarGroup, Record<string, CalendarEvent[]>>;
-}
-
 interface CalendarState {
-    items: CalendarEvent[];
+    items: CalendarEventWithSuggestion[];
+    originalItems: CalendarEvent[];
     cache?: string;
     loading: boolean;
     loaded: boolean;
     error: boolean;
-    load: () => void;
-    lastLoadedWithToken?: string;
+    openSuggestions: Collections["eventSuggestion"][];
+    load: (userId: string) => void;
+    addSuggestion: (suggestion: Collections["eventSuggestion"], userId: string) => void;
+    answerSuggestion: (suggestionId: string, accept: boolean) => void
+
 }
 
 
 export function useAuthenticatedCalendarStore() {
     const {user} = useAuthenticatedUserStore();
-    const [load, loading, error, items, loaded] = useCalendarStore(state => [state.load, state.loading, state.error, state.items, state.loaded]);
+    const state = useCalendarStore(state => state);
     useEffect(() => {
-        if(user) load();
+        if (user) state.load(user._id);
     }, [user]);
-    return {loading, error, items, loaded};
+    return state;
 }
 
 export const useCalendarStore = create<CalendarState>((set, get) => ({
     items: [],
+    originalItems: [],
+    openSuggestions: [],
     loaded: false,
     loading: false,
     error: false,
     lastLoadedWithToken: 'none',
-    load: () => {
+    load: (userId: string) => {
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
         fetchJson('/api/calendar', {})
-            .then(data => set(state => ({
-                ...state,
-                items: data.events,
+            .then((data: EventsObject) => set({
+                items: mergeEventsWithSuggestions(data.events, data.openSuggestions, userId),
+                openSuggestions: data.openSuggestions,
+                originalItems: data.events,
                 loaded: true,
                 loading: false,
                 error: false,
                 cache: data.cache,
-            })))
+            }))
             .catch(() => {
                 setTimeout(() => {
                     set(state => ({...state, loaded: false}));
-                    get().load();
+                    get().load(userId);
                 }, 3000);
-                set(state => ({...state, items: [], loaded: true, loading: false, error: true}));
+                set({items: [], loaded: true, loading: false, error: true});
             });
+    },
+    addSuggestion: (suggestion: Collections["eventSuggestion"], userId) => {
+        const newOpenSuggestions = [...get().openSuggestions.filter(sug => sug.eventId !== suggestion.eventId), suggestion];
+        set({
+            items: mergeEventsWithSuggestions(get().originalItems, newOpenSuggestions, userId),
+            openSuggestions: newOpenSuggestions
+        });
+    },
+    answerSuggestion: (suggestionId, accept) => {
+        const suggestion = get().openSuggestions.find(suggestion => suggestion._id === suggestionId)!;
+        const apply = (events: CalendarEvent[]) => events.map(event => event.id === suggestion.eventId && accept
+            ? {...applySuggestion(event, suggestion), suggestion: undefined}
+            : event)
+        set(({items, openSuggestions, originalItems}) => ({
+                openSuggestions: openSuggestions.filter(suggestion => suggestion._id !== suggestionId),
+                items: apply(items),
+                originalItems: apply(originalItems)
+            })
+        )
     }
 }));
+
+function mergeEventsWithSuggestions(events: CalendarEvent[], suggestions: Collections["eventSuggestion"][], userId: string): CalendarEventWithSuggestion[] {
+    return events
+        .map(event => ({event, suggestion: suggestions.find(suggestion => suggestion.eventId === event.id)}))
+        .map(({event, suggestion}) => suggestion?.by === userId ? applySuggestion(event, suggestion) : {
+            ...event,
+            suggestion: suggestion ? undefined : undefined
+        })
+}
+
+export function applySuggestion(event: CalendarEvent, suggestion: Collections["eventSuggestion"]) {
+    return {
+        ...event,
+        summary: suggestion.data.summary,
+        description: suggestion.data.description,
+        date: suggestion.data.date,
+        start: {dateTime: `${suggestion.data.date}T${suggestion.data.time}:00`},
+        suggestion: true
+    }
+}

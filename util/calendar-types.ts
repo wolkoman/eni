@@ -1,4 +1,6 @@
 import {CalendarName} from "./calendar-info";
+import {ReaderInfo} from "./reader";
+import {Collections} from "cockpit-sdk";
 
 export interface CalendarEvent {
     id: string,
@@ -12,12 +14,18 @@ export interface CalendarEvent {
     visibility: string,
     wholeday: boolean,
     groups: CalendarGroup[],
-    tags: CalendarTag[]
+    tags: CalendarTag[],
+    readerInfo?: {reading1?: ReaderInfo, reading2?: ReaderInfo}
+}
+
+export interface CalendarEventWithSuggestion extends CalendarEvent{
+    suggestion?: boolean
 }
 
 export interface EventsObject {
     events: CalendarEvent[];
-    cache: string | null;
+    openSuggestions: Collections['eventSuggestion'][]
+    cache?: string;
 }
 
 export enum CalendarTag {

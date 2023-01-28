@@ -7,7 +7,7 @@ export enum Preference{
     SeparateMass = "SEPARATE_MASS",
     LiturgyInformation = "LITURGY_INFORMATION",
     Search = "SEARCH",
-    MonthView= "MONTH_VIEW",
+    MonthView= "MONTH_VIEW_PREVIEW",
 }
 const defaults = {
     [Preference.SeparateMass]: true,

@@ -91,14 +91,6 @@ function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: 
                     </div>)}
                 </div>)}
         </div>
-        {props.calendar.loading || Object.entries(groupEventsByDate(applyFilter(props.calendar.items
-                .filter(event => !search || (event.summary + event.description).toLowerCase().includes(search.toLowerCase())),
-            props.filter, separateMass)))
-            .map(([date, events]) => <div key={date} data-date={date} className="py-2">
-                <EventDate date={new Date(date)}/>
-                <LiturgyInformation liturgies={props.liturgy[date]}/>
-                {events.map(event => <Event key={event.id} event={event}/>)}
-            </div>)}
     </>;
 }
 
@@ -167,7 +159,7 @@ export default function EventPage(props: {
                 <CalendarCacheNotice/>
                 <div className="flex flex-col md:flex-row">
                     {!monthView && <div
-                        className="w-full self-start py-4 lg:px-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-50 bg-black/[4%] rounded-xl">
+                        className="w-full self-start py-4 lg:px-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 bg-gray-100 rounded-xl z-20">
                         <FilterSelector
                             filter={filter}
                             setFilter={filter => setFilter(filter)}

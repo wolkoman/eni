@@ -59,6 +59,17 @@ declare module 'cockpit-sdk' {
       "mail": string,
       "description": string,
       hidden: boolean
+    } & Object,
+
+    eventSuggestion:{
+      "eventId": string,
+      "data": { summary: string, description: string, date: string, time: string },
+      "byName": string,
+      "by": string,
+      "open": boolean,
+      "accepted": boolean,
+      "closedByName": string,
+      "closedBy": string,
     } & Object
     paper_articles: {
       name: string,
@@ -105,7 +116,7 @@ declare module 'cockpit-sdk' {
 
     collectionGet<T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>>
 
-    collectionSave<T extends keyof Collections>(collectionName: T, object: Optional<Collections[T], '_id'>)
+    collectionSave<T extends keyof Collections>(collectionName: T, object: Optional<Collections[T], '_id'>): Promise<Collections[T]>
     collectionSave<T extends keyof Collections>(collectionName: T, object: Collections[T])
 
     singletonGet<T extends keyof Singletons>(singletonName: T): Promise<Singletons[T]>
