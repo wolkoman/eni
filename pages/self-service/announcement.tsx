@@ -44,7 +44,7 @@ export default function EventPage() {
                 Diese Ankündigung wird nach erfolgreicher Sichtung in den Wochenmitteilungen der Pfarren erscheinen.
             </div>
             <Field label="Ihre E-Mail Adresse (wird nicht veröffentlicht)">
-                <SelfServiceInput name="mail" form={form} disabled={user?.email}/>
+                <SelfServiceInput name="mail" form={form} disabled={!!user?.email}/>
             </Field>
             <Field label="Pfarre">
                 <SelfServiceParish name="parish" form={form}/>

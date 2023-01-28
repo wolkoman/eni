@@ -47,13 +47,13 @@ export function Settings() {
                 title="Liturgie Informationen"
                 description="Zusätzliche liturgische Information im Kalendar anzeigen"/>
             <SettingsOption
-                name={Preference.MonthView}
-                title="Monatsansicht"
-                description="Eine Monatsansicht anstelle der Terminliste anzeigen"/>
-            <SettingsOption
                 name={Preference.Search}
                 title="Terminsuche"
                 description="Ein Suchfeld bei den Terminen anzeigen"/>
+            <SettingsOption
+                name={Preference.MonthView}
+                title="Monatsansicht (In-Entwicklung)"
+                description="Eine Monatsansicht anstelle der Terminliste anzeigen"/>
         </div>
     </div>;
 }

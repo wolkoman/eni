@@ -73,15 +73,13 @@ export async function getCalendarEvents(calendarName: CalendarName, options: Get
 
 
     function getReaderInfo(event: CalendarEvent) {
-        const readerInfo = readerData?.[event.id!] ?? {reading1: null, reading2: null};
-        return (readerInfo.reading1 ? `<br/>1.Lesung: ${readerInfo.reading1?.name}` : '') + (readerInfo.reading2 ? `<br/>2.Lesung: ${readerInfo.reading2?.name}` : '');
-
+        return readerData?.[event.id!] ?? {reading1: null, reading2: null};
     }
 
     return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName, options))
         .filter((event): event is CalendarEvent => !!event?.summary)
         .filter(event => options.permission !== GetEventPermission.READER || options.ids.includes(event.id))
-        .map(event => ({...event, description: event.description + getReaderInfo(event)}))
+        .map(event => ({...event, readerInfo: getReaderInfo(event)}))
 }
 
 let oauth2Client: any;
@@ -132,7 +130,10 @@ export const getCachedEvents = async (options: GetEventOptions): Promise<EventsO
                 data: {events, cache: new Date().toISOString()}
             }).catch();
         }
-        return {events, cache: null};
+        const openSuggestions = await (GetEventPermission.PRIVATE_ACCESS === options.permission
+            ? () => cockpit.collectionGet("eventSuggestion", {filter: {open: true}}).then(({entries}) => entries)
+            : () => Promise.resolve([]))();
+        return {events, openSuggestions};
     } else {
         const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
         await notifyAdmin('Google Calendar failed');

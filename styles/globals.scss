@@ -34,6 +34,11 @@
   src: url("https://data.eni.wien/storage/uploads/2022/08/23/SourceSerifPro-Bold_uid_6304deb1dc999.ttf");
 }
 
+.Toastify__toast{
+  @apply rounded-xl;
+  @apply shadow-xl;
+  color: #333;
+}
 
 body {
   font-family: "Source Sans Pro";

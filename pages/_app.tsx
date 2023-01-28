@@ -1,8 +1,7 @@
-import "../styles/globals.scss";
 import * as React from 'react';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "../styles/toast-override.scss";
+import "../styles/globals.scss";
 
 // Used by next-fixutre.ts to pass requestInterceptor to each test,
 // where it can be used to set up the server-side request mocks.

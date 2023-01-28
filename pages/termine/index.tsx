@@ -10,7 +10,7 @@ import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
-import {CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
+import {CalendarEventWithSuggestion, CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
 import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import {getLiturgyDataTill, Liturgy, LiturgyData} from "../api/liturgy";
 import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
@@ -47,7 +47,7 @@ function EventSearch(props: { onChange: (value: string) => any, filter: FilterTy
     }[props.filter.filterType] : "Suche"}/>;
 }
 
-function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReturnType<typeof useAuthenticatedCalendarStore> }) {
+function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState }) {
     const [searchActive] = usePreference(Preference.Search);
     const [separateMass] = usePreference(Preference.SeparateMass);
     const [search, setSearch] = useState("");
@@ -91,18 +91,10 @@ function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: 
                     </div>)}
                 </div>)}
         </div>
-        {props.calendar.loading || Object.entries(groupEventsByDate(applyFilter(props.calendar.items
-                .filter(event => !search || (event.summary + event.description).toLowerCase().includes(search.toLowerCase())),
-            props.filter, separateMass)))
-            .map(([date, events]) => <div key={date} data-date={date} className="py-2">
-                <EventDate date={new Date(date)}/>
-                <LiturgyInformation liturgies={props.liturgy[date]}/>
-                {events.map(event => <Event key={event.id} event={event}/>)}
-            </div>)}
     </>;
 }
 
-function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReturnType<typeof useAuthenticatedCalendarStore> }) {
+function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState }) {
     const [searchActive] = usePreference(Preference.Search);
     const [separateMass] = usePreference(Preference.SeparateMass);
     const [search, setSearch] = useState("");
@@ -127,6 +119,8 @@ function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: R
     </>;
 }
 
+interface ReducedCalendarState{items: CalendarEventWithSuggestion[], error: boolean, loading: boolean, loaded: boolean}
+
 export default function EventPage(props: {
     liturgy: LiturgyData,
     eventsObject: EventsObject,
@@ -135,7 +129,7 @@ export default function EventPage(props: {
     const [firstFilterUpdate, setFirstFilterUpdate] = useState(true);
     const {user} = useAuthenticatedUserStore();
     const calendarStore = useAuthenticatedCalendarStore();
-    const calendar: ReturnType<typeof useAuthenticatedCalendarStore> = user
+    const calendar = user
         ? calendarStore
         : {items: props.eventsObject.events, error: false, loading: false, loaded: true};
     const [separateMass] = usePreference(Preference.SeparateMass);
@@ -167,7 +161,7 @@ export default function EventPage(props: {
                 <CalendarCacheNotice/>
                 <div className="flex flex-col md:flex-row">
                     {!monthView && <div
-                        className="w-full self-start py-4 lg:px-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 z-50 bg-black/[4%] rounded-xl">
+                        className="w-full self-start py-4 lg:px-2 md:mr-8 md:w-52 flex-shrink-0 sticky top-0 md:top-8 bg-gray-100 rounded-xl z-20">
                         <FilterSelector
                             filter={filter}
                             setFilter={filter => setFilter(filter)}
