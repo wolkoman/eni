@@ -27,10 +27,12 @@ export default function InternArticles() {
 
     function toCalEevent(event: CalendarEvent) {
         const special = event.groups.includes(CalendarGroup.Messe);
+        const isDescription = event.description.toString().trim().length > 0;
+        const description = `\n${sanitize(event.description.replaceAll("<br/>","\n").trim(), {allowedTags: []})}`
         return {
             [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),
-            [special ? 'specialtitle' : 'title']: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
-            description: event.description.toString().trim().length > 0 ? `\n${sanitize(event.description.replaceAll("<br/>","\n").trim(), {allowedTags: []})}` : ""
+            [special ? 'specialtitle' : 'title']: event.summary,
+            description: (event.mainPerson ? `\nmit ${event.mainPerson}` : '') + (isDescription ? description : '')
         };
     }
 

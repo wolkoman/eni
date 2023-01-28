@@ -5,11 +5,15 @@ import {useEffect} from "react";
 
 export enum Preference{
     SeparateMass = "SEPARATE_MASS",
-    LiturgyInformation = "LITURGY_INFORMATION"
+    LiturgyInformation = "LITURGY_INFORMATION",
+    Search = "SEARCH",
+    MonthView= "MONTH_VIEW",
 }
 const defaults = {
     [Preference.SeparateMass]: true,
     [Preference.LiturgyInformation]: false,
+    [Preference.Search]: false,
+    [Preference.MonthView]: false,
 }
 const PREFERENCES_KEY = "eniPreferences";
 function getPreferences(): Record<Preference, boolean>{

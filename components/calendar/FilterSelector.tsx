@@ -44,7 +44,7 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
                     />
                 )}
             </FilterButtons>
-            {props.userPermissions[Permission.PrivateCalendarAccess] && <>
+            {props.userPermissions[Permission.PrivateCalendarAccess] && false && <>
                 <FilterLabel>Leitung</FilterLabel>
                 <FilterButtons>
                     {props.persons.map((person, index) => <FilterButton

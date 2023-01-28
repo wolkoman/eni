@@ -11,13 +11,14 @@ export function Field(props: { children: ReactNode, label: string }) {
     </div>;
 }
 
-export function SelfServiceInput<S extends SSType>(props: { type?: string, input?: 'textarea' } & SSProps<S>) {
+export function SelfServiceInput<S extends SSType>(props: { type?: string, input?: 'textarea', disabled?: boolean } & SSProps<S>) {
     const Tag = props.input ?? "input";
     return <Tag
         {...(Tag === "input" ? {type: props.type} : {})}
+        disabled={props.disabled}
         value={props.form[0][props.name]}
         onChange={({target}) => props.form[1](rest => ({...rest, [props.name]: target.value}))}
-        className="bg-white rounded border border-black/20 focus:border-black/50 text-lg font-bold px-5 py-2 outline-none w-full"
+        className={`bg-white rounded focus:border-black/50 text-lg font-bold ${props.disabled ? '' : 'px-5 py-2 border border-black/20'} outline-none w-full`}
     />;
 }
 

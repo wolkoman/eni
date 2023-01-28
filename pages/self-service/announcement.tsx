@@ -1,16 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {Field, SelfServiceFileUpload, SelfServiceInput, SelfServiceParish} from "../../components/SelfService";
 import {cockpit} from "../../util/cockpit-sdk";
 import Button from "../../components/Button";
 import {notifyAdminFromClientSide} from "../../util/telegram";
+import {useAuthenticatedUserStore} from "../../util/use-user-store";
 
 
 export default function EventPage() {
+    const {user} = useAuthenticatedUserStore();
     const emptyForm = { mail: "", description: "", files: [], parish: "", hidden: false};
     const form = useState(emptyForm);
     const {mail, parish} = form[0];
     const [state, setState] = useState<'form' | 'loading' | 'success' | 'error'>('form');
+
+    useEffect(() => {
+        if(user?.email) form[1](rest => ({...rest, mail: user!.email!}));
+    }, [user])
 
     async function submit() {
         setState("loading");
@@ -18,11 +24,11 @@ export default function EventPage() {
             .then(() => form[1](emptyForm))
             .then(() => {
                 setState("success");
-                notifyAdminFromClientSide("NEW ANNOUNCEMENT\n" + JSON.stringify(form[0]) + "\nhttps://eni.wien/intern");
+                notifyAdminFromClientSide("NEW ANNOUNCEMENT \n" + JSON.stringify(form[0]) + "\n https://eni.wien/intern");
             })
             .catch(() => {
                 setState("error");
-                notifyAdminFromClientSide("ERROR ANNOUNCEMENT\n" + JSON.stringify(form[0]));
+                notifyAdminFromClientSide("ERROR ANNOUNCEMENT \n" + JSON.stringify(form[0]));
             });
     }
 
@@ -38,7 +44,7 @@ export default function EventPage() {
                 Diese Ankündigung wird nach erfolgreicher Sichtung in den Wochenmitteilungen der Pfarren erscheinen.
             </div>
             <Field label="Ihre E-Mail Adresse (wird nicht veröffentlicht)">
-                <SelfServiceInput name="mail" form={form}/>
+                <SelfServiceInput name="mail" form={form} disabled={user?.email}/>
             </Field>
             <Field label="Pfarre">
                 <SelfServiceParish name="parish" form={form}/>
