@@ -72,7 +72,6 @@ function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: 
                 {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
             </div>
             <div>
-
                 <Settings/>
             </div>
         </div>
@@ -135,7 +134,7 @@ function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: R
         {props.calendar.error && <CalendarErrorNotice/>}
         {props.calendar.loading && <EniLoading/>}
         {props.calendar.loading || Object.entries(groupEventsByDate(applyFilter(props.calendar.items
-                .filter(event => !search || (event.summary + event.description).toLowerCase().includes(search.toLowerCase())),
+                .filter(event => !search || (event.summary + event.description + (event.tags.includes(CalendarTag.recurring) ? "" : "Einzelevent")).toLowerCase().includes(search.toLowerCase())),
             props.filter, separateMass)))
             .map(([date, events]) => <div key={date} data-date={date} className="py-2">
                 <EventDate date={new Date(date)}/>

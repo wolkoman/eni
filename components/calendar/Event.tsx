@@ -24,8 +24,6 @@ export function Event({event, ...props}: { event: CalendarEventWithSuggestion, n
             <div className="mb-2 leading-5" data-testid="event">
                 <div className={`mt-1 ${event.tags.includes(CalendarTag.cancelled) || 'font-semibold'}`}>
                     {event.summary}
-                    {event.suggestion && <div className="px-1 inline-block">⚠️</div>
-                    }
                     {editable && <div className="hidden group-hover:inline-block px-3 cursor-pointer"
                                       onClick={() => setIsEditing(true)}>🖊️</div>
                     }
@@ -45,14 +43,20 @@ export function ParishTag2(props: { calendar: CalendarName, colorless?: boolean 
         className={`w-24 leading-4 inline-block p-2 text-center rounded-r-lg cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
 }
 
-export function EventDescription(props: { event: CalendarEvent }) {
+export function EventDescription(props: { event: CalendarEventWithSuggestion }) {
     return <div className="font-normal text-sm leading-4">
         <div>
+            {!props.event.tags.includes(CalendarTag.recurring) &&
+                <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">💫 Einzelevent</div>
+            }
             {props.event.tags.includes(CalendarTag.private) &&
                 <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">🔒 Vertraulich</div>
             }
             {props.event.tags.includes(CalendarTag.inChurch) && props.event.calendar === 'inzersdorf' &&
                 <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">🎹 Orgel-Blocker</div>
+            }
+            {props.event.suggestion &&
+                <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">⚠️ Noch nicht angenommen</div>
             }
         </div>
         {!props.event.tags.includes(CalendarTag.cancelled) && <>

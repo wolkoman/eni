@@ -33,6 +33,7 @@ export enum CalendarTag {
     private = 'private',
     cancelled = 'cancelled',
     announcement = 'announcement',
+    recurring = 'recurring',
 }
 
 export enum CalendarGroup {
