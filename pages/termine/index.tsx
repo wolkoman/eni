@@ -7,7 +7,7 @@ import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice
 import {groupEventsByDate, useAuthenticatedCalendarStore} from '../../util/use-calendar-store';
 import {useAuthenticatedUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
-import {Event, EventDate, EventEdit, EventEditBackground} from '../../components/calendar/Event';
+import {Event, EventDate} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
 import {CalendarEventWithSuggestion, CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
@@ -19,6 +19,7 @@ import {Preference, usePreference} from "../../util/use-preference";
 import {compareLiturgy} from "../intern/reader/my";
 import {EniLoading} from "../../components/Loading";
 import {Permission} from "../../util/verify";
+import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
 
 
 function LiturgyInformation(props: { liturgies?: Liturgy[] }) {
@@ -102,7 +103,7 @@ function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: 
 function AddEvent() {
     const [isEditing, setIsEditing] = useState(false);
     const {user} = useAuthenticatedUserStore();
-    return user?.permissions[Permission.PrivateCalendarAccess] && user?.parish !== "all" ? <>
+    return user?.permissions[Permission.PrivateCalendarAccess] ? <>
         <div className={`p-3 rounded-lg bg-black/5 cursor-pointer static lg:relative`} onClick={() => setIsEditing(true)}>
             <div className="w-6 aspect-square">
                 <svg viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,7 +140,7 @@ function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: R
             .map(([date, events]) => <div key={date} data-date={date} className="py-2">
                 <EventDate date={new Date(date)}/>
                 <LiturgyInformation liturgies={props.liturgy[date]}/>
-                {events.map(event => <Event key={event.id} event={event}/>)}
+                {events.map(event => <Event key={event.id} event={event} enableEditing={true}/>)}
             </div>)}
     </>;
 }

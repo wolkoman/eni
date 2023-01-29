@@ -1,5 +1,5 @@
 import React from 'react';
-import {EventDateText, EventSummary, EventTime} from '../../components/calendar/Event';
+import {EventDateText, EventTime} from '../../components/calendar/Event';
 import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {EventsObject} from "../../util/calendar-types";
 
@@ -16,7 +16,7 @@ export default function EventPage(props: {eventsObject: EventsObject}) {
                 .slice(0, 3)
                 .map(event => <div key={event.id} className="mb-4">
                     <div className="text-[#e05f28] font-semibold text-[17px] mb-0.5">
-                        <EventSummary event={event}/>
+                        {event.summary}
                     </div>
                     <div className="text-[13px]">
                         <EventDateText date={new Date(event.date)}/> um <EventTime

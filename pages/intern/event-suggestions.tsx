@@ -2,14 +2,13 @@ import React from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {applySuggestion, useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
+import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
 import {Event, EventDateText} from "../../components/calendar/Event";
 import {EniLoading} from "../../components/Loading";
 import Button from "../../components/Button";
 import {fetchJson} from "../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
-import {CalendarName} from "../../util/calendar-info";
-import {CalendarEvent} from "../../util/calendar-types";
+import {applySuggestion} from "../../util/suggestion-utils";
 
 export default function Intern() {
     usePermission([Permission.CalendarAdministration]);
@@ -29,12 +28,9 @@ export default function Intern() {
     return <Site title="Terminvorschläge" showTitle={true}>
         {loading && <EniLoading/>}
         {openSuggestions.map(suggestion => {
-            const original = suggestion.type === "add"
-                ? {tags: [], calendar: suggestion.data.parish} as any as CalendarEvent
-                : originalItems.find(event => event.id === suggestion.eventId);
-            console.log({original})
+            const original = originalItems.find(event => event.id === suggestion.eventId);
             if (!original) return <>Vergangen</>;
-            const updated =  applySuggestion(original, suggestion);
+            const updated =  applySuggestion(suggestion, original);
             return <div className="bg-black/[2%] rounded-lg my-2 p-4">
                 <div className="flex justify-between">
                     <div className="font-bold">Vorschlag von {suggestion.byName}</div>
@@ -47,11 +43,11 @@ export default function Intern() {
                 <div className="grid lg:grid-cols-2">
                     {suggestion.type !== "add" && <div>
                         <EventDateText date={new Date(original.date)}/>
-                        <Event event={original} preventEditing={true}/>
+                        <Event event={original}/>
                     </div>}
                     <div>
                         <EventDateText date={new Date(updated.date)}/>
-                        <Event event={updated} preventEditing={true}/>
+                        <Event event={updated}/>
                     </div>
                 </div>
             </div>;

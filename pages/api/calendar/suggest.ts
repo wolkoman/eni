@@ -1,10 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedGoogleAuthClient, GetEventPermission, mapGoogleEventToEniEvent} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {google} from "googleapis";
-import {musicDescriptionMatch} from "../../intern/limited-event-editing";
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
-import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
 import {cockpit} from "../../../util/cockpit-sdk";
 import {notifyAdmin} from "../../../util/telegram";
 
@@ -18,18 +13,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const eventSuggestions = await cockpit.collectionGet("eventSuggestion", {filter: {open: true, eventId: req.body.eventId}}).then(({entries}) => entries);
-
-    if(eventSuggestions.some(suggestion => suggestion.by !== user._id)){
+    //prevent colliding suggestions
+    const collidingSuggestions = await cockpit.collectionGet("eventSuggestion", {
+        filter: {
+            open: true,
+            eventId: req.body.eventId
+        }
+    }).then(({entries}) => entries.filter(suggestion => suggestion.eventId !== null));
+    if (collidingSuggestions.some(suggestion => suggestion.by !== user._id)) {
         res.status(401).json({error: "Pending suggestion from other person"});
         return;
     }
 
+    //edit new suggestion
+    const [_,suggestionId] = [...req.body.eventId?.split("suggestion_") ?? [null],null]
+
     const eventSuggestion = await cockpit.collectionSave("eventSuggestion", {
-        _id: eventSuggestions?.[0]?._id,
-        eventId: req.body.eventId,
+        _id: suggestionId ?? collidingSuggestions?.[0]?._id,
+        eventId: suggestionId ? null : req.body.eventId,
         data: req.body.data,
-        type: req.body.type,
+        type: suggestionId ? "add" : req.body.type,
         by: user._id,
         byName: user.name,
         open: true

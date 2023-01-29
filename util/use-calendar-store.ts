@@ -4,6 +4,7 @@ import {CalendarEvent, CalendarEventWithSuggestion, CalendarGroup, EventsObject}
 import {useEffect} from "react";
 import {useAuthenticatedUserStore} from "./use-user-store";
 import {Collections} from "cockpit-sdk";
+import {applySuggestion, mergeEventsWithSuggestions} from "./suggestion-utils";
 
 export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
     return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
@@ -90,9 +91,12 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     },
     answerSuggestion: (suggestionId, accept) => {
         const suggestion = get().openSuggestions.find(suggestion => suggestion._id === suggestionId)!;
-        const apply = (events: CalendarEvent[]) => events.map(event => event.id === suggestion.eventId && accept
-            ? {...applySuggestion(event, suggestion), suggestion: undefined}
-            : event)
+        const eventSuggestion = (event?: CalendarEvent) => applySuggestion(suggestion, event);
+        const apply = (events: CalendarEvent[]) => [
+            ...(suggestion.type === "add" ? [eventSuggestion()] : [] ),
+            ...events.map(event => event.id === suggestion.eventId && accept
+            ? eventSuggestion(event)
+            : event)]
         set(({items, openSuggestions, originalItems}) => ({
                 openSuggestions: openSuggestions.filter(suggestion => suggestion._id !== suggestionId),
                 items: apply(items),
@@ -102,22 +106,3 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     }
 }));
 
-function mergeEventsWithSuggestions(events: CalendarEvent[], suggestions: Collections["eventSuggestion"][], userId: string): CalendarEventWithSuggestion[] {
-    return events
-        .map(event => ({event, suggestion: suggestions.find(suggestion => suggestion.eventId === event.id)}))
-        .map(({event, suggestion}) => suggestion?.by === userId ? applySuggestion(event, suggestion) : {
-            ...event,
-            suggestion: suggestion ? undefined : undefined
-        })
-}
-
-export function applySuggestion(event: CalendarEvent, suggestion: Collections["eventSuggestion"]) {
-    return {
-        ...event,
-        summary: suggestion.data.summary,
-        description: suggestion.data.description,
-        date: suggestion.data.date,
-        start: {dateTime: `${suggestion.data.date}T${suggestion.data.time}:00`},
-        suggestion: true
-    }
-}

@@ -15,7 +15,7 @@ export interface CalendarEvent {
     wholeday: boolean,
     groups: CalendarGroup[],
     tags: CalendarTag[],
-    readerInfo?: {reading1?: ReaderInfo, reading2?: ReaderInfo}
+    readerInfo: {reading1?: ReaderInfo, reading2?: ReaderInfo}
 }
 
 export interface CalendarEventWithSuggestion extends CalendarEvent{

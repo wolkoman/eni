@@ -13,13 +13,13 @@ const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
 export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: GetEventOptions): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
     return (event): CalendarEvent | null => {
-        const displayPersonen = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
+        const mainPerson = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
         const privateAccess = options.permission === GetEventPermission.PRIVATE_ACCESS;
         if (event.visibility === 'private' && !privateAccess) return null;
         return {
             id: event.id ?? "",
-            mainPerson: displayPersonen,
+            mainPerson,
             summary: privateAccess ? summary : summary.replace(/\[.*?]/g, ''),
             description: privateAccess ? event.description ?? '' : event.description?.replace(/\[.*?]/g, '') ?? '',
             date: (event.start?.date ?? event.start?.dateTime ?? '').substring(0, 10),
@@ -38,6 +38,7 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
                 (event.description ?? '').toLowerCase().includes("[ankündigung]") && CalendarTag.announcement,
             ].filter((item): item is CalendarTag => !!item),
             wholeday: !!event.start?.date,
+            readerInfo: {}
         };
     };
 }
@@ -66,7 +67,7 @@ export async function getCalendarEvents(calendarName: CalendarName, options: Get
         timeZone: 'Europa/Vienna',
         orderBy: 'startTime'
     });
-    const readerData = await (options.permission === GetEventPermission.PRIVATE_ACCESS
+    const readerData = await (options.permission === GetEventPermission.PRIVATE_ACCESS && options.getReaderData
             ? options.getReaderData()
             : Promise.resolve({})
     );
@@ -117,7 +118,7 @@ export enum GetEventPermission {
 
 export type GetEventOptions =
     { permission: GetEventPermission.PUBLIC }
-    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: { min: Date, max: Date }, getReaderData: () => Promise<ReaderData> }
+    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: { min: Date, max: Date }, getReaderData?: () => Promise<ReaderData> }
     | { permission: GetEventPermission.READER, ids: string[] }
 
 export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {
