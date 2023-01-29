@@ -9,38 +9,46 @@ import Button from "../../components/Button";
 import {fetchJson} from "../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "../../util/calendar-info";
+import {CalendarEvent} from "../../util/calendar-types";
 
 export default function Intern() {
     usePermission([Permission.CalendarAdministration]);
     const {openSuggestions, originalItems, loading, answerSuggestion} = useAuthenticatedCalendarStore();
 
-    function answer(suggestion: Collections["eventSuggestion"], accepted: boolean, parish: CalendarName) {
-        fetchJson("/api/calendar/answer", {json: {
-            accepted, suggestionId: suggestion._id, parish
+    function answer(suggestion: Collections["eventSuggestion"], accepted: boolean) {
+        return fetchJson("/api/calendar/answer", {json: {
+            accepted, suggestionId: suggestion._id
         }}, {pending: "Speichern..", error: "Konnte nicht gespeichert werden", success: "Speichern erfolgreich"})
-            .then(() => answerSuggestion(suggestion._id, accepted))
+            .then(data => {
+                answerSuggestion(suggestion._id, accepted);
+                return data;
+            })
             .catch(() => {})
     }
 
     return <Site title="Terminvorschläge" showTitle={true}>
         {loading && <EniLoading/>}
         {openSuggestions.map(suggestion => {
-            const original = originalItems.find(event => event.id === suggestion.eventId);
+            const original = suggestion.type === "add"
+                ? {tags: [], calendar: suggestion.data.parish} as any as CalendarEvent
+                : originalItems.find(event => event.id === suggestion.eventId);
+            console.log({original})
             if (!original) return <>Vergangen</>;
-            const updated = applySuggestion(original, suggestion);
+            const updated =  applySuggestion(original, suggestion);
             return <div className="bg-black/[2%] rounded-lg my-2 p-4">
                 <div className="flex justify-between">
                     <div className="font-bold">Vorschlag von {suggestion.byName}</div>
                     <div className="flex justify-end gap-2">
-                        <Button label="Akzeptieren" onClick={() => answer(suggestion, true, original.calendar)}/>
-                        <Button label="Ablehnen" onClick={() => answer(suggestion, false, original.calendar)}/>
+                        <Button label="Akzeptieren" onClick={() => answer(suggestion, true)}/>
+                        <Button label="Bearbeiten" onClick={() => answer(suggestion, true).then(({link}) => window.open(link))}/>
+                        <Button label="Ablehnen" onClick={() => answer(suggestion, false)}/>
                     </div>
                 </div>
                 <div className="grid lg:grid-cols-2">
-                    <div>
+                    {suggestion.type !== "add" && <div>
                         <EventDateText date={new Date(original.date)}/>
                         <Event event={original} preventEditing={true}/>
-                    </div>
+                    </div>}
                     <div>
                         <EventDateText date={new Date(updated.date)}/>
                         <Event event={updated} preventEditing={true}/>

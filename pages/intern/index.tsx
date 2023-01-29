@@ -32,8 +32,8 @@ function AnnouncementsAdmin() {
     return <>
         <div className="my-8 text-xl">Ankündigungen</div>
         <div className="flex flex-col gap-4">
-            {ann.map(announcement => <div className="px-4 py-2 bg-black/[4%] rounded-lg flex flex-col">
-                <div className="my-1 italic">{announcement.mail}</div>
+            {ann.map(announcement => <div className="px-6 py-4 bg-black/[2%] rounded-lg flex flex-col">
+                <div className="mb-1 italic">{announcement.mail}</div>
                 <div className="font-bold my-2">{announcement.description}</div>
                 {announcement.files.map(file => <Link href={"https://api.eni.wien/files-v0/uploads/" + file}>
                     <div className="underline hover:no-underline">{file}</div>
@@ -59,6 +59,7 @@ export default function Intern() {
             <InternButton href="/" label="Startseite"/>
             <InternButton href="/termine" label="Termine"/>
             {permissions?.[Permission.CalendarAdministration] && <InternButton href="intern/event-suggestions" label="Terminvorschläge"/>}
+            <InternButton href="/intern/announcement" label="Ankündigung für die Wochenmitteilungen"/>
             {(permissions?.[Permission.Reader] || permissions?.[Permission.ReaderPlanning]) &&
                 <InternButton href="intern/reader/my" label="Lektor:innen"/>}
             {permissions?.[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
@@ -77,7 +78,7 @@ export default function Intern() {
                 <InternButton href="intern/weekly" label="Wochenmitteilung"/>
             </div>
         </>}
-        {permissions?.[Permission.Admin] && <AnnouncementsAdmin/>}
+        {permissions?.[Permission.CalendarAdministration] && <AnnouncementsAdmin/>}
     </Site>
 }
 

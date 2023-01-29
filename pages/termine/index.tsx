@@ -7,7 +7,7 @@ import {CalendarErrorNotice} from '../../components/calendar/CalendarErrorNotice
 import {groupEventsByDate, useAuthenticatedCalendarStore} from '../../util/use-calendar-store';
 import {useAuthenticatedUserStore} from '../../util/use-user-store';
 import {FilterSelector} from '../../components/calendar/FilterSelector';
-import {Event, EventDate} from '../../components/calendar/Event';
+import {Event, EventDate, EventEdit, EventEditBackground} from '../../components/calendar/Event';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
 import {CalendarEventWithSuggestion, CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
@@ -18,6 +18,7 @@ import {Settings} from "../../components/Settings";
 import {Preference, usePreference} from "../../util/use-preference";
 import {compareLiturgy} from "../intern/reader/my";
 import {EniLoading} from "../../components/Loading";
+import {Permission} from "../../util/verify";
 
 
 function LiturgyInformation(props: { liturgies?: Liturgy[] }) {
@@ -69,12 +70,15 @@ function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: 
                 </div>
                 {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
             </div>
-            <Settings/>
+            <div>
+
+                <Settings/>
+            </div>
         </div>
         {props.calendar.error && <CalendarErrorNotice/>}
         {props.calendar.loading && <EniLoading/>}
         <div className="grid grid-cols-7 gap-1">
-            {Array.from({length: 7}).map((_,i) => <div>{getWeekDayName((i+1)%7)}</div>)}
+            {Array.from({length: 7}).map((_, i) => <div>{getWeekDayName((i + 1) % 7)}</div>)}
             {Array.from({length: day}).map(() => <div></div>)}
             {Array.from({length: daysInMonth})
                 .map((_, i) => ({
@@ -86,12 +90,30 @@ function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: 
                 .map(({day, events}) => <div className="bg-black/5 p-1 rounded-lg">
                     <div className="text-right">{day}</div>
                     {events.map(event => <div className=" text-sm flex gap-1">
-                        <div className={getCalendarInfo(event.calendar).className + " mt-1.5 w-2 h-2 shrink-0 rounded-full"}></div>
+                        <div
+                            className={getCalendarInfo(event.calendar).className + " mt-1.5 w-2 h-2 shrink-0 rounded-full"}></div>
                         <div className="line-clamp-1">{event.summary}</div>
                     </div>)}
                 </div>)}
         </div>
     </>;
+}
+
+function AddEvent() {
+    const [isEditing, setIsEditing] = useState(false);
+    const {user} = useAuthenticatedUserStore();
+    return user?.permissions[Permission.PrivateCalendarAccess] && user?.parish !== "all" ? <>
+        <div className={`p-3 rounded-lg bg-black/5 cursor-pointer static lg:relative`} onClick={() => setIsEditing(true)}>
+            <div className="w-6 aspect-square">
+                <svg viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M45.5 9V82" stroke="#484848" strokeWidth="18" strokeLinecap="round"/>
+                    <path d="M82 45.5L9 45.5" stroke="#484848" strokeWidth="18" strokeLinecap="round"/>
+                </svg>
+            </div>
+            {isEditing && <EventEdit onClose={() => setIsEditing(false)} parish={user!.parish}/>}
+        </div>
+        {isEditing && <EventEditBackground onClick={() => setIsEditing(false)}/>}
+    </> : <></>;
 }
 
 function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState }) {
@@ -104,7 +126,10 @@ function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: R
                 <div className="font-bold text-4xl mb-6">Termine</div>
                 {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
             </div>
-            <Settings/>
+            <div className="flex gap-2">
+                <AddEvent/>
+                <Settings/>
+            </div>
         </div>
         {props.calendar.error && <CalendarErrorNotice/>}
         {props.calendar.loading && <EniLoading/>}
@@ -119,7 +144,12 @@ function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: R
     </>;
 }
 
-interface ReducedCalendarState{items: CalendarEventWithSuggestion[], error: boolean, loading: boolean, loaded: boolean}
+interface ReducedCalendarState {
+    items: CalendarEventWithSuggestion[],
+    error: boolean,
+    loading: boolean,
+    loaded: boolean
+}
 
 export default function EventPage(props: {
     liturgy: LiturgyData,

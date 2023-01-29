@@ -56,13 +56,6 @@ export function EniSections() {
                 </div>
             </div>
         </Section>
-        <Section title="Selbstbedienung">
-            <div className="flex text-lg">
-                <Link href="/self-service/announcement" legacyBehavior={true}>
-                    <Button label="Ankündigung einreichen" big={true}/>
-                </Link>
-            </div>
-        </Section>
         <Personal/>
         <Section title="Pfarren">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">

@@ -29,6 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         _id: eventSuggestions?.[0]?._id,
         eventId: req.body.eventId,
         data: req.body.data,
+        type: req.body.type,
         by: user._id,
         byName: user.name,
         open: true

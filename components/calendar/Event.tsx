@@ -12,34 +12,34 @@ import Button from "../Button";
 import {fetchJson} from "../../util/fetch-util";
 import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
 
-function EventEdit({event, onClose}: { event: CalendarEvent, onClose: () => any }) {
+export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: () => any, parish: CalendarName }) {
     const {addSuggestion} = useAuthenticatedCalendarStore();
     const {user} = useAuthenticatedUserStore();
     const form = useState({
-        summary: event.summary,
-        description: event.description,
-        date: event.date,
-        time: event.start.dateTime.substring(11, 16)
+        summary: event?.summary ?? "",
+        description: event?.description ?? "",
+        date: event?.date ?? "",
+        time: event?.start.dateTime.substring(11, 16) ?? ""
     })
 
     function save() {
         fetchJson("/api/calendar/suggest", {
             json: {
-                eventId: event.id,
-                data: form[0],
-                type: "edit"
+                eventId: event?.id,
+                data: {...form[0], parish: props.parish },
+                type: event ? "edit" : "add"
             }
         }, {
             error: "Änderung konnte nicht gespeichert werden",
             pending: "Speichere..",
             success: "Die Änderung wurde vorgeschlagen. Sie ist noch nicht öffentlich."
         }).then(suggestion => {
-            onClose();
+            props.onClose();
             addSuggestion(suggestion, user!._id);
         })
     }
 
-    return <div className="absolute top-0 left-0 bg-white rounded-lg shadow-lg p-4 z-40">
+    return <div className={`absolute top-0 ${event ? 'left-0' : 'right-0'} bg-white rounded-lg shadow-lg p-4 z-40 w-96`}>
         <Field label="Name">
             <SelfServiceInput name="summary" form={form}/>
         </Field>
@@ -56,6 +56,10 @@ function EventEdit({event, onClose}: { event: CalendarEvent, onClose: () => any 
             <Button label="Speichern" onClick={save}></Button>
         </div>
     </div>;
+}
+
+export function EventEditBackground(props: { onClick: () => void }) {
+    return <div className="fixed inset-0 bg-black/10 z-30" onClick={props.onClick}/>;
 }
 
 export function Event({event, ...props}: { event: CalendarEventWithSuggestion, noTag?: boolean, hideTagOnLarge?: boolean, preventEditing?: boolean }) {
@@ -82,9 +86,9 @@ export function Event({event, ...props}: { event: CalendarEventWithSuggestion, n
                 </div>
                 <EventDescription event={event}/>
             </div>
-            {isEditing && <EventEdit event={event} onClose={() => setIsEditing(false)}/>}
+            {isEditing && <EventEdit event={event} onClose={() => setIsEditing(false)} parish={event.calendar}/>}
         </div>
-        {isEditing && <div className="fixed inset-0 bg-black/10 z-30" onClick={() => setIsEditing(false)}/>}
+        {isEditing && <EventEditBackground onClick={() => setIsEditing(false)}/>}
     </>;
 }
 

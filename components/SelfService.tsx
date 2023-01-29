@@ -18,7 +18,7 @@ export function SelfServiceInput<S extends SSType>(props: { type?: string, input
         disabled={props.disabled}
         value={props.form[0][props.name]}
         onChange={({target}) => props.form[1](rest => ({...rest, [props.name]: target.value}))}
-        className={`bg-white rounded focus:border-black/50 text-lg font-bold ${props.disabled ? '' : 'px-5 py-2 border border-black/20'} outline-none w-full`}
+        className={`bg-white rounded focus:border-black/50 text-lg font-bold ${props.disabled ? '' : 'px-5 py-2 border border-black/20'} outline-none w-full ${props.input === "textarea" && 'h-36'}`}
     />;
 }
 

@@ -63,13 +63,14 @@ declare module 'cockpit-sdk' {
 
     eventSuggestion:{
       "eventId": string,
-      "data": { summary: string, description: string, date: string, time: string },
+      "data": { summary: string, description: string, date: string, time: string, parish: string },
       "byName": string,
       "by": string,
       "open": boolean,
       "accepted": boolean,
       "closedByName": string,
       "closedBy": string,
+      "type": "edit" | "add" | "delete",
     } & Object
     paper_articles: {
       name: string,

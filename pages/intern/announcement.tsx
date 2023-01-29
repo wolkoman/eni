@@ -5,22 +5,20 @@ import {cockpit} from "../../util/cockpit-sdk";
 import Button from "../../components/Button";
 import {notifyAdminFromClientSide} from "../../util/telegram";
 import {useAuthenticatedUserStore} from "../../util/use-user-store";
+import {usePermission} from "../../util/use-permission";
 
 
 export default function EventPage() {
+    usePermission([]);
     const {user} = useAuthenticatedUserStore();
-    const emptyForm = { mail: "", description: "", files: [], parish: "", hidden: false};
+    const emptyForm = { description: "", files: [], parish: "", hidden: false};
     const form = useState(emptyForm);
-    const {mail, parish} = form[0];
+    const {parish} = form[0];
     const [state, setState] = useState<'form' | 'loading' | 'success' | 'error'>('form');
-
-    useEffect(() => {
-        if(user?.email) form[1](rest => ({...rest, mail: user!.email!}));
-    }, [user])
 
     async function submit() {
         setState("loading");
-        cockpit.collectionSave('announcements', form[0])
+        cockpit.collectionSave('announcements', {...form[0], by: user?._id, byName: user?.name})
             .then(() => form[1](emptyForm))
             .then(() => {
                 setState("success");
@@ -43,20 +41,17 @@ export default function EventPage() {
             <div className="my-6">
                 Diese Ankündigung wird nach erfolgreicher Sichtung in den Wochenmitteilungen der Pfarren erscheinen.
             </div>
-            <Field label="Ihre E-Mail Adresse (wird nicht veröffentlicht)">
-                <SelfServiceInput name="mail" form={form} disabled={!!user?.email}/>
+            <Field label="Beschreibung">
+                <SelfServiceInput name="description" input="textarea" form={form}/>
             </Field>
             <Field label="Pfarre">
                 <SelfServiceParish name="parish" form={form}/>
-            </Field>
-            <Field label="Beschreibung / Weitere Informationen">
-                <SelfServiceInput name="description" input="textarea" form={form}/>
             </Field>
             <Field label="Dateien">
                 <SelfServiceFileUpload name="files" form={form}/>
             </Field>
             <div className={`my-8 flex flex justify-end font-bold ${state === "loading" ? 'animate-pulse' : ''}`}>
-                <Button label="Absenden" big={true} onClick={submit} disabled={state === "loading" || !mail.includes("@") || parish === ""}/>
+                <Button label="Absenden" big={true} onClick={submit} disabled={state === "loading" || parish === ""}/>
             </div>
             {state === "error" && <div className="text-red-700 font-bold my-8">
                 Die Ankündigung konnte nicht hochgeladen werden.

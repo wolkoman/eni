@@ -14,7 +14,7 @@ export default function TopBar(props: { title?: string }) {
     return site(<div className="my-2 lg:my-10 overflow-hidden">
         <Responsive>
             <div className="flex justify-between text-sm">
-                <Link href="/">
+                <Link href={user ? "/intern" : "/"}>
                     <div className="font-bold">
                         Zusammenarbeit der Pfarren Emmaus am Wienerberg, Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
                     </div>
