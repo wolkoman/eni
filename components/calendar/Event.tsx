@@ -46,7 +46,7 @@ export function ParishTag2(props: { calendar: CalendarName, colorless?: boolean 
 export function EventDescription(props: { event: CalendarEventWithSuggestion }) {
     return <div className="font-normal text-sm leading-4">
         <div>
-            {!props.event.tags.includes(CalendarTag.recurring) &&
+            {props.event.tags.includes(CalendarTag.singleEvent) &&
                 <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">💫 Einzelevent</div>
             }
             {props.event.tags.includes(CalendarTag.private) &&
