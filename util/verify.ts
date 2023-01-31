@@ -34,7 +34,7 @@ export function resolvePermissionsForGroup(group: CockpitUser['group'] = ''): Pe
 
 export function resolvePermissionsForCompetences(competences: Collections['person']['competences']): Permissions {
   return {
-    [Permission.CalendarAdministration]: competences.includes("admin"),
+    [Permission.CalendarAdministration]: competences.includes("calendar_administration"),
     [Permission.Articles]: competences.includes("admin"),
     [Permission.PrivateCalendarAccess]: competences.includes("calendar"),
     [Permission.LimitedEventEditing]: competences.includes("limited_event_editing"),
