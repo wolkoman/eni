@@ -1,6 +1,6 @@
 import create from 'zustand';
 import {fetchJson} from './fetch-util';
-import {CalendarEvent, CalendarEventWithSuggestion, CalendarGroup, EventsObject} from "./calendar-types";
+import {CalendarEvent, CalendarGroup, EventsObject} from "./calendar-types";
 import {useEffect} from "react";
 import {useAuthenticatedUserStore} from "./use-user-store";
 import {Collections} from "cockpit-sdk";
@@ -29,7 +29,7 @@ export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolea
 }
 
 interface CalendarState {
-    items: CalendarEventWithSuggestion[];
+    items: CalendarEvent[];
     originalItems: CalendarEvent[];
     cache?: string;
     loading: boolean;

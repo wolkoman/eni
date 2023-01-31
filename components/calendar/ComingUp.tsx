@@ -7,9 +7,11 @@ import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {Preference, usePreference} from "../../util/use-preference";
 import {CalendarName} from "../../util/calendar-info";
-import {Event, EventDateText, ParishTag2} from "./Event";
+import {Event} from "./Event";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
+import {ParishTag2} from "./ParishTag";
+import {EventDateText} from "./EventUtils";
 
 export const clickable = "bg-black/[2%] hover:bg-black/[4%] cursor-pointer";
 export function ComingUp(props: { eventsObject: EventsObject }) {

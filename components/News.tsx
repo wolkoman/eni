@@ -1,7 +1,7 @@
 import {CalendarGroup, CalendarTag, EventsObject} from "../util/calendar-types";
 import {Liturgy} from "../pages/api/liturgy";
-import {EventDateText, EventTime} from "./calendar/Event";
 import {getCalendarInfo} from "../util/calendar-info";
+import {EventDateText, EventTime} from "./calendar/EventUtils";
 
 export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturgy & { date: string })[] }) {
 

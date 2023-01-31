@@ -1,7 +1,7 @@
 import React from 'react';
-import {EventDateText, EventTime} from '../../components/calendar/Event';
 import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {EventsObject} from "../../util/calendar-types";
+import {EventDateText, EventTime} from "../../components/calendar/EventUtils";
 
 export default function EventPage(props: {eventsObject: EventsObject}) {
 

@@ -18,10 +18,6 @@ export interface CalendarEvent {
     readerInfo: {reading1?: ReaderInfo, reading2?: ReaderInfo}
 }
 
-export interface CalendarEventWithSuggestion extends CalendarEvent{
-    suggestion?: boolean
-}
-
 export interface EventsObject {
     events: CalendarEvent[];
     openSuggestions: Collections['eventSuggestion'][]
@@ -33,7 +29,8 @@ export enum CalendarTag {
     private = 'private',
     cancelled = 'cancelled',
     announcement = 'announcement',
-    recurring = 'recurring',
+    singleEvent = 'singleEvent',
+    suggestion = 'suggestion',
 }
 
 export enum CalendarGroup {
@@ -49,7 +46,6 @@ export enum CalendarGroup {
     Weihnachten = "Weihnachten",
     Advent = "Advent",
     Invisible = "_",
-    Sprechstunde = "Sprechstunde",
     Jugend = "Jugend",
     Gremien = "Gremien",
     Chor = "Chor",

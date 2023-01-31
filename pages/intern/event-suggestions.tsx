@@ -3,12 +3,13 @@ import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
 import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
-import {Event, EventDateText} from "../../components/calendar/Event";
+import {Event} from "../../components/calendar/Event";
 import {EniLoading} from "../../components/Loading";
 import Button from "../../components/Button";
 import {fetchJson} from "../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {applySuggestion} from "../../util/suggestion-utils";
+import {EventDateText} from "../../components/calendar/EventUtils";
 
 export default function Intern() {
     usePermission([Permission.CalendarAdministration]);
