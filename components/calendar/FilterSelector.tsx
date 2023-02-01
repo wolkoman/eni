@@ -7,7 +7,7 @@ import {getGroupSorting} from "../../util/calendar-group";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div
-        className={`px-4 py-1 text-center cursor-pointer rounded-xl ${props.active ? ((props.activeColor ?? "bg-black/5") + " font-bold") : ""}`}
+        className={`px-2 py-0.5 text-center cursor-pointer rounded-lg ${props.active ? ((props.activeColor ?? "bg-black/5") + " font-semibold") : ""}`}
         onClick={props.onClick}
     >
         {props.label}

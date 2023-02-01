@@ -13,14 +13,12 @@ import {getLiturgyData, Liturgy} from "./api/liturgy";
 import {Instagram, InstagramFeedItem} from "../components/Instagram";
 import {Collections} from "cockpit-sdk";
 import {ChristmasDisplay} from "../components/ChristmasDisplay";
-import {Personal} from "../components/Personal";
 import {EniSections} from "../components/EniSections";
 import {EmmausBranding} from "../components/EmmausBranding";
 import Articles from "../components/Articles";
 import {ComingUp} from "../components/calendar/ComingUp";
 import {EmmausSections} from "../components/EmmausSections";
 import {News} from "../components/News";
-
 
 export default function HomePage(
     props: {
@@ -38,13 +36,23 @@ export default function HomePage(
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
                 <TopBar/>
-                <div className=" overflow-hidden pb-12">
-                    <Responsive>
+                <div className=" overflow-hidden pb-12 grid grid-cols-3">
+                    <div className="bg-emmaus flex items-end justify-center">
+                        <img src="/parish/emmaus.svg" className="h-44 mt-12"/>
+                    </div>
+                    <div className="bg-inzersdorf flex items-end justify-center">
+                        <img src="/parish/inzersdorf.svg" className="h-44 mt-12"/>
+                    </div>
+                    <div className="bg-neustift flex items-end justify-center">
+                        <img src="/parish/neustift.svg" className="h-44 mt-12"/>
+
+                </div>
+                    {/*<Responsive>
                         <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
                         <div className="flex justify-center mt-12 w-full">
                             <img src="/logo/dreipfarren.svg" className="scale-[150%] lg:scale-110"/>
                         </div>
-                    </Responsive>
+                    </Responsive>*/}
                 </div>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
