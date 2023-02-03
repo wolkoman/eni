@@ -13,7 +13,7 @@ import {getGroupSorting} from "../../util/calendar-group";
 import {ParishTag2} from "./ParishTag";
 import {EventDateText} from "./EventUtils";
 
-export const clickable = "bg-black/[2%] hover:bg-black/[4%] cursor-pointer";
+export const clickable = "bg-black/[2%] hover:bg-black/[4%] cursor-pointer border border-black/10";
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
@@ -43,7 +43,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                     <div className={`${site('lg:ml-24 lg:pl-2', '')} mt-2`}><EventDateText date={new Date(date)}/>
                                     </div>
                                     {events.map(event => <div key={event.id} className="flex items-start gap-2">
-                                        <div className="hidden lg:block">
+                                        <div className="hidden lg:block mt-1.5">
                                             {site(<ParishTag2 calendar={event.calendar}/>, <div/>)}
                                         </div>
                                         <div className="my-1">

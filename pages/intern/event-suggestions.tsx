@@ -28,6 +28,7 @@ export default function Intern() {
 
     return <Site title="Terminvorschläge" showTitle={true}>
         {loading && <EniLoading/>}
+        {!loading && openSuggestions.length === 0 && <div>Keine Terminvorschläge</div>}
         {openSuggestions.map(suggestion => {
             const original = originalItems.find(event => event.id === suggestion.eventId);
             const updated = applySuggestion(suggestion, original);

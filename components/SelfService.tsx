@@ -6,7 +6,7 @@ type SSType = Record<string, any>;
 
 export function Field(props: { children: ReactNode, label: string }) {
     return <div className=" my-2">
-        <div>{props.label}</div>
+        <div className="text-sm">{props.label}</div>
         {props.children}
     </div>;
 }
@@ -18,7 +18,7 @@ export function SelfServiceInput<S extends SSType>(props: { type?: string, input
         disabled={props.disabled}
         value={props.form[0][props.name]}
         onChange={({target}) => props.form[1](rest => ({...rest, [props.name]: target.value}))}
-        className={`bg-white rounded focus:border-black/50 text-lg font-bold ${props.disabled ? '' : 'px-5 py-2 border border-black/20'} outline-none w-full ${props.input === "textarea" && 'h-36'}`}
+        className={`bg-white rounded focus:border-black/50 text-lg font-bold ${props.disabled ? '' : 'px-3 py-1 border border-black/20'} outline-none w-full ${props.input === "textarea" && 'h-36'}`}
     />;
 }
 

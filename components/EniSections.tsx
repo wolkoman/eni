@@ -72,7 +72,7 @@ function Parish(props: { name: CalendarName }) {
     return <div className="flex flex-col items-center text-center w-full">
         <div className={"rounded-lg overflow-hidden h-44 relative w-full " + info.className}>
             <div style={{backgroundImage: `url(${info.image})`}}
-                 className="w-full h-full rounded-lg bg-contain bg-no-repeat bg-center"/>
+                 className="w-full h-full rounded-lg bg-contain bg-no-repeat bg-bottom"/>
         </div>
         <div className="text-xl font-bold mt-4">{info.fullName}</div>
         <div className="italic">{info.address}</div>

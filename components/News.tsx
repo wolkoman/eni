@@ -14,12 +14,12 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
     ]
         .map(event => ({
             ...event,
-            points: (event.liturgy ? 0 : 10000) + Math.pow((new Date(event.date).getTime() - now) / 10000000, 2)
+            points: (event.liturgy ? 0 : 0) + Math.pow((new Date(event.date).getTime() - now) / 10000000, 2)
         }))
         .sort((a, b) => a.points - b.points);
     const announcement = announcements[0];
 
-    return <div className="flex flex-col items-center gap-2 my-8">
+    return <div className="flex flex-col items-center gap-2 p-12 bg-[url(/bg-login.svg)] bg-center bg-cover rounded-lg shadow-xl lg:-mx-12 lg:py-20 text-white font-bold" >
             <div className="text-lg flex justify-center items-center flex-row flex-wrap space-x-4 uppercase">
                 <div>{announcement.liturgy ? "Kirchliches Fest" : "Ankündigung"}</div>
                 <div className="flex gap-8">
@@ -32,7 +32,7 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
                 {announcement.summary}
             </div>
             {'calendar' in announcement && <div
-                className={`text-lg font-bold px-4 rounded-full ${getCalendarInfo(announcement.calendar).className}`}>
+                className={`text-lg font-bold px-4 rounded-full uppercase bg-white/30`}>
                 {getCalendarInfo(announcement.calendar).fullName}
             </div>}
             {announcement.liturgy && <div className={`flex flex-col gap-1`}>
@@ -42,7 +42,7 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
                         (event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst)))
                     .map(event => <div className="flex gap-3 items-center">
                         <div
-                            className={`font-bold px-4 rounded-full ${getCalendarInfo(event.calendar).className}`}>
+                            className={`font-bold px-4 rounded-full uppercase bg-white/30`}>
                             {getCalendarInfo(event.calendar).tagName}
                         </div>
                         <div className="text-lg font-bold">

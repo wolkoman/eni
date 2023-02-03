@@ -70,7 +70,7 @@ export function ListView2(props: { filter: FilterType, liturgy: LiturgyData, cal
             props.filter, separateMass)))
             .map(([date, events]) => <div key={date} data-date={date}
                                           className="py-2 flex flex-col lg:flex-row border-b border-black/10">
-                <div className="w-[130px]">
+                <div className="w-[130px] my-2">
                     <EventDate2 date={new Date(date)}/>
                 </div>
                 <div className="grow">

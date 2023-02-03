@@ -40,7 +40,7 @@ export function Event2({event, ...props}: { event: CalendarEvent, hideTagOnLarge
     const {user} = useAuthenticatedUserStore();
     const cancelled = event.tags.includes(CalendarTag.cancelled);
     const announcement = event.tags.includes(CalendarTag.announcement);
-    const editable = user?.permissions[Permission.PrivateCalendarAccess] && props.enableEditing;
+    const editable = user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && props.enableEditing;
     const info = getCalendarInfo(event.calendar);
     const [isEditing, setIsEditing] = useState(false);
     return <>
@@ -48,7 +48,7 @@ export function Event2({event, ...props}: { event: CalendarEvent, hideTagOnLarge
             className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${editable && 'cursor-pointer'} relative ${announcement && `${info.className} rounded-lg`}`}
             onClick={() => editable ? setIsEditing(true) : {}}
         >
-            <div className="w-[30px] lg:w-[50px] pt-1.5 shrink-0">
+            <div className={`w-[30px] lg:w-[50px] pt-1.5 shrink-0 ${props.hideTagOnLarge && 'lg:hidden'}`}>
                 <ParishTag3 info={info}/>
             </div>
             <div className={`w-[50px] lg:w-[60px] flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>

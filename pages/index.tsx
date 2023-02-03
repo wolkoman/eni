@@ -36,24 +36,9 @@ export default function HomePage(
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
                 <TopBar/>
-                <div className=" overflow-hidden pb-12 grid grid-cols-3">
-                    <div className="bg-emmaus flex items-end justify-center">
-                        <img src="/parish/emmaus.svg" className="h-44 mt-12"/>
-                    </div>
-                    <div className="bg-inzersdorf flex items-end justify-center">
-                        <img src="/parish/inzersdorf.svg" className="h-44 mt-12"/>
-                    </div>
-                    <div className="bg-neustift flex items-end justify-center">
-                        <img src="/parish/neustift.svg" className="h-44 mt-12"/>
-
-                </div>
-                    {/*<Responsive>
+                    <Responsive>
                         <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
-                        <div className="flex justify-center mt-12 w-full">
-                            <img src="/logo/dreipfarren.svg" className="scale-[150%] lg:scale-110"/>
-                        </div>
-                    </Responsive>*/}
-                </div>
+                    </Responsive>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
                 <Instagram items={props.instagram}/>

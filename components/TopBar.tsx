@@ -5,7 +5,7 @@ import {useAuthenticatedUserStore} from "../util/use-user-store";
 import Responsive from "./Responsive";
 import {useRive} from "@rive-app/react-canvas";
 
-export default function TopBar(props: { title?: string }) {
+export default function TopBar() {
     const {user} = useAuthenticatedUserStore();
     const [isFrontpage, setIsFrontpage] = useState(false);
     useEffect(() => {
@@ -13,19 +13,16 @@ export default function TopBar(props: { title?: string }) {
     }, [])
     return site(<div className="my-2 lg:my-10 overflow-hidden">
         <Responsive>
+            <Link href={user ? "/intern" : "/"}>
             <div className="flex justify-between text-sm">
-                <Link href={user ? "/intern" : "/"}>
                     <div className="font-bold">
-                        Zusammenarbeit der Pfarren Emmaus am Wienerberg, Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
+                        Zusammenarbeit der Pfarren Emmaus am Wienerberg,<br/>Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
                     </div>
-                </Link>
                 <div className="hidden lg:block">
-                    kanzlei@eni.wien
+                    <img src="/logo/dreipfarren.svg"/>
                 </div>
             </div>
-            {isFrontpage ? <></> : <div className="relative -mx-16">
-                <Hero/>
-            </div>}
+            </Link>
         </Responsive>
     </div>, <div
         className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 bg-emmaus text-white`} data-testid="navbar">
