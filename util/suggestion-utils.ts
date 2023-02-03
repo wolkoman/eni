@@ -30,6 +30,6 @@ export function getSuggestion(event?: CalendarEvent) {
         summary: event?.summary ?? "",
         description: event?.description ?? "",
         date: event?.date ?? "",
-        time: event?.start.dateTime.substring(11, 16) ?? ""
+        time: event?.start ? new Date(event?.start.dateTime).toLocaleTimeString("de-AT", {timeZone: 'Europe/Vienna'}) : ""
     };
 }
