@@ -17,7 +17,7 @@ export interface InstagramFeedItem {
 }
 
 function InstagramBig(props: { item: any, onClick: MouseEventHandler<HTMLDivElement> }) {
-    return <div className="rounded-lg bg-black/5 max-w-lg lg:w-screen cursor-pointer" onClick={props.onClick}>
+    return <div className="rounded-lg bg-black/5 lg:max-w-lg lg:w-screen cursor-pointer" onClick={props.onClick}>
         <div
             style={{backgroundImage: `url(${props.item?.media_url})`}}
             className={`bg-cover relative bg-center aspect-square rounded-lg`}>

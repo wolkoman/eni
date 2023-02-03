@@ -35,7 +35,7 @@ export function Tooltip(props: { tip: string, children: ReactNode }) {
         <div className="group relative">
             {props.children}
             <div
-                className="hidden group-hover:block z-20 text-sm absolute left-0 bottom-0 translate-y-full bg-gray-100 shadow-lg rounded px-2 py-1">
+                className="hidden group-hover:block z-20 text-sm absolute left-0 bottom-0 translate-y-full bg-gray-200 shadow-lg rounded px-3 py-1 whitespace-nowrap">
                 {props.tip}
             </div>
         </div>

@@ -12,7 +12,6 @@ import {EventSearch} from "./EventSearch";
 
 export function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState }) {
     const [searchActive] = usePreference(Preference.Search);
-    const [separateMass] = usePreference(Preference.SeparateMass);
     const [search, setSearch] = useState("");
     const [selected, setSelected] = useState(new Date());
     const getDays = (year: number, month: number) => {
