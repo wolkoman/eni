@@ -56,11 +56,8 @@ export default function EventPage(props: {
     const calendar = user
         ? calendarStore
         : {items: props.eventsObject.events, error: false, loading: false, loaded: true};
-    const [separateMass] = usePreference(Preference.SeparateMass);
     const [monthView] = usePreference(Preference.MonthView);
     const {query: {q: groupQuery, p: parishQuery}, replace: routerReplace} = useRouter();
-
-    const personOrdering = ["Pedro", "Kpl. David", "Kpl. Gil", "Pfv. Marcin", "Pfr. Dr. Brezovski"];
 
     useEffect(() => {
         if (groupQuery) setFilter({filterType: "GROUP", group: groupQuery as CalendarGroup})
@@ -91,18 +88,6 @@ export default function EventPage(props: {
                                 filter={filter}
                                 setFilter={filter => setFilter(filter)}
                                 userPermissions={user?.permissions ?? {}}
-                                groups={calendar.items
-                                    .flatMap(event => event.groups)
-                                    .filter((group, index, groups) => groups.indexOf(group) === index)
-                                    .filter(group => separateMass || group !== CalendarGroup.Messe)
-                                }
-                                persons={[...new Set(calendar.items
-                                    .filter(event => !event.tags.includes(CalendarTag.cancelled))
-                                    .map(event => event.mainPerson)
-                                    .filter((person): person is string => personOrdering.includes(person ?? ""))
-                                )]
-                                    .sort((a, b) => personOrdering.indexOf(b) - personOrdering.indexOf(a))
-                                }
                             />
                         }/>
                     }

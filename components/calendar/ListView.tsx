@@ -52,20 +52,24 @@ export function ListView2(props: { filter: FilterType, liturgy: LiturgyData, cal
         <div className="flex justify-between items-center mb-6">
             <div>
                 <div className="font-bold text-4xl mb-6">Termine</div>
-                {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
             </div>
             <div className="flex gap-2">
                 <AddEvent/>
                 <Settings/>
             </div>
         </div>
-        {props.filterSlot}
+        <div className="flex flex-col gap-1 my-4">
+            {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
+            {props.filterSlot}
+        </div>
+
         {props.calendar.error && <CalendarErrorNotice/>}
         {props.calendar.loading && <EniLoading/>}
         {props.calendar.loading || Object.entries(groupEventsByDate(applyFilter(props.calendar.items
-                .filter(event => !search || (event.summary + event.description + (event.tags.includes(CalendarTag.singleEvent) ? "" : "Einzelevent")).toLowerCase().includes(search.toLowerCase())),
+                .filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.map(group => `gruppe:${group}`).join(",") + (event.tags.includes(CalendarTag.singleEvent) ? "" : "Einzelevent")).toLowerCase().includes(search.toLowerCase())),
             props.filter, separateMass)))
-            .map(([date, events]) => <div key={date} data-date={date} className="py-2 flex flex-col lg:flex-row border-b border-black/10">
+            .map(([date, events]) => <div key={date} data-date={date}
+                                          className="py-2 flex flex-col lg:flex-row border-b border-black/10">
                 <div className="w-[130px]">
                     <EventDate2 date={new Date(date)}/>
                 </div>
