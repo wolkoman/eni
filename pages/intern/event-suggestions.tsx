@@ -30,8 +30,7 @@ export default function Intern() {
         {loading && <EniLoading/>}
         {openSuggestions.map(suggestion => {
             const original = originalItems.find(event => event.id === suggestion.eventId);
-            if (!original) return <>Vergangen</>;
-            const updated =  applySuggestion(suggestion, original);
+            const updated = applySuggestion(suggestion, original);
             return <div className="bg-black/[2%] rounded-lg my-2 p-4">
                 <div className="flex justify-between">
                     <div className="font-bold">Vorschlag von {suggestion.byName}</div>
@@ -42,7 +41,7 @@ export default function Intern() {
                     </div>
                 </div>
                 <div className="grid lg:grid-cols-2">
-                    {suggestion.type !== "add" && <div>
+                    {suggestion.type !== "add" && original && <div>
                         <EventDateText date={new Date(original.date)}/>
                         <Event event={original}/>
                     </div>}

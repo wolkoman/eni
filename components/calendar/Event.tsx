@@ -45,7 +45,7 @@ export function Event2({event, ...props}: { event: CalendarEvent, hideTagOnLarge
     const [isEditing, setIsEditing] = useState(false);
     return <>
         <div
-            className={`flex text-lg mb-1 ${cancelled && 'opacity-50'} ${editable && 'cursor-pointer'} relative ${announcement && `${info.className} rounded-lg py-1`}`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${editable && 'cursor-pointer'} relative ${announcement && `${info.className} rounded-lg`}`}
             onClick={() => editable ? setIsEditing(true) : {}}
         >
             <div className="w-[30px] lg:w-[50px] pt-1.5 shrink-0">
@@ -54,8 +54,8 @@ export function Event2({event, ...props}: { event: CalendarEvent, hideTagOnLarge
             <div className={`w-[50px] lg:w-[60px] flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
                 {event.start.dateTime && <EventTime date={new Date(event.start.dateTime)}/>}
             </div>
-            <div className="mb-2 leading-5 grow">
-                <div className={`mt-1 ${cancelled || 'font-semibold'}`}>{event.summary}</div>
+            <div className="grow">
+                <div className={`${cancelled || 'font-semibold'}`}>{event.summary}</div>
                 <EventDescription3 event={event}/>
             </div>
             <div className="flex gap-1" data-testid="event">
