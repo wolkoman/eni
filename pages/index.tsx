@@ -1,13 +1,3 @@
-import {Collections} from "cockpit-sdk";
-import Articles from '../components/Articles';
-import {ComingUp} from '../components/calendar/ComingUp';
-import {ChristmasDisplay} from "../components/ChristmasDisplay";
-import {EmmausBranding} from '../components/EmmausBranding';
-import {EmmausSections} from "../components/EmmausSections";
-import {EniBranding} from '../components/EniBranding';
-import {EniSections} from '../components/EniSections';
-import {Instagram, InstagramFeedItem} from '../components/Instagram';
-import {Personal} from "../components/Personal";
 import Responsive from "../components/Responsive";
 import {Section} from "../components/Section";
 import Site from '../components/Site';
@@ -17,18 +7,27 @@ import {EventsObject} from '../util/calendar-types';
 import {fetchArticles} from "../util/fetchArticles";
 import {fetchEmmausSites} from "../util/fetchEmmausSites";
 import {fetchInstagramFeed} from "../util/fetchInstagram";
-import {fetchEmmausbote, fetchWeeklies} from "../util/fetchWeeklies";
-import {isBeforeChristmas} from "../util/isChristmas";
+import {fetchEmmausbote} from "../util/fetchWeeklies";
 import {site} from '../util/sites';
+import {getLiturgyData, Liturgy} from "./api/liturgy";
+import {Instagram, InstagramFeedItem} from "../components/Instagram";
+import {Collections} from "cockpit-sdk";
+import {ChristmasDisplay} from "../components/ChristmasDisplay";
+import {EniSections} from "../components/EniSections";
+import {EmmausBranding} from "../components/EmmausBranding";
+import Articles from "../components/Articles";
+import {ComingUp} from "../components/calendar/ComingUp";
+import {EmmausSections} from "../components/EmmausSections";
+import {News} from "../components/News";
 
 export default function HomePage(
     props: {
         eventsObject: EventsObject,
         instagram: InstagramFeedItem[],
         articles: any[],
-        weeklies: Collections['weekly'][],
+        liturgyEvents: (Liturgy & { date: string })[],
         emmausbote: Collections['Emmausbote'][],
-        sites: Collections['site'][]
+        sites: Collections['site'][],
     }
 ) {
     return site(() => <>
@@ -37,10 +36,11 @@ export default function HomePage(
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
                 <TopBar/>
-                <EniBranding/>
-                {isBeforeChristmas() && <ChristmasDisplay eventsObject={props.eventsObject}/>}
+                    <Responsive>
+                        <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
+                    </Responsive>
+                <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
-                <Personal/>
                 <Instagram items={props.instagram}/>
                 <EniSections/>
             </Site>
@@ -56,7 +56,7 @@ export default function HomePage(
             <div className="relative z-10 bg-white">
                 <Articles items={props.articles} sites={props.sites}/>
                 <ComingUp eventsObject={props.eventsObject}/>
-                <EmmausSections weeklies={props.weeklies} emmausbote={props.emmausbote}/>
+                <EmmausSections emmausbote={props.emmausbote}/>
                 <Instagram items={props.instagram}/>
                 <Responsive>
                     <Section title="Kontakt" id="kontakt">
@@ -74,15 +74,27 @@ export default function HomePage(
 }
 
 export async function getStaticProps() {
+    const liturgy = await site(async () => {
+        const liturgy = await getLiturgyData();
+        const now = new Date().getTime();
+        const events = Object.entries(liturgy)
+            .flatMap(([date, liturgies]) => liturgies.map(liturgy => ({rank: liturgy.rank, name: liturgy.name, date})))
+            .filter(({
+                         date,
+                         rank
+                     }) => new Date(date).getTime() + 1000 * 3600 * 24 > now && (rank === "F" || rank === "H"))
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        return events;
+    }, () => Promise.resolve({}))();
     return {
         props: {
             instagram: await fetchInstagramFeed(),
             eventsObject: await getCachedEvents({permission: GetEventPermission.PUBLIC}),
             articles: await site(() => Promise.resolve({}), () => fetchArticles())(),
             sites: await site(() => Promise.resolve({}), () => fetchEmmausSites())(),
-            weeklies: await site(() => Promise.resolve({}), () => fetchWeeklies())(),
             emmausbote: await site(() => Promise.resolve({}), () => fetchEmmausbote())(),
+            liturgyEvents: liturgy,
         },
-        revalidate: 60,
+        revalidate: 60 * 5,
     }
 }

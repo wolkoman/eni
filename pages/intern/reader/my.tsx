@@ -4,9 +4,9 @@ import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import {ReaderSite} from "./index";
 import {getTasksFromReaderData, ReaderInfo} from "../../../util/reader";
-import {EventDateText, EventTime} from "../../../components/calendar/Event";
 import Button from "../../../components/Button";
 import {fetchJson} from "../../../util/fetch-util";
+import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
     const order = ["H", "F", "G", "", "g"];

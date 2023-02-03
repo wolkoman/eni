@@ -1,4 +1,4 @@
-import {CalendarEvent, CalendarGroup} from "./calendar-types";
+import {CalendarGroup} from "./calendar-types";
 import {notifyAdmin} from "./telegram";
 import {calendar_v3} from "googleapis";
 
@@ -25,6 +25,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("maiandacht") && CalendarGroup.Gebet,
         sum.includes("wärmestube") && CalendarGroup.Caritas,
         sum.includes("klimaoase") && CalendarGroup.Caritas,
+        sum.includes("caritas") && CalendarGroup.Caritas,
         sum.includes("jungschar") && CalendarGroup.Kinder,
         sum.includes("eltern-kind-treff") && CalendarGroup.Kinder,
         sum.includes("mädchenabend") && CalendarGroup.Kinder,
@@ -69,10 +70,10 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("mette") && CalendarGroup.Weihnachten,
         sum.includes("karfreitag") && CalendarGroup.Ostern,
         sum.includes("speisensegnung") && CalendarGroup.Ostern,
-        sum.includes("aschermittwoch") && CalendarGroup.Ostern,
+        sum.includes("aschermittwoch") && CalendarGroup.Fastenzeit,
         sum.includes("auferstehungsfeier") && CalendarGroup.Ostern,
-        sum.includes("jesu am kreuz") && CalendarGroup.Ostern,
-        sum.includes("gründonnerstag") && CalendarGroup.Ostern,
+        sum.includes("jesu am kreuz") && CalendarGroup.Fastenzeit,
+        sum.includes("gründonnerstag") && CalendarGroup.Karwoche,
         sum.includes("evangel") && CalendarGroup.Invisible,
         sum.includes("taufe") && CalendarGroup.Invisible,
         sum.includes(" ehe") && CalendarGroup.Invisible,
@@ -82,11 +83,11 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("krankenbesuche") && CalendarGroup.Invisible,
         sum.includes("motorrad") && CalendarGroup.Invisible,
         sum.includes("generalprobe") && CalendarGroup.Invisible,
+        sum.includes("sprechstunde") && CalendarGroup.Invisible,
         sum.includes("sitzung") && CalendarGroup.Gremien,
         sum.includes("pfarrgemeinderat") && CalendarGroup.Gremien,
         sum.includes("chor") && CalendarGroup.Chor,
         sum.includes("vokalensemble") && CalendarGroup.Chor,
-        sum.includes("sprechstunde") && CalendarGroup.Sprechstunde,
         sum.includes("lima") && CalendarGroup.Gemeinschaft,
         sum.includes("erstkommunion") && CalendarGroup.Sakramente,
         sum.startsWith("taufe") && CalendarGroup.Sakramente,
@@ -102,4 +103,18 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
     }
 
     return groups.filter(group => group !== CalendarGroup.Invisible);
+}
+
+export function getGroupSorting(group: CalendarGroup) {
+    return [
+        CalendarGroup.Gebet,
+        CalendarGroup.Wallfahrt,
+        CalendarGroup.Advent,
+        CalendarGroup.Fastenzeit,
+        CalendarGroup.Karwoche,
+        CalendarGroup.Gottesdienst,
+        CalendarGroup.Messe,
+        CalendarGroup.Weihnachten,
+        CalendarGroup.Ostern
+    ].indexOf(group);
 }

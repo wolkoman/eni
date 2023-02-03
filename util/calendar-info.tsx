@@ -12,6 +12,7 @@ export interface CalendarInfo {
   image: string,
   websiteUrl: string,
   websiteDisplay: string,
+  dot: string,
   imageColor: string,
 }
 export enum CalendarName{
@@ -34,6 +35,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     websiteUrl: 'https://eni.wien',
     websiteDisplay: 'https://eni.wien',
     image: '',
+    dot: '',
     imageColor: ''
   },
   [CalendarName.EMMAUS]: {
@@ -49,6 +51,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     imageColor: '/logos_Emmaus Fade.svg',
     websiteUrl: 'https://emmaus.wien/',
     websiteDisplay: 'emmaus.wien',
+    dot: '/dot/edot.svg',
   },
   [CalendarName.INZERSDORF]: {
     id: CalendarName.INZERSDORF,
@@ -63,6 +66,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     imageColor: '/logos_Inzersdorf Fade.svg',
     websiteUrl: 'https://pfarresanktnikolaus.at',
     websiteDisplay: 'pfarresanktnikolaus.at',
+    dot: '/dot/idot.svg',
   },
   [CalendarName.NEUSTIFT]: {
     id: CalendarName.NEUSTIFT,
@@ -77,6 +81,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     imageColor: '/logos_Neustift Fade.svg',
     websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
     websiteDisplay: 'pfarreinzersdorfneustift.at',
+    dot: '/dot/ndot.svg',
   },
   [CalendarName.INZERSDORF_ORGAN]: {
     id: CalendarName.INZERSDORF_ORGAN,
@@ -90,7 +95,8 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     websiteUrl: '',
     websiteDisplay: '',
     image: '',
-    imageColor: ''
+    imageColor: '',
+    dot: ''
   },
 };
 

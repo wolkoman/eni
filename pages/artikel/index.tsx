@@ -20,10 +20,11 @@ export default function Events(props: {articles: Collections['article'][]}) {
 }
 
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   return {
     props: {
       articles: (await cockpit.collectionGet('article', {filter: {platform: site('eni', 'emmaus')}, sort: {_created: -1}})).entries
-    }
+    },
+    revalidate: 60 * 5
   }
 }

@@ -40,7 +40,7 @@ declare module 'cockpit-sdk' {
       name: string,
       username: string,
       parish: CalendarName,
-      competences: ('organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning')[],
+      competences: ('calendar_administration' | 'organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning')[],
       code?: string,
       email?: string,
       last_login: string,
@@ -54,6 +54,24 @@ declare module 'cockpit-sdk' {
       guideline_link: string,
       deadline: string
     } & Object,
+    announcements:{
+      "files": string[],
+      "mail": string,
+      "description": string,
+      hidden: boolean
+    } & Object,
+
+    eventSuggestion:{
+      "eventId": string,
+      "data": { summary: string, description: string, date: string, time: string, parish: string },
+      "byName": string,
+      "by": string,
+      "open": boolean,
+      "accepted": boolean,
+      "closedByName": string,
+      "closedBy": string,
+      "type": "edit" | "add" | "delete",
+    } & Object
     paper_articles: {
       name: string,
       project: Reference,
@@ -90,7 +108,7 @@ declare module 'cockpit-sdk' {
     error: string
   }
 
-  type CollectionGetProps<T> = { filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
+  type CollectionGetProps<T> = { token?: string, filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
 
   class CockpitSDK {
     public host: string;
@@ -99,7 +117,7 @@ declare module 'cockpit-sdk' {
 
     collectionGet<T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>>
 
-    collectionSave<T extends keyof Collections>(collectionName: T, object: Optional<Collections[T], '_id'>)
+    collectionSave<T extends keyof Collections>(collectionName: T, object: Optional<Collections[T], '_id'>): Promise<Collections[T]>
     collectionSave<T extends keyof Collections>(collectionName: T, object: Collections[T])
 
     singletonGet<T extends keyof Singletons>(singletonName: T): Promise<Singletons[T]>

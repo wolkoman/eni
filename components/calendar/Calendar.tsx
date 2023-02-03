@@ -8,7 +8,7 @@ export function applyFilter(events: CalendarEvent[], filter: FilterType, separat
     .filter(event =>
         ((filter?.filterType === 'PERSON' && event.mainPerson === filter.person))
       || (filter?.filterType === 'PARISH' && (event.calendar === filter.parish || event.calendar === "all"))
-      || (filter?.filterType === 'GROUP' && event.groups.map(group => !separateMass && group === CalendarGroup.Messe ? CalendarGroup.Gottesdienst : group).includes(filter.group))
+      || (filter?.filterType === 'GROUP' && event.groups?.map(group => !separateMass && group === CalendarGroup.Messe ? CalendarGroup.Gottesdienst : group).includes(filter.group))
       || (filter === null))
 
 }

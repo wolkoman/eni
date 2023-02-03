@@ -5,6 +5,7 @@ import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
 import {useUserStore} from '../../util/use-user-store';
 import {CalendarEvent} from "../../util/calendar-types";
+import {clickable} from "../../components/calendar/ComingUp";
 
 export default function Orgel() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
@@ -74,7 +75,7 @@ export default function Orgel() {
 
     <div className="flex flex-col md:flex-row gap-6">
 
-      <div className="mb-8 md:w-72 bg-black/5 rounded-lg p-4 md:pr-4 flex-shrink-0">
+      <div className="mb-8 md:w-72 bg-black/[2%] rounded-lg p-4 md:pr-4 flex-shrink-0">
         <div className="text-lg mb-3">Meine Buchungen</div>
         <div className="flex flex-col gap-2">
           {
@@ -85,7 +86,7 @@ export default function Orgel() {
           }
           {data.myBookings.map(booking => <div
             key={booking.id}
-            className={`flex bg-gray-200 px-3 py-2 bg-black/5 rounded-lg justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
+            className={`flex bg-gray-200 px-3 py-2 bg-black/[4%] rounded-lg justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
             <div className="flex">
               <div className="w-20 font-bold">
                 {new Date(booking.start.dateTime).toLocaleDateString("de-AT")}
@@ -95,9 +96,7 @@ export default function Orgel() {
                 {new Date(booking.end.dateTime).toLocaleTimeString().substring(0, 5)} Uhr
               </div>
             </div>
-            <div className="on-parent-hovers cursor-pointer relative w-2 hover:opacity-80" onClick={() => {
-              unbookHour(booking);
-            }}>
+            <div className="cursor-pointer relative w-2 hover:opacity-80" onClick={() => unbookHour(booking)}>
               <div className="absolute top-3 left-0 w-3 h-0.5 bg-black transform rotate-45"/>
               <div className="absolute top-3 left-0 w-3 h-0.5 bg-black transform -rotate-45"/>
             </div>
@@ -118,7 +117,7 @@ export default function Orgel() {
               const unavailable = !data.availableSlots.includes(slot);
               return <div
                 key={slot}
-                className={`h-14 rounded-lg text-center flex justify-center items-center ${unavailable ? 'cursor-default opacity-50' : 'cursor-pointer hover:bg-black/10 bg-black/5'}`}
+                className={`h-14 rounded-lg text-center flex justify-center items-center ${unavailable ? 'cursor-default opacity-50' : clickable}`}
                 onClick={() => unavailable ? null : bookHour(slot)}>
                 <div>{new Date(slot).toLocaleTimeString().substring(0,5)}</div>
               </div>;

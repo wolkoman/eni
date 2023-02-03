@@ -1,4 +1,6 @@
 import {CalendarName} from "./calendar-info";
+import {ReaderInfo} from "./reader";
+import {Collections} from "cockpit-sdk";
 
 export interface CalendarEvent {
     id: string,
@@ -12,12 +14,14 @@ export interface CalendarEvent {
     visibility: string,
     wholeday: boolean,
     groups: CalendarGroup[],
-    tags: CalendarTag[]
+    tags: CalendarTag[],
+    readerInfo: {reading1?: ReaderInfo, reading2?: ReaderInfo}
 }
 
 export interface EventsObject {
     events: CalendarEvent[];
-    cache: string | null;
+    openSuggestions: Collections['eventSuggestion'][]
+    cache?: string;
 }
 
 export enum CalendarTag {
@@ -25,6 +29,8 @@ export enum CalendarTag {
     private = 'private',
     cancelled = 'cancelled',
     announcement = 'announcement',
+    singleEvent = 'singleEvent',
+    suggestion = 'suggestion',
 }
 
 export enum CalendarGroup {
@@ -40,9 +46,10 @@ export enum CalendarGroup {
     Weihnachten = "Weihnachten",
     Advent = "Advent",
     Invisible = "_",
-    Sprechstunde = "Sprechstunde",
     Jugend = "Jugend",
     Gremien = "Gremien",
     Chor = "Chor",
+    Karwoche = "Karwoche",
     Ostern = "Ostern",
+    Fastenzeit = "Fastenzeit",
 }

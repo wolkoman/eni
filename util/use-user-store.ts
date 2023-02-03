@@ -4,7 +4,6 @@ import {User} from './user';
 import {useEffect} from "react";
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
 import {JwtPayload, verify} from "jsonwebtoken";
-import {type} from "os";
 
 export function useAuthenticatedUserStore() {
 

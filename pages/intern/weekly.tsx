@@ -27,20 +27,27 @@ export default function InternArticles() {
 
     function toCalEevent(event: CalendarEvent) {
         const special = event.groups.includes(CalendarGroup.Messe);
+        const isDescription = event.description.toString().trim().length > 0;
+        const description = `\n${sanitize(event.description.replaceAll("<br/>","\n").trim(), {allowedTags: []})}`
         return {
             [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),
-            [special ? 'specialtitle' : 'title']: event.summary + (event.mainPerson ? ` / ${event.mainPerson}` : ""),
-            description: event.description.toString().trim().length > 0 ? `\n${sanitize(event.description.trim())}` : ""
+            [special ? 'specialtitle' : 'title']: event.summary,
+            description: (event.mainPerson ? `\nmit ${event.mainPerson}` : '') + (isDescription ? description : '')
         };
     }
 
-    async function generate() {
-        const response = await fetch('/eni.docx');
+    async function generate(file: string) {
+        const response = await fetch(file);
         const templateFile = await response.blob();
         const from = data.start.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 5);
         const to = data.end.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 10);
+        const year = new Date(data.end.getFullYear(), 0, 1);
+        const days = Math.floor((data.end.getTime() - year.getTime()) / (24 * 60 * 60 * 1000));
+        const week = Math.ceil((data.end.getDay() + days) / 7);
         const wordData = {
-            daterange: `${from}. - ${to}`,
+            daterange: `${from}. - ${to}.`,
+            kw: week,
+            year: data.end.getFullYear(),
             event: Object.entries(groupEventsByDate(events))
                 .filter(([date]) => data.start.getTime() <= new Date(date).getTime() && data.end.getTime() >= new Date(date).getTime())
                 .map(([date, events]) => ({date, events: events.filter(e => e.visibility === "public")}))
@@ -75,7 +82,8 @@ export default function InternArticles() {
                 <input type="date" className="bg-gray-200 px-3 py-1 rounded"
                        onChange={(e) => setPartialData({end: new Date(e.target.value)})}/>
             </div>
-            <Button className="mt-4" label="Generieren" onClick={() => generate()} disabled={!loaded}/>
+            <Button className="mt-4" label="Generieren" onClick={() => generate("/eni.docx")} disabled={!loaded}/>
+            <Button className="mt-4" label="Generieren Neue Version" onClick={() => generate("/eni2.docx")} disabled={!loaded}/>
         </div>
     </Site>;
 }

@@ -5,9 +5,13 @@ import {Preference, usePreference} from "../util/use-preference";
 
 function SettingsOption(props: { title: string, description: string, name: Preference }) {
     const [preference, setPreference] = usePreference(props.name);
-    return <div className="flex items-start cursor-pointer select-none" onClick={({target}) => setPreference(!preference)}>
+    return <div className="flex items-start cursor-pointer select-none" onClick={() => {
+        console.log(preference);
+        return setPreference(!preference);
+    }}>
         <input
             type="checkbox" className="mt-2 mr-4 pointer-events-none" checked={preference}
+            onChange={() => {}}
         />
         <div>
             <div className="font-bold">{props.title}</div>
@@ -42,6 +46,14 @@ export function Settings() {
                 name={Preference.LiturgyInformation}
                 title="Liturgie Informationen"
                 description="Zusätzliche liturgische Information im Kalendar anzeigen"/>
+            <SettingsOption
+                name={Preference.Search}
+                title="Terminsuche"
+                description="Ein Suchfeld bei den Terminen anzeigen"/>
+            <SettingsOption
+                name={Preference.MonthView}
+                title="Monatsansicht (In-Entwicklung)"
+                description="Eine Monatsansicht anstelle der Terminliste anzeigen"/>
         </div>
     </div>;
 }

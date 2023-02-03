@@ -5,6 +5,7 @@ import Responsive from "./Responsive";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
 import {InternButton} from "./InternButton";
+import {Personal} from "./Personal";
 
 export function EniSections() {
     return <Responsive>
@@ -13,14 +14,14 @@ export function EniSections() {
                 <div className="flex flex-col items-center">
                     <img src="./Wochenblatt.svg" className="h-44 mb-12"/>
                     <div className="text-3xl font-bold">
-                        Wochenmitteilungen
+                        Wochen&shy;mitteilungen
                     </div>
                     <div className="text-lg my-3">
                         Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu.
                         Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit
                         der gewünschten Pfarre an kanzlei@eni.wien.
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col lg:flex-row gap-2">
                         {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                             <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
                                 <Button label={info.shortName} className={info.className}/>
@@ -31,13 +32,13 @@ export function EniSections() {
                 <div className="flex flex-col items-center">
                     <img src="./Zeitungen.svg" className="h-44 mb-12"/>
                     <div className="text-3xl font-bold">
-                        Pfarrzeitungen
+                        Pfarr&shy;zeitungen
                     </div>
                     <div className="text-lg my-3">
                         Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken
                         und vieles mehr finden Sie in den Pfarrzeitungen der Pfarren.
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col lg:flex-row gap-2">
                         {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                             <Link key={info.id} href={{
                                 emmaus: "https://emmaus.wien/#pfarrzeitung",
@@ -55,13 +56,7 @@ export function EniSections() {
                 </div>
             </div>
         </Section>
-        {false && <Section title="Selbstbedienung">
-            <div className="flex text-lg">
-                <Link href="/self-service/event" legacyBehavior={true}>
-                    <Button label="Termin anmelden" big={true}/>
-                </Link>
-            </div>
-        </Section>}
+        <Personal/>
         <Section title="Pfarren">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
                 <Parish name={CalendarName.EMMAUS}/>
@@ -77,7 +72,7 @@ function Parish(props: { name: CalendarName }) {
     return <div className="flex flex-col items-center text-center w-full">
         <div className={"rounded-lg overflow-hidden h-44 relative w-full " + info.className}>
             <div style={{backgroundImage: `url(${info.image})`}}
-                 className="w-full h-full rounded-lg bg-contain bg-no-repeat bg-center"/>
+                 className="w-full h-full rounded-lg bg-contain bg-no-repeat bg-bottom"/>
         </div>
         <div className="text-xl font-bold mt-4">{info.fullName}</div>
         <div className="italic">{info.address}</div>

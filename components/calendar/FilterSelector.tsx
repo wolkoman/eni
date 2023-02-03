@@ -3,11 +3,11 @@ import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
 import {FilterType} from './Calendar';
 import {ReactNode} from "react";
 import {CalendarGroup} from "../../util/calendar-types";
-import {getGroupSorting} from "./ComingUp";
+import {getGroupSorting} from "../../util/calendar-group";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div
-        className={`px-4 py-1 mb-1 flex-grow text-center lg:text-left cursor-pointer rounded-xl ${props.active ? ((props.activeColor ?? "bg-black/5") + " font-bold") : ""}`}
+        className={`px-3 py-1 text-center cursor-pointer rounded-lg ${props.active ? ((props.activeColor ?? "bg-black/5") + " font-semibold") : ""}`}
         onClick={props.onClick}
     >
         {props.label}
@@ -15,7 +15,7 @@ function FilterButton(props: { active?: boolean, onClick?: () => void, label: st
 }
 
 function FilterButtons(props: { children: ReactNode }) {
-    return <div className="flex md:flex-col overflow-x-auto">{props.children}</div>;
+    return <div className="flex flex-wrap">{props.children}</div>;
 }
 
 function FilterLabel(props: { children: ReactNode }) {
@@ -44,7 +44,7 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
                     />
                 )}
             </FilterButtons>
-            {props.userPermissions[Permission.PrivateCalendarAccess] && <>
+            {props.userPermissions[Permission.PrivateCalendarAccess] && false && <>
                 <FilterLabel>Leitung</FilterLabel>
                 <FilterButtons>
                     {props.persons.map((person, index) => <FilterButton
@@ -59,21 +59,43 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
             <FilterLabel>Termingruppe</FilterLabel>
             <FilterButtons>
                 <div className="animate-pulse w-full flex lg:flex-col space-x-2 lg:space-x-0">
-                    {props.groups.length === 0 && Array.from({length: 5}).map(() => <FilterButton label="​" active={true}/>)}
+                    {props.groups.length === 0 && Array.from({length: 5}).map(() => <FilterButton label="​"
+                                                                                                  active={true}/>)}
                 </div>
                 <div className={"hiddens flex  lg:flex-col"}>
-                {props.groups
-                    .sort((a, b) => getGroupSorting(b) - getGroupSorting(a))
-                    .map(group => <FilterButton
-                            label={group}
-                            key={group}
-                            onClick={() => props.setFilter({filterType: 'GROUP', group})}
-                            active={props.filter?.filterType === "GROUP" && props.filter.group === group}
-                        />
-                    )}
+                    {props.groups
+                        .sort((a, b) => getGroupSorting(b) - getGroupSorting(a))
+                        .map(group => <FilterButton
+                                label={group}
+                                key={group}
+                                onClick={() => props.setFilter({filterType: 'GROUP', group})}
+                                active={props.filter?.filterType === "GROUP" && props.filter.group === group}
+                            />
+                        )}
                 </div>
             </FilterButtons>
         </div>
     </div>
         ;
+}
+
+export function FilterSelector2(props: { filter: FilterType, setFilter: (filter: FilterType) => void, userPermissions: Permissions }) {
+    const calendarNames: CalendarName[] = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
+    const calendarInfos = calendarNames.map(getCalendarInfo);
+
+    return <FilterButtons>
+            <FilterButton
+                label="Alle Pfarren"
+                onClick={() => props.setFilter(null)}
+                active={props.filter === null}
+            />
+            {calendarInfos.map(filt => <FilterButton
+                    label={filt.shortName}
+                    key={filt.id}
+                    onClick={() => props.setFilter({filterType: 'PARISH', parish: filt.id})}
+                    active={props.filter?.filterType === "PARISH" && props.filter.parish === filt.id}
+                    activeColor={filt.className}
+                />
+            )}
+        </FilterButtons>;
 }

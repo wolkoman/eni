@@ -6,9 +6,11 @@ import {useAuthenticatedUserStore} from "./use-user-store";
 import {useEffect} from "react";
 import {CalendarName} from "./calendar-info";
 import {CalendarEvent} from "./calendar-types";
+import {useAuthenticatedCalendarStore, useCalendarStore} from "./use-calendar-store";
 
 export function useAuthenticatedReaderStore() {
     const {user} = useAuthenticatedUserStore();
+    const {items: events} = useAuthenticatedCalendarStore();
     const store = useReaderStore(state => state);
     useEffect(() => {
         if (user?.parish && user.parish !== CalendarName.ALL) store.setParish(user.parish);
@@ -24,7 +26,8 @@ export function useAuthenticatedReaderStore() {
         setReaderData: store.setReaderData,
         parish: store.parish,
         setParish: store.setParish,
-        events: store.events
+        events: store.events,
+        readerCount: store.getReaderCount(events)
     };
 }
 
@@ -39,6 +42,7 @@ export const useReaderStore = create<{
     error: boolean;
     setReaderData: (x?: any) => void;
     load: (token?: string) => void;
+    getReaderCount: (events: CalendarEvent[]) => { name: string, count: number, id: string }[]
 }>((set, get) => ({
     readers: [],
     events: [],
@@ -74,5 +78,21 @@ export const useReaderStore = create<{
                 }, 3000);
                 set({loaded: true, loading: false, error: true});
             });
+    },
+    getReaderCount(events: CalendarEvent[]){
+        return Object.entries(Object.entries(get().readerData)
+            .map(([id2, data]) => ({date: events.find(({id}) => id === id2)?.date, data}))
+            .filter(({date}) => date)
+            .flatMap((({data}) => [data.reading1?.id, data.reading2?.id]))
+            .filter(data => data)
+            .reduce<Record<string, number>>(
+                (p, c) => ({...p, [c]: p[c] + 1}),
+                Object.fromEntries(get().readers.map(person => [person._id, 0]))
+            )
+        ).map(([id, count]) => ({
+            id,
+            count,
+            name: get().readers.find(({_id}) => _id === id)?.name,
+        })) as { name: string, count: number, id: string }[]
     }
 }));

@@ -13,13 +13,13 @@ const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
 export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: GetEventOptions): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
     return (event): CalendarEvent | null => {
-        const displayPersonen = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
+        const mainPerson = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
         const privateAccess = options.permission === GetEventPermission.PRIVATE_ACCESS;
         if (event.visibility === 'private' && !privateAccess) return null;
         return {
             id: event.id ?? "",
-            mainPerson: displayPersonen,
+            mainPerson,
             summary: privateAccess ? summary : summary.replace(/\[.*?]/g, ''),
             description: privateAccess ? event.description ?? '' : event.description?.replace(/\[.*?]/g, '') ?? '',
             date: (event.start?.date ?? event.start?.dateTime ?? '').substring(0, 10),
@@ -36,8 +36,10 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
                 event.visibility === 'private' && CalendarTag.private,
                 (event.summary + (event.description ?? '')).match(cancelledRegex) && CalendarTag.cancelled,
                 (event.description ?? '').toLowerCase().includes("[ankündigung]") && CalendarTag.announcement,
+                !event.recurringEventId && privateAccess &&  CalendarTag.singleEvent,
             ].filter((item): item is CalendarTag => !!item),
             wholeday: !!event.start?.date,
+            readerInfo: {}
         };
     };
 }
@@ -66,22 +68,20 @@ export async function getCalendarEvents(calendarName: CalendarName, options: Get
         timeZone: 'Europa/Vienna',
         orderBy: 'startTime'
     });
-    const readerData = await (options.permission === GetEventPermission.PRIVATE_ACCESS
+    const readerData = await (options.permission === GetEventPermission.PRIVATE_ACCESS && options.getReaderData
             ? options.getReaderData()
             : Promise.resolve({})
     );
 
 
     function getReaderInfo(event: CalendarEvent) {
-        const readerInfo = readerData?.[event.id!] ?? {reading1: null, reading2: null};
-        return (readerInfo.reading1 ? `<br/>1.Lesung: ${readerInfo.reading1?.name}` : '') + (readerInfo.reading2 ? `<br/>2.Lesung: ${readerInfo.reading2?.name}` : '');
-
+        return readerData?.[event.id!] ?? {reading1: null, reading2: null};
     }
 
     return eventsList.data.items!.map(mapGoogleEventToEniEvent(calendarName, options))
         .filter((event): event is CalendarEvent => !!event?.summary)
         .filter(event => options.permission !== GetEventPermission.READER || options.ids.includes(event.id))
-        .map(event => ({...event, description: event.description + getReaderInfo(event)}))
+        .map(event => ({...event, readerInfo: getReaderInfo(event)}))
 }
 
 let oauth2Client: any;
@@ -119,7 +119,7 @@ export enum GetEventPermission {
 
 export type GetEventOptions =
     { permission: GetEventPermission.PUBLIC }
-    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: { min: Date, max: Date }, getReaderData: () => Promise<ReaderData> }
+    | { permission: GetEventPermission.PRIVATE_ACCESS, timeFrame?: { min: Date, max: Date }, getReaderData?: () => Promise<ReaderData> }
     | { permission: GetEventPermission.READER, ids: string[] }
 
 export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {
@@ -132,7 +132,10 @@ export const getCachedEvents = async (options: GetEventOptions): Promise<EventsO
                 data: {events, cache: new Date().toISOString()}
             }).catch();
         }
-        return {events, cache: null};
+        const openSuggestions = await (GetEventPermission.PRIVATE_ACCESS === options.permission
+            ? () => cockpit.collectionGet("eventSuggestion", {filter: {open: true}}).then(({entries}) => entries)
+            : () => Promise.resolve([]))();
+        return {events, openSuggestions};
     } else {
         const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
         await notifyAdmin('Google Calendar failed');
