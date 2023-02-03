@@ -15,10 +15,9 @@ export default function Footer() {
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 justify-between md:items-center mb-5">
                     <div>
                         {site(
-                            <>Zusammenarbeit der Pfarren:<br/>
-                                <div className="text-sm mr-1 inline-block">Pfarre Emmaus am Wienerberg,</div>
-                                <div className="text-sm mr-1 inline-block">Pfarre Inzersdorf (St. Nikolaus),</div>
-                                <div className="text-sm mr-1 inline-block">Pfarre Inzersdorf-Neustift</div>
+                            <>Miteinander der Pfarren Emmaus am Wienerberg,<br/>
+                                Inzersdorf (St. Nikolaus),
+                                Inzersdorf-Neustift
                             </>,
                             <>Röm.-kath. Pfarre Emmaus am Wienerberg</>
                         )}
