@@ -33,6 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         _id: suggestionId ?? collidingSuggestions?.[0]?._id,
         eventId: suggestionId ? null : req.body.eventId,
         data: req.body.data,
+        parish: req.body.parish,
         type: suggestionId ? "add" : req.body.type,
         by: user._id,
         byName: user.name,

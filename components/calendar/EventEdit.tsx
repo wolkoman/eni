@@ -6,20 +6,23 @@ import {useState} from "react";
 import {fetchJson} from "../../util/fetch-util";
 import {Field, SelfServiceInput} from "../SelfService";
 import Button from "../Button";
-import {getSuggestion} from "../../util/suggestion-utils";
+import {createDiffSuggestion, getSuggestion} from "../../util/suggestion-utils";
 
 
 export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: () => any, parish: CalendarName }) {
-    const {addSuggestion} = useAuthenticatedCalendarStore();
+    const {addSuggestion, originalItems} = useAuthenticatedCalendarStore();
     const {user} = useAuthenticatedUserStore();
     const form = useState(getSuggestion(event))
+    const [loading, setLoading] = useState(false);
 
     function save() {
+        setLoading(true);
         fetchJson("/api/calendar/suggest", {
             json: {
                 eventId: event?.id,
-                data: {...form[0], parish: props.parish},
-                type: event ? "edit" : "add"
+                data: {...createDiffSuggestion(getSuggestion(originalItems.find(e => e.id === event?.id)), form[0])},
+                type: event ? "edit" : "add",
+                parish: props.parish
             }
         }, {
             error: "Änderung konnte nicht gespeichert werden",
@@ -28,7 +31,7 @@ export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: (
         }).then(suggestion => {
             props.onClose();
             addSuggestion(suggestion, user!._id);
-        })
+        }).finally(() => setLoading(false))
     }
 
     return <div
@@ -45,8 +48,8 @@ export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: (
         <Field label="Beschreibung">
             <SelfServiceInput name="description" form={form} input="textarea"/>
         </Field>
-        <div>
-            <Button label="Speichern" onClick={save}></Button>
+        <div className={loading ? 'animate-pulse' : ''}>
+            <Button label="Speichern" onClick={save} disabled={loading}></Button>
         </div>
     </div>;
 }

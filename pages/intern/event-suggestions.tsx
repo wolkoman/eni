@@ -3,7 +3,7 @@ import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
 import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
-import {Event} from "../../components/calendar/Event";
+import {Event, Event2} from "../../components/calendar/Event";
 import {EniLoading} from "../../components/Loading";
 import Button from "../../components/Button";
 import {fetchJson} from "../../util/fetch-util";
@@ -44,11 +44,11 @@ export default function Intern() {
                 <div className="grid lg:grid-cols-2">
                     {suggestion.type !== "add" && original && <div>
                         <EventDateText date={new Date(original.date)}/>
-                        <Event event={original}/>
+                        <Event2 event={original}/>
                     </div>}
                     <div>
                         <EventDateText date={new Date(updated.date)}/>
-                        <Event event={updated}/>
+                        <Event2 event={updated}/>
                     </div>
                 </div>
             </div>;

@@ -15,7 +15,7 @@ export function ParishTag2(props: { calendar: CalendarName, colorless?: boolean 
 }
 
 export function ParishTag3({info}: { info: CalendarInfo }) {
-    return <Tooltip tip={info.fullName}>
-        <img src={info.dot} className="w-6 -mt-1"/>
+    return <Tooltip tip={info?.fullName}>
+        <img src={info?.dot} className="w-6 -mt-1"/>
     </Tooltip>;
 }

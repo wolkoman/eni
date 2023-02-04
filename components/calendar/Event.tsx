@@ -10,7 +10,7 @@ import {getCalendarInfo} from "../../util/calendar-info";
 export function Event({event, ...props}: { event: CalendarEvent, noTag?: boolean, hideTagOnLarge?: boolean, enableEditing?: boolean }) {
     const {user} = useAuthenticatedUserStore();
     const suggestion = event.tags.includes(CalendarTag.suggestion);
-    const editable = user?.permissions[Permission.PrivateCalendarAccess] && suggestion && props.enableEditing;
+    const editable = user?.permissions[Permission.PrivateCalendarAccess] && suggestion && props.enableEditing && (user.parish === "all" || user.parish === event.calendar);
     const [isEditing, setIsEditing] = useState(false);
     return <>
         <div
@@ -40,7 +40,7 @@ export function Event2({event, ...props}: { event: CalendarEvent, hideTagOnLarge
     const {user} = useAuthenticatedUserStore();
     const cancelled = event.tags.includes(CalendarTag.cancelled);
     const announcement = event.tags.includes(CalendarTag.announcement);
-    const editable = user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && props.enableEditing;
+    const editable = user?.permissions[Permission.PrivateCalendarAccess]  && event.start.dateTime && props.enableEditing && (user.parish === "all" || user.parish === event.calendar);
     const info = getCalendarInfo(event.calendar);
     const [isEditing, setIsEditing] = useState(false);
     return <>
