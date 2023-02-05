@@ -74,7 +74,8 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
                 error: false,
                 cache: data.cache,
             }))
-            .catch(() => {
+            .catch((err) => {
+                console.log({err})
                 setTimeout(() => {
                     set(state => ({...state, loaded: false}));
                     get().load(userId);

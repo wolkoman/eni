@@ -14,7 +14,7 @@ export function ParishTag2(props: { calendar: CalendarName, colorless?: boolean 
         className={`w-24 leading-4 inline-block p-2 text-center rounded-r-lg cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
 }
 
-export function ParishTag3({info}: { info: CalendarInfo }) {
+export function ParishDot({info}: { info: CalendarInfo }) {
     return <Tooltip tip={info?.fullName}>
         <img src={info?.dot} className="w-6 -mt-1"/>
     </Tooltip>;

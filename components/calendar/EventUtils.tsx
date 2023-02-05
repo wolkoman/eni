@@ -1,7 +1,9 @@
 import {getMonthName, getWeekDayName} from "./Calendar";
 import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 import {SanitizeHTML} from "../SanitizeHtml";
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
+import {DiffView} from "./Event";
+import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
 
 export function EventDescription(props: { event: CalendarEvent }) {
     return <div className="font-normal text-sm leading-4">
@@ -65,19 +67,40 @@ export function EventTag(props: { tag: CalendarTag }) {
 
 export function EventDescription3(props: { event: CalendarEvent }) {
     if (props.event.tags.includes(CalendarTag.cancelled)) return <></>;
+    const {openSuggestions} = useAuthenticatedCalendarStore();
+    const suggestion = openSuggestions.find(item => item.eventId === props.event.id);
+    const dateChanged = suggestion?.data.date.some(d => d[0] !== 0);
+    const timeChanged = suggestion?.data.time.some(d => d[0] !== 0);
+
     return <div className="font-normal text-sm leading-4 flex gap-3">
         <div className="grow">
             {props.event.mainPerson && `mit ${props.event.mainPerson}`}
-            {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
+            <div>
+                <DiffView>{suggestion?.data.description ?? props.event.description}</DiffView>
+            </div>
+            {(dateChanged || timeChanged) && <div className="mt-4 border-t border-black/30">
+                {dateChanged && <div>
+                    Änderung des Termins: <DiffView>{suggestion?.data.date ?? ""}</DiffView>
+                </div>}
+                {timeChanged && <div>
+                    Änderung der Uhrzeit:<DiffView>{suggestion?.data.time ?? ""}</DiffView>
+                </div>}
+            </div>}
         </div>
-        {props.event.readerInfo?.reading1 && <div className="px-2 py-1 bg-black/[4%] rounded grow mx-4">
+        {props.event.readerInfo?.reading1 &&
+        <div className="px-2 py-1 bg-black/[4%] rounded grow mx-4">
             {props.event.readerInfo?.reading1 && <div>1. Lesung: {props.event.readerInfo?.reading1.name}</div>}
             {props.event.readerInfo?.reading2 && <div>2. Lesung: {props.event.readerInfo?.reading2.name}</div>}
-        </div>}
+        </div>
+        }
     </div>;
 }
 
-export const EventDate = ({date}: { date: Date }) => {
+export const EventDate = ({
+    date
+}: {
+    date: Date
+}) => {
     const day = date.getDay();
     return <div className="">
         <div className={`leading-5 text-lg bg-white py-2 ${day ? '' : 'underline'}`}>
@@ -86,7 +109,11 @@ export const EventDate = ({date}: { date: Date }) => {
     </div>;
 }
 
-export const EventDate2 = ({date}: { date: Date }) => {
+export const EventDate2 = ({
+    date
+}: {
+    date: Date
+}) => {
     const day = date.getDay();
     return <div className={`flex gap-3 items-end ${day ? '' : 'font-bold'}`}>
         <div className="text-2xl lg:text-3xl">{date.getDate()}.</div>
@@ -97,14 +124,20 @@ export const EventDate2 = ({date}: { date: Date }) => {
     </div>;
 }
 
-export const EventDateText = ({date}: { date: Date }) => {
+export const EventDateText = ({
+    date
+}: {
+    date: Date
+}) => {
     const day = date.getDay();
     return <>
         {getWeekDayName(day)},{' '}
         {date.getDate()}. {getMonthName(date.getMonth())}
     </>;
 }
-export const EventTime = (props: { date: Date }) => {
+export const EventTime = (props: {
+    date: Date
+}) => {
     const hour = props.date.getHours();
     const minutes = props.date.getMinutes();
     return <>{('0' + hour).slice(-2)}:{('0' + minutes).slice(-2)}</>;

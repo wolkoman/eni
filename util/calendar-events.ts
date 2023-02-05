@@ -129,7 +129,7 @@ export const getCachedEvents = async (options: GetEventOptions): Promise<EventsO
         if (options.permission === GetEventPermission.PUBLIC && site(true, false)) {
             cockpit.collectionSave('internal-data', {
                 _id: calendarCacheId,
-                data: {events, cache: new Date().toISOString()}
+                data: {events, cache: new Date().toISOString(), openSuggestions: []}
             }).catch();
         }
         const openSuggestions = await (GetEventPermission.PRIVATE_ACCESS === options.permission

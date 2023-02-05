@@ -3,13 +3,14 @@ import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
 import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
-import {Event, Event2} from "../../components/calendar/Event";
+import {DiffView, Event, Event2} from "../../components/calendar/Event";
 import {EniLoading} from "../../components/Loading";
 import Button from "../../components/Button";
 import {fetchJson} from "../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {applySuggestion} from "../../util/suggestion-utils";
 import {EventDateText} from "../../components/calendar/EventUtils";
+import {diff_match_patch} from "diff-match-patch";
 
 export default function Intern() {
     usePermission([Permission.CalendarAdministration]);
@@ -25,7 +26,7 @@ export default function Intern() {
             })
             .catch(() => {})
     }
-
+    const dmp = new diff_match_patch();
     return <Site title="Terminvorschläge" showTitle={true}>
         {loading && <EniLoading/>}
         {!loading && openSuggestions.length === 0 && <div>Keine Terminvorschläge</div>}
@@ -41,15 +42,11 @@ export default function Intern() {
                         <Button label="Ablehnen" onClick={() => answer(suggestion, false)}/>
                     </div>
                 </div>
-                <div className="grid lg:grid-cols-2">
-                    {suggestion.type !== "add" && original && <div>
-                        <EventDateText date={new Date(original.date)}/>
-                        <Event2 event={original}/>
-                    </div>}
-                    <div>
-                        <EventDateText date={new Date(updated.date)}/>
-                        <Event2 event={updated}/>
-                    </div>
+                <div className="">
+                    <DiffView>{suggestion.data.summary}</DiffView>
+                    <DiffView>{suggestion.data.description}</DiffView>
+                    <DiffView>{suggestion.data.date}</DiffView>
+                    <DiffView>{suggestion.data.time}</DiffView>
                 </div>
             </div>;
         })}

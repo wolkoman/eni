@@ -18,6 +18,10 @@ export interface CalendarEvent {
     readerInfo: {reading1?: ReaderInfo, reading2?: ReaderInfo}
 }
 
+export interface CalenderEventWithSuggestion extends CalendarEvent{
+    suggestion: Collections['eventSuggestion']
+}
+
 export interface EventsObject {
     events: CalendarEvent[];
     openSuggestions: Collections['eventSuggestion'][]

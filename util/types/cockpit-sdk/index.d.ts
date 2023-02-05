@@ -3,7 +3,7 @@
 declare module 'cockpit-sdk' {
 
   import {CalendarName} from "../../calendar-info";
-  import {patch_obj} from "diff-match-patch";
+  import {Diff, diff_match_patch, patch_obj} from "diff-match-patch";
   type Object = { _id: string, _created: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
@@ -67,7 +67,7 @@ declare module 'cockpit-sdk' {
     eventSuggestion:{
       "eventId": string,
       "parish": string,
-      "data": { summary: patch_obj[], description: patch_obj[], date: patch_obj[], time: patch_obj[]},
+      "data": { summary: Diff[], description: Diff[], date: Diff[], time: Diff[]},
       "byName": string,
       "by": string,
       "open": boolean,
