@@ -16,7 +16,7 @@ export default function TopBar() {
             <Link href={user ? "/intern" : "/"}>
             <div className="flex justify-between text-sm">
                     <div className="font-bold">
-                        Zusammenarbeit der Pfarren Emmaus am Wienerberg,<br/>Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
+                        Miteinander der Pfarren Emmaus am Wienerberg,<br/>Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
                     </div>
                 <div className="hidden lg:block">
                     <img src="/logo/dreipfarren.svg"/>

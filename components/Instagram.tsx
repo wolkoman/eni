@@ -4,6 +4,7 @@ import Responsive from "./Responsive";
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
 import React, {MouseEventHandler, useRef} from "react";
+import {unibox} from "./calendar/ComingUp";
 
 export interface InstagramFeedItem {
     id: string,
@@ -17,7 +18,7 @@ export interface InstagramFeedItem {
 }
 
 function InstagramBig(props: { item: any, onClick: MouseEventHandler<HTMLDivElement> }) {
-    return <div className="rounded-lg bg-black/5 lg:max-w-lg lg:w-screen cursor-pointer" onClick={props.onClick}>
+    return <div className={`rounded-lg lg:max-w-lg lg:w-screen cursor-pointer ${unibox}`} onClick={props.onClick}>
         <div
             style={{backgroundImage: `url(${props.item?.media_url})`}}
             className={`bg-cover relative bg-center aspect-square rounded-lg`}>
@@ -31,7 +32,7 @@ function InstagramBig(props: { item: any, onClick: MouseEventHandler<HTMLDivElem
                     Pfarre {props.item?.calendar?.shortName}
                 </div>}
         </div>
-        <div className="text-xl p-4 pt-0">
+        <div className="text-xl p-6 pt-0">
             {props.item?.text}
         </div>
     </div>;

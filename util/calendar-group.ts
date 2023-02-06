@@ -33,6 +33,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("sternsing") && CalendarGroup.Kinder,
         sum.startsWith("kinderstunde") && CalendarGroup.Kinder,
         sum.includes("ferienspiel") && CalendarGroup.Kinder,
+        sum.startsWith("familien") && CalendarGroup.Kinder,
         sum.includes("hl. martin") && CalendarGroup.Kinder,
         sum.includes("woche des lebens") && CalendarGroup.Kinder,
         sum.includes("kinderfasching") && CalendarGroup.Kinder,
