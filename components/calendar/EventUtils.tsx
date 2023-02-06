@@ -3,7 +3,7 @@ import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 import {SanitizeHTML} from "../SanitizeHtml";
 import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
-import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
+import {Collections} from "cockpit-sdk";
 
 export function EventDescription(props: { event: CalendarEvent }) {
     return <div className="font-normal text-sm leading-4">
@@ -65,25 +65,19 @@ export function EventTag(props: { tag: CalendarTag }) {
     </Tooltip>
 }
 
-export function EventDescription3(props: { event: CalendarEvent }) {
-    if (props.event.tags.includes(CalendarTag.cancelled)) return <></>;
-    const {openSuggestions} = useAuthenticatedCalendarStore();
-    const suggestion = openSuggestions.find(item => item.eventId === props.event.id);
-    const dateChanged = suggestion?.data.date.some(d => d[0] !== 0);
-    const timeChanged = suggestion?.data.time.some(d => d[0] !== 0);
+export function EventDescription3(props: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'] }) {
+    if (props.event.tags?.includes(CalendarTag.cancelled)) return <></>;
+    const dateChanged = props.suggestion?.data.date.some(d => d[0] !== 0);
 
     return <div className="font-normal text-sm leading-4 flex gap-3">
         <div className="grow">
             {props.event.mainPerson && `mit ${props.event.mainPerson}`}
             <div>
-                <DiffView>{suggestion?.data.description ?? props.event.description}</DiffView>
+                <DiffView>{props.suggestion?.data.description ?? props.event.description ?? ""}</DiffView>
             </div>
-            {(dateChanged || timeChanged) && <div className="mt-4 border-t border-black/30">
+            {dateChanged && props.suggestion?.type !== "add" && <div className="mt-4 border-t border-black/30">
                 {dateChanged && <div>
-                    Änderung des Termins: <DiffView>{suggestion?.data.date ?? ""}</DiffView>
-                </div>}
-                {timeChanged && <div>
-                    Änderung der Uhrzeit:<DiffView>{suggestion?.data.time ?? ""}</DiffView>
+                    Änderung des Termins: <DiffView>{props.suggestion?.data.date ?? ""}</DiffView>
                 </div>}
             </div>}
         </div>

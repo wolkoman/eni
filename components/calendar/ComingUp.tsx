@@ -7,7 +7,7 @@ import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {Preference, usePreference} from "../../util/use-preference";
 import {CalendarName} from "../../util/calendar-info";
-import {Event, Event2} from "./Event";
+import {Event} from "./Event";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 import {ParishTag2} from "./ParishTag";
@@ -47,7 +47,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                             {site(<ParishTag2 calendar={event.calendar}/>, <div/>)}
                                         </div>
                                         <div className="my-1">
-                                            <Event2 key={event.id} event={event} hideTagOnLarge={true}/>
+                                            <Event key={event.id} event={event} hideTagOnLarge={true}/>
                                         </div>
                                     </div>)}
                                 </>

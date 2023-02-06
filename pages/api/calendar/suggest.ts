@@ -28,13 +28,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     //edit new suggestion
     const [_,suggestionId] = [...req.body.eventId?.split("suggestion_") ?? [null],null]
+    const type = suggestionId ? "add" : req.body.eventId ? "edit" : "add"
 
     const eventSuggestion = await cockpit.collectionSave("eventSuggestion", {
         _id: suggestionId ?? collidingSuggestions?.[0]?._id,
         eventId: suggestionId ? null : req.body.eventId,
         data: req.body.data,
         parish: req.body.parish,
-        type: suggestionId ? "add" : req.body.type,
+        type,
         by: user._id,
         byName: user.name,
         open: true

@@ -66,7 +66,7 @@ declare module 'cockpit-sdk' {
 
     eventSuggestion:{
       "eventId": string,
-      "parish": string,
+      "parish": CalendarName,
       "data": { summary: Diff[], description: Diff[], date: Diff[], time: Diff[]},
       "byName": string,
       "by": string,

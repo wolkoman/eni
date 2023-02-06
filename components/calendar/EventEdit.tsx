@@ -1,28 +1,33 @@
-import {CalendarEvent} from "../../util/calendar-types";
 import {CalendarName} from "../../util/calendar-info";
 import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
 import {useAuthenticatedUserStore} from "../../util/use-user-store";
 import {useState} from "react";
 import {fetchJson} from "../../util/fetch-util";
-import {Field, SelfServiceInput} from "../SelfService";
+import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
 import Button from "../Button";
-import {createDiffSuggestion, getSuggestion} from "../../util/suggestion-utils";
+import {createDiffSuggestion, EventSuggestion, getSuggestionFromEvent} from "../../util/suggestion-utils";
 
 
-export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: () => any, parish: CalendarName }) {
+export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
     const {addSuggestion, originalItems} = useAuthenticatedCalendarStore();
+    const originalItem = originalItems.find(e => e.id === props.eventId);
     const {user} = useAuthenticatedUserStore();
-    const form = useState(getSuggestion(event))
+    const form = useState<EventSuggestion & {parish?: string | null}>({
+        ...props.suggestion,
+        parish: props.parish
+    })
     const [loading, setLoading] = useState(false);
 
     function save() {
         setLoading(true);
         fetchJson("/api/calendar/suggest", {
             json: {
-                eventId: event?.id,
-                data: {...createDiffSuggestion(getSuggestion(originalItems.find(e => e.id === event?.id)), form[0])},
-                type: event ? "edit" : "add",
-                parish: props.parish
+                eventId: props.eventId ?? null,
+                data: createDiffSuggestion(originalItem
+                    ? getSuggestionFromEvent(originalItem)
+                    : {summary: "", description: "", time: "", date: ""}
+                    , form[0]),
+                parish: form[0].parish
             }
         }, {
             error: "Änderung konnte nicht gespeichert werden",
@@ -35,7 +40,7 @@ export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: (
     }
 
     return <div
-        className={`absolute top-0 ${event ? 'left-0' : 'right-0'} bg-white rounded-lg shadow-lg p-4 z-40 w-96`}>
+        className={`absolute top-0 ${props.eventId ? 'left-0' : 'right-0'} bg-white rounded-lg shadow-lg p-4 z-40 w-96`}>
         <Field label="Name">
             <SelfServiceInput name="summary" form={form}/>
         </Field>
@@ -48,6 +53,9 @@ export function EventEdit({event, ...props}: { event?: CalendarEvent, onClose: (
         <Field label="Beschreibung">
             <SelfServiceInput name="description" form={form} input="textarea"/>
         </Field>
+        <div className={props.parish !== "all" ? 'hidden' : ''}><Field label="Pfarre">
+            <SelfServiceParish name="parish" form={form}/>
+        </Field></div>
         <div className={loading ? 'animate-pulse' : ''}>
             <Button label="Speichern" onClick={save} disabled={loading}></Button>
         </div>

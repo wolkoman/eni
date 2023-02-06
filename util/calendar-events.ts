@@ -24,6 +24,7 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
             description: privateAccess ? event.description ?? '' : event.description?.replace(/\[.*?]/g, '') ?? '',
             date: (event.start?.date ?? event.start?.dateTime ?? '').substring(0, 10),
             start: event.start as { dateTime: string },
+            time: event.start?.dateTime ? new Date(event.start.dateTime).toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"}).substring(0,5) : null,
             end: event.end as { dateTime: string },
             calendar: calendarName,
             visibility: event.visibility ?? 'public',

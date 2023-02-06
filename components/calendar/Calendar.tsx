@@ -3,7 +3,7 @@ import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
 
 export type FilterType = { filterType: 'PARISH', parish: CalendarName } | { filterType: 'PERSON', person: string } | { filterType: 'GROUP', group: CalendarGroup } | null;
 
-export function applyFilter(events: CalendarEvent[], filter: FilterType, separateMass: boolean) {
+export function applyFilter<T extends CalendarEvent>(events: T[], filter: FilterType, separateMass: boolean) {
   return events
     .filter(event =>
         ((filter?.filterType === 'PERSON' && event.mainPerson === filter.person))

@@ -4,7 +4,7 @@ import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 import {cockpit} from "../../../util/cockpit-sdk";
-import {getSuggestion} from "../../../util/suggestion-utils";
+import {getSuggestionFromEvent} from "../../../util/suggestion-utils";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -94,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await cockpit.collectionSave("eventSuggestion", {
             _id: eventSuggestions[0]._id,
-            previousData: getSuggestion(mapGoogleEventToEniEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(event) ?? undefined),
+            previousData: getSuggestionFromEvent(mapGoogleEventToEniEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(event) ?? undefined),
             accepted: true,
             open: false,
             closedBy: user._id,

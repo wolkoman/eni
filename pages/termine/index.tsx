@@ -8,14 +8,14 @@ import {useAuthenticatedUserStore} from '../../util/use-user-store';
 import {FilterSelector2} from '../../components/calendar/FilterSelector';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
-import {CalendarEvent, CalendarGroup, CalendarTag, EventsObject} from "../../util/calendar-types";
+import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {CalendarName} from "../../util/calendar-info";
 import {getLiturgyDataTill, LiturgyData} from "../api/liturgy";
 import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {Preference, usePreference} from "../../util/use-preference";
 import {Permission} from "../../util/verify";
 import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
-import {ListView2} from "../../components/calendar/ListView";
+import {ListView} from "../../components/calendar/ListView";
 import {MonthView} from "../../components/calendar/MonthView";
 
 
@@ -31,7 +31,7 @@ export function AddEvent() {
                     <path d="M82 45.5L9 45.5" stroke="#484848" strokeWidth="18" strokeLinecap="round"/>
                 </svg>
             </div>
-            {isEditing && <EventEdit onClose={() => setIsEditing(false)} parish={user!.parish}/>}
+            {isEditing && <EventEdit onClose={() => setIsEditing(false)} parish={user.parish} suggestion={{date: "", time: "", description: "", summary: ""}} />}
         </div>
         {isEditing && <EventEditBackground onClick={() => setIsEditing(false)}/>}
     </> : <></>;
@@ -83,7 +83,7 @@ export default function EventPage(props: {
                 <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
                     {monthView
                         ? <MonthView calendar={calendar} liturgy={props.liturgy} filter={filter}/>
-                        : <ListView2 calendar={calendar} liturgy={props.liturgy} filter={filter} filterSlot={
+                        : <ListView calendar={calendar} liturgy={props.liturgy} filter={filter} filterSlot={
                             <FilterSelector2
                                 filter={filter}
                                 setFilter={filter => setFilter(filter)}

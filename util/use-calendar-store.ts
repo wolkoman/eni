@@ -4,10 +4,9 @@ import {CalendarEvent, CalendarGroup, EventsObject} from "./calendar-types";
 import {useEffect} from "react";
 import {useAuthenticatedUserStore} from "./use-user-store";
 import {Collections} from "cockpit-sdk";
-import {applySuggestion, mergeEventsWithSuggestions} from "./suggestion-utils";
 
-export function groupEventsByDate(events: CalendarEvent[]): Record<string, CalendarEvent[]> {
-    return events.reduce<Record<string, CalendarEvent[]>>((record, event) => ({
+export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
+    return events.reduce<Record<string, T[]>>((record, event) => ({
         ...record,
         [event.date]: [...(record[event.date] ?? []), event]
     }), {});
@@ -66,7 +65,7 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
         set(state => ({...state, loading: true}));
         fetchJson('/api/calendar', {})
             .then((data: EventsObject) => set({
-                items: mergeEventsWithSuggestions(data.events, data.openSuggestions, userId),
+                items: data.events,
                 openSuggestions: data.openSuggestions,
                 originalItems: data.events,
                 loaded: true,
@@ -86,22 +85,12 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     addSuggestion: (suggestion: Collections["eventSuggestion"], userId) => {
         const newOpenSuggestions = [...get().openSuggestions.filter(sug => sug.eventId !== suggestion.eventId), suggestion];
         set({
-            items: mergeEventsWithSuggestions(get().originalItems, newOpenSuggestions, userId),
             openSuggestions: newOpenSuggestions
         });
     },
     answerSuggestion: (suggestionId, accept) => {
-        const suggestion = get().openSuggestions.find(suggestion => suggestion._id === suggestionId)!;
-        const eventSuggestion = (event?: CalendarEvent) => applySuggestion(suggestion, event);
-        const apply = (events: CalendarEvent[]) => [
-            ...(suggestion.type === "add" ? [eventSuggestion()] : [] ),
-            ...events.map(event => event.id === suggestion.eventId && accept
-            ? eventSuggestion(event)
-            : event)]
-        set(({items, openSuggestions, originalItems}) => ({
+        set(({openSuggestions}) => ({
                 openSuggestions: openSuggestions.filter(suggestion => suggestion._id !== suggestionId),
-                items: apply(items),
-                originalItems: apply(originalItems)
             })
         )
     }

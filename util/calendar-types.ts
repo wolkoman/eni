@@ -8,6 +8,7 @@ export interface CalendarEvent {
     mainPerson: string | null,
     description: string,
     date: string,
+    time: string | null,
     start: { dateTime: string },
     end: { dateTime: string },
     calendar: CalendarName,
@@ -16,10 +17,6 @@ export interface CalendarEvent {
     groups: CalendarGroup[],
     tags: CalendarTag[],
     readerInfo: {reading1?: ReaderInfo, reading2?: ReaderInfo}
-}
-
-export interface CalenderEventWithSuggestion extends CalendarEvent{
-    suggestion: Collections['eventSuggestion']
 }
 
 export interface EventsObject {
