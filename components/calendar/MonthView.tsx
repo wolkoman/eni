@@ -11,7 +11,6 @@ import {ReducedCalendarState} from "../../pages/termine";
 import {EventSearch} from "./EventSearch";
 
 export function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState }) {
-    const [searchActive] = usePreference(Preference.Search);
     const [search, setSearch] = useState("");
     const [selected, setSelected] = useState(new Date());
     const getDays = (year: number, month: number) => {
@@ -29,7 +28,7 @@ export function MonthView(props: { filter: FilterType, liturgy: LiturgyData, cal
                 <div className="p-3 bg-black/5 rounded-lg cursor-pointer"
                      onClick={() => setSelected(d => new Date(d.setMonth(month + 1)))}>➡️
                 </div>
-                {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
+                <EventSearch onChange={setSearch} filter={props.filter}/>
             </div>
             <div>
                 <Settings/>

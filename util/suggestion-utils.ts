@@ -1,6 +1,6 @@
 import {CalendarEvent} from "./calendar-types";
 import {Collections} from "cockpit-sdk";
-import {diff_match_patch} from 'diff-match-patch';
+import {Diff, diff_match_patch} from 'diff-match-patch';
 
 export interface EventSuggestion{
     summary: string;
@@ -34,4 +34,29 @@ export function createDiffSuggestion(a: EventSuggestion, b: EventSuggestion) {
         dmp.diff_cleanupSemantic(diff);
         return [key, diff];
     }));
+}
+
+
+export function applySuggestionToPatch( suggestion: Collections['eventSuggestion'], event?: CalendarEvent) {
+    const dmp = new diff_match_patch();
+    const apply = (diffs: Diff[], text?: string) => dmp.patch_apply(dmp.patch_make(diffs), text ?? "");
+    const data = {
+        summary: apply(suggestion.data.summary, event?.summary),
+        description: apply(suggestion.data.description, event?.description),
+        time: apply(suggestion.data.time, event?.time ?? undefined),
+        date: apply(suggestion.data.date, event?.date),
+    }
+    const applicable = Object.values(data).map(x => x[1]).flat().every(x => x);
+    const data2 = Object.fromEntries(Object.entries(data)
+            .map(([key, [newValue]]) => ({
+                key: key as keyof EventSuggestion,
+                newValue,
+                suggestion: event
+                    ? getSuggestionFromEvent(event)
+                    : {summary: "", description: "", time: "", date: ""}
+            }))
+            .map(({key, suggestion, newValue}) => [key, dmp.diff_main(suggestion[key], newValue)])
+        );
+    console.log(applicable, data)
+    return {suggestion: {...suggestion, data: data2} as Collections['eventSuggestion'], applicable};
 }

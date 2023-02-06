@@ -12,19 +12,24 @@ import {LiturgyInformation} from "./LiturgyInformation";
 import React, {ReactNode} from "react";
 import {AddEvent, ReducedCalendarState} from "../../pages/termine";
 import {EventSearch} from "./EventSearch";
-import {EventDate2} from "./EventUtils";
+import {EventDate} from "./EventUtils";
 import {EventEdit, EventEditBackground} from "./EventEdit";
 import {useAuthenticatedUserStore} from "../../util/use-user-store";
 import {Permission} from "../../util/verify";
-import {EventSuggestion, getSuggestionFromDiff, getSuggestionFromEvent} from "../../util/suggestion-utils";
+import {
+    applySuggestionToPatch,
+    EventSuggestion,
+    getSuggestionFromDiff,
+    getSuggestionFromEvent
+} from "../../util/suggestion-utils";
 import {CalendarName} from "../../util/calendar-info";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot: ReactNode }) {
-    const [searchActive] = usePreference(Preference.Search);
     const [separateMass] = usePreference(Preference.SeparateMass);
     const [search, setSearch] = useState("");
     const {user} = useAuthenticatedUserStore();
-    const {openSuggestions} = useAuthenticatedCalendarStore();
+    const {openSuggestions: allOpenSuggestions} = useAuthenticatedCalendarStore();
+    const openSuggestions = allOpenSuggestions.filter(sug => sug.by === user?._id || user?.permissions[Permission.CalendarAdministration]);
     const [editEventId, setEditEventId] = useState<string | undefined>(undefined);
     return <>
         <div className="flex justify-between items-center mb-6">
@@ -37,7 +42,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
             </div>
         </div>
         <div className="flex flex-col gap-1 my-4">
-            {searchActive && <EventSearch onChange={setSearch} filter={props.filter}/>}
+            <EventSearch onChange={setSearch} filter={props.filter}/>
             {props.filterSlot}
         </div>
 
@@ -49,20 +54,21 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
             .map(([date, events]) => <div key={date} data-date={date}
                                           className="py-2 flex flex-col lg:flex-row border-b border-black/10">
                 <div className="w-[130px] my-2">
-                    <EventDate2 date={new Date(date)}/>
+                    <EventDate date={new Date(date)}/>
                 </div>
                 <div className="grow">
                     <LiturgyInformation liturgies={props.liturgy[date]}/>
                     {events
                         .map(event => ({event, suggestion: openSuggestions.find(sug => sug.eventId === event.id)}))
+                        .map(({event, suggestion}) => ({event, suggestion: suggestion ? applySuggestionToPatch(suggestion, event) : null}))
                         .map(({event, suggestion}) =>
                             <EditableEvent
                                 editable={!!(user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && (user.parish === "all" || user.parish === event.calendar))}
                                 isEdited={event.id === editEventId}
                                 id={event.id} parish={event.calendar}
-                                suggestionForm={suggestion ? getSuggestionFromDiff(suggestion) : getSuggestionFromEvent(event)}
+                                suggestionForm={suggestion?.suggestion ? getSuggestionFromDiff(suggestion.suggestion) : getSuggestionFromEvent(event)}
                                 onEditEvent={setEditEventId}
-                                arguments={{event, suggestion}}
+                                arguments={{event, suggestion: suggestion?.suggestion}}
                             />)}
 
                     {openSuggestions

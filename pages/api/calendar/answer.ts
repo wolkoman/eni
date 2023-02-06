@@ -2,9 +2,9 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {getCachedGoogleAuthClient, GetEventPermission, mapGoogleEventToEniEvent} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+import {getCalendarInfo} from "../../../util/calendar-info";
 import {cockpit} from "../../../util/cockpit-sdk";
-import {getSuggestionFromEvent} from "../../../util/suggestion-utils";
+import {applySuggestionToPatch, getSuggestionFromDiff} from "../../../util/suggestion-utils";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -40,17 +40,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
+
     const suggestion = eventSuggestions[0];
-    const suggestionParish = getCalendarInfo(suggestion.data.parish as CalendarName);
-    const googleEvent = {
-        description: suggestion.data.description,
-        summary: suggestion.data.summary,
+    const suggestionParish = getCalendarInfo(suggestion.parish);
+    const eventData = {
+        auth: await getCachedGoogleAuthClient(),
+        calendarId: suggestionParish.calendarId,
+        eventId: suggestion.eventId
+    };
+    const existingGoogleEvent = await (suggestion.eventId ? google.calendar('v3').events.get(eventData).then(event => event.data) : Promise.resolve(undefined));
+    const existingEvent = mapGoogleEventToEniEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(existingGoogleEvent);
+    const patchedSuggestion = getSuggestionFromDiff(applySuggestionToPatch(suggestion, existingEvent ?? undefined).suggestion);
+
+    const patchedEvent = {
+        description: patchedSuggestion.description,
+        summary: patchedSuggestion.summary,
         start: {
-            dateTime: `${suggestion.data.date}T${suggestion.data.time}:00`,
+            dateTime: `${patchedSuggestion.date}T${patchedSuggestion.time}:00`,
             timeZone: 'Europe/Vienna'
         },
         end: {
-            dateTime: `${suggestion.data.date}T${suggestion.data.time.split(":").map((a, b) => +a + (1 - b)).join(":")}:00`,
+            dateTime: `${patchedSuggestion.date}T${patchedSuggestion.time.split(":").map((a, b) => +a + (1 - b)).join(":")}:00`,
             timeZone: 'Europe/Vienna'
         }
     }
@@ -59,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         google.calendar('v3').events.insert({
             auth: await getCachedGoogleAuthClient(),
             calendarId: suggestionParish.calendarId,
-            requestBody: googleEvent
+            requestBody: patchedEvent
         }).then((event) => {
             res.status(200).json({ok: true, link: event.data.htmlLink});
         }).catch((err) => {
@@ -73,17 +83,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             closedBy: user._id,
             closedByName: user.name
         });
-    } else if (suggestion.type === "edit") {
-        const eventData = {
-            auth: await getCachedGoogleAuthClient(),
-            calendarId: suggestionParish.calendarId,
-            eventId: suggestion.eventId
-        };
-        const event = await google.calendar('v3').events.get(eventData).then(event => event.data);
-        const [summary, mainPerson] = [...event.summary?.split("/", 2) ?? [null], null];
+    } else if (suggestion.type === "edit" && existingGoogleEvent) {
         google.calendar('v3').events.patch({
             ...eventData,
-            requestBody: {...googleEvent, summary: googleEvent.summary + (mainPerson ? `/${mainPerson}` : "")}
+            requestBody: {...patchedEvent, summary: patchedEvent.summary + (existingEvent?.mainPerson ? `/${existingEvent?.mainPerson}` : "")}
         })
             .then((event) => {
                 res.status(200).json({ok: true, link: event.data.htmlLink});
@@ -94,7 +97,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await cockpit.collectionSave("eventSuggestion", {
             _id: eventSuggestions[0]._id,
-            previousData: getSuggestionFromEvent(mapGoogleEventToEniEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(event) ?? undefined),
             accepted: true,
             open: false,
             closedBy: user._id,

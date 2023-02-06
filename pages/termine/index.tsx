@@ -5,7 +5,7 @@ import {useState} from '../../util/use-state-util';
 import {CalendarCacheNotice} from '../../components/calendar/CalendarCacheNotice';
 import {useAuthenticatedCalendarStore} from '../../util/use-calendar-store';
 import {useAuthenticatedUserStore} from '../../util/use-user-store';
-import {FilterSelector2} from '../../components/calendar/FilterSelector';
+import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
@@ -84,7 +84,7 @@ export default function EventPage(props: {
                     {monthView
                         ? <MonthView calendar={calendar} liturgy={props.liturgy} filter={filter}/>
                         : <ListView calendar={calendar} liturgy={props.liturgy} filter={filter} filterSlot={
-                            <FilterSelector2
+                            <FilterSelector
                                 filter={filter}
                                 setFilter={filter => setFilter(filter)}
                                 userPermissions={user?.permissions ?? {}}

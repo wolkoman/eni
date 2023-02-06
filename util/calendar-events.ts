@@ -11,8 +11,9 @@ import {ReaderData} from "./reader";
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
 
-export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: GetEventOptions): (event: calendar_v3.Schema$Event) => CalendarEvent | null {
+export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: GetEventOptions): (event?: calendar_v3.Schema$Event) => CalendarEvent | null {
     return (event): CalendarEvent | null => {
+        if(!event) return null;
         const mainPerson = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
         const summary = event?.summary?.split('/', 2)[0] ?? "";
         const privateAccess = options.permission === GetEventPermission.PRIVATE_ACCESS;

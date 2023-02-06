@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await notifyAdmin("new eventSuggestion by " + user.name + ": " + JSON.stringify(req.body.data));
 
-    const channel = process.env.STAGE === "prod" ? 'C047C4D4R7B' : 'U0HJVFER4';
+    const channel = process.env.STAGE === "prod" ? 'C04MQ7Y9S78' : 'U0HJVFER4';
     await slack("chat.postMessage", {channel, text: `_${user.name}_ hat einen Terminvorschlag eingereicht:\n*${req.body.data.date} ${req.body.data.time} ${req.body.data.summary}*`})
 
     res.json(eventSuggestion);

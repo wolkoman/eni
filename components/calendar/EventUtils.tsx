@@ -96,19 +96,6 @@ export const EventDate = ({
     date: Date
 }) => {
     const day = date.getDay();
-    return <div className="">
-        <div className={`leading-5 text-lg bg-white py-2 ${day ? '' : 'underline'}`}>
-            <EventDateText date={date}/>
-        </div>
-    </div>;
-}
-
-export const EventDate2 = ({
-    date
-}: {
-    date: Date
-}) => {
-    const day = date.getDay();
     return <div className={`flex gap-3 items-end ${day ? '' : 'font-bold'}`}>
         <div className="text-2xl lg:text-3xl">{date.getDate()}.</div>
         <div className="leading-4 text-sm flex gap-5  lg:gap-0 lg:flex-col items-center">
