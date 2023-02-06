@@ -40,23 +40,25 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
     }
 
     return <div
-        className={`absolute top-0 ${props.eventId ? 'left-0' : 'right-0'} bg-white rounded-lg shadow-lg p-4 z-40 w-96`}>
+        className={`absolute top-0 ${props.eventId ? 'left-0' : 'right-0'} bg-white rounded-lg shadow-lg p-4 px-6 z-40 w-96`}>
         <Field label="Name">
             <SelfServiceInput name="summary" form={form}/>
         </Field>
-        <Field label="Datum">
-            <SelfServiceInput name="date" form={form} type="date"/>
-        </Field>
-        <Field label="Uhrzeit">
-            <SelfServiceInput name="time" form={form} type="time"/>
-        </Field>
+        <div className="grid grid-cols-2 gap-2">
+            <Field label="Datum">
+                <SelfServiceInput name="date" form={form} type="date"/>
+            </Field>
+            <Field label="Uhrzeit">
+                <SelfServiceInput name="time" form={form} type="time"/>
+            </Field>
+        </div>
         <Field label="Beschreibung">
             <SelfServiceInput name="description" form={form} input="textarea"/>
         </Field>
         <div className={props.parish !== "all" ? 'hidden' : ''}><Field label="Pfarre">
             <SelfServiceParish name="parish" form={form}/>
         </Field></div>
-        <div className={loading ? 'animate-pulse' : ''}>
+        <div className={(loading ? 'animate-pulse' : '') + "flex justify-end"}>
             <Button label="Speichern" onClick={save} disabled={loading}></Button>
         </div>
     </div>;
