@@ -4,6 +4,7 @@ import {SanitizeHTML} from "../SanitizeHtml";
 import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
+import {roleToString} from "../../util/reader";
 
 export function EventDescription(props: { event: CalendarEvent }) {
     return <div className="font-normal text-sm leading-4">
@@ -68,6 +69,7 @@ export function EventTag(props: { tag: CalendarTag }) {
 export function EventDescription3(props: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'] }) {
     if (props.event.tags?.includes(CalendarTag.cancelled)) return <></>;
     const dateChanged = props.suggestion?.data.date.some(d => d[0] !== 0);
+    const roles = ["reading1", "reading2", "communionMinister1", "communionMinister2"] as const
 
     return <div className="font-normal text-sm leading-4 flex gap-3">
         <div className="grow">
@@ -81,10 +83,9 @@ export function EventDescription3(props: { event: Partial<CalendarEvent>, sugges
                 </div>}
             </div>}
         </div>
-        {props.event.readerInfo?.reading1 &&
+        {roles.some(role => props.event.readerInfo?.[role]) &&
         <div className="px-2 py-1 bg-black/[4%] rounded grow mx-4">
-            {props.event.readerInfo?.reading1 && <div>1. Lesung: {props.event.readerInfo?.reading1.name}</div>}
-            {props.event.readerInfo?.reading2 && <div>2. Lesung: {props.event.readerInfo?.reading2.name}</div>}
+            {roles.filter(role => props.event.readerInfo?.[role]).map(role => <div>{roleToString(role)}: {props.event.readerInfo?.[role]?.name}</div>)}
         </div>
         }
     </div>;

@@ -1,5 +1,5 @@
 import {CalendarName} from "./calendar-info";
-import {ReaderInfo} from "./reader";
+import {ReaderInfo, ReaderRole} from "./reader";
 import {Collections} from "cockpit-sdk";
 
 export interface CalendarEvent {
@@ -16,7 +16,7 @@ export interface CalendarEvent {
     wholeday: boolean,
     groups: CalendarGroup[],
     tags: CalendarTag[],
-    readerInfo: {reading1?: ReaderInfo, reading2?: ReaderInfo}
+    readerInfo: Partial<Record<ReaderRole, ReaderInfo>>
 }
 
 export interface EventsObject {

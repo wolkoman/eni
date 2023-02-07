@@ -36,7 +36,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.startsWith("familien") && CalendarGroup.Kinder,
         sum.includes("hl. martin") && CalendarGroup.Kinder,
         sum.includes("woche des lebens") && CalendarGroup.Kinder,
-        sum.includes("kinderfasching") && CalendarGroup.Kinder,
+        sum.includes("kinder") && CalendarGroup.Kinder,
         sum.includes("jugendtreffen") && CalendarGroup.Jugend,
         sum.startsWith("plauder") && CalendarGroup.Gemeinschaft,
         sum.includes("zusammenkommen") && CalendarGroup.Gemeinschaft,
@@ -48,6 +48,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("lieder-singen") && CalendarGroup.Gemeinschaft,
         sum.includes("flohmarkt") && CalendarGroup.Gemeinschaft,
         sum.includes("50+ treff") && CalendarGroup.Gemeinschaft,
+        sum.includes("glaubenserfahrung") && CalendarGroup.Gebet,
         sum.includes("offene kirche") && CalendarGroup.Gebet,
         sum.startsWith("bibel aktiv") && CalendarGroup.Gebet,
         sum.includes("kreuzweg") && CalendarGroup.Gottesdienst,
@@ -56,6 +57,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("andacht") && CalendarGroup.Gottesdienst,
         sum.startsWith("vesper") && CalendarGroup.Gottesdienst,
         sum.includes("worship") && CalendarGroup.Gottesdienst,
+        sum.includes("segnung") && CalendarGroup.Gottesdienst,
         sum.includes("anbetung") && CalendarGroup.Gottesdienst,
         sum.includes("wortgottesfeier") && CalendarGroup.Gottesdienst,
         sum.includes("gottesdienst") && !sum.includes("evang") && CalendarGroup.Gottesdienst,
@@ -68,12 +70,15 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("krippenspiel") && !sum.includes("probe") && CalendarGroup.Weihnachten,
         sum.includes("mette") && CalendarGroup.Weihnachten,
         sum.includes("mette") && CalendarGroup.Weihnachten,
-        sum.includes("karfreitag") && CalendarGroup.Ostern,
+        sum.includes("oster") && CalendarGroup.Ostern,
         sum.includes("speisensegnung") && CalendarGroup.Ostern,
+        sum.includes("abendmahl") && CalendarGroup.Ostern,
         sum.includes("aschermittwoch") && CalendarGroup.Fastenzeit,
         sum.includes("auferstehungsfeier") && CalendarGroup.Ostern,
         sum.includes("jesu am kreuz") && CalendarGroup.Fastenzeit,
+        sum.includes("bußfeier") && CalendarGroup.Fastenzeit,
         sum.includes("gründonnerstag") && CalendarGroup.Karwoche,
+        sum.includes("karfreitag") && CalendarGroup.Karwoche,
         sum.includes("evangel") && CalendarGroup.Invisible,
         sum.includes("taufe") && CalendarGroup.Invisible,
         sum.includes(" ehe") && CalendarGroup.Invisible,
@@ -84,6 +89,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("motorrad") && CalendarGroup.Invisible,
         sum.includes("generalprobe") && CalendarGroup.Invisible,
         sum.includes("sprechstunde") && CalendarGroup.Invisible,
+        sum.includes("sprech/") && CalendarGroup.Invisible,
         sum.includes("sitzung") && CalendarGroup.Gremien,
         sum.includes("pfarrgemeinderat") && CalendarGroup.Gremien,
         sum.includes("chor") && CalendarGroup.Chor,
@@ -99,7 +105,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
     let groups = conditions.filter((group): group is CalendarGroup => !!group);
 
     if (groups.length === 0 && event.visibility !== "private") {
-        notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
+        //notifyAdmin(`unknown event group: ${event.summary} ${JSON.stringify(event.start)}`);
     }
 
     return groups.filter(group => group !== CalendarGroup.Invisible);

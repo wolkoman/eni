@@ -71,11 +71,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         events: uniformedTasks
                             .map(task => ({
                                 task,
-                                date: new Date(task.event.date),
+                                date: new Date(task.event.start.dateTime),
                                 reading: task.data.role === "reading1" || task.data.role === "reading2" ? liturgy[task.event.date].find(liturgy => data[task.event.id].liturgy === liturgy.name)?.[task.data.role] : ''
                             }))
                             .map(({task, date, reading}) => ({
-                                date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}`,
+                                date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}, ${date.toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"})}`,
                                 summary: task.event.summary?.replace(/\[.*?]/g, ''),
                                 description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')),
                                 info: `${{
