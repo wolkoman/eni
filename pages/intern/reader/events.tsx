@@ -4,7 +4,7 @@ import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
-import {ReaderData, ReaderRole, roleToString} from "../../../util/reader";
+import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../util/reader";
 import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
@@ -26,6 +26,11 @@ function PersonSelector(props: { persons: Collections['person'][], person?: stri
     </div>;
 }
 
+function LiturgyStatus(props: {status: ReaderStatus}) {
+    const statusColors = {assigned: 'bg-blue-500', informed: 'bg-green-600', cancelled: 'bg-red-600'};
+    return <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.status]}`}/>;
+}
+
 function LiturgyEvent(props: {
     setActive: () => void,
     event: CalendarEvent,
@@ -38,24 +43,23 @@ function LiturgyEvent(props: {
     selectPerson: (role: ReaderRole, userId: string | null) => any,
 }) {
     const activeLiturgy = props.liturgies.find(liturgy => liturgy.name === props.readerData?.liturgy);
-    const statusColors = {assigned: 'bg-blue-500', informed: 'bg-green-600', cancelled: 'bg-red-600'};
-    return <div className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"} ${!props.active ? clickable : unibox}`}>
+    return <div
+        className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"} ${props.active ? unibox : clickable}`}>
         <div
             className={`flex gap-1 px-3 py-0.5 w-full print:p-0 print:hidden`}
             onClick={props.setActive}>
-            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.reading1?.status]}`}/>
-            <div className={`w-3 h-3 my-1.5 mr-1 rounded ${statusColors[props.readerData?.reading2?.status]}`}/>
-            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.communionMinister1?.status]}`}/>
-            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.communionMinister2?.status]}`}/>
+            {(["reading1", "reading2", "communionMinister1", "communionMinister2"] as ReaderRole[]).map(role =>
+                <LiturgyStatus status={props.readerData?.[role]?.status}/>
+            )}
             <div className="w-12">
-                {new Date(props.event.start.dateTime).toLocaleTimeString().substring(0, 5)}
+                {new Date(props.event.start.dateTime).toLocaleTimeString("de-AT").substring(0, 5)}
             </div>
             <div>{props.event.summary}</div>
         </div>
-        <div className={`p-3 flex flex-col gap-3 print:p-0 ${!props.active && 'hidden print:block'}`}>
-            <div className="flex flex-col lg:flex-row">
-                <div className="w-64 print:hidden">Liturgien:</div>
-                <div className="flex flex-col">
+        <div className={`p-3 grid lg:grid-cols-2 gap-3 print:p-0 ${!props.active && 'hidden print:grid print:grid-cols-2 print:gap-1'}`}>
+            <>
+                <div className="print:hidden">Liturgien:</div>
+                <div className="print:hidden flex flex-col">
                     {props.liturgies
                         .sort(compareLiturgy)
                         .map(liturgy => ({liturgy, active: activeLiturgy?.name === liturgy.name}))
@@ -67,38 +71,30 @@ function LiturgyEvent(props: {
                             {liturgy.name} {liturgy.rank && `[${liturgy.rank}]`}
                         </div>)}
                 </div>
-            </div>
-            {activeLiturgy && <>
-                <div className="flex flex-col lg:flex-row print:flex-row">
-                    <div className="w-64 shrink-0">1. Lesung ({activeLiturgy.reading1}):</div>
+            </>
+            {(["reading1", "reading2"] as const).filter(role => activeLiturgy?.[role]).map((role) =>
+                <>
+                    <div>{roleToString(role)} ({activeLiturgy?.[role]}):</div>
                     <PersonSelector
                         persons={props.readers}
-                        person={props.readerData?.reading1?.id}
-                        onChange={personId => props.selectPerson('reading1', personId)}/>
-                </div>
-                {activeLiturgy.reading2 && <div className="flex flex-col lg:flex-row print:flex-row">
-                    <div className="w-64 shrink-0">2. Lesung ({activeLiturgy.reading2}):</div>
+                        person={props.readerData?.[role]?.id}
+                        onChange={personId => props.selectPerson(role, personId)}/>
+                </>)}
+            {(["communionMinister1", "communionMinister2"] as const).map(role =>
+                <>
+                    <div>{roleToString(role)}:</div>
                     <PersonSelector
-                        persons={props.readers}
-                        person={props.readerData?.reading2?.id}
-                        onChange={personId => props.selectPerson('reading2', personId)}/>
-                </div>}
-            </>}
-            {(["communionMinister1", "communionMinister2"] as ReaderRole[]).map(role =>
-            <div className="flex flex-col lg:flex-row print:flex-row">
-                <div className="w-64 shrink-0">{roleToString(role)}:</div>
-                <PersonSelector
-                    persons={props.communionMinisters}
-                    person={props.readerData?.[role]?.id}
-                    onChange={personId => props.selectPerson(role, personId)}/>
-            </div>)}
-            {props.readerData?.cancelledBy && <div className="flex flex-col lg:flex-row print:flex-row">
-                <div className="w-64">Abgesagt:</div>
+                        persons={props.communionMinisters}
+                        person={props.readerData?.[role]?.id}
+                        onChange={personId => props.selectPerson(role, personId)}/>
+                </>)}
+            {props.readerData?.cancelledBy && <>
+                <div>Abgesagt:</div>
                 <div className="flex flex-col">
                     {props.readerData.cancelledBy.map(id =>
                         <div key={id}>{props.readers.find(reader => reader._id === id)?.name}</div>)}
                 </div>
-            </div>}
+            </>}
 
         </div>
 

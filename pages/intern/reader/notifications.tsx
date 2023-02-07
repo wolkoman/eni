@@ -1,19 +1,14 @@
-import React, {useState} from 'react';
-import Site from '../../../components/Site';
-import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../../util/use-calendar-store";
-import {useUserStore} from "../../../util/use-user-store";
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
-import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
-import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
+import React from 'react';
+import {CalendarEvent} from "../../../util/calendar-types";
+import {getLiturgyData, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
-import {Collections} from "cockpit-sdk";
 import Button from "../../../components/Button";
 import {
     getTasksForPerson,
     getTasksFromReaderData,
     getUninformedTasks,
-    ReaderData,
-    ReaderTask
+    ReaderTask,
+    roleToString
 } from "../../../util/reader";
 import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import {ReaderSite} from "./index";
@@ -73,7 +68,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                                         {new Date(event.date).toLocaleDateString()} {new Date(event.start.dateTime).toLocaleTimeString().substring(0, 5)}
                                     </div>
                                     <div>
-                                        {event.summary} ({data.role})
+                                        {event.summary} ({roleToString(data.role)})
                                     </div>
                                 </div>
                             )}
