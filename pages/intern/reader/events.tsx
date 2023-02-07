@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {groupEventsByDate} from "../../../util/use-calendar-store";
 import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
-import {ReaderData} from "../../../util/reader";
+import {ReaderData, ReaderRole, roleToString} from "../../../util/reader";
 import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
-import {clickable} from "../../../components/calendar/ComingUp";
+import {clickable, unibox} from "../../../components/calendar/ComingUp";
 
-function PersonSelector(props: { persons: Collections['person'][], person: string, onChange: (id: string | null) => any }) {
+function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {
 
-    const {readerCount} = useAuthenticatedReaderStore();
+    //const {readerCount} = useAuthenticatedReaderStore();
 
     return <div>
         <div className="flex gap-2">
-            <select value={props.person} onChange={({target}) => props.onChange(target.value ? target.value : null)}>
+            <select value={props.person ?? ""} onChange={({target}) => props.onChange(target.value ? target.value : null)}>
                 <option value="">niemand</option>
-                {readerCount
-                    .sort((a,b) => a.count - b.count)
-                    .map(({name, id, count}) => <option key={id} value={id}>{name} ({count})</option>)}
+                {props.persons
+                    //.sort((a,b) => a.count - b.count)
+                    .map(({name, _id: id}) => <option key={id} value={id}>{name}</option>)}
             </select>
         </div>
     </div>;
@@ -32,24 +32,27 @@ function LiturgyEvent(props: {
     active: boolean,
     liturgies: Liturgy[],
     readers: Collections["person"][],
+    communionMinisters: Collections["person"][],
     readerData: ReaderData[string],
     selectLiturgy: (liturgy: string) => any,
-    selectPerson: (role: 'reading1' | 'reading2', userId: string | null) => any,
+    selectPerson: (role: ReaderRole, userId: string | null) => any,
 }) {
     const activeLiturgy = props.liturgies.find(liturgy => liturgy.name === props.readerData?.liturgy);
     const statusColors = {assigned: 'bg-blue-500', informed: 'bg-green-600', cancelled: 'bg-red-600'};
-    return <div className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"}`}>
+    return <div className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"} ${!props.active ? clickable : unibox}`}>
         <div
-            className={`flex gap-2 px-3 py-0.5 w-full print:p-0 print:hidden ${!props.active ? clickable : 'bg-black/5'}`}
+            className={`flex gap-1 px-3 py-0.5 w-full print:p-0 print:hidden`}
             onClick={props.setActive}>
             <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.reading1?.status]}`}/>
-            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.reading2?.status]}`}/>
+            <div className={`w-3 h-3 my-1.5 mr-1 rounded ${statusColors[props.readerData?.reading2?.status]}`}/>
+            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.communionMinister1?.status]}`}/>
+            <div className={`w-3 h-3 my-1.5 rounded ${statusColors[props.readerData?.communionMinister2?.status]}`}/>
             <div className="w-12">
                 {new Date(props.event.start.dateTime).toLocaleTimeString().substring(0, 5)}
             </div>
             <div>{props.event.summary}</div>
         </div>
-        <div className={`p-3 flex flex-col gap-3  print:p-0 ${!props.active && 'hidden print:block'}`}>
+        <div className={`p-3 flex flex-col gap-3 print:p-0 ${!props.active && 'hidden print:block'}`}>
             <div className="flex flex-col lg:flex-row">
                 <div className="w-64 print:hidden">Liturgien:</div>
                 <div className="flex flex-col">
@@ -80,14 +83,22 @@ function LiturgyEvent(props: {
                         person={props.readerData?.reading2?.id}
                         onChange={personId => props.selectPerson('reading2', personId)}/>
                 </div>}
-                {props.readerData.cancelledBy && <div className="flex flex-col lg:flex-row print:flex-row">
-                    <div className="w-64">Abgesagt:</div>
-                    <div className="flex flex-col">
-                        {props.readerData.cancelledBy.map(id =>
-                            <div key={id}>{props.readers.find(reader => reader._id === id)!.name}</div>)}
-                    </div>
-                </div>}
             </>}
+            {(["communionMinister1", "communionMinister2"] as ReaderRole[]).map(role =>
+            <div className="flex flex-col lg:flex-row print:flex-row">
+                <div className="w-64 shrink-0">{roleToString(role)}:</div>
+                <PersonSelector
+                    persons={props.communionMinisters}
+                    person={props.readerData?.[role]?.id}
+                    onChange={personId => props.selectPerson(role, personId)}/>
+            </div>)}
+            {props.readerData?.cancelledBy && <div className="flex flex-col lg:flex-row print:flex-row">
+                <div className="w-64">Abgesagt:</div>
+                <div className="flex flex-col">
+                    {props.readerData.cancelledBy.map(id =>
+                        <div key={id}>{props.readers.find(reader => reader._id === id)?.name}</div>)}
+                </div>
+            </div>}
 
         </div>
 
@@ -98,7 +109,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
-    const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
+    const {readers, communionMinisters, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;
@@ -109,7 +120,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
         }).then(() => setReaderData({[eventId]: {...readerData[eventId], liturgy}}));
     }
 
-    async function selectPerson(eventId: string, role: 'reading1' | 'reading2', userId: string | null) {
+    async function selectPerson(eventId: string, role: ReaderRole, userId: string | null) {
         const userName = readers.find(reader => reader._id === userId)?.name ?? 'Unbekannt';
         const roleData = userId !== null ? {id: userId, name: userName, status: "assigned"} : null;
         fetchJson("/api/reader/save", {
@@ -148,6 +159,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                     {events.map(event =>
                         <LiturgyEvent
                             readers={readers}
+                            communionMinisters={communionMinisters}
                             key={event.id} event={event}
                             readerData={readerData[event.id]}
                             setActive={() => setCurrentEvent(event.id)}

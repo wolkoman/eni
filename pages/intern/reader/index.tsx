@@ -1,12 +1,10 @@
 import React, {ReactNode} from 'react';
 import Site from '../../../components/Site';
-import {getLiturgyData, LiturgyData} from "../../api/liturgy";
+import {getLiturgyData} from "../../api/liturgy";
 import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import Responsive from "../../../components/Responsive";
 import {CalendarName} from "../../../util/calendar-info";
-import ReactMarkdown from "react-markdown";
 import Link from "next/link";
-import {useAuthenticatedCalendarStore} from "../../../util/use-calendar-store";
 import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
@@ -23,7 +21,7 @@ export function ReaderSite(props: { children?: ReactNode }) {
     const belongsTo = (calendar: CalendarName) => user?.parish === CalendarName.ALL || user?.parish === calendar;
 
     const inactive = 'grayscale opacity-20 contrast-50 cursor-pointer';
-    return <Site title="Lektor:innen" responsive={false}>
+    return <Site title="Liturgische Dienste" responsive={false}>
         <div className="flex flex-col lg:flex-row">
             <div className="print:hidden">
                 <div

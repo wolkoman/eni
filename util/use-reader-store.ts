@@ -22,6 +22,7 @@ export function useAuthenticatedReaderStore() {
         loading: store.loading,
         error: store.error,
         readers: store.readers,
+        communionMinisters: store.communionMinisters,
         readerData: store.readerData,
         setReaderData: store.setReaderData,
         parish: store.parish,
@@ -33,6 +34,7 @@ export function useAuthenticatedReaderStore() {
 
 export const useReaderStore = create<{
     readers: Collections["person"][];
+    communionMinisters: Collections["person"][];
     readerData: ReaderData;
     events: CalendarEvent[],
     parish: CalendarName;
@@ -45,6 +47,7 @@ export const useReaderStore = create<{
     getReaderCount: (events: CalendarEvent[]) => { name: string, count: number, id: string }[]
 }>((set, get) => ({
     readers: [],
+    communionMinisters: [],
     events: [],
     readerData: {},
     loaded: false,
@@ -68,7 +71,8 @@ export const useReaderStore = create<{
                 loading: false,
                 loaded: true,
                 readerData: data.readerData,
-                readers: data.readers,
+                readers: (<Collections['person'][]>data.readers).filter(person => person.competences.includes('reader')),
+                communionMinisters: (<Collections['person'][]>data.readers).filter(person => person.competences.includes('communion_minister')),
                 events: data.events,
             })))
             .catch(() => {

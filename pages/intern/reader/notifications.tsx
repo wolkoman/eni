@@ -73,7 +73,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                                         {new Date(event.date).toLocaleDateString()} {new Date(event.start.dateTime).toLocaleTimeString().substring(0, 5)}
                                     </div>
                                     <div>
-                                        {event.summary}
+                                        {event.summary} ({data.role})
                                     </div>
                                 </div>
                             )}

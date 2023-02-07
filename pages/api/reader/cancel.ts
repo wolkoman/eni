@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await notifyAdmin(`${user.name} has cancelled ${role} (${eventId})`);
     readerInfo.status = "cancelled";
-    data[eventId].cancelledBy = [...(data[eventId].cancelledBy ?? []), user._id]
+    data[eventId].cancelledBy = [...(data[eventId].cancelledBy?.filter(id => id !== user._id) ?? []), user._id]
 
     await cockpit.collectionSave("internal-data", {_id: READER_ID, data});
     res.json({ok: true});

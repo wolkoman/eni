@@ -26,12 +26,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
     invalidateCachedReaderData();
     const readers = await cockpit.collectionGet("person").then(x => x.entries
-        .filter(person => person.competences?.includes('reader') && person.active)
+        .filter(person => (person.competences?.includes('reader') || person.competences?.includes('communion_minister')) && person.active)
         .filter(person => user.parish === CalendarName.ALL || user.parish === person.parish)
         .map(person => ({
             _id: person._id,
             name: person.name,
             parish: person.parish,
+            competences: person.competences,
             email: person.email?.includes("@")
         }))
     );

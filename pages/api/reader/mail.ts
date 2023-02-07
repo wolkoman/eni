@@ -21,8 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS, getReaderData: getCachedReaderData}).then(x => x.events);
-    invalidateCachedReaderData();
+    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS}).then(x => x.events);
     const data: ReaderData = await cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
     const liturgy: LiturgyData = await cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await cockpit.collectionGet('person').then(x => x.entries);
@@ -38,7 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const secretOrPrivateKey = Buffer.from(process.env.PRIVATE_KEY!, 'base64');
 
-    const userlikeObject: User = {...person, permissions: {[Permission.Reader]: true}, api_key: `person_${person._id}`,  is_person: true};
+    const userlikeObject: User = {
+        ...person,
+        permissions: resolvePermissionsForCompetences(person.competences),
+        api_key: `person_${person._id}`,
+        is_person: true
+    };
     const jwt = sign(userlikeObject, secretOrPrivateKey, {algorithm: 'RS256', expiresIn: "90d"})
     const link = `https://eni.wien/login?redirect=/intern/reader/my&jwt=${jwt}`
 
@@ -60,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     To: [{Email: person.email, Name: person.name}],
                     TemplateID: 4375769,
                     TemplateLanguage: true,
-                    Subject: "Lesetermine",
+                    Subject: "Neue liturgische Dienste",
                     Variables: {
                         link: link,
                         name: person.name,
@@ -68,17 +72,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             .map(task => ({
                                 task,
                                 date: new Date(task.event.date),
-                                liturgy: liturgy[task.event.date].find(liturgy => data[task.event.id].liturgy === liturgy.name)!,
+                                reading: task.data.role === "reading1" || task.data.role === "reading2" ? liturgy[task.event.date].find(liturgy => data[task.event.id].liturgy === liturgy.name)?.[task.data.role] : ''
                             }))
-                            .map(({task, date, liturgy}) => ({
+                            .map(({task, date, reading}) => ({
                                 date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}`,
                                 summary: task.event.summary?.replace(/\[.*?]/g, ''),
-                                description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')) + "<br>" + liturgy.name,
+                                description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')),
                                 info: `${{
                                     reading1: "1. Lesung",
-                                    reading2: "2. Lesung"
-                                }[task.data.role]} ${liturgy[task.data.role]}`,
-                                link: `https://www.bibleserver.com/EU/${encodeURI(liturgy[task.data.role])}`,
+                                    reading2: "2. Lesung",
+                                    communionMinister1: "1. Kommunionsspender:in:",
+                                    communionMinister2: "2. Kommunionsspender:in:",
+                                }[task.data.role]} ${reading}`,
+                                link: reading ? `https://www.bibleserver.com/EU/${encodeURI(reading)}` : '',
                             }))
                     }
                 }
