@@ -1,7 +1,7 @@
 import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 import {ParishDot} from './ParishTag';
 import React from "react";
-import {EventDescription3, EventTag} from "./EventUtils";
+import {EventDescription, EventTag} from "./EventUtils";
 import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
@@ -24,7 +24,7 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
                 <div className={`${cancelled || 'font-semibold'}`}>
                     <DiffView>{suggestion?.data.summary ?? event.summary ?? ""}</DiffView>
                 </div>
-                <EventDescription3 event={event} suggestion={suggestion}/>
+                <EventDescription event={event} suggestion={suggestion}/>
             </div>
             <div className="flex gap-1" data-testid="event">
                 {event.tags?.map(tag => <EventTag key={tag} tag={tag}/>)}
@@ -35,13 +35,13 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
 
 export const DiffView = (props: { children: Diff[] | string }) => {
     if(!props.children) return <></>
-    return <>{typeof props.children === "string"
+    return <span className="whitespace-pre">{typeof props.children === "string"
         ? props.children
         : props.children.map(diff => <span className={"rounded " + {
             "-1": "bg-red-300 line-through",
             "0": "",
             "1": "bg-green-300 "
-        }[diff[0]]}>{diff[1]}</span>)}</>
+        }[diff[0]]}>{diff[1]}</span>)}</span>
 }
 
 

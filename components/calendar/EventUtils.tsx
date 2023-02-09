@@ -1,37 +1,9 @@
 import {getMonthName, getWeekDayName} from "./Calendar";
 import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
-import {SanitizeHTML} from "../SanitizeHtml";
 import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
 import {roleToString} from "../../util/reader";
-
-export function EventDescription(props: { event: CalendarEvent }) {
-    return <div className="font-normal text-sm leading-4">
-        <div>
-            {!props.event.tags.includes(CalendarTag.singleEvent) &&
-                <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">💫 Einzelevent</div>
-            }
-            {props.event.tags.includes(CalendarTag.private) &&
-                <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">🔒 Vertraulich</div>
-            }
-            {props.event.tags.includes(CalendarTag.inChurch) && props.event.calendar === 'inzersdorf' &&
-                <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">🎹 Orgel-Blocker</div>
-            }
-            {props.event.tags.includes(CalendarTag.suggestion) &&
-                <div className="text-xs p-0.5 m-1 bg-black/10 inline-block rounded">⚠️ Noch nicht angenommen</div>
-            }
-        </div>
-        {!props.event.tags.includes(CalendarTag.cancelled) && <>
-            {props.event.mainPerson && `mit ${props.event.mainPerson}`}
-            {props.event.description && <SanitizeHTML html={props.event.description?.replace(/\n/g, '<br/>')}/>}
-            {props.event.readerInfo?.reading1 && <div className="px-2 py-1 bg-black/5 rounded mt-2">
-                {props.event.readerInfo?.reading1 && <div>1. Lesung: {props.event.readerInfo?.reading1.name}</div>}
-                {props.event.readerInfo?.reading2 && <div>2. Lesung: {props.event.readerInfo?.reading2.name}</div>}
-            </div>}
-        </>}
-    </div>;
-}
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
     return <div>
@@ -66,7 +38,7 @@ export function EventTag(props: { tag: CalendarTag }) {
     </Tooltip>
 }
 
-export function EventDescription3(props: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'] }) {
+export function EventDescription(props: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'] }) {
     if (props.event.tags?.includes(CalendarTag.cancelled)) return <></>;
     const dateChanged = props.suggestion?.data.date.some(d => d[0] !== 0);
     const roles = ["reading1", "reading2", "communionMinister1", "communionMinister2"] as const

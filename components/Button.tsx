@@ -6,7 +6,7 @@ export default function Button(props: {label: string, sure?: true, onClick?: () 
       ${props.className ?? ''}
       inline-block  rounded-lg transform transition
       ${props.big ? 'px-8 py-3 text-lg' : 'px-3 py-1'}
-      ${props.secondary ? 'border border-black/80 text-black/80' : 'bg-black/5'}
+      ${props.secondary ? 'border border-black/20 text-black/80 hover:bg-black/10' : 'bg-black/5'}
       ${props.disabled ? 'pointer-events-none opacity-70 border-black/50'  : 'cursor-pointer hover:bg-black/10'}
       ${sure && 'bg-[#d00] hover:bg-[#c00] text-white scale-110 transition-all shadow-xl'}
     `}
