@@ -17,15 +17,16 @@ import {useAuthenticatedSuggestionsStore, useSuggestionsStore} from "../../util/
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const {answerSuggestion} = useAuthenticatedCalendarStore();
     const {add: addSuggestion} = useAuthenticatedSuggestionsStore();
+    //const []
 
-    function answer(suggestion: Collections["eventSuggestion"], accepted: boolean) {
+    function answer(suggestion: Collections["eventSuggestion"], accepted: true | string) {
         return fetchJson("/api/calendar/answer",
-            {json: {accepted, suggestionId: suggestion._id}},
+            {json: {accepted: accepted === true, suggestionId: suggestion._id, reason: accepted}},
             {pending: "Speichern..", error: "Konnte nicht gespeichert werden", success: "Speichern erfolgreich"}
         )
             .then(data => {
-                answerSuggestion(suggestion._id, accepted);
-                addSuggestion({...suggestion, accepted})
+                answerSuggestion(suggestion._id, accepted === true);
+                addSuggestion({...suggestion, accepted: accepted === true})
                 return data;
             })
             .catch(() => {
@@ -35,13 +36,13 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
     return <div className={"p-4 " + unibox}>
         <div className="flex justify-between">
             <div className="font-bold">Vorschlag von {props.suggestion.byName}</div>
-            {props.active && <div className="flex justify-end gap-2">
+            {props.active && <div className="flex justify-end gap-2 relative">
                 {props.applicable && <>
                     <Button label="Akzeptieren" onClick={() => answer(props.suggestion, true)}/>
                     <Button label="Bearbeiten"
                             onClick={() => answer(props.suggestion, true).then(({link}) => window.open(link))}/>
                 </>}
-                <Button label="Ablehnen" onClick={() => answer(props.suggestion, false)}/>
+                <Button label="Ablehnen" onClick={() => answer(props.suggestion, "unbekannt")}/>
             </div>}
             {props.suggestion.closedBy && <div className="flex justify-end gap-2">
                 {props.suggestion.accepted ? 'akzeptiert' : 'abgelehnt'} von{' '}

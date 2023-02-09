@@ -20,9 +20,9 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
     const announcement = announcements[0];
 
     return <div className="flex flex-col items-center gap-2 p-12 bg-[url(/bg-login.svg)] bg-center bg-cover rounded-lg shadow-xl lg:-mx-12 lg:py-20 text-white font-bold" >
-            <div className="text-lg flex justify-center items-center flex-row flex-wrap space-x-4 uppercase">
+            <div className="text-lg flex justify-center items-center flex-row flex-wrap gap-2 lg:gap-8 uppercase">
                 <div>{announcement.liturgy ? "Kirchliches Fest" : "Ankündigung"}</div>
-                <div className="flex gap-8">
+                <div className="flex gap-2 lg:gap-8">
                     <div><EventDateText date={new Date(announcement.date)}/></div>
                     {'start' in announcement && <EventTime date={new Date(announcement.start.dateTime)}/>}
                 </div>
@@ -32,7 +32,7 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
                 {announcement.summary}
             </div>
             {'calendar' in announcement && <div
-                className={`text-lg font-bold px-4 rounded-full uppercase bg-white/30`}>
+                className={`text-lg font-bold px-4 rounded-full uppercase bg-white/30 text-center`}>
                 {getCalendarInfo(announcement.calendar).fullName}
             </div>}
             {announcement.liturgy && <div className={`flex flex-col gap-1`}>

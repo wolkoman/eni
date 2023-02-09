@@ -91,11 +91,7 @@ export function EventDescription3(props: { event: Partial<CalendarEvent>, sugges
     </div>;
 }
 
-export const EventDate = ({
-    date
-}: {
-    date: Date
-}) => {
+export const EventDate = ({date}: { date: Date }) => {
     const day = date.getDay();
     return <div className={`flex gap-3 items-end ${day ? '' : 'font-bold'}`}>
         <div className="text-2xl lg:text-3xl">{date.getDate()}.</div>
@@ -106,11 +102,7 @@ export const EventDate = ({
     </div>;
 }
 
-export const EventDateText = ({
-    date
-}: {
-    date: Date
-}) => {
+export const EventDateText = ({date}: { date: Date }) => {
     const day = date.getDay();
     return <>
         {getWeekDayName(day)},{' '}

@@ -8,7 +8,7 @@ import {CalendarTag} from "../../../util/calendar-types";
 import {LiturgyData} from "../liturgy";
 import {sign} from "jsonwebtoken";
 import {User} from "../../../util/user";
-import {getCachedReaderData, invalidateCachedReaderData} from "./index";
+import {sendMail} from "../../../util/mailjet";
 
 const READER_ID = "637b85bc376231d51500018d";
 
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const liturgy: LiturgyData = await cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await cockpit.collectionGet('person').then(x => x.entries);
     const person = persons.find(p => p._id === req.body.personId)!;
-    if(!person) {
+    if (!person) {
         res.status(500).json({error: "Person not found"});
     }
 
@@ -51,53 +51,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    await fetch("https://api.mailjet.com/v3.1/send", {
-        method: "POST",
-        headers: {
-            'Authorization': 'Basic ' + Buffer.from(process.env.MJ_PUBLIC + ":" + process.env.MJ_PRIVATE).toString('base64'),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            Messages: [
-                {
-                    From: {Email: "admin@tesarekplatz.at", Name: user.name},
-                    To: [{Email: person.email, Name: person.name}],
-                    TemplateID: 4375769,
-                    TemplateLanguage: true,
-                    Subject: "Neue liturgische Dienste",
-                    Variables: {
-                        link: link,
-                        name: person.name,
-                        events: uniformedTasks
-                            .map(task => ({
-                                task,
-                                date: new Date(task.event.start.dateTime),
-                                reading: task.data.role === "reading1" || task.data.role === "reading2" ? liturgy[task.event.date].find(liturgy => data[task.event.id].liturgy === liturgy.name)?.[task.data.role] : ''
-                            }))
-                            .map(({task, date, reading}) => ({
-                                date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}, ${date.toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"})}`,
-                                summary: task.event.summary?.replace(/\[.*?]/g, ''),
-                                description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')),
-                                info: `${{
-                                    reading1: "1. Lesung",
-                                    reading2: "2. Lesung",
-                                    communionMinister1: "1. Kommunionsspender:in:",
-                                    communionMinister2: "2. Kommunionsspender:in:",
-                                }[task.data.role]} ${reading}`,
-                                link: reading ? `https://www.bibleserver.com/EU/${encodeURI(reading)}` : '',
-                            }))
-                    }
-                }
-            ]
-        })
-    }).then(response => {
-        if(!response.ok){
-         response.text().then(text => console.log("MJ_E", text))
-        throw new Error("Mail not sent");
-        }
-        return response.json();
-    }).then(response => console.log("MJ", response))
-    console.log("MAIL SENT OK");
+    if (person.email) {
+        await sendMail(4375769, person.name, person.email, "Neue liturgische Dienste", {
+                link: link,
+                name: person.name,
+                events: uniformedTasks
+                    .map(task => ({
+                        task,
+                        date: new Date(task.event.start.dateTime),
+                        reading: task.data.role === "reading1" || task.data.role === "reading2" ? liturgy[task.event.date].find(liturgy => data[task.event.id].liturgy === liturgy.name)?.[task.data.role] : ''
+                    }))
+                    .map(({task, date, reading}) => ({
+                        date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}, ${date.toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"})}`,
+                        summary: task.event.summary?.replace(/\[.*?]/g, ''),
+                        description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')),
+                        info: `${{
+                            reading1: "1. Lesung",
+                            reading2: "2. Lesung",
+                            communionMinister1: "1. Kommunionsspender:in:",
+                            communionMinister2: "2. Kommunionsspender:in:",
+                        }[task.data.role]} ${reading}`,
+                        link: reading ? `https://www.bibleserver.com/EU/${encodeURI(reading)}` : '',
+                    }))
+            }
+        )
+        console.log("MAIL SENT OK");
+    }
     res.json({ok: true});
 
 }
+

@@ -126,7 +126,10 @@ export type GetEventOptions =
 
 export const getCachedEvents = async (options: GetEventOptions): Promise<EventsObject> => {
     const calendarCacheId = '61b335996165305292000383';
-    const events = await getCalendarsEvents(options).catch(() => null);
+    const events = await getCalendarsEvents(options).catch(err => {
+        console.log(err);
+        return null;
+    });
     if (events !== null) {
         if (options.permission === GetEventPermission.PUBLIC && site(true, false)) {
             cockpit.collectionSave('internal-data', {
@@ -140,7 +143,7 @@ export const getCachedEvents = async (options: GetEventOptions): Promise<EventsO
         return {events, openSuggestions};
     } else {
         const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
-        await notifyAdmin('Google Calendar failed');
+        await notifyAdmin('Google Calendar failed ' + JSON.stringify(events));
         return cachedEvents;
     }
 }

@@ -3,7 +3,7 @@ import {notifyAdmin} from "./telegram";
 import {calendar_v3} from "googleapis";
 
 export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGroup[] {
-    const sum = event.summary!.toLowerCase();
+    const sum = event.summary?.toLowerCase() ?? "";
     let conditions: (CalendarGroup | false)[] = [
         sum.includes("wallfahrt") && CalendarGroup.Wallfahrt,
         sum.startsWith("grabwache") && CalendarGroup.Grabwache,

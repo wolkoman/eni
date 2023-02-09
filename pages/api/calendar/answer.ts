@@ -5,6 +5,7 @@ import {google} from "googleapis";
 import {getCalendarInfo} from "../../../util/calendar-info";
 import {cockpit} from "../../../util/cockpit-sdk";
 import {applySuggestionToPatch, getSuggestionFromDiff} from "../../../util/suggestion-utils";
+import {sendMail} from "../../../util/mailjet";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -27,6 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(404).json({error: "No suggestion found"});
         return;
     }
+    const suggestion = eventSuggestions[0];
+    const suggestionParish = getCalendarInfo(suggestion.parish);
+    const suggestionValues = getSuggestionFromDiff(suggestion);
 
     if (!req.body.accepted) {
         await cockpit.collectionSave("eventSuggestion", {
@@ -36,13 +40,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             closedBy: user._id,
             closedByName: user.name
         });
+        if(user.email){
+            await sendMail(4570749, user.name, user.email, "Abgelehnter Termin: " + suggestionValues.summary, {
+                summary: suggestionValues.summary,
+                dateandtime: new Date(suggestionValues.date+"T"+suggestionValues.time).toLocaleString("de-AT", {timeZone: "Europe/Vienna"}),
+                description: suggestionValues.description,
+                name: user.name,
+                reason: req.body.reason
+            })
+        }
         res.json({accepted: false});
         return;
     }
 
 
-    const suggestion = eventSuggestions[0];
-    const suggestionParish = getCalendarInfo(suggestion.parish);
     const eventData = {
         auth: await getCachedGoogleAuthClient(),
         calendarId: suggestionParish.calendarId,
