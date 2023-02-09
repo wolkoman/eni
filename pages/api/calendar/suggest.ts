@@ -3,6 +3,7 @@ import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {cockpit} from "../../../util/cockpit-sdk";
 import {notifyAdmin} from "../../../util/telegram";
 import {slack} from "../../../util/slack";
+import {getSuggestionFromDiff} from "../../../util/suggestion-utils";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -44,7 +45,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await notifyAdmin("new eventSuggestion by " + user.name + ": " + JSON.stringify(req.body.data));
 
     const channel = process.env.STAGE === "prod" ? 'C04MQ7Y9S78' : 'U0HJVFER4';
-    await slack("chat.postMessage", {channel, text: `_${user.name}_ hat einen Terminvorschlag eingereicht:\n*${req.body.data.date} ${req.body.data.time} ${req.body.data.summary}*`})
+    const suggestionValues = getSuggestionFromDiff(req.body)
+    await slack("chat.postMessage", {channel, text: `_${user.name}_ hat einen Terminvorschlag eingereicht:\n*${suggestionValues.date} ${suggestionValues.time} ${suggestionValues.summary}*`})
 
     res.json(eventSuggestion);
 

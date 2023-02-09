@@ -12,7 +12,7 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && `${info.className} rounded-lg`}`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && !props.hideTagOnLarge && `${info.className} rounded-lg`}`}
         >
             <div className={`w-[30px] lg:w-[50px] pt-1.5 shrink-0 ${props.hideTagOnLarge && 'lg:hidden'}`}>
                 <ParishDot info={info}/>

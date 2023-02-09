@@ -34,17 +34,26 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
             })
     }
 
-    return <div className={"p-4 " + unibox}>
-        <div className="flex justify-between">
-            <div className="font-bold">Vorschlag von {props.suggestion.byName}</div>
-            {props.active && <div className="flex justify-end gap-2 relative">
+    return <div className={ "grid lg:grid-cols-2 gap-2 "+(props.active ? `p-4 ${unibox}` : '')}>
+
+        <div className="flex flex-col lg:flex-row gap-4 items-start">
+            <EventDate
+                date={new Date(props.suggestion.data.date.filter(([i]) => i >= 0).map(([_, str]) => str).join(""))}/>
+            <Event event={props.event} suggestion={props.suggestion}/>
+        </div>
+        <div className="flex flex-col items-end">
+            <div className="">
+                {props.suggestion.byName} ({new Date(props.suggestion._modified*1000).toLocaleString("de-AT")})
+            </div>
+
+            {props.active && <div className="flex  gap-2 relative">
                 {props.applicable && <>
                     <Button label="Akzeptieren" onClick={() => answer(props.suggestion, true)}/>
                     <Button label="Bearbeiten"
                             onClick={() => answer(props.suggestion, true).then(({link}) => window.open(link))}/>
                 </>}
                 <Button label="Ablehnen" onClick={() => setDeclineDialog(true)}/>
-                {declineDialog && <div className="absolute top-0 right-0 z-40 bg-white p-4 shadow-lg rounded-lg flex flex-col gap-2">
+                {declineDialog && <div className="absolute top-0 left-0 z-40 bg-white p-4 shadow-lg rounded-lg flex flex-col gap-2">
                     <div className="flex gap-2">
                         <Button secondary={true} label="Terminkollision" onClick={() => setDeclineMessage("Es gibt eine Terminkollision zu diesem Zeitpunkt.")}/>
                         <Button secondary={true} label="Ausführlich" onClick={() => setDeclineMessage("Dieser Vorschlag ist zu umfangreich. Der Terminkalender dient lediglich zur Anzeige von prägnanten Informationen. Ausführliche Einladungen, Beschreibungen, o.ä. würden wir Sie bitten über die Wochenmitteilungen zu verlautbaren.")}/>
@@ -56,20 +65,15 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
                         onChange={({target}) => setDeclineMessage(target.value)}
                     />
                     <div className="flex gap-2 flex-row-reverse">
-                        <Button label="Ablehnen" disabled={!declineMessage} onClick={() => answer(props.suggestion, declineMessage!)}/>
+                        <Button label="Mail senden" disabled={!declineMessage} onClick={() => answer(props.suggestion, declineMessage!)}/>
                     </div>
                 </div>}
             </div>}
             {declineDialog && <div className="fixed inset-0 z-30 bg-black/40 p-4 shadow-lg rounded-lg" onClick={() => setDeclineDialog(false)}/>}
-            {props.suggestion.closedBy && <div className="flex justify-end gap-2">
+            {props.suggestion.closedBy && <div className="flex gap-2">
                 {props.suggestion.accepted ? 'akzeptiert' : 'abgelehnt'} von{' '}
                 {props.suggestion.closedByName} ({new Date(props.suggestion._modified*1000).toLocaleString("de-AT")})
             </div>}
-        </div>
-        <div className="flex flex-col lg:flex-row gap-4 items-start">
-            <EventDate
-                date={new Date(props.suggestion.data.date.filter(([i]) => i >= 0).map(([_, str]) => str).join(""))}/>
-            <Event event={props.event} suggestion={props.suggestion}/>
         </div>
     </div>;
 }
