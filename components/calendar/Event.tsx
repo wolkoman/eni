@@ -35,7 +35,7 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
 
 export const DiffView = (props: { children: Diff[] | string }) => {
     if(!props.children) return <></>
-    return <span className="whitespace-pre">{typeof props.children === "string"
+    return <span className="whitespace-pre-wrap">{typeof props.children === "string"
         ? props.children
         : props.children.map(diff => <span className={"rounded " + {
             "-1": "bg-red-300 line-through",

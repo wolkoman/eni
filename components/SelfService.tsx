@@ -1,5 +1,6 @@
 import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction, useEffect, useState} from "react";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
+import {EniLoading} from "./Loading";
 
 type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;
@@ -35,13 +36,13 @@ export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
         }</div>;
 }
 
+export type SelfServiceFile = { id: string, index: number, name: string, result: string, finished: boolean };
 export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
 
-    const [fileList, setFileList] = useState<{ id: string, index: number, name: string, result: string, finished: boolean }[]>([]);
-
-    useEffect(() => {
-        if (props.form[0][props.name].length === 0) setFileList([]);
-    }, [props.form[0]])
+    const [fileList, setFileList] = [
+        props.form[0][props.name] as SelfServiceFile[],
+        (fn: (files: SelfServiceFile[]) => SelfServiceFile[]) => props.form[1](rest => ({...rest, [props.name]:fn(rest[props.name] as SelfServiceFile[])}))
+    ] as const;
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const id = Math.random().toString();
@@ -50,7 +51,7 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
         const data = new FormData();
         files.forEach((file, i) => {
             data.append(`file-${i}`, file, file.name);
-            setFileList(x => ([...x, {id, index: i, name: file.name, result: "", finished: false}]))
+            setFileList(fileList => [...fileList, {id, index: i, name: file.name, result: "", finished: false}])
         });
         fetch('https://api.eni.wien/files-v0/upload.php', {
             method: 'POST',
@@ -63,9 +64,11 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
                     finished: true,
                     result: data[file.index]
                 } : file))
-                props.form[1](rest => ({...rest, [props.name]: [...rest[props.name], ...data]}))
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                setFileList(files => files.filter(file => file.id !== id))
+                console.error(err);
+            });
     };
 
     return <label htmlFor="dropzone-file"
@@ -79,11 +82,11 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
             <p className="">Hochladen</p>
         </div> : <div className="p-4 flex flex-col gap-2">
             {fileList.map(file => <div className={file.finished ? 'font-bold' : 'animate-pulse'}>
-                {file.name}
+                {file.name}{file.finished ? '' : '...'}
             </div>)}
             {fileList.some(file => !file.finished) &&
-                <div className="absolute left-0 w-full bottom-0 bg-black/20 p-2 font-bold italic">
-                    Hochladen läuft...
+                <div className="absolute left-0 w-full top-0">
+                    <EniLoading noPadding={true}/>
                 </div>}
         </div>}
         <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} multiple/>
