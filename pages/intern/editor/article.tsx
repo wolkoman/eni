@@ -39,7 +39,6 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     const {user} = useAuthenticatedUserStore();
     const permission = user?.permissions?.[Permission.Editor] ?? false;
-    const editable = permission || props.article.status === "writing";
     const {query: {articleId}} = useRouter();
     const [text, setText] = useState(props.versions[0]?.text ?? '');
     const [length, setLength] = useState(0);
@@ -50,6 +49,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     const [finishModalOpen, setFinishModalOpen] = useState(false);
     const [mobilMenuOpen, setMobilMenuOpen] = useState(false);
     const [warning, setWarning] = useState({open: false, active: false});
+    const editable = permission || status === "writing";
 
     useEffect(() => {
         setLength(text.length);
