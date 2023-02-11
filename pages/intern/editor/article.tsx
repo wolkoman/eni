@@ -49,7 +49,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     const [finishModalOpen, setFinishModalOpen] = useState(false);
     const [mobilMenuOpen, setMobilMenuOpen] = useState(false);
     const [warning, setWarning] = useState({open: false, active: false});
-    const editable = permission || status === "writing";
+    const editable = permission || status === "writing" || status === null;
 
     useEffect(() => {
         setLength(text.length);
