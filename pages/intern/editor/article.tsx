@@ -67,7 +67,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     useEffect(() => {
         const interval = setInterval(() => save(), 10000);
         return () => clearInterval(interval);
-    }, []);
+    }, [saved]);
 
     useBeforeunload(async (event) => {
         if (saved !== 'saved' && editable) {
