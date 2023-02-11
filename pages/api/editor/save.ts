@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
     const user = resolveUserFromRequest(req);
-    if (article.status !== 'writing' && !user?.permissions[Permission.Editor]) {
+    if ((article.status !== null && article.status !== 'writing') && !user?.permissions[Permission.Editor]) {
         res.status(401).end();
         return;
     }
