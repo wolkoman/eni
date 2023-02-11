@@ -74,7 +74,6 @@ export default function Intern() {
         {permissions?.[Permission.Admin] && <>
             <div className="my-8 text-xl">Administration</div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                <InternButton href="intern/artikel" label="Importer"/>
                 <InternButton href="intern/weekly" label="Wochenmitteilung"/>
             </div>
         </>}
