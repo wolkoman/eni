@@ -8,7 +8,7 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
     const now = new Date().getTime();
     const announcements = [
         ...props.eventsObject.events
-            .filter(event => event.tags.includes(CalendarTag.announcement) && false)
+            .filter(event => event.tags.includes(CalendarTag.announcement))
             .map(event => ({...event, liturgy: false})),
         ...props.liturgyEvents.map(event => ({...event, summary: event.displayName ?? event.name, liturgy: true}))
     ]
