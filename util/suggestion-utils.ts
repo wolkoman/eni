@@ -57,6 +57,5 @@ export function applySuggestionToPatch( suggestion: Collections['eventSuggestion
             }))
             .map(({key, suggestion, newValue}) => [key, dmp.diff_main(suggestion[key], newValue)])
         );
-    console.log(applicable, data)
     return {suggestion: {...suggestion, data: data2} as Collections['eventSuggestion'], applicable};
 }

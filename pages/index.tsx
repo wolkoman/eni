@@ -35,10 +35,8 @@ export default function HomePage(
                 responsive={false} navbar={false}
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
-                <TopBar/>
-                    <Responsive>
-                        <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
-                    </Responsive>
+                <TopBar hidePicture={true}/>
+                <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
                 <Instagram items={props.instagram}/>
@@ -78,7 +76,12 @@ export async function getStaticProps() {
         const liturgy = await getLiturgyData();
         const now = new Date().getTime();
         const events = Object.entries(liturgy)
-            .flatMap(([date, liturgies]) => liturgies.map(liturgy => ({rank: liturgy.rank, name: liturgy.name, date})))
+            .flatMap(([date, liturgies]) => liturgies.map(liturgy => ({
+                rank: liturgy.rank,
+                name: liturgy.name,
+                date,
+                displayName: liturgy.displayName ?? null
+            })))
             .filter(({
                          date,
                          rank

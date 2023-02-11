@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 export type LiturgyData = Record<string, Liturgy[]>;
 export interface Liturgy{
   name: string;
+  displayName?: string;
   color: string;
   rank: string;
   reading1: string;
