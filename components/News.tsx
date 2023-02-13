@@ -10,7 +10,7 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
         ...props.eventsObject.events
             .filter(event => event.tags.includes(CalendarTag.announcement))
             .map(event => ({...event, liturgy: false})),
-        ...props.liturgyEvents.map(event => ({...event, summary: event.name, liturgy: true}))
+        ...props.liturgyEvents.map(event => ({...event, summary: event.displayName ?? event.name, liturgy: true}))
     ]
         .map(event => ({
             ...event,
@@ -19,40 +19,50 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
         .sort((a, b) => a.points - b.points);
     const announcement = announcements[0];
 
-    return <div className="flex flex-col items-center gap-2 p-12 bg-[url(/bg-login.svg)] bg-center bg-cover rounded-lg shadow-xl lg:-mx-12 lg:py-20 text-white font-bold" >
-            <div className="text-lg flex justify-center items-center flex-row flex-wrap gap-2 lg:gap-8 uppercase">
-                <div>{announcement.liturgy ? "Kirchliches Fest" : "Ankündigung"}</div>
-                <div className="flex gap-2 lg:gap-8">
-                    <div><EventDateText date={new Date(announcement.date)}/></div>
-                    {'start' in announcement && <EventTime date={new Date(announcement.start.dateTime)}/>}
-                </div>
+    return <>
 
+        <div className="bg-[url(/bg-login.svg)] bg-center bg-cover flex flex-col items-center">
+            <div className="h-0.5 lg:h-1 w-full bg-black"/>
+            <div className="my-20 text-white">
+                <div className="text-xl flex justify-center items-center flex-row flex-wrap gap-2 lg:gap-10 uppercase">
+                    <div>{announcement.liturgy ? "Kirchliches Fest" : "Ankündigung"}</div>
+                    <div className="flex gap-2 lg:gap-10">
+                        <div><EventDateText date={new Date(announcement.date)}/></div>
+                        {'start' in announcement && <EventTime date={new Date(announcement.start.dateTime)}/>}
+                    </div>
+                </div>
+                <div className="text-4xl lg:text-7xl font-bold my-4 text-center">
+                    {announcement.summary}
+                </div>
+                {'calendar' in announcement && <div
+                    className={`text-xl font-bold px-4 py-1 rounded-full uppercase bg-white/30 text-center`}>
+                    {getCalendarInfo(announcement.calendar).fullName}
+                </div>}
+                {announcement.liturgy && <div className={`flex flex-col gap-1 items-center`}>
+                    {props.eventsObject.events
+                        .filter(event =>
+                            event.date === announcement.date &&
+                            (event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))
+                        )
+                        .map(event => <div className="flex gap-3 items-center">
+                            <div
+                                className={`font-bold px-4 rounded-full uppercase bg-white/30`}>
+                                {getCalendarInfo(event.calendar).tagName}
+                            </div>
+                            <div className="text-lg font-bold">
+                                <EventTime date={new Date(event.start.dateTime)}/>
+                            </div>
+                            <div className="text-lg font-bold">
+                                {event.summary}
+                            </div>
+                        </div>)
+                    }
+                </div>}
             </div>
-            <div className="text-4xl lg:text-5xl font-bold mb-4 text-center">
-                {announcement.summary}
-            </div>
-            {'calendar' in announcement && <div
-                className={`text-lg font-bold px-4 rounded-full uppercase bg-white/30 text-center`}>
-                {getCalendarInfo(announcement.calendar).fullName}
-            </div>}
-            {announcement.liturgy && <div className={`flex flex-col gap-1`}>
-                {props.eventsObject.events
-                    .filter(event =>
-                        event.date === announcement.date &&
-                        (event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst)))
-                    .map(event => <div className="flex gap-3 items-center">
-                        <div
-                            className={`font-bold px-4 rounded-full uppercase bg-white/30`}>
-                            {getCalendarInfo(event.calendar).tagName}
-                        </div>
-                        <div className="text-lg font-bold">
-                            <EventTime date={new Date(event.start.dateTime)}/>
-                        </div>
-                        <div className="text-lg font-bold">
-                            {event.summary}
-                        </div>
-                    </div>)
-                }
-            </div>}
-        </div>;
+            <img src="/logo/dreipfarren.svg" className="lg:h-[250px] z-20"/>
+            <div className="h-0.5 lg:h-1 -mt-0.5 lg:-mt-1 w-full bg-black"/>
+        </div>
+
+
+    </>;
 }

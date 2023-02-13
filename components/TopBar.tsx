@@ -5,7 +5,7 @@ import {useAuthenticatedUserStore} from "../util/use-user-store";
 import Responsive from "./Responsive";
 import {useRive} from "@rive-app/react-canvas";
 
-export default function TopBar() {
+export default function TopBar(props: {hidePicture?: boolean}) {
     const {user} = useAuthenticatedUserStore();
     const [isFrontpage, setIsFrontpage] = useState(false);
     useEffect(() => {
@@ -18,9 +18,9 @@ export default function TopBar() {
                     <div className="font-bold">
                         Miteinander der Pfarren Emmaus am Wienerberg,<br/>Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
                     </div>
-                <div className="hidden lg:block">
-                    <img src="/logo/dreipfarren.svg"/>
-                </div>
+                {!props.hidePicture && <div className="hidden lg:block">
+                    <img src="/logo/dreipfarren.svg" className="h-[45px]"/>
+                </div>}
             </div>
             </Link>
         </Responsive>
@@ -38,14 +38,4 @@ export default function TopBar() {
             <div className="text-md md:ml-24">{site("+43 664 886 32 680", "+43 1 616 34 00")}</div>
         </div>
     </div>);
-}
-
-export function Hero() {
-    const {RiveComponent} = useRive({
-        src: '/hero.riv',
-        autoplay: true,
-    });
-    return <div className="relative w-full aspect-[25/1]">
-        <RiveComponent/>
-    </div>;
 }
