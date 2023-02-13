@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const isPlanner = user.permissions[Permission.ReaderPlanning];
-    const isReader = user.permissions[Permission.Reader];
-    if (!isPlanner && !isReader) {
+    const isServant = user.permissions[Permission.Reader] || user.permissions[Permission.CommunionMinister];
+    if (!isPlanner && !isServant) {
         res.status(401).json({errorMessage: 'No sufficient role'});
         return;
     }

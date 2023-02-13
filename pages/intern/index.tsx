@@ -60,7 +60,7 @@ export default function Intern() {
             <InternButton href="/termine" label="Termine"/>
             {permissions?.[Permission.CalendarAdministration] && <InternButton href="intern/event-suggestions" label="Terminvorschläge"/>}
             <InternButton href="/intern/announcement" label="Ankündigung für die Wochenmitteilungen"/>
-            {(permissions?.[Permission.Reader] || permissions?.[Permission.ReaderPlanning]) &&
+            {(permissions?.[Permission.Reader] || permissions?.[Permission.ReaderPlanning] || permissions?.[Permission.CommunionMinister]) &&
                 <InternButton href="intern/reader/my" label="Liturgische Dienste"/>}
             {permissions?.[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
             {permissions?.[Permission.Editor] && <InternButton href="intern/editor" label="Redaktion"/>}
