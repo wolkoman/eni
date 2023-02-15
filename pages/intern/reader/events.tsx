@@ -149,7 +149,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
             </div>
             {liturgyEvents.map(([date, events]) => <div className="flex flex-col lg:flex-row" key={date}>
                 <div className={`w-24 flex-shrink-0 ${new Date(date).getDay() ? '' : 'font-bold'}`}>
-                    {new Date(date).toLocaleDateString()}
+                    {new Date(date).toLocaleDateString("de-AT")}
                 </div>
                 <div className="flex flex-col gap-2 flex-grow">
                     {events.map(event =>
