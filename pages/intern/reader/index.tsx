@@ -38,7 +38,7 @@ export function ReaderSite(props: { children?: ReactNode }) {
                     <Link href="/intern/reader/my" legacyBehavior={true}>
                         <img src="/logo/persons.svg" className="cursor-pointer"/>
                     </Link>
-                    {user?.permissions[Permission.Admin] && <>
+                    {user?.permissions[Permission.ReaderPlanning] && <>
                         <Link href="/intern/reader/events" legacyBehavior={true}>
                             <img src="/logo/events.svg" className="cursor-pointer"/>
                         </Link>

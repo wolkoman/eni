@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = resolveUserFromRequest(req);
 
-    if (user === undefined || (!user.permissions[Permission.ReaderPlanning] && !user.permissions[Permission.Reader])) {
+    if (user === undefined || (!user.permissions[Permission.ReaderPlanning] && !user.permissions[Permission.Reader] && !user.permissions[Permission.CommunionMinister])) {
         res.status(401).json({errorMessage: 'No permission'});
         return;
     }
