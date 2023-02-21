@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {usePermission} from '../../util/use-permission';
 import Site from '../../components/Site';
 import Button from '../../components/Button';
@@ -7,9 +7,10 @@ import {TemplateHandler} from 'easy-template-x';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
-import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from '../../util/use-calendar-store';
+import {groupEventsByDate, useAuthenticatedCalendarStore} from '../../util/use-calendar-store';
 import {saveFile} from "../../util/save-file";
 import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
+import {Field, SelfServiceFile, SelfServiceFileUpload} from "../../components/SelfService";
 
 export default function InternArticles() {
     usePermission([Permission.Admin]);
@@ -69,9 +70,12 @@ export default function InternArticles() {
 
         saveFile('wochenmitteilung.docx', doc);
     }
+    const emptyForm = { description: "", files: [] as SelfServiceFile[], parish: "", hidden: false};
+    const form = useState(emptyForm);
 
     return <Site title="Wochenmitteilungen" narrow={true}>
         <div className="flex flex-col items-center mx-auto">
+            <div className="text-3xl font-bold my-4">Vorlage erstellen</div>
            <div>
                 <div className="mt-4 text-sm">Start</div>
                 <input type="date" className="bg-gray-200 px-3 py-1 rounded"
@@ -82,8 +86,9 @@ export default function InternArticles() {
                 <input type="date" className="bg-gray-200 px-3 py-1 rounded"
                        onChange={(e) => setPartialData({end: new Date(e.target.value)})}/>
             </div>
-            <Button className="mt-4" label="Generieren" onClick={() => generate("/eni.docx")} disabled={!loaded}/>
-            <Button className="mt-4" label="Generieren Neue Version" onClick={() => generate("/eni2.docx")} disabled={!loaded}/>
+            <Button className="mt-4" label="Generieren" onClick={() => generate("/eni2.docx")} disabled={!loaded}/>
+            <div className="text-3xl font-bold my-4 mt-10">PDF hochladen</div>
+
         </div>
     </Site>;
 }

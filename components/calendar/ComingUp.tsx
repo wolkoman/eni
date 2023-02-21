@@ -13,7 +13,7 @@ import {getGroupSorting} from "../../util/calendar-group";
 import {ParishTag2} from "./ParishTag";
 import {EventDateText} from "./EventUtils";
 
-export const unibox = "bg-black/[2%] border border-black/10  rounded-lg";
+export const unibox = "bg-black/[2%]  rounded-lg";
 export const clickable = unibox+" hover:bg-black/[4%] cursor-pointer";
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);

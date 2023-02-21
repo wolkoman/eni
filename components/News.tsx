@@ -22,7 +22,6 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
     return <>
 
         <div className="bg-[url(/bg-login.svg)] bg-center bg-cover flex flex-col items-center">
-            <div className="h-0.5 lg:h-1 w-full bg-black"/>
             <div className="my-20 text-white">
                 <div className="text-xl flex justify-center items-center flex-row flex-wrap gap-2 lg:gap-10 uppercase">
                     <div>{announcement.liturgy ? "Kirchliches Fest" : "Ankündigung"}</div>
@@ -60,7 +59,6 @@ export function News(props: { eventsObject: EventsObject, liturgyEvents: (Liturg
                 </div>}
             </div>
             <img src="/logo/dreipfarren.svg" className="lg:h-[250px] z-20"/>
-            <div className="h-0.5 lg:h-1 -mt-0.5 lg:-mt-1 w-full bg-black"/>
         </div>
 
 
