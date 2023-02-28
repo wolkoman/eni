@@ -45,7 +45,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
     }
 
     return <ReaderSite>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-5">
             <div className="my-4 text-lg font-bold">Liturgische Dienste von {user?.name}</div>
             {myTasks.length === 0 && <div>
                 Keine Dienste eingeteilt
@@ -53,33 +53,32 @@ export default function Index(props: { liturgy: LiturgyData }) {
             {myTasks.map(task => {
                 const activeLiturgy = props.liturgy[task.event.date].find(liturgy => liturgy.name === readerData[task.event.id].liturgy)!;
                 const cancelled = task.data.status === "cancelled";
-                return <div
-                    key={task.event.id + task.data.role}
-                    className={`bg-black/5 p-6 rounded-lg my-4 ${cancelled && "opacity-50 pointer-events-none"}`}>
-                    {task.data.status === "cancelled" && <div className="bg-red-700 text-white font-bold rounded px-3">
-                        Die Planung wurde über die Absage informiert. Danke fürs Bescheid geben!
+                return <div className="rounded-lg overflow-hidden">
+                    {task.data.status === "cancelled" && <div className="bg-black/10 font-bold px-4 py-2">
+                        Sie haben sich von diesem Dienst ausgetragen. Danke fürs Bescheid geben!
                     </div>}
-                    <div className={task.data.status === "cancelled" ? 'line-through' : ''}>
-                        <div className={"font-bold text-xl"}>
-                            <EventDateText date={new Date(task.event.date)}/>,{" "}
-                            <EventTime date={new Date(task.event.start.dateTime)}/> Uhr
+                    <div key={task.event.id + task.data.role}
+                         className={`bg-black/5 p-6 ${cancelled && "pointer-events-none"} flex justify-between`}>
+                        <div>
+                            <div className={cancelled ? 'line-through' : ''}>
+                                <div className={"font-bold text-lg"}>
+                                    <EventDateText date={new Date(task.event.date)}/>,{" "}
+                                    <EventTime date={new Date(task.event.start.dateTime)}/> Uhr
+                                </div>
+                                <div className="text-xl">
+                                    {task.event.summary}. {roleToString(task.data.role)}
+                                    {(task.data.role === "reading1" || task.data.role === "reading2") && <>: <a
+                                        className="underline hover:no-underline" target="_new"
+                                        href={`https://bibleserver.com/EU/${encodeURI(activeLiturgy[task.data.role])}`}>
+                                        {activeLiturgy[task.data.role]}
+                                    </a></>}
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-3xl">
-                            {task.event.summary}
-                        </div>
-                        <div className="text-lg my-2">{roleToString(task.data.role)}
-                            {task.data.role === "reading1" || task.data.role === "reading2" && <>: <a
-                                className="underline hover:no-underline" target="_new"
-                                href={`https://bibleserver.com/EU/${encodeURI(activeLiturgy[task.data.role])}`}>
-                                {activeLiturgy[task.data.role]}
-                            </a></>}</div>
-                        <div className="flex justify-end">
-                            {!cancelled &&
-                                <Button label="Austragen" sure={true}
-                                        onClick={() => cancel(task.event.id, task.data.role)}/>
-                            }
-                        </div>
-
+                        {!cancelled && <div className="flex items-end">
+                            <Button label="Austragen" sure={true}
+                                    onClick={() => cancel(task.event.id, task.data.role)}/>
+                        </div>}
                     </div>
                 </div>;
             })
@@ -88,10 +87,13 @@ export default function Index(props: { liturgy: LiturgyData }) {
             {Object.entries(readerData)
                 .map(([eventId, data]) => ({...data, event: events.find(event => event.id === eventId)!}))
                 .filter(data => new Date(data.event?.date) > new Date())
-                .map((data) => <div>
-                    <div className="font-bold"><EventDateText
-                        date={new Date(data.event?.date)}/>: {data.event.summary}
+                .sort((a,b) => new Date(a.event?.date).getTime() - new Date(b.event?.date).getTime())
+                .map((data) => <div className="flex border-black/10 border-t py-1">
+                    <div className="w-60">
+                        <div className="font-bold"><EventDateText date={new Date(data.event?.date)}/></div>
+                        <div><EventTime date={new Date(data.event?.start.dateTime)}/> {data.event.summary}</div>
                     </div>
+                    <div>
                     {(["reading1", "reading2", "communionMinister1", "communionMinister2"] as ReaderRole[])
                         .map(role => ({
                             roleData: data[role],
@@ -104,6 +106,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                                             sure={true}/>}
                             </div>
                         )}
+                    </div>
                 </div>)}
         </div>
     </ReaderSite>

@@ -3,7 +3,7 @@ import {SectionHeader} from "./SectionHeader";
 export function Personal() {
     return <>
         <SectionHeader id="personal">Priester</SectionHeader>
-        <div className="grid grid-cols-2 lg:flex gap-10 mb-24">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 mb-24">
             <Person img="/personal/zvonko.png" name="Dr. Zvonko Brezovski" role="Pfarrer" mail="pfarrer"/>
             <Person img="/personal/marcin.png" name="Marcin Wojciech" role="Pfarrvikar" mail="pfarrvikar"/>
             <Person img="/personal/gil.png" name="Gil Vicente Thomas" role="Aushilfskaplan" mail="kaplan.e"/>
