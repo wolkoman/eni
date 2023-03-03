@@ -10,7 +10,7 @@ import {CalendarName} from "../../util/calendar-info";
 import {Event} from "./Event";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
-import {ParishTag2} from "./ParishTag";
+import {ParishTag} from "./ParishTag";
 import {EventDateText} from "./EventUtils";
 
 export const unibox = "bg-black/[2%]  rounded-lg";
@@ -31,24 +31,37 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
 
     return <Responsive>
         <div className="my-8">
-            <SectionHeader id="termine">Termine</SectionHeader>
-            <div className={`grid md:grid-cols-2 gap-4 py-4`}>
-                {groups.slice(0,8).map(([group, eventsObject]) =>
+            <div className={`grid gap-4 py-4`}>
+                {groups.map(([group, eventsObject]) =>
                     <Link
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`overflow-hidden rounded-2xl ${clickable} relative py-6 ${site('px-2 lg:px-0', 'px-6')}`}
+                        className={`grid grid-cols-2 relative border-b border-black/10 py-4`}
                     >
-                        <div className="text-2xl font-bold text-center">{group}</div>
+                        <div className="">
+                            <div className="text-2xl font-bold">{group}</div>
+                            <div className="text-lg max-w-sm">{{
+                                [CalendarGroup.Messe]: "Gottesdienst mit Eucharistiefeier, bei der die Gläubigen die gegenwärtige Christi im Brot und Wein empfangen",
+                                [CalendarGroup.Gottesdienst]: "Religiöse Feiern und Zusammenkünfte, um Gott zu ehren",
+                                [CalendarGroup.Gebet]: "Treffen, um gemeinsam zu beten und die Bibel zu lesen und zu diskutieren",
+                                [CalendarGroup.Gemeinschaft]: "Veranstaltung zur Förderung des Zusammenhalts und der Gemeinschaft innerhalb der Pfarre",
+                                [CalendarGroup.Kinder]: "Veranstaltung für Kinder, die spielerisch den katholischen Glauben kennenlernen und leben können",
+                                [CalendarGroup.Gremien]: "Gruppen, die sich mit der Verwaltung und Organisation der Pfarre befassen und Entscheidungen treffen",
+                                [CalendarGroup.Advent]: "Vorbereitungszeit vor Weihnachten, in der die Ankunft Jesu Christi erwartet wird",
+                                [CalendarGroup.Jugend]: "Veranstaltungen und Aktivitäten für Jugendliche, um den katholischen Glauben zu fördern und Gemeinschaft zu erleben",
+                                [CalendarGroup.Fastenzeit]: "Zeitraum vor Ostern, in der man sich auf den Glauben und die Buße besinnt und durch Verzicht und Gebet darauf vorbereitet",
+                                [CalendarGroup.Ostern]: "Höhepunkt des christlichen Glaubens, bei dem die Auferstehung Jesu Christi gefeiert wird",
+                                [CalendarGroup.Karwoche]: "Woche vor Ostern, in der an das Leiden und Sterben Jesu Christi erinnert wird",
+                                [CalendarGroup.Sakramente]: "Heilige Handlungen der katholischen Kirche, die Gnade und Segen vermitteln",
+                                [CalendarGroup.Chor]: "Gruppe, die bei religiösen Feiern und Gottesdiensten singt und musiziert",
+                            }[group]}</div>
+                        </div>
                         <div>
                             {Object.entries(eventsObject).map(([date, events]) => <>
-                                    <div className={`${site('lg:ml-24 lg:pl-2', '')} mt-2`}><EventDateText date={new Date(date)}/>
+                                    <div className={`${site('', '')} mt-2`}><EventDateText date={new Date(date)}/>
                                     </div>
                                     {events.map(event => <div key={event.id} className="flex items-start gap-2">
-                                        <div className="hidden lg:block mt-1.5">
-                                            {site(<ParishTag2 calendar={event.calendar}/>, <div/>)}
-                                        </div>
                                         <div className="my-1">
-                                            <Event key={event.id} event={event} hideTagOnLarge={true}/>
+                                            <Event key={event.id} event={event}/>
                                         </div>
                                     </div>)}
                                 </>
@@ -57,16 +70,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                     </Link>
                 )}
             </div>
-            <div className="flex flex-wrap gap-4 pb-4">
-                {groups.slice(8).map(([group]) => <Link
-                    href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                    className={`flex-grow rounded-2xl text-xl text-center font-bold ${clickable} p-4`}
-                    key={group}>
-                    {group}
-                </Link>)}
-            </div>
-            <Link href={`${urlPrefix}/termine`}
-                  className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}>
+            <Link href={`${urlPrefix}/termine`} className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}>
                 Alle Termine
             </Link>
         </div>

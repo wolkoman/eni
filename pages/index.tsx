@@ -18,7 +18,7 @@ import {EmmausBranding} from "../components/EmmausBranding";
 import Articles from "../components/Articles";
 import {ComingUp} from "../components/calendar/ComingUp";
 import {EmmausSections} from "../components/EmmausSections";
-import {News} from "../components/News";
+import {EniHero} from "../components/EniHero";
 
 export default function HomePage(
     props: {
@@ -35,8 +35,8 @@ export default function HomePage(
                 responsive={false} navbar={false}
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
-                <TopBar hidePicture={true}/>
-                <News eventsObject={props.eventsObject} liturgyEvents={props.liturgyEvents}/>
+                <TopBar/>
+                <EniHero/>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
                 <Instagram items={props.instagram}/>

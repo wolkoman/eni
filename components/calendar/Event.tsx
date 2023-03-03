@@ -14,7 +14,7 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
         <div
             className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && !props.hideTagOnLarge && `${info.className} rounded-lg`}`}
         >
-            <div className={`w-[30px] lg:w-[50px] pt-1.5 shrink-0 ${props.hideTagOnLarge && 'lg:hidden'}`}>
+            <div className={`w-[30px] lg:w-[100px] pt-1.5 shrink-0 ${props.hideTagOnLarge && 'lg:hidden'}`}>
                 <ParishDot info={info}/>
             </div>
             <div className={`w-[50px] lg:w-[60px] flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>

@@ -11,7 +11,7 @@ export default function TopBar(props: {hidePicture?: boolean}) {
     useEffect(() => {
         setIsFrontpage(location.pathname === "/");
     }, [])
-    return site(<div className="my-2 lg:my-10 overflow-hidden">
+    return site(<div className="py-2 lg:py-6  bg-black/5">
         <Responsive>
             <Link href={user ? "/intern" : "/"}>
             <div className="flex justify-between text-sm">
