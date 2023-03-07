@@ -35,8 +35,8 @@ export default function HomePage(
                 responsive={false} navbar={false}
                 description="Drei Pfarren im Wiener Dekanat 23"
                 keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
-                <TopBar hidePicture={true}/>
-                <EniHero/>
+                <TopBar/>
+                <EniHero items={props.instagram}/>
                 <ChristmasDisplay eventsObject={props.eventsObject}/>
                 <ComingUp eventsObject={props.eventsObject}/>
                 <Instagram items={props.instagram}/>

@@ -133,12 +133,7 @@ body ::-webkit-scrollbar-thumb:hover {
 .border-neustift{ border-color: #f4ac11; }
 
 .text-stroke {
-  -webkit-text-stroke: 12px rgba(#fff, 1);
-  z-index:-1;
-}
-.text-stroke-sm {
-  -webkit-text-stroke: 10px rgba(#fff, 1);
-  z-index:-1;
+  -webkit-text-stroke: 8px rgba(#000, 1);
 }
 
 @keyframes dashdraw {
