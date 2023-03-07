@@ -1,4 +1,4 @@
-export function sendMail(templateId: number, toName: string, toMail: string, subject: string, variables: any) {
+export function sendMail(templateId: number, toName: string, toMail: string, subject: string, variables: any, sendViaBcc = false) {
     return fetch("https://api.mailjet.com/v3.1/send", {
         method: "POST",
         headers: {
@@ -8,7 +8,8 @@ export function sendMail(templateId: number, toName: string, toMail: string, sub
         body: JSON.stringify({
             Messages: [
                 {
-                    To: [{Email: toMail, Name: toName}],
+                    ...(sendViaBcc ? {To: [{Email: "admin@eni.wien", Name: "Kanzlei"}]} : {}),
+                    [sendViaBcc ? 'Bcc' : 'To']: [{Email: toMail, Name: toName}],
                     TemplateID: templateId,
                     TemplateLanguage: true,
                     Subject: subject,
