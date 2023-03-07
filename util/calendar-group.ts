@@ -70,7 +70,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("krippenspiel") && !sum.includes("probe") && CalendarGroup.Weihnachten,
         sum.includes("mette") && CalendarGroup.Weihnachten,
         sum.includes("mette") && CalendarGroup.Weihnachten,
-        sum.includes("oster") && CalendarGroup.Ostern,
+        sum.includes("oster") && !sum.includes("ostermarkt") && CalendarGroup.Ostern,
         sum.includes("speisensegnung") && CalendarGroup.Ostern,
         sum.includes("abendmahl") && CalendarGroup.Ostern,
         sum.includes("aschermittwoch") && CalendarGroup.Fastenzeit,
