@@ -10,11 +10,12 @@ import {CalendarName} from "../../util/calendar-info";
 import {Event} from "./Event";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
-import {ParishTag2} from "./ParishTag";
 import {EventDateText} from "./EventUtils";
+import Button from "../Button";
 
 export const unibox = "bg-black/[2%]  rounded-lg";
-export const clickable = unibox+" hover:bg-black/[4%] cursor-pointer";
+export const clickable = unibox + " hover:bg-black/[4%] cursor-pointer";
+
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
@@ -33,28 +34,24 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
         <div className="my-8">
             <SectionHeader id="termine">Termine</SectionHeader>
             <div className={`grid md:grid-cols-2 gap-4 py-4`}>
-                {groups.slice(0,8).map(([group, eventsObject]) =>
-                    <Link
-                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`overflow-hidden rounded-2xl ${clickable} relative py-6 ${site('px-2 lg:px-0', 'px-6')}`}
-                    >
-                        <div className="text-2xl font-bold text-center">{group}</div>
+                {groups.slice(0, 8).map(([group, eventsObject]) =>
+                    <div key={group}
+                         className={`overflow-hidden rounded-2xl border border-black/10 relative p-6 flex flex-col`}>
+                        <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}>
+                        <div className="text-2xl font-bold text-center underline hover:no-underline">{group}</div>
+                        </Link>
                         <div>
                             {Object.entries(eventsObject).map(([date, events]) => <>
-                                    <div className={`${site('lg:ml-24 lg:pl-2', '')} mt-2`}><EventDateText date={new Date(date)}/>
-                                    </div>
+                                    <div className={` mt-2`}><EventDateText date={new Date(date)}/></div>
                                     {events.map(event => <div key={event.id} className="flex items-start gap-2">
-                                        <div className="hidden lg:block mt-1.5">
-                                            {site(<ParishTag2 calendar={event.calendar}/>, <div/>)}
-                                        </div>
                                         <div className="my-1">
-                                            <Event key={event.id} event={event} hideTagOnLarge={true}/>
+                                            <Event key={event.id} event={event}/>
                                         </div>
                                     </div>)}
                                 </>
                             )}
                         </div>
-                    </Link>
+                    </div>
                 )}
             </div>
             <div className="flex flex-wrap gap-4 pb-4">
