@@ -40,7 +40,7 @@ export default function EventPage(props: {eventsObject: EventsObject}) {
 
     useEffect(() => {
         const load = () => {
-            if(new Date().getTime() - start > 1000 * 3600 * 60) {
+            if(new Date().getTime() - start > 1000 * 3600) {
                 reload();
             }
             return fetchJson("/api/calendar/display?code=" + query.code)
