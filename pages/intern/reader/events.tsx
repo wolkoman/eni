@@ -117,7 +117,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
     }
 
     async function selectPerson(eventId: string, role: ReaderRole, userId: string | null) {
-        const userName = readers.find(reader => reader._id === userId)?.name ?? 'Unbekannt';
+        const userName = [...readers, ...communionMinisters].find(reader => reader._id === userId)?.name ?? 'Unbekannt';
         const roleData = userId !== null ? {id: userId, name: userName, status: "assigned"} : null;
         fetchJson("/api/reader/save", {
             json: {[eventId]: {[role]: roleData}}
