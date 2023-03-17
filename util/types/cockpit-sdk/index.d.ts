@@ -61,6 +61,9 @@ declare module 'cockpit-sdk' {
       "files": string[],
       "mail": string,
       "description": string,
+      "parish": string,
+      "by": string,
+      "byName": string,
       hidden: boolean
     } & Object,
 
