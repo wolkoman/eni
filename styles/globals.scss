@@ -98,22 +98,6 @@ body ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-
-.shimmer {
-  animation: shimmer 1s infinite cubic-bezier(.61,0,.29,1);
-  background: linear-gradient(to right, #f5f5f5 0%, #e2e2e2 5%, #f5f5f5 10%);
-  background-size: 1000px 100%;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
 * > .on-parent-hover {
   opacity: 0;
 }
@@ -136,8 +120,15 @@ body ::-webkit-scrollbar-thumb:hover {
   -webkit-text-stroke: 8px rgba(#000, 1);
 }
 
-@keyframes dashdraw {
+.bg-animate-size{
+  animation: bg-animate-size 2s 1 ease-out;
+}
+
+@keyframes bg-animate-size {
+  from {
+    background-size: 300%;
+  }
   to {
-    stroke-dashoffset: 0
+    background-size: 100%;
   }
 }

@@ -6,18 +6,18 @@ import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
 
-export function Event({event, suggestion, ...props}: { event: Partial<CalendarEvent>, hideTagOnLarge?: boolean, suggestion?: Collections['eventSuggestion'] }) {
+export function Event({event, suggestion, ...props}: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'], small?: boolean }) {
     const cancelled = event.tags?.includes(CalendarTag.cancelled);
     const announcement = event.tags?.includes(CalendarTag.announcement);
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && !props.hideTagOnLarge && `${info.className} rounded-lg`}`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && `${info.className} rounded-lg`}`}
         >
-            <div className={`w-[30px] lg:w-[100px] pt-1.5 shrink-0 ${props.hideTagOnLarge && 'lg:hidden'}`}>
-                <ParishDot info={info}/>
+            <div className={`pr-3 pt-1.5 shrink-0`}>
+                <ParishDot info={info} small={props.small}/>
             </div>
-            <div className={`w-[50px] lg:w-[60px] flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
+            <div className={`w-[50px] lg:w-[40px] flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">

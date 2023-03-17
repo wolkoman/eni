@@ -67,7 +67,7 @@ export const EventDate = ({date}: { date: Date }) => {
     const day = date.getDay();
     return <div className={`flex gap-3 items-end ${day ? '' : 'font-bold'}`}>
         <div className="text-2xl lg:text-3xl">{date.getDate()}.</div>
-        <div className="leading-4 text-sm flex gap-5  lg:gap-0 lg:flex-col items-center">
+        <div className="leading-4 text-sm flex gap-5  lg:gap-0 lg:flex-col">
             <div className="text-2xl lg:text-sm">{getMonthName(date.getMonth())}</div>
             <div className="italic">{getWeekDayName(day)}</div>
         </div>

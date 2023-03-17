@@ -31,8 +31,8 @@ export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
             .map(name => getCalendarInfo(name))
             .map(info => <div
                 onClick={() => props.form[1](rest => ({...rest, [props.name]: info.id}))}
-                className={(value === info.id ? info.className : "bg-black/10 opacity-50") + " px-4 py-2 rounded cursor-pointer"}>
-                Pfarre {info.shortName}</div>)
+                className={(value === info.id ? info.className : "bg-black/10 opacity-50") + " p-2 rounded cursor-pointer"}>
+                {info.shortName}</div>)
         }</div>;
 }
 

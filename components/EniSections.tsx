@@ -10,7 +10,7 @@ import {Personal} from "./Personal";
 export function EniSections() {
     return <Responsive>
         <Section title="Mitteilungen">
-            <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center">
+            <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center" id="wochenmitteilungen">
                 <div className="flex flex-col items-center">
                     <img src="./Wochenblatt.svg" className="h-44 mb-12"/>
                     <div className="text-3xl font-bold">

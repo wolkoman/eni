@@ -17,13 +17,14 @@ import {Permission} from "../../util/verify";
 import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
 import {ListView} from "../../components/calendar/ListView";
 import {MonthView} from "../../components/calendar/MonthView";
+import {Settings} from "../../components/Settings";
 
 
 export function AddEvent() {
     const [isEditing, setIsEditing] = useState(false);
     const {user} = useAuthenticatedUserStore();
     return user?.permissions[Permission.PrivateCalendarAccess] ? <>
-        <div className={`p-3 rounded-lg bg-black/5 cursor-pointer static lg:relative`}
+        <div className={`p-3 rounded-lg bg-black/5 ${isEditing || 'cursor-pointer'} static lg:relative`}
              onClick={() => setIsEditing(true)}>
             <div className="w-6 aspect-square">
                 <svg viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,13 +78,23 @@ export default function EventPage(props: {
     }, [filter]);
 
     return <Site responsive={false}>
-        <Responsive sides={false}>
+        <Responsive>
             <div data-testid="calendar" className="relative">
                 <CalendarCacheNotice/>
                 <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
+
+                    <div className="flex justify-between items-center mb-6">
+                        <div>
+                            <div className="font-bold text-4xl mb-6">Termine</div>
+                        </div>
+                        <div className="flex gap-2">
+                            <AddEvent/>
+                            <Settings/>
+                        </div>
+                    </div>
                     {monthView
                         ? <MonthView calendar={calendar} liturgy={props.liturgy} filter={filter}/>
-                        : <ListView calendar={calendar} liturgy={props.liturgy} filter={filter} filterSlot={
+                        : <ListView calendar={calendar} liturgy={props.liturgy} filter={filter} editable={true} filterSlot={
                             <FilterSelector
                                 filter={filter}
                                 setFilter={filter => setFilter(filter)}

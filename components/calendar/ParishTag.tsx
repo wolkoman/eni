@@ -8,11 +8,11 @@ export function ParishTag(props: { calendar: CalendarName, colorless?: boolean }
         className={`w-24 leading-4 inline-block p-2 text-center rounded-r-lg cursor-default ${props.colorless || info.className}`}>{info.tagName}</div>
 }
 
-export function ParishDot({info}: { info: CalendarInfo }) {
+export function ParishDot({info, small}: { info: CalendarInfo, small?: boolean }) {
     return <Tooltip tip={info?.fullName}>
         <div className={"flex "}>
             <img src={info?.dot} className="w-6 -mt-1 relative"/>
-            <div className={ info.className + " text-sm -ml-3 -mt-1 pl-4 pr-2 h-6 rounded-r-full flex items-center font-bold"}>{info.tagName}</div>
+            {!small && <div className={ info.className + " text-sm -ml-3 -mt-1 pl-4 pr-2 h-6 rounded-r-full flex items-center font-bold"}>{info.tagName}</div>}
         </div>
     </Tooltip>;
 }

@@ -3,26 +3,27 @@ import {site} from '../util/sites';
 import React, {useEffect, useState} from 'react';
 import {useAuthenticatedUserStore} from "../util/use-user-store";
 import Responsive from "./Responsive";
-import {useRive} from "@rive-app/react-canvas";
 
-export default function TopBar(props: {hidePicture?: boolean}) {
+export default function TopBar(props: { hidePicture?: boolean }) {
     const {user} = useAuthenticatedUserStore();
     const [isFrontpage, setIsFrontpage] = useState(false);
     useEffect(() => {
         setIsFrontpage(location.pathname === "/");
     }, [])
-    return site(<div className="py-2 lg:py-6  bg-black/5">
+    return site(<div className="py-4 lg:py-6">
         <Responsive>
-            <Link href={user ? "/intern" : "/"}>
-            <div className="flex justify-between text-sm">
-                    <div className="font-bold">
-                        Miteinander der Pfarren Emmaus am Wienerberg,<br/>Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift
+            <div className="flex justify-between items-center">
+                <Link href="/">
+                    <div className="font-bold text-xl">
+                        eni.wien
                     </div>
-                {!props.hidePicture && <div className="hidden lg:block">
-                    <img src="/logo/dreipfarren.svg" className="h-[45px]"/>
-                </div>}
+                </Link>
+                <div className="flex justify-between items-center font-semibold gap-2 lg:gap-6">
+                    <Link href="/termine">Termine</Link>
+                    <Link href="/#wochenmitteilungen">Wochenmitteilungen</Link>
+                   <Link href="/intern"> {user ? 'Intern' : 'Login'}</Link>
+                </div>
             </div>
-            </Link>
         </Responsive>
     </div>, <div
         className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 bg-emmaus text-white`} data-testid="navbar">

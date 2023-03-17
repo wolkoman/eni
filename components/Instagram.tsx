@@ -77,17 +77,3 @@ export function Instagram(props: { items: any[] }) {
         </div>
     </>;
 }
-
-function InstagramSmall({item}: { item?: InstagramFeedItem }) {
-    return <div
-        style={{backgroundImage: `url(${item?.media_url})`}}
-        className={`bg-cover bg-center ${item == null && 'shimmer'} aspect-square w-64 flex gap-2 items-end rounded-xl p-2 hover:opacity-90 cursor-pointer`}
-    >
-        <div className="inline-block px-1 bg-white font-bold rounded-lg">
-            {item == null || new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}
-        </div>
-        {item?.calendar && <div className={"inline-block px-1 font-bold rounded-lg " + (item?.calendar?.className)}>
-            Pfarre {item?.calendar?.shortName}
-        </div>}
-    </div>;
-}
