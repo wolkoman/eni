@@ -120,15 +120,18 @@ body ::-webkit-scrollbar-thumb:hover {
   -webkit-text-stroke: 8px rgba(#000, 1);
 }
 
-.bg-animate-size{
-  animation: bg-animate-size 2s 1 ease-out;
+.hero{
+  animation: bg-animate-size 1s 1 ease-out;
+  animation-fill-mode: both;
 }
 
 @keyframes bg-animate-size {
   from {
-    background-size: 300%;
+    transform: scale(300%);
+    filter: saturate(80%);
   }
   to {
-    background-size: 100%;
+    transform: scale(100%);
+    filter: saturate(125%);
   }
 }

@@ -23,17 +23,22 @@ function InstagramBig(props: { item: any, onClick: MouseEventHandler<HTMLDivElem
             style={{backgroundImage: `url(${props.item?.media_url})`}}
             className={`bg-cover relative bg-center aspect-square rounded-lg`}>
         </div>
-        <div className="p-4 flex gap-4">
-            <div className="inline-block px-3 bg-white font-bold rounded-lg">
-                {props.item == null || new Date(props.item?.timestamp ?? 0).toLocaleDateString("de-AT")}
+        <div className="flex flex-col p-6 gap-4">
+            <div className="text-xl font-bold">
+                {props.item?.title}
             </div>
-            {props.item?.calendar &&
-                <div className={"inline-block px-3 font-bold rounded-lg " + (props.item?.calendar?.className)}>
-                    Pfarre {props.item?.calendar?.shortName}
-                </div>}
-        </div>
-        <div className="text-xl p-6 pt-0">
-            {props.item?.text}
+            <div className="flex gap-4">
+                <div className="px-3 bg-white rounded-lg">
+                    {props.item == null || new Date(props.item?.timestamp ?? 0).toLocaleDateString("de-AT")}
+                </div>
+                {props.item?.calendar &&
+                    <div className={"px-3 rounded-lg " + (props.item?.calendar?.className)}>
+                        Pfarre {props.item?.calendar?.shortName}
+                    </div>}
+            </div>
+            <div className="text-lg">
+                {props.item?.text}
+            </div>
         </div>
     </div>;
 }
@@ -69,7 +74,7 @@ export function Instagram(props: { items: any[] }) {
                             const x = t.getBoundingClientRect().left
                             const x2 = ref.current!.scrollLeft;
                             const x3 = headerRef.current!.getBoundingClientRect().left
-                            ref.current!.scrollTo({left: x2+x-x3})
+                            ref.current!.scrollTo({left: x2 + x - x3})
                         }}/>
                     </div>)}
                 </div>

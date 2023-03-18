@@ -7,6 +7,10 @@ declare module 'cockpit-sdk' {
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
+    'cache': {
+      key: string,
+      value: string,
+    } & Object,
     'Emmausbote': {
       date: string,
       preview: { path: string },

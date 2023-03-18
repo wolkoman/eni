@@ -10,8 +10,9 @@ import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 import {ListView} from "./ListView";
 
-export const unibox = "bg-black/[2%]  rounded-lg";
-export const clickable = unibox+" hover:bg-black/[4%] cursor-pointer";
+export const unibox = "bg-black/[2%]  rounded-lg border border-black/[5%]";
+export const clickable = unibox + " hover:bg-black/[4%] cursor-pointer";
+
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
@@ -29,10 +30,10 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
     return <Responsive>
         <div className="my-8">
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
-                {groups.slice(0,6).map(([group, eventsObject]) =>
+                {groups.slice(0, 6).map(([group, eventsObject]) =>
                     <Link
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`p-4 bg-black/[2%] rounded-xl relative overflow-hidden`}
+                        className={`p-4 bg-black/[2%] border border-black/[5%] rounded-xl relative overflow-hidden`}
                     >
                         <img src={"/logo/logo_" + group + ".svg"}
                              className="absolute scale-[350%] opacity-10 right-8 bottom-8"/>
@@ -51,11 +52,15 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                     </Link>
                 )}
                 {groups.slice(6).map(([group]) =>
-                        <Link href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}>
-                            {group}
-                        </Link>)}
+                    <Link
+                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
+                        className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}
+                    >
+                        {group}
+                    </Link>)}
             </div>
-            <Link href={`${urlPrefix}/termine`} className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}>
+            <Link href={`${urlPrefix}/termine`}
+                  className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 mt-2 block`}>
                 Alle Termine
             </Link>
         </div>

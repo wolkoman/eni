@@ -14,10 +14,10 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
         <div
             className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && `${info.className} rounded-lg`}`}
         >
-            <div className={`pr-3 pt-1.5 shrink-0`}>
+            <div className={`pr-3 pt-1.5 shrink-0 ${props.small ? "w-[40px]" : "w-[110px]"}`}>
                 <ParishDot info={info} small={props.small}/>
             </div>
-            <div className={`w-[50px] lg:w-[40px] flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
+            <div className={`${props.small ? "w-[50px]" : "w-[60px]"} flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">

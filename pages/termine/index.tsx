@@ -9,7 +9,7 @@ import {FilterSelector} from '../../components/calendar/FilterSelector';
 import {useRouter} from "next/router";
 import Responsive from "../../components/Responsive";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
-import {CalendarName} from "../../util/calendar-info";
+import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import {getLiturgyDataTill, LiturgyData} from "../api/liturgy";
 import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {Preference, usePreference} from "../../util/use-preference";
@@ -85,7 +85,7 @@ export default function EventPage(props: {
 
                     <div className="flex justify-between items-center mb-6">
                         <div>
-                            <div className="font-bold text-4xl mb-6">Termine</div>
+                            <div className="font-bold text-4xl mb-6">Termine{filter !== null && ": "}{filter?.filterType === "GROUP" && filter.group}{filter?.filterType === "PARISH" && getCalendarInfo(filter.parish).shortName}</div>
                         </div>
                         <div className="flex gap-2">
                             <AddEvent/>
