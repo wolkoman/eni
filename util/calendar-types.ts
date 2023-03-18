@@ -30,13 +30,11 @@ export enum CalendarTag {
     private = 'private',
     cancelled = 'cancelled',
     announcement = 'announcement',
-    singleEvent = 'singleEvent',
     suggestion = 'suggestion',
 }
 
 export enum CalendarGroup {
     Wallfahrt = "Wallfahrt",
-    Grabwache = "Grabwache",
     Messe = "Heilige Messe",
     Gebet = "Gebet & Bibel",
     Caritas = "Caritas",

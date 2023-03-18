@@ -27,7 +27,6 @@ function trimString(value: string){
     const trimable = "\" .\n";
     const start = value.split("").findIndex(c => trimable.indexOf(c) === -1);
     const end = value.split("").reverse().findIndex(c => trimable.indexOf(c) === -1);
-    console.log(value, start, end)
     return value.substring(start, value.length - end);
 }
 

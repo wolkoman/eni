@@ -59,17 +59,6 @@ export default function HomePage(
                 <ComingUp eventsObject={props.eventsObject}/>
                 <EmmausSections emmausbote={props.emmausbote}/>
                 <Instagram items={props.instagram}/>
-                <Responsive>
-                    <Section title="Kontakt" id="kontakt">
-                        <div className="text-lg">
-                            Röm.-kath. Pfarre Emmaus am Wienerberg<br/>
-                            Tesarekplatz 2, 1100 Wien<br/>
-                            Telefon: +43 1 616 34 00<br/>
-                            IBAN: AT97 12000 50324795601<br/>
-                            BIC: BKAUATWW
-                        </div>
-                    </Section>
-                </Responsive>
             </div>
         </Site>)();
 }

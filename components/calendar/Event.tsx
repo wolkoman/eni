@@ -12,12 +12,12 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} ${announcement && `${info.className} rounded-lg`}`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'}`}
         >
-            <div className={`pr-3 pt-1.5 shrink-0 ${props.small ? "w-[40px]" : "w-[110px]"}`}>
+            <div className={`pr-3 pt-1.5 shrink-0 ${props.small ? "w-[40px]" : "w-[100px] lg:w-[110px]"}`}>
                 <ParishDot info={info} small={props.small}/>
             </div>
-            <div className={`${props.small ? "w-[50px]" : "w-[60px]"} flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
+            <div className={`${props.small ? "w-[50px]" : "w-[50px] lg:w-[60px]"} flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">
@@ -27,7 +27,7 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
                 <EventDescription event={event} suggestion={suggestion}/>
             </div>
             <div className="flex gap-1" data-testid="event">
-                {event.tags?.map(tag => <EventTag key={tag} tag={tag}/>)}
+                {event.tags?.filter(tag => tag !== CalendarTag.announcement).map(tag => <EventTag key={tag} tag={tag}/>)}
             </div>
         </div>
     </>;

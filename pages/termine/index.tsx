@@ -81,7 +81,7 @@ export default function EventPage(props: {
         <Responsive>
             <div data-testid="calendar" className="relative">
                 <CalendarCacheNotice/>
-                <div className="flex-grow events mt-4 pb-4 px-4 lg:px-0 relative">
+                <div className="flex-grow mt-4 pb-4 relative">
 
                     <div className="flex justify-between items-center mb-6">
                         <div>

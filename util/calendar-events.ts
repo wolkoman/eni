@@ -38,7 +38,6 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
                 event.visibility === 'private' && CalendarTag.private,
                 (event.summary + (event.description ?? '')).match(cancelledRegex) && CalendarTag.cancelled,
                 (event.description ?? '').toLowerCase().includes("[ankündigung]") && CalendarTag.announcement,
-                !event.recurringEventId && privateAccess &&  CalendarTag.singleEvent,
             ].filter((item): item is CalendarTag => !!item),
             wholeday: !!event.start?.date,
             readerInfo: {}

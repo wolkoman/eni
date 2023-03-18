@@ -4,6 +4,13 @@ import React, {useEffect, useState} from 'react';
 import {useAuthenticatedUserStore} from "../util/use-user-store";
 import Responsive from "./Responsive";
 
+function NavItem(props: {href: string, label: string}) {
+    return <Link href={props.href}><div className="group relative">
+        {props.label}
+        <div className="absolute inset-0 transition group-hover:bg-black/[3%] group-hover:scale-[120%] rounded"/>
+    </div></Link>;
+}
+
 export default function TopBar(props: { hidePicture?: boolean }) {
     const {user} = useAuthenticatedUserStore();
     const [isFrontpage, setIsFrontpage] = useState(false);
@@ -19,9 +26,9 @@ export default function TopBar(props: { hidePicture?: boolean }) {
                     </div>
                 </Link>
                 <div className="flex justify-between items-center font-semibold gap-2 lg:gap-6">
-                    <Link href="/termine">Termine</Link>
-                    <Link href="/#wochenmitteilungen">Wochenmitteilungen</Link>
-                   <Link href="/intern"> {user ? 'Intern' : 'Login'}</Link>
+                    <NavItem href="/termine" label="Termine"/>
+                    <NavItem href="/#wochenmitteilungen" label="Wochenmitteilung"/>
+                    <NavItem href="/intern" label={user ? 'Intern' : 'Login'}/>
                 </div>
             </div>
         </Responsive>

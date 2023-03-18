@@ -6,6 +6,7 @@ import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {InternButton} from "../../../components/InternButton";
 import {usePermission} from "../../../util/use-permission";
 import {Permission} from "../../../util/verify";
+import {EniLoading} from "../../../components/Loading";
 
 export default function Index() {
 
@@ -16,7 +17,8 @@ export default function Index() {
         fetchJson("/api/editor/projects").then(projects => setProjects(projects));
     }, [setProjects])
 
-    return <Site title="Projekte der Redaktionen">
+    return <Site title="Projekte der Redaktionen" showTitle={true}>
+        <>{!projects && <EniLoading/>}</>
         <div className="grid grid-cols-1 md:grid-cols-3 m-2 gap-3">
             {projects?.filter(project => user?.parish === 'all'
                 || (project.name.startsWith("EB") && user?.parish === 'emmaus')

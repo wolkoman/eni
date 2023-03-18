@@ -19,7 +19,7 @@ export default function Index() {
         fetchJson("/api/editor/project", {json: {projectId}}).then(projects => setProject(projects));
     }, [projectId])
 
-    return <Site title={`Projekt ${project?.name ?? ''}`}>
+    return <Site title={`Projekt ${project?.name ?? ''}`} showTitle={true}>
         <div className="flex mb-4">
             <Link href="."><Button label="Zurück"/></Link>
         </div>

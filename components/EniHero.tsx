@@ -3,7 +3,7 @@ import Responsive from "./Responsive";
 
 export function EniHero() {
     return <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url(/bg-grad-mobile.svg)] lg:bg-[url(/bg-grad.svg)] bg-center bg-cover hero"/>
+        <div className="absolute inset-0 bg-[url(/bg-grad-mobile.svg)] lg:bg-[url(/bg-grad.svg)] bg-center bg-cover animate-colorful"/>
         <Responsive>
         <div className="flex justify-between flex-col lg:flex-row lg:items-end relative">
             <div className="my-20 text-5xl leading-tight text-white lg:mb-36">

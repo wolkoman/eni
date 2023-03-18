@@ -46,8 +46,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                 error: false,
                                 loading: false,
                                 loaded: true
-                            }}
-                                      liturgy={{}} filter={null}/>
+                            }} liturgy={{}} filter={null}/>
                         </div>
                     </Link>
                 )}

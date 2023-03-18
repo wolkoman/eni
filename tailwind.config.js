@@ -15,12 +15,12 @@ module.exports = {
         'serif': ['Source Serif Pro'],
       },
       animation: {
-        wiggle: 'wiggle 0.5s ease-out 0s 1 normal both running',
+        colorful: 'colorful 1s ease-out 0s 1 normal both running',
       },
       keyframes: {
-        wiggle: {
-          '0%': { transform: 'translateY(100px)', opacity: 0 },
-          '100%': { transform: 'translateY(0px)', opacity: 1 },
+        colorful: {
+          '0%': { transform: 'scale(300%)', filter: 'saturate(80%)' },
+          '100%': { transform: 'scale(100%)', filter: 'saturate(125%)' },
         }
       },
       colors: {
@@ -40,11 +40,6 @@ module.exports = {
         "2xl": "400px",
         "3xl": "500px",
       },},
-  },
-  variants: {
-    extend: {
-      ringWidth: ['hover']
-    },
   },
   plugins: [
     require('@tailwindcss/line-clamp'),

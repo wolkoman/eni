@@ -6,7 +6,6 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
     const sum = event.summary?.toLowerCase() ?? "";
     let conditions: (CalendarGroup | false)[] = [
         sum.includes("wallfahrt") && CalendarGroup.Wallfahrt,
-        sum.startsWith("grabwache") && CalendarGroup.Grabwache,
         sum.includes("abendmahl") && CalendarGroup.Messe,
         sum.includes("gründonnerstagsl") && CalendarGroup.Messe,
         sum.includes("auferstehungsfeier") && CalendarGroup.Messe,
@@ -76,6 +75,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("speisensegnung") && CalendarGroup.Ostern,
         sum.includes("abendmahl") && CalendarGroup.Ostern,
         sum.includes("auferstehungsfeier") && CalendarGroup.Ostern,
+        sum.startsWith("grabwache") && CalendarGroup.Ostern,
         sum.includes("aschermittwoch") && CalendarGroup.Ostern,
         sum.includes("jesu am kreuz") && CalendarGroup.Ostern,
         sum.includes("bußfeier") && CalendarGroup.Ostern,

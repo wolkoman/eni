@@ -31,7 +31,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
     const {openSuggestions: allOpenSuggestions} = useAuthenticatedCalendarStore();
     const openSuggestions = allOpenSuggestions.filter(sug => sug.by === user?._id || user?.permissions[Permission.CalendarAdministration]);
     const [editEventId, setEditEventId] = useState<string | undefined>(undefined);
-    return <>
+    return <div className="overflow-hidden">
         {props.filterSlot && <div className="flex flex-col gap-1 my-4">
             <EventSearch onChange={setSearch} filter={props.filter}/>
             {props.filterSlot}
@@ -40,7 +40,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
         {props.calendar.error && <CalendarErrorNotice/>}
         {props.calendar.loading && <EniLoading/>}
         {props.calendar.loading || Object.entries(groupEventsByDate(applyFilter(props.calendar.items
-                .filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.map(group => `gruppe:${group}`).join(",") + (event.tags.includes(CalendarTag.singleEvent) ? "" : "Einzelevent")).toLowerCase().includes(search.toLowerCase())),
+                .filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.map(group => `gruppe:${group}`).join(",")).toLowerCase().includes(search.toLowerCase())),
             props.filter, separateMass)))
             .map(([date, events]) => <div key={date} data-date={date}
                                           className="py-2 flex flex-col lg:flex-row border-b last:border-none border-black/10">
@@ -79,7 +79,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
                 </div>
             </div>)}
         {editEventId && <EventEditBackground onClick={() => setEditEventId(undefined)}/>}
-    </>;
+    </div>;
 }
 
 export function EditableEvent(props: { editable: boolean, isEdited: boolean, id: string, parish: CalendarName, suggestionForm: EventSuggestion, onEditEvent: (eventId?: string) => void, arguments: Parameters<typeof Event>[0], small?: boolean }) {

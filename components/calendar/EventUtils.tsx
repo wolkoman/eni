@@ -20,7 +20,6 @@ export function Tooltip(props: { tip: string, children: ReactNode }) {
 export function EventTag(props: { tag: CalendarTag }) {
     if (props.tag === CalendarTag.inChurch) return <></>;
     return <Tooltip tip={{
-        [CalendarTag.singleEvent]: "Einzeltermin",
         [CalendarTag.private]: "Vertraulich",
         [CalendarTag.announcement]: "Ankündigung",
         [CalendarTag.cancelled]: "Abgesagt",
@@ -28,7 +27,6 @@ export function EventTag(props: { tag: CalendarTag }) {
     }[props.tag]}>
         <div className="bg-black/[4%] p-1 rounded">
             {{
-                [CalendarTag.singleEvent]: <>☝🏼</>,
                 [CalendarTag.private]: <>🔒</>,
                 [CalendarTag.announcement]: <>⭐</>,
                 [CalendarTag.cancelled]: <>❌</>,
@@ -43,7 +41,7 @@ export function EventDescription(props: { event: Partial<CalendarEvent>, suggest
     const dateChanged = props.suggestion?.data.date.some(d => d[0] !== 0);
     const roles = ["reading1", "reading2", "communionMinister1", "communionMinister2"] as const
 
-    return <div className="font-normal text-sm leading-4 flex gap-3">
+    return <div className="font-normal text-sm leading-4 flex flex-col lg:flex-row gap-3">
         <div className="grow">
             {props.event.mainPerson && `mit ${props.event.mainPerson}`}
             <div>
