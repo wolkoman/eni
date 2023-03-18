@@ -4,8 +4,8 @@ import React from 'react';
 import Responsive from "./Responsive";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
-import {InternButton} from "./InternButton";
 import {Personal} from "./Personal";
+import Image from "next/image";
 
 export function EniSections() {
     return <Responsive>
@@ -24,7 +24,10 @@ export function EniSections() {
                     <div className="flex flex-col lg:flex-row gap-2">
                         {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
                             <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
-                                <Button label={info.shortName} className={info.className}/>
+                                <Button label={<div className="flex gap-2 items-center">
+                                    <Image src={info.dot} alt="Emmaus" width={20} height={20}/>
+                                    {info.shortName}
+                                </div>}/>
                             </Link>
                         )}
                     </div>
@@ -45,11 +48,14 @@ export function EniSections() {
                                 inzersdorf: "https://www.pfarresanktnikolaus.at/wp/?page_id=89",
                                 neustift: "https://www.erzdioezese-wien.at/pages/pfarren/9233/pfarrblatt"
                             }[info.id as 'emmaus']}>
-                                <Button label={{
-                                    emmaus: "Emmausbote",
-                                    inzersdorf: "BLICKpunkt",
-                                    neustift: "IN-News"
-                                }[info.id as 'emmaus']} className={info.className}/>
+                                <Button label={<div className="flex gap-2">
+                                    <Image src={info.dot} alt="Emmaus" width={20} height={20}/>
+                                    {{
+                                        emmaus: "Emmausbote",
+                                        inzersdorf: "BLICKpunkt",
+                                        neustift: "IN-News"
+                                    }[info.id as 'emmaus']}
+                                </div>}/>
                             </Link>
                         )}
                     </div>

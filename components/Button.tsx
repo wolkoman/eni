@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 
-export default function Button(props: {label: string, sure?: true, onClick?: () => any, secondary?: boolean, disabled?: boolean, big?: boolean, className?: string}) {
+export default function Button(props: {label: ReactNode, sure?: true, onClick?: () => any, secondary?: boolean, disabled?: boolean, big?: boolean, className?: string}) {
     const [sure, setSure] = useState(false);
   return <div className={`
       ${props.className ?? ''}
