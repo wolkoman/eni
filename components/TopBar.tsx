@@ -5,9 +5,9 @@ import {useAuthenticatedUserStore} from "../util/use-user-store";
 import Responsive from "./Responsive";
 
 function NavItem(props: {href: string, label: string}) {
-    return <Link href={props.href}><div className="group relative">
+    return <Link href={props.href}><div className="group relative px-2 py-1">
         {props.label}
-        <div className="absolute inset-0 transition group-hover:bg-black/[3%] group-hover:scale-[120%] rounded"/>
+        <div className="absolute inset-0 transition group-hover:bg-black/[3%] scale-75 group-hover:scale-100 rounded"/>
     </div></Link>;
 }
 
@@ -25,7 +25,7 @@ export default function TopBar(props: { hidePicture?: boolean }) {
                         eni.wien
                     </div>
                 </Link>
-                <div className="flex justify-between items-center font-semibold gap-2 lg:gap-6">
+                <div className="flex justify-between items-center font-semibold">
                     <NavItem href="/termine" label="Termine"/>
                     <NavItem href="/#wochenmitteilungen" label="Wochenmitteilung"/>
                     <NavItem href="/intern" label={user ? 'Intern' : 'Login'}/>

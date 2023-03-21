@@ -3,78 +3,102 @@ import Responsive from "./Responsive";
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
-import React, {MouseEventHandler, useRef} from "react";
+import React, {MouseEventHandler, useState} from "react";
 import {unibox} from "./calendar/ComingUp";
+import {AnimatePresence, motion} from 'framer-motion'
 
 export interface InstagramFeedItem {
     id: string,
     media_type: 'CAROUSEL_ALBUM' | 'VIDEO' | 'IMAGE',
     media_url: string,
+    title: string,
     permalink: string,
     timestamp: string,
     caption: string,
     text: string,
-    calendar?: CalendarInfo,
+    calendar: CalendarInfo | null,
 }
 
-function InstagramBig(props: { item: any, onClick: MouseEventHandler<HTMLDivElement> }) {
-    return <div className={`rounded-lg lg:max-w-lg lg:w-screen cursor-pointer ${unibox}`} onClick={props.onClick}>
-        <div
+function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHandler<HTMLDivElement> }) {
+    return <div className={`rounded-lg lg:max-w-md lg:w-screen cursor-pointer`} onClick={props.onClick}>
+        <motion.div
+            whileTap={{scale: 0.95}}
+            whileHover={{scale: 1.02}}
+            layoutId={props.item.id}
             style={{backgroundImage: `url(${props.item?.media_url})`}}
-            className={`bg-cover relative bg-center aspect-square rounded-lg`}>
-        </div>
-        <div className="flex flex-col p-6 gap-4">
-            <div className="text-xl font-bold">
-                {props.item?.title}
-            </div>
-            <div className="flex gap-4">
-                <div className="px-3 bg-white rounded-lg">
-                    {props.item == null || new Date(props.item?.timestamp ?? 0).toLocaleDateString("de-AT")}
-                </div>
-                {props.item?.calendar &&
-                    <div className={"px-3 rounded-lg " + (props.item?.calendar?.className)}>
-                        Pfarre {props.item?.calendar?.shortName}
-                    </div>}
-            </div>
-            <div className="text-lg">
-                {props.item?.text}
-            </div>
-        </div>
+            className="bg-cover relative bg-center aspect-square rounded-lg"
+        >
+            <motion.div
+                className="text-xl font-bold backdrop-blur-sm bg-white/70 p-4 rounded-t-lg absolute bottom-0 lg:bottom-auto w-full">
+                <motion.div layoutId={props.item.id + "title"}>{props.item?.title}</motion.div>
+            </motion.div>
+        </motion.div>
     </div>;
 }
 
-export function Instagram(props: { items: any[] }) {
-    const feed = props.items.slice(0, 10).map(item => ({
+function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => void }) {
+    return <div className="fixed inset-0 grid place-items-center z-30 p-2 lg:p-12">
+        <motion.div
+            className="absolute inset-0  bg-black/10"
+            onClick={close}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+        />
+        <motion.div
+            initial={{opacity: 0, scale: 0.8}}
+            animate={{opacity: 1, scale: 1}}
+            exit={{opacity: 0, scale: 0.8}}
+            className="relative grid lg:grid-cols-2 shadow p-4 bg-white max-w-6xl rounded-xl shadow-xl">
+            <motion.div
+                layoutId={item.id}
+                style={{backgroundImage: `url(${item?.media_url})`}}
+                className="max-w-full rounded-lg aspect-square bg-cover bg-center"/>
+            <div className="p-4 flex flex-col gap-4">
+                <motion.div className="text-3xl font-bold" layoutId={item.id + "title"}>{item.title}</motion.div>
+                <div className="flex gap-4">
+                    <div className="px-3 bg-black/5 rounded-lg">
+                        {new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}
+                    </div>
+                    {item.calendar &&
+                        <div className={"px-3 rounded-lg " + (item.calendar?.className)}>
+                            Pfarre {item.calendar?.shortName}
+                        </div>}
+                </div>
+                <div className="">{item.caption}</div>
+            </div>
+        </motion.div>
+    </div>;
+}
+
+export function Instagram(props: { items: InstagramFeedItem[] }) {
+    const feed = props.items.slice(0, 6).map(item => ({
         ...item,
-        text: Aesthetically.unformat(item?.caption.normalize() ?? ''),
+        caption: Aesthetically.unformat(item?.caption.normalize() ?? ''),
     })).map(item => ({
         ...item,
-        calendar: item.text.includes("Emmaus")
+        calendar: item.caption.includes("Emmaus")
             ? getCalendarInfo(CalendarName.EMMAUS)
-            : (item.text.includes("Nikolaus")
+            : (item.caption.includes("Nikolaus")
                 ? getCalendarInfo(CalendarName.INZERSDORF)
-                : (item.text.includes("Neustift")
+                : (item.caption.includes("Neustift")
                         ? getCalendarInfo(CalendarName.NEUSTIFT)
                         : null
                 ))
     }));
-    const ref = useRef<HTMLElement>();
-    const headerRef = useRef<HTMLElement>();
+    const [item, setItem] = useState<InstagramFeedItem | null>();
+
     return <>
         <Responsive>
-            <div ref={headerRef as any}/>
             <SectionHeader id="pfarrleben">Einblick ins Pfarrleben</SectionHeader>
         </Responsive>
-        <div className="overflow-auto snap-x snap-mandatory scroll-smooth" ref={ref as any}>
+        <AnimatePresence>{item && <InstagramScreen item={item} close={() => setItem(null)}/>}</AnimatePresence>
+        <div className="">
             <Responsive>
-                <div className="flex">
-                    {feed.map(item => <div className="shrink-0 p-4 -mx-2 w-full lg:w-auto snap-center">
-                        <InstagramBig item={item} onClick={({target}) => {
-                            const t = target as HTMLDivElement;
-                            const x = t.getBoundingClientRect().left
-                            const x2 = ref.current!.scrollLeft;
-                            const x3 = headerRef.current!.getBoundingClientRect().left
-                            ref.current!.scrollTo({left: x2 + x - x3})
+                <div className="flex flex-wrap">
+                    {feed.map((item, index) => <div
+                        className="shrink-0 p-2 w-full lg:w-auto snap-center">
+                        <InstagramItem item={item} onClick={item ? () => setItem(item) : () => {
                         }}/>
                     </div>)}
                 </div>
