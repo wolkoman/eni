@@ -2,7 +2,7 @@ import React, {MutableRefObject, useRef} from 'react';
 import {usePdf} from "@mikecousins/react-pdf";
 import Site from "../components/Site";
 import {motion} from 'framer-motion'
-import Link from "next/link";
+import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 
 const MyPdfViewer = () => {
     const canvasRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -15,23 +15,32 @@ const MyPdfViewer = () => {
     ];
 
     return (
-        <Site title="Wochenmitteilungen" showTitle={true}>
-            <canvas className={`border border-gray-300 rounded-xl`} ref={canvasRefs[0]}/>
-            <div className="flex flex-col lg:flex-row">
-                <Page canvas={canvasRefs} index={0} className="border-gray-300"/>
-                <Page href="/api/weekly?parish=emmaus" canvas={canvasRefs} index={1} className="border-emmaus lg:-ml-60"/>
-                <Page href="/api/weekly?parish=inzersdorf" canvas={canvasRefs} index={2}
-                      className="border-inzersdorf lg:-ml-60"/>
-                <Page href="/api/weekly?parish=neustift" canvas={canvasRefs} index={3}
-                      className="border-neustift lg:-ml-60"/>
+        <Site title="Wochenmitteilungen">
+            <div className="flex">
+                <canvas className={`border border-gray-300 rounded-xl w-[445px] h-[631px]`} ref={canvasRefs[0]}/>
+                <div className="p-8">
+                    <div className="text-4xl font-bold my-4">
+                        Wochenmitteilungen
+                    </div>
+                    <div>
+                        Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu. Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an kanzlei@eni.wien.
+                    </div>
+                    <div className="flex flex-col lg:flex-row gap-2 lg:-ml-[445px] mt-6">
+                        <Page href="/api/weekly?parish=emmaus" canvas={canvasRefs} index={0} calendar={CalendarName.EMMAUS}/>
+                        <Page href="/api/weekly?parish=inzersdorf" canvas={canvasRefs} index={1} calendar={CalendarName.INZERSDORF}/>
+                        <Page href="/api/weekly?parish=neustift" canvas={canvasRefs} index={2} calendar={CalendarName.NEUSTIFT}/>
+                    </div>
+                </div>
             </div>
         </Site>
     );
 };
 
-function Page(props: { canvas: MutableRefObject<null>[], index: number, className: string, href?: string }) {
-    return <motion.a whileHover={{zIndex: 10, scale: 1.05}} style={{zIndex: 4-props.index}} className="block max-w-full" href={props.href}>
-        <canvas className={`border border-gray-300 rounded-xl ${props.className}`} ref={props.canvas[props.index]}/>
+function Page(props: { canvas: MutableRefObject<null>[], index: number, href?: string, calendar: CalendarName }) {
+    const info = getCalendarInfo(props.calendar);
+    return <motion.a whileHover={{zIndex: 10, scale: 1.05}} style={{zIndex: 3-props.index}} className={`block max-w-full  border-2 rounded-lg ${info.borderColor} ${info.className} overflow-hidden`} href={props.href}>
+        <div className={` px-2`}>{info.fullName}</div>
+        <canvas className={`w-[267px] h-[378px] rounded`} ref={props.canvas[props.index+1]}/>
     </motion.a>
 }
 
