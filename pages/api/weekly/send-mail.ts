@@ -1,8 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from "../../../util/verify";
-import {sendMail} from "../../../util/mailjet";
+import {sendBulkMail} from "../../../util/mailjet";
 import {cockpit} from "../../../util/cockpit-sdk";
 import {fetchCurrentWeeklies} from "../../../util/fetchWeeklies";
+import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 
 const lastMailId = '640735d7353062f2d200017b';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -30,26 +31,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-
     await cockpit.collectionSave("internal-data", {_id: lastMailId, data: {date: new Date().toISOString()}});
 
-    const subject = 'Wochenmitteilungen ' /*+ new Date().toLocaleDateString("de-AT")*/;
+    const subject = 'Wochenmitteilungen ' + new Date().toLocaleDateString("de-AT");
+    const recipients: Record<CalendarName, string[]> = await cockpit.collectionGet("internal-data", {filter: {id: "newsletter"}}).then(({entries}) => entries[0].data);
 
-    await Promise.all([
-            sendMail(4636128, 'Gemeindemitglied Pfarre Emmaus', 'wochenmitteilung.e@eni.wien', subject, {
-                message,
-                link: 'https://eni.wien/api/weekly?parish=emmaus'
-            }, true),
-            sendMail(4636128, 'Gemeindemitglied Pfarre Emmaus', 'wochenmitteilung.i@eni.wien', subject, {
-                message,
-                link: 'https://eni.wien/api/weekly?parish=inzersdorf'
-            }, true),
-            sendMail(4636128, 'Gemeindemitglied Pfarre Emmaus', 'wochenmitteilung.n@eni.wien', subject, {
-                message,
-                link: 'https://eni.wien/api/weekly?parish=neustift'
-            }, true),
-        ]
-    )
+    await Promise.all([CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT].map(calendar =>
+        sendBulkMail(4636128, recipients[calendar].map(mail => ({
+            mail,
+            name: "Gemeindemitglied " + getCalendarInfo(calendar).shortName
+        })), subject, {
+            message,
+            parish: getCalendarInfo(calendar).shortName,
+            link: `https://eni.wien/api/weekly?parish=${calendar}`
+        }, true)
+    ))
         .then(() => res.json({ok: true}))
         .catch(() => res.json({errorMessage: "Mail konnte nicht gesendet werden!"}))
 }
