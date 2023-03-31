@@ -13,7 +13,6 @@ export interface CalendarInfo {
   websiteUrl: string,
   websiteDisplay: string,
   dot: string,
-  imageColor: string,
 }
 export enum CalendarName{
   ALL = 'all',
@@ -35,9 +34,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     websiteUrl: 'https://eni.wien',
     websiteDisplay: 'https://eni.wien',
     image: '',
-    dot: '',
-    imageColor: ''
-  },
+    dot: '',},
   [CalendarName.EMMAUS]: {
     id: CalendarName.EMMAUS,
     borderColor: 'border-emmaus',
@@ -47,8 +44,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     shortName: 'Emmaus',
     tagName: 'Emmaus',
     address: 'Tesarekplatz 2, 1100 Wien',
-    image: '/parish/emmaus.svg',
-    imageColor: '/logos_Emmaus Fade.svg',
+    image: '/logo/parish_emmaus.svg',
     websiteUrl: 'https://emmaus.wien/',
     websiteDisplay: 'emmaus.wien',
     dot: '/dot/edot.svg',
@@ -62,8 +58,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     shortName: 'St. Nikolaus',
     tagName: 'Nikolaus',
     address: 'Inzersdorf Kirchenplatz 1, 1230 Wien',
-    image: '/parish/inzersdorf.svg',
-    imageColor: '/logos_Inzersdorf Fade.svg',
+    image: '/logo/parish_inzersdorf.svg',
     websiteUrl: 'https://pfarresanktnikolaus.at',
     websiteDisplay: 'pfarresanktnikolaus.at',
     dot: '/dot/idot.svg',
@@ -77,8 +72,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     shortName: 'Neustift',
     tagName: 'Neustift',
     address: 'Don-Bosco-Gasse 14, 1230 Wien',
-    image: '/parish/neustift.svg',
-    imageColor: '/logos_Neustift Fade.svg',
+    image: '/logo/parish_neustift.svg',
     websiteUrl: 'https://www.erzdioezese-wien.at/pages/pfarren/9233',
     websiteDisplay: 'pfarreinzersdorfneustift.at',
     dot: '/dot/ndot.svg',
@@ -95,7 +89,6 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     websiteUrl: '',
     websiteDisplay: '',
     image: '',
-    imageColor: '',
     dot: ''
   },
 };
