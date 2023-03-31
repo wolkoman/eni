@@ -10,7 +10,7 @@ export function EniHero() {
                 Miteinander der Pfarren <span className="font-bold">Emmaus</span>,{" "}
                  <span className="font-bold">St.&nbsp;Nikolaus</span> und  <span className="font-bold">Neustift</span>
             </div>
-            <div className="bg-[url(/logo/dreipfarren.svg)] bg-contain bg-no-repeat bg-bottom lg:w-[1300px] h-[150px] grow-0"/>
+            <div className="bg-[url(/logo/parish_all.svg)] bg-contain bg-no-repeat bg-bottom lg:w-[1300px] h-[150px] grow-0"/>
         </div>
     </Responsive></div>;
 }

@@ -94,7 +94,7 @@ export default function InternArticles() {
                 <input type="date" className="bg-gray-200 px-3 py-1 rounded"
                        onChange={(e) => setPartialData({end: new Date(e.target.value)})}/>
             </div>
-            <Button className="mt-4" label="Generieren" onClick={() => generate("/eni2.docx")} disabled={!loaded}/>
+            <Button className="mt-4" label="Generieren" onClick={() => generate("/eni.docx")} disabled={!loaded}/>
             <AnnouncementsEntries/>
             <AnnouncementsUpload/>
             <AnnouncementsSend/>

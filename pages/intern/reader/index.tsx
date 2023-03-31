@@ -26,13 +26,13 @@ export function ReaderSite(props: { children?: ReactNode }) {
             <div className="print:hidden">
                 <div
                     className="flex lg:flex-col h-20 lg:h-auto lg:w-20 p-4 gap-2 bg-black/5 rounded-r-xl grow-0 lg:sticky top-0">
-                    <img src="/logo/emmaus.svg"
+                    <img src="/dot/edot.svg"
                          onClick={() => setParish(CalendarName.EMMAUS)}
                          className={`${parish === CalendarName.EMMAUS ? '' : inactive} ${belongsTo(CalendarName.EMMAUS) || 'hidden'}`}/>
-                    <img src="/logo/inzersdorf.svg"
+                    <img src="/dot/idot.svg"
                          onClick={() => setParish(CalendarName.INZERSDORF)}
                          className={`${parish === CalendarName.INZERSDORF ? '' : inactive} ${belongsTo(CalendarName.INZERSDORF) || 'hidden'}`}/>
-                    <img src="/logo/neustift.svg"
+                    <img src="/dot/ndot.svg"
                          onClick={() => setParish(CalendarName.NEUSTIFT)}
                          className={`${parish === CalendarName.NEUSTIFT ? '' : inactive} ${belongsTo(CalendarName.NEUSTIFT) || 'hidden'}`}/>
                     <Link href="/intern/reader/my" legacyBehavior={true}>
