@@ -4,7 +4,6 @@ import Responsive from "./Responsive";
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
 import React, {MouseEventHandler, useState} from "react";
-import {unibox} from "./calendar/ComingUp";
 import {AnimatePresence, motion} from 'framer-motion'
 
 export interface InstagramFeedItem {
@@ -20,7 +19,7 @@ export interface InstagramFeedItem {
 }
 
 function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHandler<HTMLDivElement> }) {
-    return <div className={`rounded-lg lg:max-w-md lg:w-screen cursor-pointer`} onClick={props.onClick}>
+    return <div className={`rounded-lg cursor-pointer`} onClick={props.onClick}>
         <motion.div
             whileTap={{scale: 0.95}}
             whileHover={{scale: 1.02}}
@@ -37,9 +36,9 @@ function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHand
 }
 
 function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => void }) {
-    return <div className="fixed inset-0 grid place-items-center z-30 p-2 lg:p-12">
+    return <div className="fixed inset-0 flex items-center justify-center z-30 p-4">
         <motion.div
-            className="absolute inset-0  bg-black/10"
+            className="absolute inset-0 bg-black/10"
             onClick={close}
             initial={{opacity: 0}}
             animate={{opacity: 1}}
@@ -49,24 +48,37 @@ function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => 
             initial={{opacity: 0, scale: 0.8}}
             animate={{opacity: 1, scale: 1}}
             exit={{opacity: 0, scale: 0.8}}
-            className="relative grid lg:grid-cols-2 shadow p-4 bg-white max-w-6xl rounded-xl shadow-xl">
+            className="flex flex-col items-center z-50 max-h-full"
+        >
             <motion.div
-                layoutId={item.id}
-                style={{backgroundImage: `url(${item?.media_url})`}}
-                className="max-w-full rounded-lg aspect-square bg-cover bg-center"/>
-            <div className="p-4 flex flex-col gap-4">
-                <motion.div className="text-3xl font-bold" layoutId={item.id + "title"}>{item.title}</motion.div>
-                <div className="flex gap-4">
-                    <div className="px-3 bg-black/5 rounded-lg">
-                        {new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}
+                className="relative grid lg:grid-cols-2 shadow p-4 bg-white max-w-6xl rounded-xl shadow-xl max-h-full">
+                <motion.div
+                    layoutId={item.id}
+                    style={{backgroundImage: `url(${item?.media_url})`}}
+                    className="max-w-full rounded-lg aspect-square bg-cover bg-center"/>
+                <div className="p-4 flex flex-col gap-4">
+                    <motion.div className="text-3xl font-bold" layoutId={item.id + "title"}>{item.title}</motion.div>
+                    <div className="flex gap-4">
+                        <div className="px-3 bg-black/5 rounded-lg">
+                            {new Date(item?.timestamp ?? 0).toLocaleDateString("de-AT")}
+                        </div>
+                        {item.calendar &&
+                            <div className={"px-3 rounded-lg " + (item.calendar?.className)}>
+                                Pfarre {item.calendar?.shortName}
+                            </div>}
                     </div>
-                    {item.calendar &&
-                        <div className={"px-3 rounded-lg " + (item.calendar?.className)}>
-                            Pfarre {item.calendar?.shortName}
-                        </div>}
+                    <div className="max-h-32 lg:max-h-80 overflow-y-auto">{item.caption}</div>
                 </div>
-                <div className="">{item.caption}</div>
-            </div>
+            </motion.div>
+            <motion.img
+                src="/logo/close.svg" className="w-16 bg-white rounded-xl shadow-xl mt-4 cursor-pointer"
+                onClick={close}
+                whileTap={{scale: 0.95}}
+                whileHover={{scale: 1.02}}
+                initial={{translateY: -20}}
+                animate={{translateY: 0}}
+                exit={{translateY: -20}}
+            />
         </motion.div>
     </div>;
 }
@@ -95,12 +107,10 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
         <AnimatePresence>{item && <InstagramScreen item={item} close={() => setItem(null)}/>}</AnimatePresence>
         <div className="">
             <Responsive>
-                <div className="flex flex-wrap">
-                    {feed.map((item, index) => <div
-                        className="shrink-0 p-2 w-full lg:w-auto snap-center">
-                        <InstagramItem item={item} onClick={item ? () => setItem(item) : () => {
-                        }}/>
-                    </div>)}
+                <div className="grid lg:grid-cols-2 gap-8">
+                    {feed.map((item, index) => <InstagramItem key={index} item={item}
+                                                              onClick={item ? () => setItem(item) : () => {
+                                                              }}/>)}
                 </div>
             </Responsive>
         </div>
