@@ -1,6 +1,8 @@
-import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction, useEffect, useState} from "react";
+import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction} from "react";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import {EniLoading} from "./Loading";
+import Button from "./Button";
+import Link from "next/link";
 
 type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;
@@ -37,11 +39,15 @@ export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
 }
 
 export type SelfServiceFile = { id: string, index: number, name: string, result: string, finished: boolean };
-export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
+
+export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {providedFiles?: string[]}) {
 
     const [fileList, setFileList] = [
         props.form[0][props.name] as SelfServiceFile[],
-        (fn: (files: SelfServiceFile[]) => SelfServiceFile[]) => props.form[1](rest => ({...rest, [props.name]:fn(rest[props.name] as SelfServiceFile[])}))
+        (fn: (files: SelfServiceFile[]) => SelfServiceFile[]) => props.form[1](rest => ({
+            ...rest,
+            [props.name]: fn(rest[props.name] as SelfServiceFile[])
+        }))
     ] as const;
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +68,7 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
                 setFileList(files => files.map(file => file.id === id ? {
                     ...file,
                     finished: true,
-                    result: data[file.index]
+                    result: `https://api.eni.wien/files-v0/uploads/${data[file.index]}`
                 } : file))
             })
             .catch((err) => {
@@ -71,24 +77,43 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
             });
     };
 
-    return <label htmlFor="dropzone-file"
-                  className="flex flex-col h-44 border border-black/20 rounded cursor-pointer hover:bg-black/[2%] relative">
-        {fileList.length == 0 ? <div className="flex flex-col items-center justify-center h-full">
+    let uploadEverywhere = fileList.length == 0 && (props.providedFiles ?? []).length === 0;
+    return <label
+        htmlFor={uploadEverywhere ? "dropzone-file" : ""}
+        className={`flex flex-col h-44 border border-black/20 rounded relative overflow-hidden ${uploadEverywhere ? 'cursor-pointer hover:bg-black/[2%]' : ''}`}
+    >
+        {uploadEverywhere ? <div className="flex flex-col items-center justify-center h-full">
             <svg aria-hidden="true" className="w-10 h-10 mb-3" fill="none" stroke="currentColor"
                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
             </svg>
             <p className="">Hochladen</p>
-        </div> : <div className="p-4 flex flex-col gap-2">
-            {fileList.map(file => <div className={file.finished ? 'font-bold' : 'animate-pulse'}>
-                {file.name}{file.finished ? '' : '...'}
-            </div>)}
+        </div> : <div className="flex flex-col min-h-full">
+            {props.providedFiles
+                ?.map(file => <FileItem key={file} name={file.split("_",2)[1]} link={file}/>)
+            }
+            {fileList
+                .filter(file => file.finished)
+                .map(file => <FileItem key={file.id} name={file.name} link={file.result}/>)
+            }
+            {fileList
+                .filter(file => !file.finished)
+                .map(file => <FileItem key={file.id} name={file.name}/>)
+            }
             {fileList.some(file => !file.finished) &&
-                <div className="absolute left-0 w-full top-0">
-                    <EniLoading noPadding={true}/>
-                </div>}
+                <div className="absolute left-0 w-full top-0"><EniLoading noPadding={true}/></div>
+            }
+            <div className="grow"/>
+            <label htmlFor="dropzone-file"><div className="absolute bg-white bottom-0 right-0 px-2 py-1 border-black/20 border-l border-t rounded-tl cursor-pointer">Hochladen</div></label>
         </div>}
         <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} multiple/>
     </label>;
+}
+
+function FileItem(props: {name: string, link?: string, loading?: true}){
+    const Content = () => <div className="text-left border-b border-black/20 px-2 py-1">{props.name}</div>
+    return props.link
+        ? <Link target="_blank" href={props.link} className="hover:bg-black/5"><Content/></Link>
+        : <div className='animate-pulse'><Content/></div>;
 }

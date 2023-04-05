@@ -88,6 +88,7 @@ declare module 'cockpit-sdk' {
       project: Reference,
       author: string,
       email: string,
+      files: {value: string}[],
       char_min: string,
       char_max: string
       status: 'finished' | 'corrected' | 'written' | 'writing'
