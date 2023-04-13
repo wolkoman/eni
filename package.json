@@ -50,10 +50,10 @@
     "zustand": "^4.1.5"
   },
   "scripts": {
-    "start": "doppler run --forward-signals -- next start",
+    "start": "next start",
     "lint": "next lint",
-    "build": "doppler run --forward-signals -- npm run build",
-    "dev": "doppler run --forward-signals -- npm run dev"
+    "build": "next build",
+    "dev": "doppler run --forward-signals -- next dev"
   },
   "browserslist": {
     "production": [
