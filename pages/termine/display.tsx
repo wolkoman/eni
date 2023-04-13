@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
 import {CalendarEvent, EventsObject} from "../../util/calendar-types";
 import {EventDateText, EventTime} from "../../components/calendar/EventUtils";
 import {fetchJson} from "../../util/fetch-util";

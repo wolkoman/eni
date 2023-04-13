@@ -25,24 +25,27 @@ export interface Liturgy{
   psalm: string;
   evangelium: string;
 }
-export async function getLiturgyData(): Promise<LiturgyData>{
+
+async function fetchLiturgyData(): Promise<LiturgyData>{
 
   const year = new Date().getFullYear()+1;
-  /*const xml = await fetch(`https://www.eucharistiefeier.de/lk/api.php?jahr=${year}`)
+  const xml = await fetch(`https://www.eucharistiefeier.de/lk/api.php?jahr=${year}`)
       .then(response => response.text())
       .then(response => response.replace(/<br>/g, ""))
       .then(response => new XMLParser({alwaysCreateTextNode: true}).parse(response).html.head.body.table.tbody.tr);
 
-  const merged: LiturgyData = Object.fromEntries(xml.reduce((data: any, {td}: { td: Cell }) => isNewDate(td)
+  return Object.fromEntries(xml.reduce((data: any, {td}: { td: Cell }) => isNewDate(td)
           ? [...data, {date: transformDate(td[0] as TextNode), liturgies: transformLiturgy(td.slice(1))}]
           : [...data.slice(0, -1), {...data.at(-1), liturgies: [...data.at(-1)!.liturgies, ...transformLiturgy(td)]}]
       , []).map(({date, liturgies}: any) => [date, liturgies]));
-   */
+}
+
+export async function getLiturgyData(): Promise<LiturgyData>{
 
   const liturgyCache = (await cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
   //await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
 
-  return {/*...merged,*/ ...liturgyCache.data};
+  return liturgyCache.data;
 
 }
 
