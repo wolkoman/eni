@@ -36,7 +36,6 @@
     "react-beforeunload": "^2.5.3",
     "react-dom": "^18.2.0",
     "react-html-renderer": "^0.3.3",
-    "react-lottie-player": "^1.5.4",
     "react-markdown": "^8.0.4",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.5.0",
@@ -51,17 +50,10 @@
     "zustand": "^4.1.5"
   },
   "scripts": {
-    "dev": "next dev",
-    "test": "playwright test",
-    "test:skipbuild": "SKIP_BUILD=1 playwright test",
-    "test:headed": "playwright test --headed",
-    "build": "next build",
-    "start": "next start",
+    "start": "doppler run --forward-signals -- next start",
     "lint": "next lint",
-    "doppler-build": "doppler run --forward-signals -- npm run build",
-    "doppler-dev": "doppler run --forward-signals -- npm run dev",
-    "doppler-test": "doppler run --forward-signals -- npm run test",
-    "doppler-test:headed": "doppler run --forward-signals -- npm run test:headed"
+    "build": "doppler run --forward-signals -- npm run build",
+    "dev": "doppler run --forward-signals -- npm run dev"
   },
   "browserslist": {
     "production": [
@@ -77,7 +69,6 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.29.0",
     "autoprefixer": "^10.4.13",
     "dotenv": "^16.0.3",
     "postcss": "^8.4.20",
