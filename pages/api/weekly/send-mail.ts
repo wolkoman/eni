@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await Promise.all(
         [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
-            .map(calendar => ({calendar, recipients: chunk(recipients[calendar], 50)}))
+            .map(calendar => ({calendar, recipients: chunk(recipients[calendar], 49)}))
             .flatMap(({calendar, recipients}) => recipients.map(recipients => ({calendar, recipients})))
             .map(({calendar, recipients}) =>
                 sendBulkMail(4636128, recipients.map(mail => ({
