@@ -38,6 +38,7 @@ export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
 
 export type SelfServiceFile = { id: string, index: number, name: string, result: string, finished: boolean };
 
+
 export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
 
     const [fileList, setFileList] = [
