@@ -264,34 +264,31 @@ function Modal(props: { children: ReactNode, title?: string }) {
 }
 
 function MediaModal(props: { close: (files: string[]) => void, files: string[], articleId: string }) {
-    const mediaModalForm = useState({files: [] as SelfServiceFile[]});
+    const mediaModalForm = useState({files: props.files.map((file, index) => ({
+            result: file,
+            finished: true,
+            name: file.split("/").reverse()[0].substring(14),
+            id: file,
+            index
+        })) as SelfServiceFile[]});
     const [saving, setSaving] = useState(false);
     const uploading = mediaModalForm[0].files.some(file => !file.finished);
-    const uploaded = mediaModalForm[0].files.length > 0;
 
     function closes() {
-        if (!uploaded) {
-            props.close(props.files);
-            return;
-        }
         setSaving(true);
-        fetchJson("/api/editor/saveMedia?articleId=" + props.articleId, {
-            json: [...props.files, ...mediaModalForm[0].files.map(({result}) => result)]
-        }, {
+        const files = mediaModalForm[0].files.map(({result}) => result);
+        fetchJson("/api/editor/saveMedia?articleId=" + props.articleId, {json: files}, {
             pending: "Speichere Medien..",
             success: "Medien gespeichert",
             error: "Fehler beim Speichern"
         })
-            .then(() => props.close([
-                ...props.files,
-                ...mediaModalForm[0].files.map(({result}) => result)
-            ]));
+            .then(() => props.close(files));
     }
 
     return <Modal>
-        <div className="flex flex-col gap-2 max-w-screen w-66">
-            <SelfServiceFileUpload name="files" form={mediaModalForm} providedFiles={props.files}/>
-            <Button label={uploaded ? "Speichern" : "Schließen"} secondary={true} onClick={closes}
+        <div className="flex flex-col gap-2 max-w-screen w-80">
+            <SelfServiceFileUpload name="files" form={mediaModalForm}/>
+            <Button label="Schließen" secondary={true} onClick={closes}
                     disabled={uploading || saving}/>
         </div>
     </Modal>;

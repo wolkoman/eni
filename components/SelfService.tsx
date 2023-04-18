@@ -1,8 +1,6 @@
 import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction} from "react";
 import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import {EniLoading} from "./Loading";
-import Button from "./Button";
-import Link from "next/link";
 
 type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;
@@ -40,7 +38,7 @@ export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
 
 export type SelfServiceFile = { id: string, index: number, name: string, result: string, finished: boolean };
 
-export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {providedFiles?: string[]}) {
+export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
 
     const [fileList, setFileList] = [
         props.form[0][props.name] as SelfServiceFile[],
@@ -49,6 +47,15 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {pro
             [props.name]: fn(rest[props.name] as SelfServiceFile[])
         }))
     ] as const;
+
+
+    const onDelete = (fileUrl: string) => {
+        setFileList(list => list.filter(file => file.result !== fileUrl))
+        fetch(
+            `https://api.eni.wien/files-v0/delete.php?file=${fileUrl.split("/").at(-1)}`,
+            {method: 'POST'}
+        )
+    };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const id = Math.random().toString();
@@ -77,7 +84,7 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {pro
             });
     };
 
-    let uploadEverywhere = fileList.length == 0 && (props.providedFiles ?? []).length === 0;
+    let uploadEverywhere = fileList.length == 0;
     return <label
         htmlFor={uploadEverywhere ? "dropzone-file" : ""}
         className={`flex flex-col h-44 border border-black/20 rounded relative overflow-hidden ${uploadEverywhere ? 'cursor-pointer hover:bg-black/[2%]' : ''}`}
@@ -90,12 +97,9 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {pro
             </svg>
             <p className="">Hochladen</p>
         </div> : <div className="flex flex-col min-h-full">
-            {props.providedFiles
-                ?.map(file => <FileItem key={file} name={file.split("_",2)[1]} link={file}/>)
-            }
             {fileList
                 .filter(file => file.finished)
-                .map(file => <FileItem key={file.id} name={file.name} link={file.result}/>)
+                .map(file => <FileItem key={file.id} name={file.name} link={file.result} onDelete={() => onDelete(file.result)}/>)
             }
             {fileList
                 .filter(file => !file.finished)
@@ -105,15 +109,26 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {pro
                 <div className="absolute left-0 w-full top-0"><EniLoading noPadding={true}/></div>
             }
             <div className="grow"/>
-            <label htmlFor="dropzone-file"><div className="absolute bg-white bottom-0 right-0 px-2 py-1 border-black/20 border-l border-t rounded-tl cursor-pointer">Hochladen</div></label>
+            <label htmlFor="dropzone-file">
+                <div
+                    className="absolute bg-white bottom-0 right-0 px-2 py-1 border-black/20 border-l border-t rounded-tl cursor-pointer">Hochladen
+                </div>
+            </label>
         </div>}
         <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} multiple/>
     </label>;
 }
 
-function FileItem(props: {name: string, link?: string, loading?: true}){
-    const Content = () => <div className="text-left border-b border-black/20 px-2 py-1">{props.name}</div>
+function FileItem(props: { name: string, link?: string, onDelete?: () => void }) {
+    const Content = () => <div className="flex justify-between border-b border-black/20 px-2 py-1">
+        <div className="truncate">{props.name}</div>
+        <div className="px-3 hover:bg-red-700 hover:text-white rounded" onClick={e => {
+            e.stopPropagation();
+            props.onDelete?.();
+        }}>X
+        </div>
+    </div>
     return props.link
-        ? <Link target="_blank" href={props.link} className="hover:bg-black/5"><Content/></Link>
+        ? <div onClick={() => { window.open(props.link)}} className="hover:bg-black/5 cursor-pointer"><Content/></div>
         : <div className='animate-pulse'><Content/></div>;
 }
