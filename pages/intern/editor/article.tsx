@@ -7,27 +7,52 @@ import {useRouter} from "next/router";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
 import {saveFile} from "../../../util/save-file";
-import {useAuthenticatedUserStore, useUserStore} from "../../../util/use-user-store";
+import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {Permission} from "../../../util/verify";
 import Button from "../../../components/Button";
 import Responsive from "../../../components/Responsive";
 import {Hamburger} from "../../../components/Hamburger";
+import {AnimatePresence, motion} from 'framer-motion';
+import {SelfServiceFile, SelfServiceFileUpload} from "../../../components/SelfService";
+import Link from "next/link";
 
+
+function Welcome(props: { article: any, project: any }) {
+    return <div className="py-12 max-w-lg mx-auto">
+        <div className="font-bold text-5xl mb-4">Schreibmaske</div>
+        <div className="text-xl">Artikel: <span
+            className="bg-white px-2 py-1">{props.article.name}</span></div>
+        <div className="text-xl">Autor:in: <span
+            className="bg-white px-2 py-1">{props.article.author}</span></div>
+        <div className="text-xl">Zeichen: <span
+            className="bg-white px-2 py-1">{props.article.char_min}-{props.article.char_max} Zeichen</span>
+        </div>
+        <div className="text-xl">Redaktionsschluss: <span
+            className="bg-white px-2 py-1">{new Date(props.project.deadline).toLocaleDateString()}</span>
+        </div>
+    </div>;
+}
 
 export default function Index(props: { article: Collections['paper_articles'], project: Collections['paper_projects'], versions: Collections['paper_texts'][] }) {
 
-    const router = useRouter();
-
-    function MoreOptions(cprops: { editable: any, onSave: () => Promise<void>, saved: "saving" | "saved" | "justnow" | "error", permission: any, value: any, disabled: boolean, onSaveStatusChange: (status: Collections['paper_articles']['status']) => any, onFinish: () => void }) {
-        return <div className="flex space-x-2 text-black/80">
-            {cprops.editable && <Button label="Speichern" onClick={cprops.onSave}
-                                        disabled={cprops.saved === "saving" || cprops.saved === "saved"}/>}
+    function MoreOptions(cprops: { editable: any, onSave: () => Promise<void>, saved: "saving" | "saved" | "justnow" | "error", permission: boolean, status: Collections['paper_articles']['status'], disabled: boolean, onSaveStatusChange: (status: Collections['paper_articles']['status']) => any, onFinish: () => void }) {
+        return <div className="flex gap-2 text-black/80">
+            {cprops.editable && <Button
+                label={<img src="/logo/icon_save.svg" className="w-5 mt-0.5"/>}
+                onClick={cprops.onSave}
+                disabled={cprops.saved === "saving" || cprops.saved === "saved"}/>
+            }
+            {cprops.editable && <Button
+                label={<img src="/logo/icon_media.svg" className="w-5 mt-0.5"/>}
+                onClick={() => setMediaModalOpen(true)}/>
+            }
             {cprops.permission ? <>
-                <Button label="Versionen"
-                        onClick={() => router.push(`/intern/editor/version?articleId=${props.article._id}`)}/>
+                <Link href={`/intern/editor/version?articleId=${props.article._id}`} target="_blank">
+                    <Button label={<img src="/logo/icon_versions.svg" className="w-5 mt-0.5"/>}/>
+                </Link>
                 <select
                     className="px-3 py-1 bg-black/5 rounded-lg cursor-pointer"
-                    value={cprops.value} disabled={cprops.disabled}
+                    value={cprops.status} disabled={cprops.disabled}
                     onChange={event => cprops.onSaveStatusChange(event.target?.value as any)}>
                     <option value="writing">In Arbeit</option>
                     <option value="written">Geschrieben</option>
@@ -37,6 +62,8 @@ export default function Index(props: { article: Collections['paper_articles'], p
         </div>;
     }
 
+
+    const [article, setArticle] = useState(props.article);
     const {user} = useAuthenticatedUserStore();
     const permission = user?.permissions?.[Permission.Editor] ?? false;
     const {query: {articleId}} = useRouter();
@@ -44,8 +71,9 @@ export default function Index(props: { article: Collections['paper_articles'], p
     const [length, setLength] = useState(0);
     const [note, setNote] = useState<'unfinished' | 'perfect' | 'excess'>('unfinished');
     const [saved, setSaved] = useState<'saving' | 'saved' | 'justnow' | 'error'>('saved');
-    const [status, setStatus] = useState<typeof props.article.status>(props.article.status);
+    const [status, setStatus] = useState<typeof article.status>(article.status);
     const [statusLoading, setStatusLoading] = useState(false);
+    const [mediaModalOpen, setMediaModalOpen] = useState(false);
     const [finishModalOpen, setFinishModalOpen] = useState(false);
     const [mobilMenuOpen, setMobilMenuOpen] = useState(false);
     const [warning, setWarning] = useState({open: false, active: false});
@@ -53,17 +81,17 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     useEffect(() => {
         setLength(text.length);
-        setNote(text.length < +props.article.char_min
+        setNote(text.length < +article.char_min
             ? 'unfinished'
-            : (text.length > +props.article.char_max ? 'excess' : 'perfect')
+            : (text.length > +article.char_max ? 'excess' : 'perfect')
         );
         setSaved(x => x === 'saved' ? 'justnow' : x);
-        if (text.length > +props.article.char_max + 100 && !warning.active) {
+        if (text.length > +article.char_max + 100 && !warning.active) {
             setWarning({open: true, active: true});
-        } else if (text.length < +props.article.char_max + 100 && warning.active) {
+        } else if (text.length < +article.char_max + 100 && warning.active) {
             setWarning({open: false, active: false});
         }
-    }, [text, props.article.char_max, props.article.char_min, warning.active]);
+    }, [text, article.char_max, article.char_min, warning.active]);
     useEffect(() => {
         const interval = setInterval(() => save(), 10000);
         return () => clearInterval(interval);
@@ -94,12 +122,12 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     function saveAndDownload() {
         return save().catch(() => {
-            saveFile(`${props.article.name} ${new Date().toLocaleDateString("de-AT")}.txt`, new Blob([text]));
+            saveFile(`${article.name} ${new Date().toLocaleDateString("de-AT")}.txt`, new Blob([text]));
             throw new Error();
         })
     }
 
-    function saveStatus(newStatus: typeof props.article.status) {
+    function saveStatus(newStatus: typeof article.status) {
         setStatusLoading(true);
         return fetchJson("/api/editor/saveStatus", {
             json: {status: newStatus, articleId},
@@ -120,45 +148,41 @@ export default function Index(props: { article: Collections['paper_articles'], p
     }
 
     return <Site navbar={false} footer={false} responsive={false}>
-        {finishModalOpen && <Modal>
+        <AnimatePresence>{mediaModalOpen && <MediaModal
+            close={files => {
+                setArticle(article => ({...article, files: files.map(value => ({value}))}));
+                setMediaModalOpen(false);
+            }}
+            files={article.files?.map(({value}) => value) ?? []}
+            articleId={article._id}
+        />}</AnimatePresence>
+        <AnimatePresence>{finishModalOpen && <Modal>
             <div className="text-lg">Wollen Sie den Text abgeben?</div>
             <div className="space-x-2">
                 <Button label="Abbrechen" secondary={true} onClick={() => setFinishModalOpen(false)}></Button>
                 <Button label="Abgeben" onClick={finish}></Button>
             </div>
-        </Modal>}
-        {warning.open && <Modal>
+        </Modal>}</AnimatePresence>
+        <AnimatePresence>{warning.open && <Modal>
             <div className="text-lg font-bold">Achtung, Zeichenlimit!</div>
             <div className="text-lg mb-2">Sie haben das Zeichenlimit weit überschritten.
             </div>
             <div className="space-x-2">
                 <Button label="Okay" onClick={() => setWarning(value => ({...value, open: false}))}></Button>
             </div>
-        </Modal>}
+        </Modal>}</AnimatePresence>
         <div className="flex flex-col h-screen">
             <div className="p-4">
                 <Responsive>
-                    {length === 0 ? <div className="py-12 max-w-lg mx-auto">
-                            <div className="font-bold text-5xl mb-4">Schreibmaske</div>
-                            <div className="text-xl">Artikel: <span
-                                className="bg-white px-2 py-1">{props.article.name}</span></div>
-                            <div className="text-xl">Autor:in: <span
-                                className="bg-white px-2 py-1">{props.article.author}</span></div>
-                            <div className="text-xl">Zeichen: <span
-                                className="bg-white px-2 py-1">{props.article.char_min}-{props.article.char_max} Zeichen</span>
-                            </div>
-                            <div className="text-xl">Redaktionsschluss: <span
-                                className="bg-white px-2 py-1">{new Date(props.project.deadline).toLocaleDateString()}</span>
-                            </div>
-                        </div> :
+                    {length === 0 ? <Welcome article={article} project={props.project}/> :
                         <div className="flex justify-between">
                             <div>
                                 <div className="flex flex-row text-black/80">
                                     <div
-                                        className="text-2xl mr-2 -mb-2 font-bold line-clamp-1">{props.article.name}</div>
+                                        className="text-2xl mr-2 -mb-2 font-bold line-clamp-1">{article.name}</div>
                                 </div>
                                 <div
-                                    className="text-sm line-clamp-1">{props.article.author} (Redaktionsschluss: {new Date(props.project.deadline).toLocaleDateString()})
+                                    className="text-sm line-clamp-1">{article.author} (Redaktionsschluss: {new Date(props.project.deadline).toLocaleDateString()})
                                 </div>
                             </div>
                             <div className="flex flex-row space-x-3 items-center">
@@ -176,7 +200,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
                                 <div className="hidden md:flex">
                                     <MoreOptions
                                         editable={editable} onSave={saveAndDownload} saved={saved}
-                                        permission={permission} value={status} disabled={statusLoading}
+                                        permission={permission} status={status} disabled={statusLoading}
                                         onSaveStatusChange={saveStatus}
                                         onFinish={() => setFinishModalOpen(true)}
                                     />
@@ -189,7 +213,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
                 {mobilMenuOpen &&
                     <div className="bg-gray-200 absolute top-0 left-0 w-full p-4 md:hidden flex justify-center z-10">
                         <MoreOptions editable={editable} onSave={saveAndDownload} saved={saved} permission={permission}
-                                     value={status} disabled={statusLoading} onSaveStatusChange={saveStatus}
+                                     status={status} disabled={statusLoading} onSaveStatusChange={saveStatus}
                                      onFinish={() => setFinishModalOpen(true)}/>
                     </div>}
                 <textarea
@@ -207,11 +231,11 @@ export default function Index(props: { article: Collections['paper_articles'], p
                 excess: 'bg-red-600 text-white font-bold',
             }[note]}`}><Responsive>
                 <div className="flex justify-between">
-                    <div className="">{length} von {props.article.char_min}-{props.article.char_max} Zeichen</div>
+                    <div className="">{length} von {article.char_min}-{article.char_max} Zeichen</div>
                     <div className={`px-2 rounded`}>{{
-                        unfinished: `${Math.round(200 * length / (+props.article.char_min + +props.article.char_max))}%`,
+                        unfinished: `${Math.round(200 * length / (+article.char_min + +article.char_max))}%`,
                         perfect: `100%`,
-                        excess: `${length - +props.article.char_max} Zeichen Überschuss`,
+                        excess: `${length - +article.char_max} Zeichen Überschuss`,
                     }[note]}</div>
                 </div>
             </Responsive></div>
@@ -221,13 +245,55 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
 function Modal(props: { children: ReactNode, title?: string }) {
     return <div
-        className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center backdrop-blur-sm bg-black/20 z-20">
-        <div className="bg-white border-4 border-black/10 rounded-lg shadow-lg text-center p-8">
+        className="absolute inset-0 w-screen h-screen flex items-center justify-center z-20">
+        <motion.div
+            className="absolute inset-0 bg-black/40"
+            initial={{opacity: 0}}
+            exit={{opacity: 0}}
+            animate={{opacity: 1}}
+        />
+        <motion.div
+            className="relative bg-white rounded-lg shadow-lg text-center p-8"
+            initial={{opacity: 0, scale: 0.2}}
+            exit={{opacity: 0, scale: 0.2}}
+            animate={{opacity: 1, scale: 1}}>
             {props.title && <div className="font-bold mb-2">{props.title}</div>}
             <div>{props.children}</div>
-        </div>
+        </motion.div>
     </div>
 }
+
+function MediaModal(props: { close: (files: string[]) => void, files: string[], articleId: string }) {
+    const mediaModalForm = useState({files: props.files.map((file, index) => ({
+            result: file,
+            finished: true,
+            name: file.split("/").reverse()[0].substring(14),
+            id: file,
+            index
+        })) as SelfServiceFile[]});
+    const [saving, setSaving] = useState(false);
+    const uploading = mediaModalForm[0].files.some(file => !file.finished);
+
+    function closes() {
+        setSaving(true);
+        const files = mediaModalForm[0].files.map(({result}) => result);
+        fetchJson("/api/editor/saveMedia?articleId=" + props.articleId, {json: files}, {
+            pending: "Speichere Medien..",
+            success: "Medien gespeichert",
+            error: "Fehler beim Speichern"
+        })
+            .then(() => props.close(files));
+    }
+
+    return <Modal>
+        <div className="flex flex-col gap-2 max-w-screen w-80">
+            <SelfServiceFileUpload name="files" form={mediaModalForm}/>
+            <Button label="Schließen" secondary={true} onClick={closes}
+                    disabled={uploading || saving}/>
+        </div>
+    </Modal>;
+}
+
 
 export async function getServerSideProps(context: any) {
     const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: context.query.articleId}})).entries[0];

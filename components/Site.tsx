@@ -17,13 +17,18 @@ export default function Site(props: {
     navbar?: boolean,
     footer?: boolean
 }) {
+    const title = (props.title ? `${props.title} | ` : '') + site("eni.wien", "Pfarre Emmaus");
+    const description = props.description ?? site("Miteinander der Pfarren Emmaus, St. Nikolaus und Neustift", "Katholische Pfarre im zehnten Wiener Gemeindebezirk");
     return <>
         <Head>
-            <title>{(props.title ? `${props.title} | ` : '')+ (site("eni.wien", "Pfarre Emmaus"))}</title>
+            <title>{title}</title>
             {props.author && <meta name="author" content={props.author}/>}
-            {props.description && <meta name="description" content={props.description}/>}
+            <meta name="description" content={props.description}/>
             {props.keywords && <meta name="keywords" content={props.keywords.join(", ")}/>}
             <link rel="shortcut icon" type="image/png" href={(site("/favicon.png", "/favicon-emmaus.png"))}/>
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <meta property="og:image" content="/social.png" />
         </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">
             <div className="flex-grow flex flex-col items-stretch">
