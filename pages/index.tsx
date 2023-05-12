@@ -1,5 +1,3 @@
-import Responsive from "../components/Responsive";
-import {Section} from "../components/Section";
 import Site from '../components/Site';
 import TopBar from '../components/TopBar';
 import {getCachedEvents, GetEventPermission} from "../util/calendar-events";
@@ -19,9 +17,8 @@ import Articles from "../components/Articles";
 import {ComingUp} from "../components/calendar/ComingUp";
 import {EmmausSections} from "../components/EmmausSections";
 import {EniHero} from "../components/EniHero";
-import {ListView} from "../components/calendar/ListView";
-import {FilterSelector} from "../components/calendar/FilterSelector";
 import React from "react";
+import {WorshipNotice} from "../components/WorshipNotice";
 
 export default function HomePage(
     props: {
@@ -54,6 +51,7 @@ export default function HomePage(
                 <TopBar/>
                 <EmmausBranding eventsObject={props.eventsObject}/>
             </div>
+            <WorshipNotice worshipEvents={props.eventsObject.events.filter(event => event.summary === "Worship")}/>
             <div className="relative z-10 bg-white">
                 <Articles items={props.articles} sites={props.sites}/>
                 <ComingUp eventsObject={props.eventsObject}/>

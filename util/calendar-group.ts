@@ -103,6 +103,7 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
         sum.includes("firmvorbereitung") && CalendarGroup.Sakramente,
         sum.includes("firmung") && sum.includes("anmeldung") && CalendarGroup.Sakramente,
         sum.includes("firmung") && sum.includes("info") && CalendarGroup.Sakramente,
+        (event.description?.includes("lndk") ?? false) && CalendarGroup.LNDK,
     ];
     let groups = conditions.filter((group): group is CalendarGroup => !!group);
 

@@ -49,4 +49,5 @@ export enum CalendarGroup {
     Gremien = "Gremien",
     Chor = "Chor",
     Ostern = "Buß- und Osterzeit",
+    LNDK = "Lange Nacht der Kirchen",
 }
