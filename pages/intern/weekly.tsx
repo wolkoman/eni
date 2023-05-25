@@ -218,7 +218,7 @@ function AnnouncementsEntries() {
             {ann?.map(announcement => <div className="px-6 py-4 bg-black/[2%] rounded-lg flex flex-col" key={announcement._id}>
                 <div className="mb-1 font-bold">{getCalendarInfo(announcement.parish as any).fullName}: {announcement.byName}</div>
                 <div className="mb-2">{announcement.description}</div>
-                {announcement.files.map(file => <Link href={"https://api.eni.wien/files-v0/uploads/" + file}>
+                {announcement.files.map(file => <Link href={file}>
                     <div className="underline hover:no-underline">{file}</div>
                 </Link>)}
                 <div className="flex justify-end gap-2">

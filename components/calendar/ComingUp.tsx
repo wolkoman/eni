@@ -35,8 +35,6 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
                         className={`p-4 pb-8 bg-black/[2%] border border-black/[5%] rounded-xl relative overflow-hidden`}
                     >
-                        <img src={"/logo/logo_" + group + ".svg"}
-                             className="absolute scale-[350%] opacity-10 right-8 bottom-8"/>
                         <div className="flex gap-2 items-start justify-center my-4">
                             <div className="text-xl font-bold">{group}</div>
                         </div>

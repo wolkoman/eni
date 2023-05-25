@@ -13,7 +13,7 @@ export function EmmausSections(props: { emmausbote: Collections['Emmausbote'][] 
         <Section title="Mitteilungen" id="mitteilungen">
             <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center">
                 <div className="flex flex-col items-center">
-                    <img src="./Wochenblatt.svg" className="h-44 mb-12"/>
+                    <img src="./logo/wochenblatt.svg" className="h-44 mb-12"/>
                     <div className="text-3xl font-bold">
                         Wochenmitteilungen
                     </div>

@@ -43,7 +43,7 @@ function Page(props: { canvas: MutableRefObject<null>[], index: number, href?: s
                      className={`block max-w-full flex flex-col mx-auto border-8 rounded-lg ${info.borderColor} ${info.className} overflow-hidden shadow-lg`}
                      href={props.href}>
         <div className={` px-4 pb-2`}>{info.fullName}</div>
-        <canvas className={`w-[267px] h-[378px] rounded`} ref={props.canvas[props.index + 1]}/>
+        <canvas className={`w-[267px] h-[378px] rounded bg-white`} ref={props.canvas[props.index + 1]}/>
     </motion.a>
 }
 
