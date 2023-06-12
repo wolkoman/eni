@@ -23,7 +23,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                     .filter(event => event.calendar === calendar)
                     .slice(0, site(1, 3))
                 )
-                .sort((b, a) => b.start.dateTime.localeCompare(a.start.dateTime))
+                .sort((b, a) => b.start.dateTime?.localeCompare(a.start.dateTime))
             )]) as [string, Record<string, CalendarEvent[]>][]
     const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
 
