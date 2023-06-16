@@ -167,9 +167,9 @@ function AnnouncementsUpload() {
         await adminCockpit.collectionSave(`weekly`, {
             date,
             _id: existing?.[0]?._id,
-            emmaus: uploadedFiles[0],
-            inzersdorf: uploadedFiles[1],
-            neustift: uploadedFiles[2]
+            emmaus: uploadedFiles.find((file: string) => file.includes("WM0")),
+            inzersdorf: uploadedFiles.find((file: string) => file.includes("WM1")),
+            neustift: uploadedFiles.find((file: string) => file.includes("WM2"))
         })
         setUploadPossible('success');
     }
