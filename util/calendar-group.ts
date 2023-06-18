@@ -116,6 +116,8 @@ export function getGroupFromEvent(event: calendar_v3.Schema$Event): CalendarGrou
 
 export function getGroupSorting(group: CalendarGroup) {
     return [
+        CalendarGroup.Kinder,
+        CalendarGroup.Gemeinschaft,
         CalendarGroup.Gebet,
         CalendarGroup.Wallfahrt,
         CalendarGroup.Advent,

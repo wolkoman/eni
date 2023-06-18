@@ -55,7 +55,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
                         data-date={date}
                         className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                     >
-                        <div className="w-[130px] my-2  shrink-0">
+                        <div className="lg:w-[100px] my-2  shrink-0">
                             <EventDate date={new Date(date)}/>
                         </div>
                         <div className="grow">

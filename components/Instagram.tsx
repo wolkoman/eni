@@ -5,6 +5,7 @@ import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
 import React, {MouseEventHandler, useState} from "react";
 import {AnimatePresence, motion} from 'framer-motion'
+import {clickable} from "./calendar/ComingUp";
 
 export interface InstagramFeedItem {
     id: string,
@@ -19,18 +20,16 @@ export interface InstagramFeedItem {
 }
 
 function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHandler<HTMLDivElement> }) {
-    return <div className={`rounded-lg cursor-pointer`} onClick={props.onClick}>
+    return <div className={`${clickable}`} onClick={props.onClick}>
         <motion.div
-            whileTap={{scale: 0.95}}
-            whileHover={{scale: 1.02}}
             layoutId={props.item.id}
             style={{backgroundImage: `url(${props.item?.media_url})`}}
-            className="bg-cover relative bg-center aspect-square rounded-lg"
+            className="bg-cover relative bg-center aspect-square rounded-lg border border-black/20"
         >
-            <motion.div
-                className="text-xl font-bold backdrop-blur-sm bg-white/70 p-4 rounded-t-lg absolute bottom-0 lg:bottom-auto w-full">
-                <motion.div layoutId={props.item.id + "title"}>{props.item?.title}</motion.div>
-            </motion.div>
+        </motion.div>
+        <motion.div
+          className="text-xl font-bold p-4 rounded-t-lg ">
+            <motion.div layoutId={props.item.id + "title"}>{props.item?.title}</motion.div>
         </motion.div>
     </div>;
 }
@@ -51,7 +50,7 @@ function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => 
             className="flex flex-col items-center z-50 max-h-full"
         >
             <motion.div
-                className="relative grid lg:grid-cols-2 shadow p-4 bg-white max-w-6xl rounded-xl shadow-xl max-h-full">
+                className="relative grid lg:grid-cols-2 p-4 bg-white max-w-6xl rounded-xl max-h-full">
                 <motion.div
                     layoutId={item.id}
                     style={{backgroundImage: `url(${item?.media_url})`}}
@@ -71,10 +70,8 @@ function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => 
                 </div>
             </motion.div>
             <motion.img
-                src="/logo/close.svg" className="w-16 bg-white rounded-xl shadow-xl mt-4 cursor-pointer"
+                src="/logo/close.svg" className="w-16 bg-white rounded-xl mt-4 cursor-pointer"
                 onClick={close}
-                whileTap={{scale: 0.95}}
-                whileHover={{scale: 1.02}}
                 initial={{translateY: -20}}
                 animate={{translateY: 0}}
                 exit={{translateY: -20}}
@@ -108,9 +105,8 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
         <div className="">
             <Responsive>
                 <div className="grid lg:grid-cols-2 gap-8">
-                    {feed.map((item, index) => <InstagramItem key={index} item={item}
-                                                              onClick={item ? () => setItem(item) : () => {
-                                                              }}/>)}
+                    {feed.map((item, index) =>
+                      <InstagramItem key={index} item={item} onClick={item ? () => setItem(item) : () => {}}/>)}
                 </div>
             </Responsive>
         </div>

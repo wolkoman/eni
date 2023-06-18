@@ -9,8 +9,9 @@ import {CalendarName} from "../../util/calendar-info";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 import {ListView} from "./ListView";
+import {SectionHeader} from "../SectionHeader";
 
-export const unibox = "bg-black/[2%]  rounded-lg border border-black/[5%]";
+export const unibox = "bg-black/[2%]  rounded-lg border border-black/[5%] transition";
 export const clickable = unibox + " hover:bg-black/[4%] cursor-pointer";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
@@ -29,14 +30,15 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
 
     return <Responsive>
         <div className="my-8">
+            <SectionHeader id="coming-up">Die nächsten Tage</SectionHeader>
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
                 {groups.slice(0, 6).map(([group, eventsObject]) =>
                     <Link
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`p-4 pb-8 bg-black/[2%] border border-black/[5%] rounded-xl relative overflow-hidden`}
+                        className={`p-4 pb-8 rounded-xl relative overflow-hidden ${clickable}`}
                     >
                         <div className="flex gap-2 items-start justify-center my-4">
-                            <div className="text-xl font-bold">{group}</div>
+                            <div className="text-2xl font-bold">{group}</div>
                         </div>
                         <div>
                             <ListView editable={false} calendar={{

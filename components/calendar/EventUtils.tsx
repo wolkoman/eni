@@ -63,14 +63,12 @@ export function EventDescription(props: { event: Partial<CalendarEvent>, suggest
 
 export const EventDate = ({date}: { date: Date }) => {
     const day = date.getDay();
-    return <div className={`flex gap-3 items-end`}>
-        <div className="text-2xl lg:hidden">{getWeekDayName(day)},</div>
-        <div className={`text-2xl lg:text-3xl ${day ? '' : 'lg:font-bold'}`}>{date.getDate()}.</div>
-        <div className="leading-4 text-sm flex gap-5  lg:gap-0 lg:flex-col">
-            <div className="text-2xl lg:text-sm">{getMonthName(date.getMonth())}</div>
-            <div className="italic hidden lg:block">{getWeekDayName(day)}</div>
-        </div>
-    </div>;
+    return <>
+        <div className="text-lg lg:hidden">{getWeekDayName(day)}, {date.getDate()}. {getMonthName(date.getMonth())}</div>
+        <div className={`hidden lg:flex flex-col`}>
+            <div className="text-lg font-semibold">{date.getDate()}. {getMonthName(date.getMonth())}</div>
+            <div className="text-2xl text-sm">{getWeekDayName(day)}</div>
+    </div></>;
 }
 
 export const EventDateText = ({date}: { date: Date }) => {
