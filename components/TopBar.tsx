@@ -1,3 +1,5 @@
+"use client"
+
 import Link from 'next/link';
 import {site} from '../util/sites';
 import React, {useEffect, useState} from 'react';

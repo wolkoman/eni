@@ -1,3 +1,5 @@
+"use client"
+
 import {Section} from './Section';
 import Link from 'next/link';
 import React from 'react';

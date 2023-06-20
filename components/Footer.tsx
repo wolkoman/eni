@@ -1,3 +1,5 @@
+"use client"
+
 import Link from 'next/link';
 import React, {ReactNode} from 'react';
 import Responsive from './Responsive';
@@ -35,21 +37,21 @@ export default function Footer() {
                     <div>
                         <Title>Offenlegung</Title>
                         {site(<>
-                                HerausgeberIn, Alleininhaber, Redaktion:<br/>
-                                Röm.-kath. Pfarre Emmaus am Wienerberg,<br/>
-                                Röm.-kath. Pfarre Inzersdorf,<br/>
-                                Röm.-kath. Pfarre Inzersdorf-Neustift
-                                <Link href="/impressum">
-                                    <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
-                                </Link>
-                            </>,
-                            <>
-                                HerausgeberIn, Alleininhaber, Redaktion:<br/>
-                                Röm.-kath. Pfarre Emmaus am Wienerberg
-                                <Link href="/impressum">
-                                    <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
-                                </Link>
-                            </>
+                              HerausgeberIn, Alleininhaber, Redaktion:<br/>
+                              Röm.-kath. Pfarre Emmaus am Wienerberg,<br/>
+                              Röm.-kath. Pfarre Inzersdorf,<br/>
+                              Röm.-kath. Pfarre Inzersdorf-Neustift
+                              <Link href="/impressum">
+                                  <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
+                              </Link>
+                          </>,
+                          <>
+                              HerausgeberIn, Alleininhaber, Redaktion:<br/>
+                              Röm.-kath. Pfarre Emmaus am Wienerberg
+                              <Link href="/impressum">
+                                  <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
+                              </Link>
+                          </>
                         )}
                     </div>
                     <div>

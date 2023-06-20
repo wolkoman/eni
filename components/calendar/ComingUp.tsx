@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '../../util/use-calendar-store';
 import Responsive from '../Responsive';
