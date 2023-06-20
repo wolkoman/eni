@@ -2,20 +2,20 @@ import React, {useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
+import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
 import {Event} from "../../components/calendar/Event";
 import {EniLoading} from "../../components/Loading";
 import Button from "../../components/Button";
 import {fetchJson} from "../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {EventDate} from "../../components/calendar/EventUtils";
-import {unibox} from "../../components/calendar/ComingUp";
 import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {CalendarEvent} from "../../util/calendar-types";
-import {useAuthenticatedSuggestionsStore} from "../../util/use-suggestions-store";
+import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
+import {unibox} from "../../util/styles";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
-    const {answerSuggestion} = useAuthenticatedCalendarStore();
+    const {removeSuggestion} = useAuthenticatedCalendarStore();
     const {add: addSuggestion} = useAuthenticatedSuggestionsStore();
     const [declineDialog, setDeclineDialog] = useState(false);
     const [declineMessage, setDeclineMessage] = useState<string | undefined>();
@@ -26,7 +26,7 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
             {pending: "Speichern..", error: "Konnte nicht gespeichert werden", success: "Speichern erfolgreich"}
         )
             .then(data => {
-                answerSuggestion(suggestion._id, accepted === true);
+                removeSuggestion(suggestion._id);
                 addSuggestion({...suggestion, accepted: accepted === true})
                 return data;
             })

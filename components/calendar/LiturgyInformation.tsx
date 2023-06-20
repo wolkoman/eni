@@ -1,5 +1,5 @@
 import {Liturgy} from "../../pages/api/liturgy";
-import {Preference, usePreference} from "../../util/use-preference";
+import {Preference, usePreference} from "../../util/store/use-preference";
 import {compareLiturgy} from "../../pages/intern/reader/my";
 import React from "react";
 

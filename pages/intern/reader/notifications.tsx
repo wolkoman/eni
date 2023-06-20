@@ -10,12 +10,14 @@ import {
     ReaderTask,
     roleToString
 } from "../../../util/reader";
-import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
+import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
+import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
 
 export default function Index(props: { liturgy: LiturgyData }) {
 
-    const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
+    const {items: events} = useAuthenticatedCalendarStore();
+    const {readers, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
 
     const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!)
         .filter(task => new Date(task.event?.date) > new Date());

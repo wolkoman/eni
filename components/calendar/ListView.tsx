@@ -1,17 +1,16 @@
 import {applyFilter, FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
-import {Preference, usePreference} from "../../util/use-preference";
+import {Preference, usePreference} from "../../util/store/use-preference";
 import {useState} from "../../util/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
-import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
+import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
 import {LiturgyInformation} from "./LiturgyInformation";
 import React, {ReactNode, useRef} from "react";
-import {ReducedCalendarState} from "../../pages/termine";
 import {EventSearch} from "./EventSearch";
 import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
-import {useAuthenticatedUserStore} from "../../util/use-user-store";
+import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {Permission} from "../../util/verify";
 import {
     applySuggestionToPatch,
@@ -22,6 +21,7 @@ import {
 import {ViewportList} from "react-viewport-list";
 import {EventEdit, EventEditBackground} from "./EventEdit";
 import {CalendarName} from "../../util/calendar-info";
+import {ReducedCalendarState} from "../../app/termine/EventPage";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
@@ -55,7 +55,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
                         data-date={date}
                         className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                     >
-                        <div className="lg:w-[100px] my-2  shrink-0">
+                        <div className="lg:w-[130px] my-2  shrink-0">
                             <EventDate date={new Date(date)}/>
                         </div>
                         <div className="grow">

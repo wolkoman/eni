@@ -1,16 +1,16 @@
 import create from 'zustand';
-import {fetchJson} from './fetch-util';
-import {Collections} from 'cockpit-sdk';
-import {ReaderData} from "./reader";
+import {fetchJson} from '../fetch-util';
+import {ReaderData} from "../reader";
 import {useAuthenticatedUserStore} from "./use-user-store";
 import {useEffect} from "react";
-import {CalendarName} from "./calendar-info";
-import {CalendarEvent} from "./calendar-types";
-import {useAuthenticatedCalendarStore, useCalendarStore} from "./use-calendar-store";
+import {CalendarName} from "../calendar-info";
+import {CalendarEvent} from "../calendar-types";
+import {Collections} from "cockpit-sdk";
+import {combine} from "zustand/middleware";
 
 export function useAuthenticatedReaderStore() {
     const {user} = useAuthenticatedUserStore();
-    const {items: events} = useAuthenticatedCalendarStore();
+    //const {items: events} = useAuthenticatedCalendarStore();
     const store = useReaderStore(state => state);
     useEffect(() => {
         if (user?.parish && user.parish !== CalendarName.ALL) store.setParish(user.parish);
@@ -27,41 +27,28 @@ export function useAuthenticatedReaderStore() {
         setReaderData: store.setReaderData,
         parish: store.parish,
         setParish: store.setParish,
-        events: store.events,
-        readerCount: store.getReaderCount(events)
+        //readerCount: store.getReaderCount(events)
     };
 }
 
-export const useReaderStore = create<{
-    readers: Collections["person"][];
-    communionMinisters: Collections["person"][];
-    readerData: ReaderData;
-    events: CalendarEvent[],
-    parish: CalendarName;
-    setParish: (calendar: CalendarName) => void;
-    loading: boolean;
-    loaded: boolean;
-    error: boolean;
-    setReaderData: (x?: any) => void;
-    load: (token?: string) => void;
-    getReaderCount: (events: CalendarEvent[]) => { name: string, count: number, id: string }[]
-}>((set, get) => ({
-    readers: [],
-    communionMinisters: [],
-    events: [],
-    readerData: {},
-    loaded: false,
-    loading: false,
-    error: false,
+export const useReaderStore = create(combine({
+    readers: [] as Collections["person"][],
+    communionMinisters: [] as Collections["person"][],
+    readerData: {} as ReaderData,
+    events: [] as CalendarEvent[],
     parish: CalendarName.EMMAUS,
-    setParish: (parish) => set({parish}),
-    setReaderData: (x) => {
+    loading: false,
+    loaded: false,
+    error: false,
+},(set, get) => ({
+    setParish: (parish: CalendarName) => set({parish}),
+    setReaderData: (x?: any) => {
         set(data => ({
             ...data,
             readerData: {...data.readerData, ...x}
         }))
     },
-    load: () => {
+    load: (token?: string) => {
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
@@ -76,10 +63,6 @@ export const useReaderStore = create<{
                 events: data.events,
             })))
             .catch(() => {
-                setTimeout(() => {
-                    set(state => ({...state, loaded: false}));
-                    get().load();
-                }, 3000);
                 set({loaded: true, loading: false, error: true});
             });
     },
@@ -99,4 +82,4 @@ export const useReaderStore = create<{
             name: get().readers.find(({_id}) => _id === id)?.name,
         })) as { name: string, count: number, id: string }[]
     }
-}));
+})));

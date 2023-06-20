@@ -1,9 +1,12 @@
 import React from 'react';
-import {getCachedEvents, GetEventPermission} from "../../util/calendar-events";
-import {EventsObject} from "../../util/calendar-types";
-import {EventDateText, EventTime} from "../../components/calendar/EventUtils";
+import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
+import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
 
-export default function EventPage(props: {eventsObject: EventsObject}) {
+export const revalidate = 300
+
+export default async function EventPage() {
+
+    const eventsObject= await getCachedEvents({permission: GetEventPermission.PUBLIC})
 
     return <div data-testid="calendar" className="relative">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -11,7 +14,7 @@ export default function EventPage(props: {eventsObject: EventsObject}) {
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"/>
         <div className="flex-grow events mt-4 lg:px-0 relative font-[Rubik]">
             <div className="font-bold text-sm mb-4 text-[#000] tracking-tighter">AKTUELLE VERANSTALTUNGEN:</div>
-            {props.eventsObject.events
+            {eventsObject.events
                 .filter(event => event.calendar === 'inzersdorf' && !event.summary.match(/Messe|Taufe|(?<!-)Wortgottesdienst|ENTFÄLLT/))
                 .slice(0, 3)
                 .map(event => <div key={event.id} className="mb-4">
@@ -31,13 +34,4 @@ export default function EventPage(props: {eventsObject: EventsObject}) {
         </div>
         <style>{"body{ background:none; }"}</style>
     </div>;
-}
-
-export async function getStaticProps() {
-    return {
-        props: {
-            eventsObject: await getCachedEvents({permission: GetEventPermission.PUBLIC}),
-        },
-        revalidate: 60,
-    }
 }

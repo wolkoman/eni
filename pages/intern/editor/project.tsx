@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import Link from "next/link";
 import {fetchJson} from "../../../util/fetch-util";
-import {useUserStore} from "../../../util/use-user-store";
+import {useUserStore} from "../../../util/store/use-user-store";
 import {useRouter} from "next/router";
 import Button from "../../../components/Button";
 import {usePermission} from "../../../util/use-permission";

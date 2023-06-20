@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import React, {ReactNode} from 'react';
 import Responsive from './Responsive';
-import {useAuthenticatedUserStore} from '../util/use-user-store';
+import {useAuthenticatedUserStore} from '../util/store/use-user-store';
 import {site} from '../util/sites';
 import Button from "./Button";
 import {useEmmausProd} from "../util/use-emmaus-prod";

@@ -1,20 +1,18 @@
 "use client"
 
 import React from 'react';
-import {groupEventsByDate, groupEventsByGroup,} from '../../util/use-calendar-store';
+import {groupEventsByDate, groupEventsByGroup,} from '../../util/store/use-calendar-store';
 import Responsive from '../Responsive';
 import Link from "next/link";
 import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
-import {Preference, usePreference} from "../../util/use-preference";
+import {Preference, usePreference} from "../../util/store/use-preference";
 import {CalendarName} from "../../util/calendar-info";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-
-export const unibox = "bg-black/[2%]  rounded-lg border border-black/[5%] transition";
-export const clickable = unibox + " hover:bg-black/[4%] cursor-pointer";
+import {clickable} from "../../util/styles";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);

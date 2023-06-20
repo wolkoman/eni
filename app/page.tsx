@@ -17,13 +17,15 @@ import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 
+export const revalidate = 300
+
 export default async function HomePage() {
   const eventsObject = await getCachedEvents({permission: GetEventPermission.PUBLIC})
   return site(async () => <Site
     responsive={false} navbar={false}
     description="Drei Pfarren im Wiener Dekanat 23"
     keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
-    <TopBar/>
+    <TopBar frontpage={true}/>
     <EniHero/>
     <ChristmasDisplay eventsObject={eventsObject}/>
     <ComingUp eventsObject={eventsObject}/>
@@ -34,7 +36,7 @@ export default async function HomePage() {
     description="Eine katholische Pfarre im Wiener Dekanat 23"
     keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
     <div className="md:sticky inset-0 w-full">
-      <TopBar/>
+      <TopBar frontpage={true}/>
       <EmmausBranding eventsObject={eventsObject}/>
     </div>
     <WorshipNotice worshipEvents={eventsObject.events.filter(event => event.summary === "Worship")}/>

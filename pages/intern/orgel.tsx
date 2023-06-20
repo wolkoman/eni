@@ -3,9 +3,10 @@ import Site from '../../components/Site';
 import {toast} from 'react-toastify';
 import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
-import {useUserStore} from '../../util/use-user-store';
+import {useUserStore} from '../../util/store/use-user-store';
 import {CalendarEvent} from "../../util/calendar-types";
-import {clickable} from "../../components/calendar/ComingUp";
+
+import {clickable} from "../../util/styles";
 
 export default function Orgel() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
@@ -86,7 +87,7 @@ export default function Orgel() {
           }
           {data.myBookings.map(booking => <div
             key={booking.id}
-            className={`flex bg-gray-200 px-3 py-2 bg-black/[4%] rounded-lg justify-between ${booking.description === 'NO' ? 'pointer-events-none opacity-50' : ''}`}>
+            className={`flex bg-gray-200 px-3 py-2 bg-black/[4%] rounded-lg justify-between ${booking.description === 'NO' ? 'pointer-(old)-none opacity-50' : ''}`}>
             <div className="flex">
               <div className="w-20 font-bold">
                 {new Date(booking.start.dateTime).toLocaleDateString("de-AT")}

@@ -1,6 +1,7 @@
 import React, {ReactNode} from "react";
 import Link from "next/link";
-import {clickable} from "./calendar/ComingUp";
+
+import {clickable} from "../util/styles";
 
 export function InternButton({href, label, onClick, children}: { href?: string, label?: string, onClick?: () => any, children?: ReactNode }) {
     return <Link href={href ?? ''}>

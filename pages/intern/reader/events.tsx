@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {groupEventsByDate} from "../../../util/use-calendar-store";
+import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
 import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../util/reader";
-import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
+import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
-import {clickable, unibox} from "../../../components/calendar/ComingUp";
+import {clickable, unibox} from "../../../util/styles";
 
 function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {
 
@@ -105,7 +105,8 @@ export default function Index(props: { liturgy: LiturgyData }) {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
-    const {readers, communionMinisters, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
+    const {items: events} = useAuthenticatedCalendarStore();
+    const {readers, communionMinisters, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;

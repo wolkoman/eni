@@ -7,7 +7,8 @@ import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
 import React, {MouseEventHandler, useState} from "react";
 import {AnimatePresence, motion} from 'framer-motion'
-import {clickable} from "./calendar/ComingUp";
+
+import {clickable} from "../util/styles";
 
 export interface InstagramFeedItem {
     id: string,
