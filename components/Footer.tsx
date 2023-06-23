@@ -58,11 +58,12 @@ export default function Footer() {
                         <Title>Interner Zugang</Title>
                         Wenn Sie Zugang zu den internen Systemen der {site(<>Pfarren</>, <>Pfarre</>)} brauchen, melden Sie sich in der
                         Pfarrkanzlei unter kanzlei@eni.wien.
-                        <div className="mt-2">
-                            <Link href={emmausProd ? "https://eni.wien/intern" : "/intern"}>
+                        {site(<div className="mt-2">
+                            <Link href={"/intern/login"}>
                                 <Button label="Login"/>
                             </Link>
-                        </div>
+                        </div>, <></>)}
+
                     </div>
                 </div>
             </Responsive>

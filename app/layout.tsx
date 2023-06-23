@@ -1,4 +1,5 @@
 import "../styles/globals.scss";
+import {Toasts} from "./ToastContainer";
 
 export default function RootLayout({
   children,
@@ -9,6 +10,7 @@ export default function RootLayout({
     <html>
       <head />
       <body>{children}</body>
+      <Toasts/>
     </html>
   )
 }
