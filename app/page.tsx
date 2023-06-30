@@ -16,6 +16,8 @@ import {EmmausSections} from "../components/EmmausSections";
 import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
+import {ComingUp2} from "../components/calendar/ComingUp2";
+import Responsive from "../components/Responsive";
 
 export const revalidate = 300
 
@@ -28,8 +30,17 @@ export default async function HomePage() {
     <TopBar frontpage={true}/>
     <EniHero/>
     <ChristmasDisplay eventsObject={eventsObject}/>
-    <ComingUp eventsObject={eventsObject}/>
-    <Instagram items={await fetchInstagramFeed()}/>
+    <Responsive size="md">
+      <ComingUp eventsObject={eventsObject}/>
+      {/*<div className="flex p-10 gap-10">
+      <div className="w-1/3">
+        <ComingUp2 eventsObject={eventsObject}/>
+      </div>
+      <div className="w-2/3">
+        <Instagram items={await fetchInstagramFeed()}/>
+      </div>
+    </div>*/}
+    </Responsive>
     <EniSections/>
   </Site>, async () => <Site
     responsive={false} navbar={false}

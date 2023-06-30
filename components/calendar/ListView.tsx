@@ -23,7 +23,7 @@ import {EventEdit, EventEditBackground} from "./EventEdit";
 import {CalendarName} from "../../util/calendar-info";
 import {ReducedCalendarState} from "../../app/termine/EventPage";
 
-export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean }) {
+export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
     const [search, setSearch] = useState("");
     const {user} = useAuthenticatedUserStore();
@@ -45,7 +45,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
         {props.calendar.loading && <EniLoading/>}
         {props.calendar.loading ||
 
-            <div className="scroll-container" ref={ref}>
+            <div ref={ref}>
                 <ViewportList
                     viewportRef={ref}
                     items={items}
@@ -55,9 +55,9 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
                         data-date={date}
                         className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                     >
-                        <div className="lg:w-[130px] my-2  shrink-0">
+                        {!props.hideDate && <div className="lg:w-[130px] my-2  shrink-0">
                             <EventDate date={new Date(date)}/>
-                        </div>
+                        </div>}
                         <div className="grow">
                             <LiturgyInformation liturgies={props.liturgy[date]}/>
                             {events

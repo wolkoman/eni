@@ -60,7 +60,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                         Sie haben sich von diesem Dienst ausgetragen. Danke fürs Bescheid geben!
                     </div>}
                     <div key={task.event.id + task.data.role}
-                         className={`bg-black/5 p-6 ${cancelled && "pointer-(old)-none"} flex justify-between`}>
+                         className={`bg-black/5 p-6 ${cancelled && "pointer-events-none"} flex justify-between`}>
                         <div>
                             <div className={cancelled ? 'line-through' : ''}>
                                 <div className={"font-bold text-lg"}>

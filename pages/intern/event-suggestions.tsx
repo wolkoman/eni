@@ -13,6 +13,7 @@ import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {CalendarEvent} from "../../util/calendar-types";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
 import {unibox} from "../../util/styles";
+import {Clickable} from "../../app/(components)/Clickable";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const {removeSuggestion} = useAuthenticatedCalendarStore();
@@ -34,7 +35,7 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
             })
     }
 
-    return <div className={ "grid lg:grid-cols-2 gap-2 "+(props.active ? `p-4 ${unibox}` : '')}>
+    return <div className="grid lg:grid-cols-2 gap-2 p-4">
 
         <div className="flex flex-col lg:flex-row gap-4 items-start">
             <EventDate

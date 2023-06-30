@@ -48,7 +48,7 @@ export function LoginPage() {
         <div
           className="w-full h-screen relative flex flex-col justify-center items-center ">
             <div
-              className={`z-10 bg-white shadow-lg  border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-(old)-none select-none' : ''}`}>
+              className={`z-10 bg-white shadow-lg  border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
                     <div className="font-bold text-2xl mb-5">eni.wien</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"

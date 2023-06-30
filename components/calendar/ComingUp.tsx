@@ -12,7 +12,7 @@ import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {clickable} from "../../util/styles";
+import {Clickable} from "../../app/(components)/Clickable";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
@@ -33,9 +33,9 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             <SectionHeader id="coming-up">Die nächsten Tage</SectionHeader>
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
                 {groups.slice(0, 6).map(([group, eventsObject]) =>
-                    <Link
+                    <Clickable
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`p-4 pb-8 rounded-xl relative overflow-hidden ${clickable}`}
+                        className={`p-4 pb-8 rounded-xl relative overflow-hidden`}
                     >
                         <div className="flex gap-2 items-start justify-center my-4">
                             <div className="text-2xl font-bold">{group}</div>
@@ -48,20 +48,20 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                 loaded: true
                             }} liturgy={{}} filter={null}/>
                         </div>
-                    </Link>
+                    </Clickable>
                 )}
                 {groups.slice(6).map(([group]) =>
-                    <Link
+                    <Clickable
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                        className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}
+                        className={`rounded-2xl text-xl text-center font-bold p-4 block`}
                     >
                         {group}
-                    </Link>)}
+                    </Clickable>)}
             </div>
-            <Link href={`${urlPrefix}/termine`}
-                  className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 mt-2 block`}>
+            <Clickable href={`${urlPrefix}/termine`}
+                  className={`rounded-2xl text-xl text-center font-bold p-4 mt-2 block`}>
                 Alle Termine
-            </Link>
+            </Clickable>
         </div>
     </Responsive>;
 }
