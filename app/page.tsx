@@ -16,7 +16,6 @@ import {EmmausSections} from "../components/EmmausSections";
 import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
-import {ComingUp2} from "../components/calendar/ComingUp2";
 import Responsive from "../components/Responsive";
 
 export const revalidate = 300
