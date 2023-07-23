@@ -1,11 +1,11 @@
 import React, {ReactNode} from 'react';
 import Site from '../../../components/Site';
 import {getLiturgyData} from "../../api/liturgy";
-import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
+import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import Responsive from "../../../components/Responsive";
 import {CalendarName} from "../../../util/calendar-info";
 import Link from "next/link";
-import {useAuthenticatedUserStore} from "../../../util/use-user-store";
+import {useAuthenticatedUserStore} from "../../../util/store/use-user-store";
 import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
 

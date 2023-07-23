@@ -3,7 +3,7 @@ import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import Button from '../../components/Button';
 import {fetchJson} from '../../util/fetch-util';
-import {useUserStore} from '../../util/use-user-store';
+import {useUserStore} from '../../util/store/use-user-store';
 
 function Input(props: { label: string, value: string, onChange: (text: string) => any }) {
     return <div className="my-2">

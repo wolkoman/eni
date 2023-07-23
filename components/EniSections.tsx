@@ -1,3 +1,5 @@
+"use client"
+
 import {Section} from './Section';
 import Link from 'next/link';
 import React from 'react';
@@ -10,7 +12,6 @@ import {motion} from 'framer-motion';
 
 export function EniSections() {
     return <Responsive>
-        <Section title="Mitteilungen">
             <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center" id="wochenmitteilungen">
                 <div className="flex flex-col items-center">
                     <img src="./logo/wochenblatt.svg" className="h-44 mb-12"/>
@@ -62,7 +63,6 @@ export function EniSections() {
                     </div>
                 </div>
             </div>
-        </Section>
         <Personal/>
         <Section title="Pfarren">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">

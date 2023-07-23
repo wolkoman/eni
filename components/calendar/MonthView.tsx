@@ -1,14 +1,13 @@
 import {FilterType, getMonthName, getWeekDayName} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
-import {Preference, usePreference} from "../../util/use-preference";
 import {useState} from "../../util/use-state-util";
 import {Settings} from "../Settings";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
 import {getCalendarInfo} from "../../util/calendar-info";
 import React from "react";
-import {ReducedCalendarState} from "../../pages/termine";
 import {EventSearch} from "./EventSearch";
+import {ReducedCalendarState} from "../../app/termine/EventPage";
 
 export function MonthView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState }) {
     const [search, setSearch] = useState("");

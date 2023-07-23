@@ -1,17 +1,20 @@
+"use client";
+
 import React, {useEffect} from 'react';
-import Site from '../components/Site';
-import Button from '../components/Button';
+import Site from '../../../components/Site';
+import Button from '../../../components/Button';
 import {toast} from 'react-toastify';
-import {useState} from '../util/use-state-util';
-import {useRouter} from 'next/router';
-import {useUserStore} from '../util/use-user-store';
+import {useState} from '../../../util/use-state-util';
+import {useRouter, useSearchParams} from 'next/navigation';
+import {useUserStore} from '../../../util/store/use-user-store';
 import Link from "next/link";
 
-export default function Events() {
+export function LoginPage() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
     const [disabled, setDisabled] = useState(false);
     const [user, _login, setJwt, loading] = useUserStore(state => [state.user, state.login, state.setJwt, state.loading])
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         if (!user?.active) {
@@ -19,12 +22,12 @@ export default function Events() {
         }
     }, [user, router, setData]);
     useEffect(() => {
-        if (router.query.jwt) setJwt(router.query.jwt as string).then(onLogin);
-    }, [router.query.jwt])
+        if (searchParams.has("jwt")) setJwt(searchParams.get("jwt")!).then(onLogin);
+    }, [searchParams])
 
     function onLogin() {
         setDisabled(true);
-        router.push(router.query.redirect ? router.query.redirect as string : '/intern');
+        router.push(searchParams.has("redirect") ? searchParams.get("redirect") as string : '/intern');
     }
 
     function login() {
@@ -33,8 +36,8 @@ export default function Events() {
             pending: 'Anmeldung läuft...',
             success: 'Anmeldung erfolgreich'
         })
-            .then(() => onLogin())
-            .catch(() => setPartialData({password: ''}));
+          .then(() => onLogin())
+          .catch(() => setPartialData({password: ''}));
     }
 
     function buttonDisabled() {
@@ -43,9 +46,9 @@ export default function Events() {
 
     return <Site navbar={false} responsive={false} footer={false} title="Login">
         <div
-            className="w-full h-screen relative flex flex-col justify-center items-center ">
+          className="w-full h-screen relative flex flex-col justify-center items-center ">
             <div
-                className={`z-10 bg-white shadow-lg  border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
+              className={`z-10 bg-white shadow-lg  border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
                     <div className="font-bold text-2xl mb-5">eni.wien</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"

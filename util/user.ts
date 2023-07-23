@@ -1,6 +1,5 @@
 import {Permissions} from './verify';
 import {CalendarName} from "./calendar-info";
-
 export interface User {
     name: string,
     email?: string,

@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
 import {saveFile} from "../../../util/save-file";
-import {useAuthenticatedUserStore} from "../../../util/use-user-store";
+import {useAuthenticatedUserStore} from "../../../util/store/use-user-store";
 import {Permission} from "../../../util/verify";
 import Button from "../../../components/Button";
 import Responsive from "../../../components/Responsive";

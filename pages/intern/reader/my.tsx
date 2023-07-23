@@ -1,12 +1,13 @@
 import React from 'react';
-import {useUserStore} from "../../../util/use-user-store";
+import {useUserStore} from "../../../util/store/use-user-store";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
-import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
+import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
 import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "../../../util/reader";
 import Button from "../../../components/Button";
 import {fetchJson} from "../../../util/fetch-util";
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
+import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
     const order = ["H", "F", "G", "", "g"];
@@ -15,7 +16,8 @@ export function compareLiturgy(a: Liturgy, b: Liturgy) {
 
 export default function Index(props: { liturgy: LiturgyData }) {
 
-    const {readers, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
+    const {readers, readerData, setReaderData,  ...reader} = useAuthenticatedReaderStore();
+    const {items: events} = useAuthenticatedCalendarStore();
     const [user] = useUserStore(state => [state.user]);
     const myTasks = getTasksFromReaderData(readerData, eventId => events.find(e => e.id === eventId)!)
         .filter(task => task.data.userId === user?._id && task.event.calendar === reader.parish)
