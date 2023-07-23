@@ -3,7 +3,6 @@
 import React from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '../../util/store/use-calendar-store';
 import Responsive from '../Responsive';
-import Link from "next/link";
 import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {Preference, usePreference} from "../../util/store/use-preference";

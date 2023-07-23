@@ -51,7 +51,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
                     items={items}
                 >
                     {(([date, events], index, all) => <div
-                        key={date}
+                        key={date + index}
                         data-date={date}
                         className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                     >
@@ -71,6 +71,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
                                 }))
                                 .map(({event, suggestion}) =>
                                     <EditableEvent
+                                        key={event.id}
                                         small={!props.filterSlot}
                                         editable={!!(user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && (user.parish === "all" || user.parish === event.calendar)) && props.editable}
                                         isEdited={event.id === editEventId}
@@ -82,8 +83,9 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
 
                             {openSuggestions
                                 .filter(suggestion => suggestion.type === "add" && suggestion.data.date[0][1] === date)
-                                .map(suggestion =>
+                                .map((suggestion, index) =>
                                     <EditableEvent
+                                      key={index}
                                         small={!props.filterSlot}
                                         editable={props.editable}
                                         isEdited={`suggestion_${suggestion._id}` === editEventId}

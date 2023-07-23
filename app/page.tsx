@@ -32,14 +32,7 @@ export default async function HomePage() {
     <ChristmasDisplay eventsObject={eventsObject}/>
     <Responsive size="md">
       <ComingUp eventsObject={eventsObject}/>
-      {/*<div className="flex p-10 gap-10">
-      <div className="w-1/3">
-        <ComingUp2 eventsObject={eventsObject}/>
-      </div>
-      <div className="w-2/3">
-        <Instagram items={await fetchInstagramFeed()}/>
-      </div>
-    </div>*/}
+      <Instagram items={await fetchInstagramFeed()}/>
     </Responsive>
     <EniSections/>
   </Site>, async () => <Site
@@ -55,7 +48,9 @@ export default async function HomePage() {
       <Articles items={await fetchArticles()} sites={await fetchEmmausSites()}/>
       <ComingUp eventsObject={eventsObject}/>
       <EmmausSections emmausbote={await fetchEmmausbote()}/>
-      <Instagram items={await fetchInstagramFeed()}/>
+      <Responsive>
+        <Instagram items={await fetchInstagramFeed()}/>
+      </Responsive>
     </div>
   </Site>)();
 }

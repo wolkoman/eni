@@ -7,6 +7,7 @@ import React, {MouseEventHandler, useState} from "react";
 import {AnimatePresence, motion} from 'framer-motion'
 
 import {Clickable} from "../app/(components)/Clickable";
+import {SectionHeader} from "./SectionHeader";
 
 export interface InstagramFeedItem {
   id: string,
@@ -99,6 +100,7 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
   const [item, setItem] = useState<InstagramFeedItem | null>();
 
   return <div className="my-8">
+    <SectionHeader id="einblick">Einblick ins Pfarrleben</SectionHeader>
     <AnimatePresence>{item && <InstagramScreen item={item} close={() => setItem(null)}/>}</AnimatePresence>
     <div className="grid lg:grid-cols-2 gap-8">
       {feed.map((item, index) =>
