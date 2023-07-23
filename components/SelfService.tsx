@@ -12,10 +12,11 @@ export function Field(props: { children: ReactNode, label: string }) {
     </div>;
 }
 
-export function SelfServiceInput<S extends SSType>(props: { type?: string, input?: 'textarea', disabled?: boolean } & SSProps<S>) {
+export function SelfServiceInput<S extends SSType>(props: { type?: string, input?: 'textarea', disabled?: boolean, placeholder?: string } & SSProps<S>) {
     const Tag = props.input ?? "input";
     return <Tag
         {...(Tag === "input" ? {type: props.type} : {})}
+        placeholder={props.placeholder}
         disabled={props.disabled}
         value={props.form[0][props.name]}
         onChange={({target}) => props.form[1](rest => ({...rest, [props.name]: target.value}))}

@@ -1,6 +1,7 @@
 module.exports = {
     experimental: {
         appDir: true,
+        serverActions: true
     },
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
         config.externals.push({

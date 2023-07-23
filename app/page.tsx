@@ -16,8 +16,8 @@ import {EmmausSections} from "../components/EmmausSections";
 import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
-import {ComingUp2} from "../components/calendar/ComingUp2";
 import Responsive from "../components/Responsive";
+import {PrayerWall} from "./PrayerWall";
 
 export const revalidate = 300
 
@@ -49,6 +49,7 @@ export default async function HomePage() {
       <ComingUp eventsObject={eventsObject}/>
       <EmmausSections emmausbote={await fetchEmmausbote()}/>
       <Responsive>
+        <PrayerWall/>
         <Instagram items={await fetchInstagramFeed()}/>
       </Responsive>
     </div>

@@ -7,6 +7,7 @@ declare module 'cockpit-sdk' {
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
+    'prayers': { name: string, concern: string, prayedCount: string, publicPrayer: string, blocked: boolean } & Object,
     'cache': {
       key: string,
       value: string,
