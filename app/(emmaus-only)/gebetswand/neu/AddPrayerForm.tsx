@@ -16,7 +16,7 @@ export function AddPrayerForm() {
     await submitPrayer(form[0])
     setState("")
     form[1](emptyForm)
-    router.push("/")
+    router.push("/#gebetswand")
   }
 
   return <div className="max-w-lg">

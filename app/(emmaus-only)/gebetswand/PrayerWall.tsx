@@ -16,21 +16,21 @@ export function PrayerWall() {
     fetchPrayers().then(setPrayers)
   })
 
-  return <Section title="Gebetswand">
+  return <Section title="Gebetswand" id="gebetswand">
     <div>
       Schreiben Sie Ihr Anliegen an die virtuelle Gebetswand, dass auch andere dafür beten können (30 Tage
       öffentlich sichtbar).
       Oder beten Sie für ein Anliegen der Gemeinde.
     </div>
     <div className="">
-      <div className="grid grid-cols-2 gap-4">
-        {prayer === undefined && <EniLoading/>}
+      {prayer === undefined && <EniLoading/>}
+      <div className="grid grid-cols-2 gap-4 my-4">
         {prayer?.map(prayer =>
           <PrayerCard key={prayer._id} prayer={prayer}/>
         )}
       </div>
       <div className="flex justify-end gap-2">
-        <Link href="/prayerwall/add">
+        <Link href="/gebetswand/neu">
           <Button label="Anliegen einbringen"/>
         </Link>
       </div>

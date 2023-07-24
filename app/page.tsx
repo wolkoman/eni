@@ -17,7 +17,7 @@ import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
-import {PrayerWall} from "./(emmaus-only)/prayerwall/PrayerWall";
+import {PrayerWall} from "./(emmaus-only)/gebetswand/PrayerWall";
 
 export const revalidate = 300
 
