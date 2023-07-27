@@ -6,7 +6,7 @@ export async function fetchInstagramFeed(){
     const instagramAuth = await cockpit.collectionGet("internal-data", {filter: {id: "instagram"}});
     const instagramToken = instagramAuth.entries[0].data.token;
 
-    return await Promise.resolve().then(() => fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,caption&limit=100&access_token=${instagramToken}`))
+    return await Promise.reject().then(() => fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,caption&limit=100&access_token=${instagramToken}`))
         .then(response => response.json())
         .then(response => response.data
             ?.filter((post: any) => post.caption?.toLowerCase().includes(site('', 'emmaus')))
