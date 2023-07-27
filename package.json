@@ -28,7 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "ls": "^0.2.1",
     "msw": "^0.49.2",
-    "next": "^13.4.6",
+    "next": "^13.0.7",
     "node-fetch": "^3.3.0",
     "pdf-merger-js": "^4.2.0",
     "pdfjs-dist": "^3.4.120",

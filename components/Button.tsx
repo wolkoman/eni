@@ -1,5 +1,3 @@
-"use client"
-
 import React, {ReactNode, useState} from 'react';
 
 export default function Button(props: {label: ReactNode, sure?: true, onClick?: () => any, secondary?: boolean, disabled?: boolean, big?: boolean, className?: string}) {

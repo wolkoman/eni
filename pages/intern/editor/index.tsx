@@ -2,7 +2,7 @@ import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import {fetchJson} from "../../../util/fetch-util";
-import {useAuthenticatedUserStore} from "../../../util/store/use-user-store";
+import {useAuthenticatedUserStore} from "../../../util/use-user-store";
 import {InternButton} from "../../../components/InternButton";
 import {usePermission} from "../../../util/use-permission";
 import {Permission} from "../../../util/verify";

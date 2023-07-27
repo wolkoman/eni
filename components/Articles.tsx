@@ -2,6 +2,7 @@ import Link from 'next/link';
 import * as React from 'react';
 import {cockpit} from '../util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
+import {Section} from './Section';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
 
@@ -56,7 +57,7 @@ export default function Articles(props: { items: Collections['article'][], sites
                 <SectionHeader>Über uns</SectionHeader>
                 <div className="grid md:grid-cols-3 gap-4 my-6">
                     {props.sites.filter(site => site.level === 0).map(site =>
-                        <Link href={"/seite/" + site.slug}>
+                        <Link href={"/" + site.slug}>
                             <div
                                 className="p-4 py-6 rounded border border-emmaus/20 hover:bg-emmaus/5 font-bold text-lg cursor-pointer text-center">{site.name}</div>
                         </Link>

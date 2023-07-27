@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
+import {groupEventsByDate} from "../../../util/use-calendar-store";
 import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../util/reader";
-import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
+import {useAuthenticatedReaderStore} from "../../../util/use-reader-store";
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
-import {Clickable} from "../../../app/(components)/Clickable";
+import {clickable, unibox} from "../../../components/calendar/ComingUp";
 
 function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {
 
@@ -43,9 +43,8 @@ function LiturgyEvent(props: {
     selectPerson: (role: ReaderRole, userId: string | null) => any,
 }) {
     const activeLiturgy = props.liturgies.find(liturgy => liturgy.name === props.readerData?.liturgy);
-    return <Clickable
-      disabled={!props.active}
-        className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"}`}>
+    return <div
+        className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"} ${props.active ? unibox : clickable}`}>
         <div
             className={`flex gap-1 px-3 py-0.5 w-full print:p-0 print:hidden`}
             onClick={props.setActive}>
@@ -99,15 +98,14 @@ function LiturgyEvent(props: {
 
         </div>
 
-    </Clickable>;
+    </div>;
 }
 
 export default function Index(props: { liturgy: LiturgyData }) {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
-    const {items: events} = useAuthenticatedCalendarStore();
-    const {readers, communionMinisters, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
+    const {readers, communionMinisters, readerData, setReaderData, events, ...reader} = useAuthenticatedReaderStore();
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;

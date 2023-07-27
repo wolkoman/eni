@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         is_person: true
     };
     const jwt = sign(userlikeObject, secretOrPrivateKey, {algorithm: 'RS256', expiresIn: "90d"})
-    const link = `https://eni.wien/intern/login?redirect=/intern/reader/my&jwt=${jwt}`
+    const link = `https://eni.wien/login?redirect=/intern/reader/my&jwt=${jwt}`
 
     if (eventIds.length !== req.body.eventIds.length || eventIds.some(eventId => !req.body.eventIds.includes(eventId)) || !person) {
         res.status(400).json({errorMessage: 'Wrong request'});

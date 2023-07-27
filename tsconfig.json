@@ -22,18 +22,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "incremental": true
   },
   "include": [
     "src",
     "pages",
-    "components",
-    ".next/types/**/*.ts"
+    "components"
   ],
   "exclude": [
     "node_modules"
