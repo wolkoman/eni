@@ -63,7 +63,7 @@ export default function EventPage(props: {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (searchParams.get("q")) setFilter({filterType: "GROUP", group: searchParams.get("q") as CalendarGroup})
+    if (searchParams.get("g")) setFilter({filterType: "GROUP", group: searchParams.get("g") as CalendarGroup})
     if (searchParams.get("p")) setFilter({filterType: "PARISH", parish: searchParams.get("p") as CalendarName})
   }, [searchParams]);
   useEffect(() => {
