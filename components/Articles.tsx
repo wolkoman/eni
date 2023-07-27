@@ -42,7 +42,7 @@ export default function Articles(props: { items: Collections['article'][], sites
                     <div><ArticleCard article={props.items[1]}/></div>
                     <div>
                         <ArticleCard article={props.items[2]}/>
-                        <Link href="/artikel">
+                        <Link href="/app/page.tsx">
                         <div
                             className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle
                             Beiträge
