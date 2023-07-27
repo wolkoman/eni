@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
-import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from "../../util/store/use-calendar-store";
+import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from "../../util/use-calendar-store";
 import {Permission} from "../../util/verify";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
+import {useAuthenticatedUserStore} from "../../util/use-user-store";
 import {Event} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
 import {CalendarName} from "../../util/calendar-info";
@@ -40,7 +40,7 @@ export default function LimitedEventEditing() {
             error: "Ein Fehler hat das Speichern verhindert",
             pending: "Musik wird gespeichert..."
         }).then(event => {
-            load();
+            load(user!._id);
             setCurrentEvent(event);
         });
     }

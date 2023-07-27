@@ -2,7 +2,7 @@ import React from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {useAuthenticatedUserStore, useUserStore} from '../../util/store/use-user-store';
+import {useAuthenticatedUserStore, useUserStore} from '../../util/use-user-store';
 import {InternButton} from "../../components/InternButton";
 
 

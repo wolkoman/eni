@@ -2,6 +2,7 @@ import Link from 'next/link';
 import * as React from 'react';
 import {cockpit} from '../util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
+import {Section} from './Section';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
 
@@ -42,7 +43,7 @@ export default function Articles(props: { items: Collections['article'][], sites
                     <div><ArticleCard article={props.items[1]}/></div>
                     <div>
                         <ArticleCard article={props.items[2]}/>
-                        <Link href="/app/page.tsx">
+                        <Link href="/artikel">
                         <div
                             className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle
                             Beiträge

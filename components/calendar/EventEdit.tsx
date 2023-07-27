@@ -1,6 +1,6 @@
 import {CalendarName} from "../../util/calendar-info";
-import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
+import {useAuthenticatedCalendarStore} from "../../util/use-calendar-store";
+import {useAuthenticatedUserStore} from "../../util/use-user-store";
 import {useState} from "react";
 import {fetchJson} from "../../util/fetch-util";
 import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
@@ -35,7 +35,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
             success: "Die Änderung wurde vorgeschlagen. Sie ist noch nicht öffentlich."
         }).then(suggestion => {
             props.onClose();
-            addSuggestion(suggestion);
+            addSuggestion(suggestion, user!._id);
         }).finally(() => setLoading(false))
     }
 

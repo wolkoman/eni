@@ -2,6 +2,7 @@ import TopBar from './TopBar';
 import Responsive from './Responsive';
 import {ReactNode} from 'react';
 import Footer from './Footer';
+import Head from 'next/head';
 import {site} from '../util/sites';
 
 export default function Site(props: {
@@ -16,7 +17,19 @@ export default function Site(props: {
     navbar?: boolean,
     footer?: boolean
 }) {
+    const title = (props.title ? `${props.title} | ` : '') + site("eni.wien", "Pfarre Emmaus");
+    const description = props.description ?? site("Miteinander der Pfarren Emmaus, St. Nikolaus und Neustift", "Katholische Pfarre im zehnten Wiener Gemeindebezirk");
     return <>
+        <Head>
+            <title>{title}</title>
+            {props.author && <meta name="author" content={props.author}/>}
+            <meta name="description" content={props.description}/>
+            {props.keywords && <meta name="keywords" content={props.keywords.join(", ")}/>}
+            <link rel="shortcut icon" type="image/png" href={(site("/favicon.png", "/favicon-emmaus.png"))}/>
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <meta property="og:image" content="/social.png" />
+        </Head>
         <div style={{minHeight: '100vh'}} className="flex flex-col justify-between">
             <div className="flex-grow flex flex-col items-stretch">
                 {(props.navbar ?? true) && <>
@@ -28,7 +41,7 @@ export default function Site(props: {
                         </div>
                     </div>)}
                 </>}
-                {(props.responsive ?? true) ? <Responsive size={props.narrow ? "sm" : "md"}>
+                {(props.responsive ?? true) ? <Responsive narrow={props.narrow}>
                     {props.title && props.showTitle ? <div className="font-bold text-2xl my-4">{site(props.title, null)}</div> : null}
                     {props.children}
                 </Responsive> : props.children}

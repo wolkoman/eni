@@ -1,17 +1,17 @@
 import create from 'zustand';
-import {fetchJson} from '../fetch-util';
-import {User} from '../user';
+import {fetchJson} from './fetch-util';
+import {User} from './user';
 import {useEffect} from "react";
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
 import {JwtPayload, verify} from "jsonwebtoken";
-import {combine} from "zustand/middleware";
 
 export function useAuthenticatedUserStore() {
-    const state = useUserStore(state => state);
+
+    const [load, loaded, user] = useUserStore(state => [state.load, state.loaded, state.user]);
     useEffect(() => {
-        state.load();
+        load();
     }, [])
-    return state;
+    return {user, loaded};
 }
 
 function decodeJwt(jwt: string): { user: User, exp: number } {
@@ -19,19 +19,25 @@ function decodeJwt(jwt: string): { user: User, exp: number } {
     return {user: payload as User, exp: payload.exp!};
 }
 
-export const useUserStore = create(combine({
-    user: null as User | null,
+export const useUserStore = create<{
+    setJwt: (jwt: string) => Promise<any>,
+    user?: User,
+    load: () => void,
+    login: (data: { username: string, password: string }) => Promise<any>,
+    logout: () => void,
+    loaded: boolean,
+    loading: boolean,
+}>((set, get) => ({
     loaded: false,
     loading: false,
-},(set, get) => ({
-    setJwt: async (jwt: string) => {
+    setJwt: async (jwt) => {
         if (get().loading) return;
         set(state => ({...state, loading: true}));
         setCookie("jwt", jwt);
         const {user} = decodeJwt(jwt);
         set({user, loaded: true, loading: false});
     },
-    login: (data: { username: string, password: string }) => {
+    login: (data) => {
         if (get().loading) return Promise.resolve();
         set(state => ({...state, loading: true}));
         return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
@@ -54,4 +60,4 @@ export const useUserStore = create(combine({
         if(typeof jwt !== "string") return;
         set({user: decodeJwt(jwt).user, loaded: true});
     }
-})));
+}));

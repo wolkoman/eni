@@ -1,9 +1,9 @@
 import create from 'zustand';
-import {fetchJson} from '../fetch-util';
-import {CalendarEvent, CalendarGroup, EventsObject} from "../calendar-types";
+import {fetchJson} from './fetch-util';
+import {CalendarEvent, CalendarGroup, EventsObject} from "./calendar-types";
 import {useEffect} from "react";
+import {useAuthenticatedUserStore} from "./use-user-store";
 import {Collections} from "cockpit-sdk";
-import {combine} from "zustand/middleware";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({
@@ -27,25 +27,39 @@ export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolea
     }), {} as any)
 }
 
+interface CalendarState {
+    items: CalendarEvent[];
+    originalItems: CalendarEvent[];
+    cache?: string;
+    loading: boolean;
+    loaded: boolean;
+    error: boolean;
+    openSuggestions: Collections["eventSuggestion"][];
+    load: (userId: string) => void;
+    addSuggestion: (suggestion: Collections["eventSuggestion"], userId: string) => void;
+    answerSuggestion: (suggestionId: string, accept: boolean) => void
+
+}
+
+
 export function useAuthenticatedCalendarStore() {
+    const {user} = useAuthenticatedUserStore();
     const state = useCalendarStore(state => state);
     useEffect(() => {
-        state.load();
-    }, []);
+        if (user) state.load(user._id);
+    }, [user]);
     return state;
 }
 
-export const useCalendarStore = create(combine({
-    items: [] as CalendarEvent[],
-    originalItems: [] as CalendarEvent[],
-    openSuggestions: [] as Collections["eventSuggestion"][],
+export const useCalendarStore = create<CalendarState>((set, get) => ({
+    items: [],
+    originalItems: [],
+    openSuggestions: [],
     loaded: false,
     loading: false,
     error: false,
-    cache: undefined as string | undefined,
     lastLoadedWithToken: 'none',
-},(set, get) => ({
-    load: () => {
+    load: (userId: string) => {
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
@@ -62,23 +76,23 @@ export const useCalendarStore = create(combine({
             .catch((err) => {
                 console.log({err})
                 setTimeout(() => {
-                    // set(state => ({...state, loaded: false}));
-                    // get().load(userId);
+                    set(state => ({...state, loaded: false}));
+                    get().load(userId);
                 }, 3000);
                 set({items: [], loaded: true, loading: false, error: true});
             });
     },
-    addSuggestion: (suggestion: Collections["eventSuggestion"]) => {
+    addSuggestion: (suggestion: Collections["eventSuggestion"], userId) => {
         const newOpenSuggestions = [...get().openSuggestions.filter(sug => sug.eventId !== suggestion.eventId), suggestion];
         set({
             openSuggestions: newOpenSuggestions
         });
     },
-    removeSuggestion: (suggestionId: string) => {
+    answerSuggestion: (suggestionId, accept) => {
         set(({openSuggestions}) => ({
                 openSuggestions: openSuggestions.filter(suggestion => suggestion._id !== suggestionId),
             })
         )
     }
-})));
+}));
 

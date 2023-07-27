@@ -1,8 +1,8 @@
 import create from 'zustand';
-import {fetchJson} from '../fetch-util';
+import {fetchJson} from './fetch-util';
 import {useEffect} from "react";
-import {combine} from "zustand/middleware";
 import {Collections} from "cockpit-sdk";
+import {combine} from "zustand/middleware";
 
 export function useAuthenticatedSuggestionsStore() {
     const state = useSuggestionsStore(state => state);
@@ -11,11 +11,7 @@ export function useAuthenticatedSuggestionsStore() {
 }
 
 export const useSuggestionsStore = create(combine(
-    {
-      loading: false,
-      loaded: false,
-      items: [] as Collections['eventSuggestion'][]
-    },
+    {loading: false, loaded: false, items: [] as Collections['eventSuggestion'][]},
     (set, get) => ({
         add: (suggestion: Collections['eventSuggestion']) => {
             set(({items}) => ({items: [...items, suggestion]}));

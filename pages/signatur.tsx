@@ -1,26 +1,15 @@
-"use client"
-
-import React, {useRef, useState} from "react";
+import React, {useRef, useState} from 'react';
+import Site from '../components/Site';
+import Button from "../components/Button";
 import {toast} from "react-toastify";
-import Site from "../../components/Site";
-import Button from "../../components/Button";
 
-function Signatur({signatur}: {
-  signatur: {
-    address: string;
-    mail: string;
-    name: string;
-    tel: string;
-    position: string;
-    parishes: { neustift: boolean; emmaus: boolean; inzersdorf: boolean }
-  }
-}) {
+function Signatur({signatur}: {signatur:{ address: string; mail: string; name: string; tel: string; position: string; parishes: { neustift: boolean; emmaus: boolean; inzersdorf: boolean } } }) {
   return <div style={{fontFamily: "Arial"}}>
     <div>
       <div style={{fontSize: 13, fontWeight: 'bold'}}>{signatur.name}</div>
       <div style={{fontSize: 12, fontStyle: 'italic'}}>{signatur.position}</div>
       {Object.values(signatur.parishes).some(x => x) && <div style={{fontSize: 12, fontStyle: ''}}>
-          Pfarre{' '}
+        Pfarre{' '}
         {[
           signatur.parishes.emmaus ? 'Emmaus am Wienerberg' : null,
           signatur.parishes.inzersdorf ? 'Inzersdorf St. Nikolaus' : null,
@@ -41,13 +30,13 @@ function Signatur({signatur}: {
       {signatur.address && <div>{signatur.address}</div>}
       <div>
         <img alt="signatur"
-             src="https://eni.wien/signatur.svg" width="500"/>
+            src="https://eni.wien/signatur.svg" width="500"/>
       </div>
     </div>
   </div>;
 }
 
-export function SignaturPage() {
+export default function HomePage() {
 
   const [signatur, setSignatur] = useState({
     name: 'Maximilian Mustermann',
@@ -60,79 +49,73 @@ export function SignaturPage() {
   const divRef = useRef<HTMLDivElement>();
 
   function copy() {
-    const type = "text/html";
-    const blob = new Blob([divRef.current!.innerHTML], {type});
-    const data = [new ClipboardItem({[type]: blob})];
+      const type = "text/html";
+      const blob = new Blob([divRef.current!.innerHTML], { type });
+      const data = [new ClipboardItem({ [type]: blob })];
 
-    navigator.clipboard.write(data).then(
-      function () {
-        toast("Signatur in Zwischenablage kopiert", {type: "success"});
-      },
-      function () {
-        toast("Fehler beim Kopieren", {type: "error"});
-      }
-    );
+      navigator.clipboard.write(data).then(
+          function () {
+            toast("Signatur in Zwischenablage kopiert", {type: "success"});
+          },
+          function () {
+            toast("Fehler beim Kopieren", {type: "error"});
+          }
+      );
   }
 
 
   return <Site title="Mail Signatur">
     <div className="text-lg font-bold">Daten</div>
     <div className="mb-12  grid md:grid-cols-2">
-      <div>
-        <div className="opacity-80 text-sm mt-2">Name</div>
-        <input
+      <div><div className="opacity-80 text-sm mt-2">Name</div>
+      <input
           className="px-2 py-1 border mb-1"
           value={signatur.name}
           onChange={(e) => setSignatur(x => ({...x, name: e.target.value}))}
-        /></div>
-      <div>
-        <div className="opacity-80 text-sm mt-2">Funktion</div>
-        <input
+      /></div>
+      <div><div className="opacity-80 text-sm mt-2">Funktion</div>
+      <input
           className="px-2 py-1 border mb-1"
           value={signatur.position}
           onChange={(e) => setSignatur(x => ({...x, position: e.target.value}))}
-        /></div>
-      <div>
-        <div className="opacity-80 text-sm mt-2">Mail Adresse</div>
-        <input
+      /></div>
+      <div><div className="opacity-80 text-sm mt-2">Mail Adresse</div>
+      <input
           className="px-2 py-1 border mb-1"
           value={signatur.mail}
           onChange={(e) => setSignatur(x => ({...x, mail: e.target.value}))}
-        /></div>
-      <div>
-        <div className="opacity-80 text-sm mt-2">Telefon</div>
-        <input
+      /></div>
+      <div><div className="opacity-80 text-sm mt-2">Telefon</div>
+      <input
           className="px-2 py-1 border mb-1"
           value={signatur.tel}
           onChange={(e) => setSignatur(x => ({...x, tel: e.target.value}))}
-        /></div>
-      <div>
-        <div className="opacity-80 text-sm mt-2">Adresse</div>
-        <input
+      /></div>
+      <div><div className="opacity-80 text-sm mt-2">Adresse</div>
+      <input
           className="px-2 py-1 border mb-1"
           value={signatur.address}
           onChange={(e) => setSignatur(x => ({...x, address: e.target.value}))}
-        /></div>
-      <div>
-        <div className="opacity-80 text-sm mt-2">Pfarren</div>
-        <input
+      /></div>
+      <div><div className="opacity-80 text-sm mt-2">Pfarren</div>
+      <input
           type="checkbox"
           className="px-2 py-1 border mb-1"
           checked={signatur.parishes.emmaus}
           onChange={(e) => setSignatur(x => ({...x, parishes: {...x.parishes, emmaus: e.target.checked}}))}
-        />
-        <input
+      />
+      <input
           type="checkbox"
           className="px-2 py-1 border mb-1"
           checked={signatur.parishes.inzersdorf}
           onChange={(e) => setSignatur(x => ({...x, parishes: {...x.parishes, inzersdorf: e.target.checked}}))}
-        />
-        <input
+      />
+      <input
           type="checkbox"
           className="px-2 py-1 border mb-1"
           checked={signatur.parishes.neustift}
           onChange={(e) => setSignatur(x => ({...x, parishes: {...x.parishes, neustift: e.target.checked}}))}
-        /></div>
+      /></div>
     </div>
 
 

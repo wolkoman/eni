@@ -1,9 +1,7 @@
-"use client"
-
 import Link from 'next/link';
 import React, {ReactNode} from 'react';
 import Responsive from './Responsive';
-import {useAuthenticatedUserStore} from '../util/store/use-user-store';
+import {useAuthenticatedUserStore} from '../util/use-user-store';
 import {site} from '../util/sites';
 import Button from "./Button";
 import {useEmmausProd} from "../util/use-emmaus-prod";
@@ -37,33 +35,32 @@ export default function Footer() {
                     <div>
                         <Title>Offenlegung</Title>
                         {site(<>
-                              HerausgeberIn, Alleininhaber, Redaktion:<br/>
-                              Röm.-kath. Pfarre Emmaus am Wienerberg,<br/>
-                              Röm.-kath. Pfarre Inzersdorf,<br/>
-                              Röm.-kath. Pfarre Inzersdorf-Neustift
-                              <Link href="/impressum">
-                                  <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
-                              </Link>
-                          </>,
-                          <>
-                              HerausgeberIn, Alleininhaber, Redaktion:<br/>
-                              Röm.-kath. Pfarre Emmaus am Wienerberg
-                              <Link href="/impressum">
-                                  <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
-                              </Link>
-                          </>
+                                HerausgeberIn, Alleininhaber, Redaktion:<br/>
+                                Röm.-kath. Pfarre Emmaus am Wienerberg,<br/>
+                                Röm.-kath. Pfarre Inzersdorf,<br/>
+                                Röm.-kath. Pfarre Inzersdorf-Neustift
+                                <Link href="/impressum">
+                                    <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
+                                </Link>
+                            </>,
+                            <>
+                                HerausgeberIn, Alleininhaber, Redaktion:<br/>
+                                Röm.-kath. Pfarre Emmaus am Wienerberg
+                                <Link href="/impressum">
+                                    <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
+                                </Link>
+                            </>
                         )}
                     </div>
                     <div>
                         <Title>Interner Zugang</Title>
                         Wenn Sie Zugang zu den internen Systemen der {site(<>Pfarren</>, <>Pfarre</>)} brauchen, melden Sie sich in der
                         Pfarrkanzlei unter kanzlei@eni.wien.
-                        {site(<div className="mt-2">
-                            <Link href={"/intern/login"}>
+                        <div className="mt-2">
+                            <Link href={emmausProd ? "https://eni.wien/intern" : "/intern"}>
                                 <Button label="Login"/>
                             </Link>
-                        </div>, <></>)}
-
+                        </div>
                     </div>
                 </div>
             </Responsive>

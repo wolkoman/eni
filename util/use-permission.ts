@@ -1,6 +1,6 @@
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
-import {useAuthenticatedUserStore} from './store/use-user-store';
+import {useAuthenticatedUserStore} from './use-user-store';
 import {Permission} from './verify';
 
 export const usePermission = (requiredPermissions: Permission[] = []) => {
@@ -10,9 +10,9 @@ export const usePermission = (requiredPermissions: Permission[] = []) => {
         if (!loaded) return;
         const unauthorized = requiredPermissions.some(p => !user?.permissions[p]);
         if (unauthorized) {
-            router.push('/intern/login');
+            router.push('/login');
         }else if (!user) {
-            router.push('/');
+            router.push('/login');
         }
     }, [loaded, user]);
 };

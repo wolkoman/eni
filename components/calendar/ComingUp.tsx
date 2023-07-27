@@ -1,17 +1,18 @@
-"use client"
-
 import React from 'react';
-import {groupEventsByDate, groupEventsByGroup,} from '../../util/store/use-calendar-store';
+import {groupEventsByDate, groupEventsByGroup,} from '../../util/use-calendar-store';
 import Responsive from '../Responsive';
+import Link from "next/link";
 import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
-import {Preference, usePreference} from "../../util/store/use-preference";
+import {Preference, usePreference} from "../../util/use-preference";
 import {CalendarName} from "../../util/calendar-info";
 import {site} from "../../util/sites";
 import {getGroupSorting} from "../../util/calendar-group";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {Clickable} from "../../app/(components)/Clickable";
+
+export const unibox = "bg-black/[2%]  rounded-lg border border-black/[5%] transition";
+export const clickable = unibox + " hover:bg-black/[4%] cursor-pointer";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);
@@ -32,9 +33,9 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             <SectionHeader id="coming-up">Die nächsten Tage</SectionHeader>
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
                 {groups.slice(0, 6).map(([group, eventsObject]) =>
-                    <Clickable
+                    <Link
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
-                        className={`p-4 pb-8 rounded-xl relative overflow-hidden`}
+                        className={`p-4 pb-8 rounded-xl relative overflow-hidden ${clickable}`}
                     >
                         <div className="flex gap-2 items-start justify-center my-4">
                             <div className="text-2xl font-bold">{group}</div>
@@ -47,20 +48,20 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                                 loaded: true
                             }} liturgy={{}} filter={null}/>
                         </div>
-                    </Clickable>
+                    </Link>
                 )}
                 {groups.slice(6).map(([group]) =>
-                    <Clickable
+                    <Link
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                        className={`rounded-2xl text-xl text-center font-bold p-4 block`}
+                        className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 block`}
                     >
                         {group}
-                    </Clickable>)}
+                    </Link>)}
             </div>
-            <Clickable href={`${urlPrefix}/termine`}
-                  className={`rounded-2xl text-xl text-center font-bold p-4 mt-2 block`}>
+            <Link href={`${urlPrefix}/termine`}
+                  className={`rounded-2xl text-xl text-center font-bold ${clickable} p-4 mt-2 block`}>
                 Alle Termine
-            </Clickable>
+            </Link>
         </div>
     </Responsive>;
 }

@@ -10,7 +10,7 @@ import {
 import {cockpit} from "../../util/cockpit-sdk";
 import Button from "../../components/Button";
 import {notifyAdminFromClientSide} from "../../util/telegram";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
+import {useAuthenticatedUserStore} from "../../util/use-user-store";
 import {usePermission} from "../../util/use-permission";
 
 

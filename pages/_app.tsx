@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "../styles/globals.scss";
 
 // Used by next-fixutre.ts to pass requestInterceptor to each test,
@@ -16,6 +18,7 @@ export const requestInterceptor =
 function MyApp({Component, pageProps}: any) {
     return <>
         <Component {...pageProps} />
+        <ToastContainer position={'top-left'} newestOnTop={true}/>
     </>
 }
 

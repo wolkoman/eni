@@ -1,3 +1,4 @@
+import {toast} from 'react-toastify';
 
 type RequestInitPlus = RequestInit & { jwt?: string, json?: any };
 
@@ -16,5 +17,9 @@ export const fetchJson = (input: RequestInfo, init?: RequestInitPlus, toastOptio
         return response.json();
     });
   };
+  if(toastOptions !== undefined){
+    return toast.promise(fetchPlus(input, init), toastOptions);
+  }else{
     return fetchPlus(input, init);
+  }
 };

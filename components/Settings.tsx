@@ -1,7 +1,7 @@
 import {useRive, useStateMachineInput} from "@rive-app/react-canvas";
 import {useState} from "../util/use-state-util";
 import React, {useEffect} from "react";
-import {Preference, usePreference} from "../util/store/use-preference";
+import {Preference, usePreference} from "../util/use-preference";
 
 function SettingsOption(props: { title: string, description: string, name: Preference }) {
     const [preference, setPreference] = usePreference(props.name);
