@@ -8,7 +8,6 @@ import {Collections} from "cockpit-sdk";
 
 export function Event({event, suggestion, ...props}: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'], small?: boolean }) {
     const cancelled = event.tags?.includes(CalendarTag.cancelled);
-    const announcement = event.tags?.includes(CalendarTag.announcement);
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
@@ -17,17 +16,17 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
             <div className={`pr-3 pt-1.5 shrink-0 ${props.small ? "w-[40px]" : "w-[100px] lg:w-[110px]"}`}>
                 <ParishDot info={info} small={props.small}/>
             </div>
-            <div className={`${props.small ? "w-[50px]" : "w-[50px] lg:w-[60px]"} flex-shrink-0 mr-2 ${cancelled || 'font-semibold'}`}>
+            <div className={`${props.small ? "w-[50px]" : "w-[50px] lg:w-[60px]"} flex-shrink-0 mr-2 font-semibold ${cancelled && 'line-through'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">
-                <div className={`${cancelled || 'font-semibold'}`}>
+                <div className={`font-semibold ${cancelled && 'line-through'}`}>
                     <DiffView>{suggestion?.data.summary ?? event.summary ?? ""}</DiffView>
                 </div>
                 <EventDescription event={event} suggestion={suggestion}/>
             </div>
             <div className="flex gap-1" data-testid="event">
-                {event.tags?.filter(tag => tag !== CalendarTag.announcement).map(tag => <EventTag key={tag} tag={tag}/>)}
+                {event.tags?.filter(tag => tag !== CalendarTag.announcement && tag !== CalendarTag.cancelled).map(tag => <EventTag key={tag} tag={tag}/>)}
             </div>
         </div>
     </>;

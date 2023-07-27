@@ -1,9 +1,11 @@
+"use client"
+
 import {Event} from './calendar/Event';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
 import {CalendarName, getCalendarInfo} from '../util/calendar-info';
 import {EventsObject} from '../util/calendar-types';
-import {groupEventsByDate} from '../util/use-calendar-store';
+import {groupEventsByDate} from '../util/store/use-calendar-store';
 import {EventDateText} from "./calendar/EventUtils";
 import React from "react";
 

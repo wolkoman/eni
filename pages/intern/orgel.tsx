@@ -3,9 +3,9 @@ import Site from '../../components/Site';
 import {toast} from 'react-toastify';
 import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
-import {useUserStore} from '../../util/use-user-store';
 import {CalendarEvent} from "../../util/calendar-types";
-import {clickable} from "../../components/calendar/ComingUp";
+
+import {Clickable} from "../../app/(components)/Clickable";
 
 export default function Orgel() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
@@ -115,12 +115,13 @@ export default function Orgel() {
           {
             data.slots.map(slot => {
               const unavailable = !data.availableSlots.includes(slot);
-              return <div
+              return <Clickable
+                disabled={unavailable}
                 key={slot}
-                className={`h-14 rounded-lg text-center flex justify-center items-center ${unavailable ? 'cursor-default opacity-50' : clickable}`}
+                className={`h-14 rounded-lg text-center flex justify-center items-center`}
                 onClick={() => unavailable ? null : bookHour(slot)}>
                 <div>{new Date(slot).toLocaleTimeString().substring(0,5)}</div>
-              </div>;
+              </Clickable>;
             })
           }
         </div>
