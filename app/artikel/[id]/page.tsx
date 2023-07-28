@@ -2,12 +2,13 @@ import React from 'react';
 import {cockpit} from '../../../util/cockpit-sdk';
 import {Article as ArticleSite} from '../../../components/Article';
 import {site} from '../../../util/sites';
+import {CockpitData} from "../../../util/cockpit-data";
 
 export const revalidate = 300
 
 export default async function Article({params}: { params: { id: string } }) {
 
-  const article = (await cockpit.collectionGet('article', {
+  const article = (await CockpitData.collectionGet('article', {
     filter: {
       platform: site('eni', 'emmaus'),
       _id: params.id

@@ -1,9 +1,9 @@
-import {cockpit} from "./cockpit-sdk";
 import {getCockpitResourceUrl} from "../components/Articles";
 import {Collections} from "cockpit-sdk";
+import {CockpitData} from "./cockpit-data";
 
 export async function fetchWeeklies(){
-    const articles = await cockpit.collectionGet('weekly', {sort:{'date': '-1'}});
+    const articles = await CockpitData.collectionGet('weekly', {sort:{'date': '-1'}});
     return articles.entries;
 }
 export async function fetchCurrentWeeklies(){
@@ -11,7 +11,7 @@ export async function fetchCurrentWeeklies(){
 }
 
 export async function fetchEmmausbote(){
-    const articles = await cockpit.collectionGet('Emmausbote', {sort:{'date': '-1'}});
+    const articles = await CockpitData.collectionGet('Emmausbote', {sort:{'date': '-1'}});
     return articles.entries;
 }
 

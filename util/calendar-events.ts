@@ -1,5 +1,4 @@
 import {calendar_v3, google} from 'googleapis';
-import {cockpit} from './cockpit-sdk';
 import {site} from "./sites";
 import {notifyAdmin} from "./telegram";
 import {getTimeOfEvent} from "./get-time-of-event";
@@ -7,6 +6,7 @@ import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
 import {CalendarEvent, CalendarTag, EventsObject} from "./calendar-types";
 import {getGroupFromEvent} from "./calendar-group";
 import {ReaderData} from "./reader";
+import {CockpitData} from "./cockpit-data";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
@@ -45,9 +45,9 @@ export function mapGoogleEventToEniEvent(calendarName: CalendarName, options: Ge
     };
 }
 
-export async function getCalendarEvents(calendarName: CalendarName, options: GetEventOptions): Promise<CalendarEvent[]> {
+export async function getCalendarEvents(calendarName: CalendarName, options: GetEventOptions, oauth2Client?: any): Promise<CalendarEvent[]> {
     const calendarId = CALENDAR_INFOS[calendarName].calendarId;
-    const oauth2Client = await getCachedGoogleAuthClient();
+    if(!oauth2Client) oauth2Client = await getCachedGoogleAuthClient();
     const calendar = google.calendar('v3');
     const todayDate = new Date();
     todayDate.setHours(0);
@@ -89,7 +89,7 @@ let oauth2Client: any;
 
 export async function getCachedGoogleAuthClient() {
     if (oauth2Client) return oauth2Client;
-    const configResponse = await cockpit.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});
+    const configResponse = await CockpitData.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});
     const config = configResponse.entries[0].data;
     oauth2Client = new google.auth.OAuth2(
         process.env.CLIENT_ID,
@@ -99,13 +99,14 @@ export async function getCachedGoogleAuthClient() {
     return oauth2Client;
 }
 
-export function getCalendarsEvents(options: GetEventOptions): Promise<CalendarEvent[]> {
-    return Promise.all(
+export async function getCalendarsEvents(options: GetEventOptions): Promise<CalendarEvent[]> {
+    const oauth2Client = await getCachedGoogleAuthClient()
+    return await Promise.all(
         site(
             [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
             [CalendarName.ALL, CalendarName.EMMAUS]
         )
-            .map((name) => getCalendarEvents(name, options))
+            .map((name) => getCalendarEvents(name, options, oauth2Client))
     )
         .then(eventList => eventList.flat())
         .then(events => events.filter(event => !!event))
@@ -131,18 +132,19 @@ export const getCachedEvents = async (options: GetEventOptions): Promise<EventsO
     });
     if (events !== null) {
         if (options.permission === GetEventPermission.PUBLIC && site(true, false)) {
-            cockpit.collectionSave('internal-data', {
+            CockpitData.collectionSave('internal-data', {
                 _id: calendarCacheId,
                 data: {events, cache: new Date().toISOString(), openSuggestions: []}
             }).catch();
         }
         const openSuggestions = await (GetEventPermission.PRIVATE_ACCESS === options.permission
-            ? () => cockpit.collectionGet("eventSuggestion", {filter: {open: true}}).then(({entries}) => entries)
-            : () => Promise.resolve([]))();
+            ? () => CockpitData.collectionGet("eventSuggestion", {filter: {open: true}}).then(({entries}) => entries)
+          : () => Promise.resolve([]))();
         return {events, openSuggestions};
     } else {
-        const cachedEvents = await cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
+        const cachedEvents = await CockpitData.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
         await notifyAdmin('Google Calendar failed ' + JSON.stringify(events));
         return cachedEvents;
     }
 }
+

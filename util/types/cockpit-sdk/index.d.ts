@@ -102,7 +102,7 @@ declare module 'cockpit-sdk' {
   type Singletons = {
     impressum: { content: string } & Object
   }
-  type CollectionResponse<T> = {
+  export type CollectionResponse<T> = {
     entries: T[]
   }
 
@@ -120,7 +120,7 @@ declare module 'cockpit-sdk' {
     error: string
   }
 
-  type CollectionGetProps<T> = { token?: string, filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
+  export type CollectionGetProps<T> = { token?: string, filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
 
   class CockpitSDK {
     public host: string;
