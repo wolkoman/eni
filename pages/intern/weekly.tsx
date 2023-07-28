@@ -19,6 +19,7 @@ import PDFMerger from 'pdf-merger-js/browser';
 import {toast} from "react-toastify";
 import {fetchJson} from "../../util/fetch-util";
 import {getCalendarInfo} from "../../util/calendar-info";
+import {Cockpit} from "../../util/cockpit";
 
 export default function InternArticles() {
     usePermission([Permission.Admin]);
@@ -197,7 +198,7 @@ function AnnouncementsEntries() {
 
     useEffect(() => {
         if (!apiKey) return;
-        cockpit.collectionGet('announcements', {
+        Cockpit.collectionGet('announcements', {
             token: apiKey,
             filter: {hidden: false}
         }).then(({entries}) => setAnn(entries));

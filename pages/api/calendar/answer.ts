@@ -3,9 +3,9 @@ import {getCachedGoogleAuthClient, GetEventPermission, mapGoogleEventToEniEvent}
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {getCalendarInfo} from "../../../util/calendar-info";
-import {cockpit} from "../../../util/cockpit-sdk";
 import {applySuggestionToPatch, getSuggestionFromDiff} from "../../../util/suggestion-utils";
 import {sendMail} from "../../../util/mailjet";
+import {Cockpit} from "../../../util/cockpit";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const eventSuggestions = await cockpit.collectionGet("eventSuggestion", {
+    const eventSuggestions = await Cockpit.collectionGet("eventSuggestion", {
         filter: {
             open: true,
             _id: req.body.suggestionId
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const suggestionValues = getSuggestionFromDiff(suggestion);
 
     if (!req.body.accepted) {
-        await cockpit.collectionSave("eventSuggestion", {
+        await Cockpit.collectionSave("eventSuggestion", {
             _id: eventSuggestions[0]._id,
             accepted: false,
             open: false,
@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log(err);
             res.status(500).json({err});
         });
-        await cockpit.collectionSave("eventSuggestion", {
+        await Cockpit.collectionSave("eventSuggestion", {
             _id: eventSuggestions[0]._id,
             accepted: true,
             open: false,
@@ -106,7 +106,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(500).json({err});
         });
 
-        await cockpit.collectionSave("eventSuggestion", {
+        await Cockpit.collectionSave("eventSuggestion", {
             _id: eventSuggestions[0]._id,
             accepted: true,
             open: false,

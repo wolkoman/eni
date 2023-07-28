@@ -6,7 +6,7 @@ import {CALENDAR_INFOS, CalendarName} from "./calendar-info";
 import {CalendarEvent, CalendarTag, EventsObject} from "./calendar-types";
 import {getGroupFromEvent} from "./calendar-group";
 import {ReaderData} from "./reader";
-import {CockpitData} from "./cockpit-data";
+import {Cockpit} from "./cockpit";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
@@ -89,7 +89,7 @@ let oauth2Client: any;
 
 export async function getCachedGoogleAuthClient() {
     if (oauth2Client) return oauth2Client;
-    const configResponse = await CockpitData.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});
+    const configResponse = await Cockpit.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});
     const config = configResponse.entries[0].data;
     oauth2Client = new google.auth.OAuth2(
         process.env.CLIENT_ID,
@@ -132,17 +132,17 @@ export const getCachedEvents = async (options: GetEventOptions): Promise<EventsO
     });
     if (events !== null) {
         if (options.permission === GetEventPermission.PUBLIC && site(true, false)) {
-            CockpitData.collectionSave('internal-data', {
+            Cockpit.collectionSave('internal-data', {
                 _id: calendarCacheId,
                 data: {events, cache: new Date().toISOString(), openSuggestions: []}
             }).catch();
         }
         const openSuggestions = await (GetEventPermission.PRIVATE_ACCESS === options.permission
-            ? () => CockpitData.collectionGet("eventSuggestion", {filter: {open: true}}).then(({entries}) => entries)
+            ? () => Cockpit.collectionGet("eventSuggestion", {filter: {open: true}}).then(({entries}) => entries)
           : () => Promise.resolve([]))();
         return {events, openSuggestions};
     } else {
-        const cachedEvents = await CockpitData.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
+        const cachedEvents = await Cockpit.collectionGet('internal-data', {filter: {_id: calendarCacheId}}).then(x => x.entries[0].data);
         await notifyAdmin('Google Calendar failed ' + JSON.stringify(events));
         return cachedEvents;
     }

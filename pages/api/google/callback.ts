@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {google} from 'googleapis';
-import {cockpit} from '../../../util/cockpit-sdk';
+import {Cockpit} from "../../../util/cockpit";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { tokens } = await oauth2Client.getToken(req.query.code as string);
 
-  await cockpit.collectionSave('internal-data', {_id: "60d2474f6264631a2e00035c", data: tokens});
+  await Cockpit.collectionSave('internal-data', {_id: "60d2474f6264631a2e00035c", data: tokens});
 
   //res.json(tokens);
   res.redirect("/");

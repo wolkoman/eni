@@ -2,7 +2,7 @@ import {Collections} from 'cockpit-sdk';
 import {AnimatePresence, motion} from 'framer-motion';
 import React, {useState} from 'react';
 import Site from '../../../components/Site';
-import {cockpit} from "../../../util/cockpit-sdk";
+import {Cockpit} from "../../../util/cockpit";
 
 export default function Version(props: { versions: Collections['paper_texts'][] }) {
     const [open, setOpen] = useState<string>();
@@ -25,7 +25,7 @@ export default function Version(props: { versions: Collections['paper_texts'][] 
 }
 
 export async function getServerSideProps(context: any) {
-    const versions = (await cockpit.collectionGet('paper_texts', {
+    const versions = (await Cockpit.collectionGet('paper_texts', {
         filter: {article: context.query.articleId},
         sort: {_created: -1}
     })).entries;

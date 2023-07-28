@@ -96,8 +96,8 @@ declare module 'cockpit-sdk' {
   }
   type Reference = {
     _id: string,
-    link: string,
-    display: string
+    link?: string,
+    display?: string
   }
   type Singletons = {
     impressum: { content: string } & Object

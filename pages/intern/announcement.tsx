@@ -7,11 +7,11 @@ import {
     SelfServiceInput,
     SelfServiceParish
 } from "../../components/SelfService";
-import {cockpit} from "../../util/cockpit-sdk";
 import Button from "../../components/Button";
 import {notifyAdminFromClientSide} from "../../util/telegram";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {usePermission} from "../../util/use-permission";
+import {Cockpit} from "../../util/cockpit";
 
 
 export default function EventPage() {
@@ -24,7 +24,7 @@ export default function EventPage() {
 
     async function submit() {
         setState("loading");
-        cockpit.collectionSave('announcements', {...form[0], files: form[0].files.map(f => f.result), by: user?._id, byName: user?.name})
+        Cockpit.collectionSave('announcements', {...form[0], files: form[0].files.map(f => f.result), by: user?._id, byName: user?.name})
             .then(() => form[1](emptyForm))
             .then(() => {
                 setState("success");

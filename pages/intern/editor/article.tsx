@@ -1,7 +1,6 @@
 import {Collections} from 'cockpit-sdk';
 import React, {ReactNode, useEffect, useState} from 'react';
 import Site from '../../../components/Site';
-import {cockpit} from "../../../util/cockpit-sdk";
 import {fetchJson} from "../../../util/fetch-util";
 import {useRouter} from "next/router";
 import {useBeforeunload} from "react-beforeunload";
@@ -15,6 +14,7 @@ import {Hamburger} from "../../../components/Hamburger";
 import {AnimatePresence, motion} from 'framer-motion';
 import {SelfServiceFile, SelfServiceFileUpload} from "../../../components/SelfService";
 import Link from "next/link";
+import {Cockpit} from "../../../util/cockpit";
 
 
 function Welcome(props: { article: any, project: any }) {
@@ -296,9 +296,9 @@ function MediaModal(props: { close: (files: string[]) => void, files: string[], 
 
 
 export async function getServerSideProps(context: any) {
-    const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: context.query.articleId}})).entries[0];
-    const project = (await cockpit.collectionGet('paper_projects', {filter: {_id: article.project._id}})).entries[0];
-    const versions = (await cockpit.collectionGet('paper_texts', {
+    const article = (await Cockpit.collectionGet('paper_articles', {filter: {_id: context.query.articleId}})).entries[0];
+    const project = (await Cockpit.collectionGet('paper_projects', {filter: {_id: article.project._id}})).entries[0];
+    const versions = (await Cockpit.collectionGet('paper_texts', {
         filter: {article: context.query.articleId},
         sort: {_created: -1}
     })).entries

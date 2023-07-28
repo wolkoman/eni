@@ -1,9 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from "../../../util/verify";
 import {sendBulkMail} from "../../../util/mailjet";
-import {cockpit} from "../../../util/cockpit-sdk";
 import {fetchCurrentWeeklies} from "../../../util/fetchWeeklies";
 import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+import {Cockpit} from "../../../util/cockpit";
 
 const lastMailId = '640735d7353062f2d200017b';
 
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.json({errorMessage: 'No permission'});
         return;
     }
-    const diffSinceLastMail = await cockpit.collectionGet("internal-data", {filter: {_id: lastMailId}})
+    const diffSinceLastMail = await Cockpit.collectionGet("internal-data", {filter: {_id: lastMailId}})
         .then(({entries}) => new Date().getTime() - new Date(entries[0].data.date).getTime());
     if (diffSinceLastMail < 1000 * 60 * 60 * 24 * 5) {
         res.json({errorMessage: "Eine Mail wurde erst vor kurzem versendet!"});
@@ -40,10 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    await cockpit.collectionSave("internal-data", {_id: lastMailId, data: {date: new Date().toISOString()}});
+    await Cockpit.collectionSave("internal-data", {_id: lastMailId, data: {date: new Date().toISOString()}});
 
     const subject = 'Wochenmitteilungen ' + new Date().toLocaleDateString("de-AT");
-    const recipients: Record<CalendarName, string[]> = await cockpit.collectionGet("internal-data", {filter: {id: "newsletter"}}).then(({entries}) => entries[0].data);
+    const recipients: Record<CalendarName, string[]> = await Cockpit.collectionGet("internal-data", {filter: {id: "newsletter"}}).then(({entries}) => entries[0].data);
 
     await Promise.all(
         [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
