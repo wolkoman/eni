@@ -16,6 +16,7 @@
     "@types/react-dom": "^18.0.9",
     "@types/react-router-dom": "^5.3.3",
     "@types/sanitize-html": "^2.8.0",
+    "@vercel/edge-config": "^0.2.1",
     "aesthetically": "^0.0.5",
     "cockpit-sdk": "^0.15.1",
     "cookies-next": "^2.1.1",
@@ -53,7 +54,7 @@
     "start": "next start",
     "lint": "next lint",
     "build": "next build",
-    "dev": "doppler run --forward-signals -- next dev"
+    "dev": "next dev"
   },
   "browserslist": {
     "production": [

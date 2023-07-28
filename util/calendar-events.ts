@@ -92,8 +92,8 @@ export async function getCachedGoogleAuthClient() {
     const configResponse = await Cockpit.collectionGet('internal-data', {filter: {_id: '60d2474f6264631a2e00035c'}});
     const config = configResponse.entries[0].data;
     oauth2Client = new google.auth.OAuth2(
-        process.env.CLIENT_ID,
-        process.env.CLIENT_KEY,
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_KEY,
     );
     oauth2Client.setCredentials(config);
     return oauth2Client;
