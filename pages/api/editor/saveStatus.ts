@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await Cockpit.collectionSave('paper_articles', {...article, status: req.body.status});
 
-    if(article.project.display.startsWith("EB")){
+    if(article.project.display?.startsWith("EB")){
         const channel = process.env.STAGE === "prod" ? 'C047C4D4R7B' : 'U0HJVFER4';
         const articles = (await Cockpit.collectionGet('paper_articles', {filter: {project: article.project._id as any}})).entries;
         const sameStatus = {
