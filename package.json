@@ -52,7 +52,7 @@
   "scripts": {
     "start": "next start",
     "lint": "next lint",
-    "build": "doppler run --forward-signals -- next build",
+    "build": "next build",
     "dev": "doppler run --forward-signals -- next dev"
   },
   "browserslist": {
