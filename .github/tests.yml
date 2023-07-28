@@ -25,15 +25,15 @@ jobs:
         run: npm install
       - name: Build
         env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_KEY: ${{ secrets.CLIENT_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_KEY: ${{ secrets.GOOGLE_CLIENT_KEY }}
           COCKPIT_TOKEN: ${{ secrets.COCKPIT_TOKEN }}
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: npm run build
       - name: Run
         env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_KEY: ${{ secrets.CLIENT_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_KEY: ${{ secrets.GOOGLE_CLIENT_KEY }}
           COCKPIT_TOKEN: ${{ secrets.COCKPIT_TOKEN }}
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: npm run start &

@@ -1,15 +1,15 @@
 import Site from '../../components/Site';
 import React from 'react';
 import {getArticleLink, getCockpitResourceUrl} from '../../components/Articles';
-import {cockpit} from '../../util/cockpit-sdk';
 import {site} from '../../util/sites';
 import {Clickable} from "../(components)/Clickable";
+import {Cockpit} from "../../util/cockpit";
 
 export const revalidate = 300
 
 export default async function Events() {
 
-  const articles = await cockpit.collectionGet('article', {filter: {platform: site('eni', 'emmaus')}, sort: {_created: -1}}).then(x => x.entries)
+  const articles = await Cockpit.collectionGet('article', {filter: {platform: site('eni', 'emmaus')}, sort: {_created: -1}}).then(x => x.entries)
 
   return <Site title="Alle Beiträge" showTitle={true}>
     {articles.map(article => <Clickable href={getArticleLink(article)} className="flex items-start mt-4">

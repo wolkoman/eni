@@ -1,8 +1,8 @@
-import {cockpit} from "./cockpit-sdk";
+import {Cockpit} from "./cockpit";
 
 async function getCachedPrompt(prompt: string): Promise<string>{
 
-    const cache = await cockpit.collectionGet("cache", {filter: {key: prompt}})
+    const cache = await Cockpit.collectionGet("cache", {filter: {key: prompt}})
         .then(({entries}) => entries)
 
     if(cache.length > 0) return cache[0].value;
@@ -18,7 +18,7 @@ async function getCachedPrompt(prompt: string): Promise<string>{
         .then(response => response.json())
         .then(response => response.choices[0].message.content)
 
-    await cockpit.collectionSave("cache", {key: prompt, value: value});
+    await Cockpit.collectionSave("cache", {key: prompt, value: value});
     return value;
 
 }

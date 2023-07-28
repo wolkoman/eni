@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {cockpit} from '../../util/cockpit-sdk';
 import {doubleHash, resolveUserFromRequest} from '../../util/verify';
 import {Collections} from 'cockpit-sdk';
+import {Cockpit} from "../../util/cockpit";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -19,14 +19,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    await cockpit.collectionSave('person', {...person, code: doubleHash(req.body.neo)})
+    await Cockpit.collectionSave('person', {...person, code: doubleHash(req.body.neo)})
     res.status(200).json({});
 
 }
 
 export async function getPerson(username: string, password: string): Promise<Collections['person'] | undefined >{
     const hashed = doubleHash(password ?? "");
-    const personsWithName = (await cockpit.collectionGet('person', {filter: {username}})).entries;
+    const personsWithName = (await Cockpit.collectionGet('person', {filter: {username}})).entries;
     const persons = personsWithName
         .filter(person => person.active)
         .filter(person => person.code === password || person.code === hashed || password === undefined);

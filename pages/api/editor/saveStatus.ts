@@ -1,11 +1,11 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from "../../../util/verify";
-import {cockpit} from "../../../util/cockpit-sdk";
 import {slack} from "../../../util/slack";
+import {Cockpit} from "../../../util/cockpit";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    const article = (await cockpit.collectionGet('paper_articles', {filter: {_id: req.body.articleId}})).entries[0];
+    const article = (await Cockpit.collectionGet('paper_articles', {filter: {_id: req.body.articleId}})).entries[0];
 
     if(!article){
         res.status(400).end();
@@ -17,11 +17,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    await cockpit.collectionSave('paper_articles', {...article, status: req.body.status});
+    await Cockpit.collectionSave('paper_articles', {...article, status: req.body.status});
 
-    if(article.project.display.startsWith("EB")){
+    if(article.project.display?.startsWith("EB")){
         const channel = process.env.STAGE === "prod" ? 'C047C4D4R7B' : 'U0HJVFER4';
-        const articles = (await cockpit.collectionGet('paper_articles', {filter: {project: article.project._id as any}})).entries;
+        const articles = (await Cockpit.collectionGet('paper_articles', {filter: {project: article.project._id as any}})).entries;
         const sameStatus = {
             writing: articles.filter(a => a.status === 'writing'),
             written: articles.filter(a => a.status === 'finished' || a.status === 'corrected' || a.status === 'written'),

@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {XMLParser} from "fast-xml-parser";
 import {Permission, resolveUserFromRequest} from "../../util/verify";
-import {cockpit} from "../../util/cockpit-sdk";
+import {Cockpit} from "../../util/cockpit";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
@@ -42,7 +42,7 @@ async function fetchLiturgyData(): Promise<LiturgyData>{
 
 export async function getLiturgyData(): Promise<LiturgyData>{
 
-  const liturgyCache = (await cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
+  const liturgyCache = (await Cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
   //await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
 
   return liturgyCache.data;

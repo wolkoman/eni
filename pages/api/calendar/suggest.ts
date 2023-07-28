@@ -1,9 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {cockpit} from "../../../util/cockpit-sdk";
 import {notifyAdmin} from "../../../util/telegram";
 import {slack} from "../../../util/slack";
 import {getSuggestionFromDiff} from "../../../util/suggestion-utils";
+import {Cockpit} from "../../../util/cockpit";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     //prevent colliding suggestions
-    const collidingSuggestions = await cockpit.collectionGet("eventSuggestion", {
+    const collidingSuggestions = await Cockpit.collectionGet("eventSuggestion", {
         filter: {
             open: true,
             eventId: req.body.eventId
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const [_,suggestionId] = [...req.body.eventId?.split("suggestion_") ?? [null],null]
     const type = suggestionId ? "add" : req.body.eventId ? "edit" : "add"
 
-    const eventSuggestion = await cockpit.collectionSave("eventSuggestion", {
+    const eventSuggestion = await Cockpit.collectionSave("eventSuggestion", {
         _id: suggestionId ?? collidingSuggestions?.[0]?._id,
         eventId: suggestionId ? null : req.body.eventId,
         data: req.body.data,
