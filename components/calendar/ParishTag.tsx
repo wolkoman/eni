@@ -1,6 +1,6 @@
-import {CalendarInfo, CalendarName, getCalendarInfo} from '../../util/calendar-info';
 import {Tooltip} from "./EventUtils";
 import React from "react";
+import {CalendarInfo, CalendarName, getCalendarInfo} from "../../app/termine/CalendarInfo";
 
 export function ParishTag(props: { calendar: CalendarName, colorless?: boolean }) {
     const info = getCalendarInfo(props.calendar);

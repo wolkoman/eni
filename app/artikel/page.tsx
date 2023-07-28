@@ -2,7 +2,7 @@ import Site from '../../components/Site';
 import React from 'react';
 import {getArticleLink, getCockpitResourceUrl} from '../../components/Articles';
 import {site} from '../../util/sites';
-import {Clickable} from "../(components)/Clickable";
+import {Clickable} from "../(shared)/Clickable";
 import {Cockpit} from "../../util/cockpit";
 
 export const revalidate = 300

@@ -1,9 +1,9 @@
 import {Permission, Permissions} from '../../util/verify';
-import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
 import {FilterType} from './Calendar';
 import {ReactNode} from "react";
-import {CalendarGroup} from "../../util/calendar-types";
-import {getGroupSorting} from "../../util/calendar-group";
+
+import {CalendarGroup, getGroupSorting} from "../../app/termine/CalendarGroup";
+import {CalendarName, getCalendarInfo} from "../../app/termine/CalendarInfo";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div

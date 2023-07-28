@@ -3,10 +3,10 @@ import {fetchJson} from '../fetch-util';
 import {ReaderData} from "../reader";
 import {useAuthenticatedUserStore} from "./use-user-store";
 import {useEffect} from "react";
-import {CalendarName} from "../calendar-info";
-import {CalendarEvent} from "../calendar-types";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
+import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export function useAuthenticatedReaderStore() {
     const {user} = useAuthenticatedUserStore();
@@ -48,7 +48,7 @@ export const useReaderStore = create(combine({
             readerData: {...data.readerData, ...x}
         }))
     },
-    load: (token?: string) => {
+    load: () => {
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));

@@ -1,11 +1,11 @@
 import React from 'react';
 import {Collections} from "cockpit-sdk";
 import Link from "next/link";
-import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import Site from "../../components/Site";
 import {site} from "../../util/sites";
 import {getCockpitResourceUrl} from "../../components/Articles";
 import {fetchEmmausbote, fetchWeeklies} from "../../util/fetchWeeklies";
+import {CalendarName, getCalendarInfo} from "../termine/CalendarInfo";
 
 export default async function HomePage() {
 

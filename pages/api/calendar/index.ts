@@ -1,15 +1,16 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedEvents, GetEventPermission} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
+import {loadReaderData} from "../reader";
+import {GetEventPermission} from "../../../app/termine/EventMapper";
+import {loadEvents} from "../../../app/termine/EventsLoader";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const user = resolveUserFromRequest(req);
     const privateAccess = user && user.permissions[Permission.PrivateCalendarAccess];
-    const events = await getCachedEvents({
+    const readerData = await loadReaderData()
+    const events = await loadEvents({
         permission: privateAccess ? GetEventPermission.PRIVATE_ACCESS : GetEventPermission.PUBLIC,
-        getReaderData: getCachedReaderData
+        readerData
     });
-    invalidateCachedReaderData();
     res.json(events);
 }

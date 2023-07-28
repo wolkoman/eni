@@ -20,8 +20,8 @@ import {
 } from "../../util/suggestion-utils";
 import {ViewportList} from "react-viewport-list";
 import {EventEdit, EventEditBackground} from "./EventEdit";
-import {CalendarName} from "../../util/calendar-info";
 import {ReducedCalendarState} from "../../app/termine/EventPage";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
     const [separateMass] = usePreference(Preference.SeparateMass);

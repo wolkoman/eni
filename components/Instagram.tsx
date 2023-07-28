@@ -2,12 +2,12 @@
 
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
-import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
 import React, {MouseEventHandler, useState} from "react";
 import {AnimatePresence, motion} from 'framer-motion'
 
-import {Clickable} from "../app/(components)/Clickable";
+import {Clickable} from "../app/(shared)/Clickable";
 import {SectionHeader} from "./SectionHeader";
+import {CalendarInfo, CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
 
 export interface InstagramFeedItem {
   id: string,

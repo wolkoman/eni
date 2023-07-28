@@ -1,26 +1,11 @@
-import React from "react";
-
-export interface CalendarInfo {
-  id: CalendarName,
-  calendarId: string,
-  borderColor: string,
-  className: string,
-  fullName: string,
-  shortName: string,
-  tagName: string,
-  address: string,
-  image: string,
-  websiteUrl: string,
-  websiteDisplay: string,
-  dot: string,
-}
-export enum CalendarName{
+export enum CalendarName {
   ALL = 'all',
   EMMAUS = 'emmaus',
   INZERSDORF = 'inzersdorf',
   NEUSTIFT = 'neustift',
   INZERSDORF_ORGAN = 'inzersdorf-organ',
-};
+}
+
 export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
   [CalendarName.ALL]: {
     id: CalendarName.ALL,
@@ -34,7 +19,8 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     websiteUrl: 'https://eni.wien',
     websiteDisplay: 'https://eni.wien',
     image: '',
-    dot: '',},
+    dot: '',
+  },
   [CalendarName.EMMAUS]: {
     id: CalendarName.EMMAUS,
     borderColor: 'border-emmaus',
@@ -92,7 +78,21 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     dot: ''
   },
 };
-
 export const getCalendarInfo = (calendar: CalendarName): CalendarInfo => {
   return CALENDAR_INFOS[calendar];
 };
+
+export interface CalendarInfo {
+  id: CalendarName,
+  calendarId: string,
+  borderColor: string,
+  className: string,
+  fullName: string,
+  shortName: string,
+  tagName: string,
+  address: string,
+  image: string,
+  websiteUrl: string,
+  websiteDisplay: string,
+  dot: string,
+}

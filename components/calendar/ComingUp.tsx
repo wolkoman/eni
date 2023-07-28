@@ -4,14 +4,14 @@ import React from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '../../util/store/use-calendar-store';
 import Responsive from '../Responsive';
 import {useEmmausProd} from "../../util/use-emmaus-prod";
-import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {Preference, usePreference} from "../../util/store/use-preference";
-import {CalendarName} from "../../util/calendar-info";
 import {site} from "../../util/sites";
-import {getGroupSorting} from "../../util/calendar-group";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {Clickable} from "../../app/(components)/Clickable";
+import {Clickable} from "../../app/(shared)/Clickable";
+import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
+import {CalendarGroup, getGroupSorting} from "../../app/termine/CalendarGroup";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreference(Preference.SeparateMass);

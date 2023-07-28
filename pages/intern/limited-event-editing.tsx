@@ -6,10 +6,11 @@ import {Permission} from "../../util/verify";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {Event} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
-import {CalendarName} from "../../util/calendar-info";
-import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
 import {SanitizeHTML} from "../../components/SanitizeHtml";
 import {EventDate, EventDateText} from "../../components/calendar/EventUtils";
+import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarGroup} from "../../app/termine/CalendarGroup";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
 export default function LimitedEventEditing() {

@@ -1,10 +1,11 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedGoogleAuthClient, GetEventPermission, mapGoogleEventToEniEvent} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
-import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
+import {loadReaderData} from "../reader";
+import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
+import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -21,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const oauth2Client = await getCachedGoogleAuthClient();
+    const oauth2Client = await getGoogleAuthClient();
     const calendar = google.calendar('v3');
 
     const event = await calendar.events.get({
@@ -43,11 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         eventId: req.body.eventId,
         requestBody: {description: newDescription.trim()}
     }).then((event) => {
-        const eniEvent = mapGoogleEventToEniEvent(CalendarName.INZERSDORF, {
-            permission: GetEventPermission.PRIVATE_ACCESS,
-            getReaderData: getCachedReaderData
+        const eniEvent = mapEvent(CalendarName.INZERSDORF, {
+            permission: GetEventPermission.PRIVATE_ACCESS
         })(event.data);
-        invalidateCachedReaderData();
         res.status(200).json(eniEvent);
     }).catch((err) => {
         res.status(500).json({err});

@@ -3,10 +3,10 @@ import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from '../.
 import {sign} from 'jsonwebtoken';
 import {User} from '../../util/user';
 import {getPerson} from './change-password';
-import {CalendarName} from "../../util/calendar-info";
 import {setCookie} from "cookies-next";
 import {Cockpit} from "../../util/cockpit";
 import {cockpit} from "../../util/cockpit-sdk";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

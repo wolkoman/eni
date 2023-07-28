@@ -2,8 +2,8 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from "../../../util/verify";
 import {sendBulkMail} from "../../../util/mailjet";
 import {fetchCurrentWeeklies} from "../../../util/fetchWeeklies";
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
 import {Cockpit} from "../../../util/cockpit";
+import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
 
 const lastMailId = '640735d7353062f2d200017b';
 

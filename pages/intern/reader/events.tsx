@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
-import {CalendarEvent, CalendarGroup} from "../../../util/calendar-types";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
@@ -8,7 +7,9 @@ import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../util/
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
-import {Clickable} from "../../../app/(components)/Clickable";
+import {Clickable} from "../../../app/(shared)/Clickable";
+import {CalendarEvent} from "../../../app/termine/EventMapper";
+import {CalendarGroup} from "../../../app/termine/CalendarGroup";
 
 function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {
 

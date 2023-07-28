@@ -1,4 +1,3 @@
-import {CalendarName} from "../../util/calendar-info";
 import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {useState} from "react";
@@ -6,6 +5,7 @@ import {fetchJson} from "../../util/fetch-util";
 import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
 import Button from "../Button";
 import {createDiffSuggestion, EventSuggestion, getSuggestionFromEvent} from "../../util/suggestion-utils";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {

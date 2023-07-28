@@ -1,5 +1,6 @@
-import {CalendarName} from "../../util/calendar-info";
-import {CalendarEvent, CalendarGroup} from "../../util/calendar-types";
+import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarGroup} from "../../app/termine/CalendarGroup";
+import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export type FilterType = { filterType: 'PARISH', parish: CalendarName } | { filterType: 'PERSON', person: string } | { filterType: 'GROUP', group: CalendarGroup } | null;
 

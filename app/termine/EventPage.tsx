@@ -1,7 +1,6 @@
 "use client"
 
 import {LiturgyData} from "../../pages/api/liturgy";
-import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
 import {useState} from "../../util/use-state-util";
 import {FilterType} from "../../components/calendar/Calendar";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
@@ -9,7 +8,6 @@ import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store
 import {Preference, usePreference} from "../../util/store/use-preference";
 import {useRouter, useSearchParams} from "next/navigation";
 import React, {useEffect} from "react";
-import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import Site from "../../components/Site";
 import Responsive from "../../components/Responsive";
 import {CalendarCacheNotice} from "../../components/calendar/CalendarCacheNotice";
@@ -19,6 +17,9 @@ import {ListView} from "../../components/calendar/ListView";
 import {FilterSelector} from "../../components/calendar/FilterSelector";
 import {Permission} from "../../util/verify";
 import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
+import {CalendarEvent, EventsObject} from "./EventMapper";
+import {CalendarGroup} from "./CalendarGroup";
+import {CalendarName, getCalendarInfo} from "./CalendarInfo";
 
 
 export function AddEvent() {

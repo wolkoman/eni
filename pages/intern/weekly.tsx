@@ -9,7 +9,6 @@ import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
 import {groupEventsByDate, useAuthenticatedCalendarStore} from '../../util/store/use-calendar-store';
 import {saveFile} from "../../util/save-file";
-import {CalendarEvent, CalendarGroup, CalendarTag} from "../../util/calendar-types";
 import {useAuthenticatedUserStore, useUserStore} from "../../util/store/use-user-store";
 import CockpitSDK, {Collections} from "cockpit-sdk";
 import {cockpit} from "../../util/cockpit-sdk";
@@ -18,8 +17,10 @@ import {EniLoading} from "../../components/Loading";
 import PDFMerger from 'pdf-merger-js/browser';
 import {toast} from "react-toastify";
 import {fetchJson} from "../../util/fetch-util";
-import {getCalendarInfo} from "../../util/calendar-info";
 import {Cockpit} from "../../util/cockpit";
+import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
+import {CalendarGroup} from "../../app/termine/CalendarGroup";
+import {getCalendarInfo} from "../../app/termine/CalendarInfo";
 
 export default function InternArticles() {
     usePermission([Permission.Admin]);

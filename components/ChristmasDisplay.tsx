@@ -3,11 +3,11 @@
 import {Event} from './calendar/Event';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
-import {CalendarName, getCalendarInfo} from '../util/calendar-info';
-import {EventsObject} from '../util/calendar-types';
 import {groupEventsByDate} from '../util/store/use-calendar-store';
 import {EventDateText} from "./calendar/EventUtils";
 import React from "react";
+import {EventsObject} from "../app/termine/EventMapper";
+import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
 
 export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
     const events = props.eventsObject.events.filter(event => ["12-24", "12-25"].includes(event.date.slice(5)));

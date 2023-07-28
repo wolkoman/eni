@@ -1,8 +1,8 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import { getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {google} from 'googleapis';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
 
 export default async function handler(req: NextApiRequest & {query: {token: string, id: string }}, res: NextApiResponse) {
 
@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest & {query: {token: stri
     return;
   }
 
-  const oauth2Client = await getCachedGoogleAuthClient();
+  const oauth2Client = await getGoogleAuthClient();
   const calendar = google.calendar('v3');
   calendar.events.delete({
     auth: oauth2Client,

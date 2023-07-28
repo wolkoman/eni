@@ -1,12 +1,13 @@
 import React from 'react';
-import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
+import {GetEventPermission} from "../EventMapper";
+import {loadEvents} from "../EventsLoader";
 
 export const revalidate = 300
 
 export default async function EventPage() {
 
-    const eventsObject= await getCachedEvents({permission: GetEventPermission.PUBLIC})
+    const eventsObject= await loadEvents({permission: GetEventPermission.PUBLIC})
 
     return <div data-testid="calendar" className="relative">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>

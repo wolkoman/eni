@@ -1,10 +1,10 @@
-import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 import {ParishDot} from './ParishTag';
 import React from "react";
 import {EventDescription, EventTag} from "./EventUtils";
-import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
+import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
+import {CalendarName, getCalendarInfo} from "../../app/termine/CalendarInfo";
 
 export function Event({event, suggestion, ...props}: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'], small?: boolean }) {
     const cancelled = event.tags?.includes(CalendarTag.cancelled);

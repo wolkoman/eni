@@ -4,11 +4,11 @@ import {Section} from './Section';
 import Link from 'next/link';
 import React from 'react';
 import Responsive from "./Responsive";
-import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import Button from "./Button";
 import {Personal} from "./Personal";
 import Image from "next/image";
 import {motion} from 'framer-motion';
+import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
 
 export function EniSections() {
     return <Responsive>

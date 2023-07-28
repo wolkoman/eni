@@ -1,11 +1,11 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {cockpit} from '../../../util/cockpit-sdk';
-import {getCachedGoogleAuthClient} from "../../../util/calendar-events";
 import {notifyAdmin} from "../../../util/telegram";
+import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
-  const client = await getCachedGoogleAuthClient()
+  const client = await getGoogleAuthClient()
 
   await client.refreshAccessToken(async (err:any, tokens:any) => {
     if(err){

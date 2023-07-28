@@ -1,6 +1,6 @@
-import {CalendarEvent} from "./calendar-types";
 import {Collections} from "cockpit-sdk";
 import {Diff, diff_match_patch} from 'diff-match-patch';
+import {CalendarEvent} from "../app/termine/EventMapper";
 
 export interface EventSuggestion{
     summary: string;

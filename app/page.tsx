@@ -1,6 +1,5 @@
 import Site from '../components/Site';
 import TopBar from '../components/TopBar';
-import {getCachedEvents, GetEventPermission} from "../util/calendar-events";
 import {fetchArticles} from "../util/fetchArticles";
 import {fetchEmmausSites} from "../util/fetchEmmausSites";
 import {fetchInstagramFeed} from "../util/fetchInstagram";
@@ -17,11 +16,13 @@ import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
+import {GetEventPermission} from "./termine/EventMapper";
+import {loadEvents} from "./termine/EventsLoader";
 
 export const revalidate = 300
 
 export default async function HomePage() {
-  const eventsObject = await getCachedEvents({permission: GetEventPermission.PUBLIC})
+  const eventsObject = await loadEvents({permission: GetEventPermission.PUBLIC})
   return site(async () => <Site
     responsive={false} navbar={false}
     description="Drei Pfarren im Wiener Dekanat 23"

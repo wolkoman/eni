@@ -1,14 +1,14 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolvePermissionsForCompetences, resolveUserFromRequest} from '../../../util/verify';
 import {getTasksForPerson, getTasksFromReaderData, getUninformedTasks, ReaderData} from "../../../util/reader";
-import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
 import {getWeekDayName} from "../../../components/calendar/Calendar";
-import {CalendarTag} from "../../../util/calendar-types";
 import {LiturgyData} from "../liturgy";
 import {sign} from "jsonwebtoken";
 import {User} from "../../../util/user";
 import {sendMail} from "../../../util/mailjet";
 import {Cockpit} from "../../../util/cockpit";
+import {CalendarTag, GetEventPermission} from "../../../app/termine/EventMapper";
+import {loadEvents} from "../../../app/termine/EventsLoader";
 
 const READER_ID = "637b85bc376231d51500018d";
 
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS}).then(x => x.events);
+    const events = await loadEvents({permission: GetEventPermission.PRIVATE_ACCESS}).then(x => x.events);
     const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
     const liturgy: LiturgyData = await Cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await Cockpit.collectionGet('person').then(x => x.entries);

@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {Clickable} from "../app/(components)/Clickable";
+import {Clickable} from "../app/(shared)/Clickable";
 
 export function InternButton({href, label, onClick, children}: {
   href?: string,

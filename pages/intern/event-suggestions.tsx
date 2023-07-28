@@ -10,10 +10,10 @@ import {fetchJson} from "../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
 import {EventDate} from "../../components/calendar/EventUtils";
 import {applySuggestionToPatch} from "../../util/suggestion-utils";
-import {CalendarEvent} from "../../util/calendar-types";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
 import {unibox} from "../../util/styles";
-import {Clickable} from "../../app/(components)/Clickable";
+import {Clickable} from "../../app/(shared)/Clickable";
+import {CalendarEvent} from "../../app/termine/EventMapper";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const {removeSuggestion} = useAuthenticatedCalendarStore();

@@ -1,5 +1,4 @@
 import React from 'react';
-import {CalendarEvent} from "../../../util/calendar-types";
 import {getLiturgyData, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import Button from "../../../components/Button";
@@ -13,6 +12,7 @@ import {
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
 import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
+import {CalendarEvent} from "../../../app/termine/EventMapper";
 
 export default function Index(props: { liturgy: LiturgyData }) {
 

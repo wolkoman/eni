@@ -1,9 +1,9 @@
 "use client"
 
 import React from "react";
-import {CalendarName, getCalendarInfo} from "../../util/calendar-info";
 import {motion} from "framer-motion";
 import Site from "../../components/Site";
+import {CalendarName, getCalendarInfo} from "../termine/CalendarInfo";
 
 export const MyPdfViewer = () => {
 

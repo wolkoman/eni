@@ -1,14 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {ReaderData} from "../../../util/reader";
-import {Collections} from "cockpit-sdk";
-import {CalendarName} from "../../../util/calendar-info";
-import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
 import {Cockpit} from "../../../util/cockpit";
-
-const READER_ID = "637b85bc376231d51500018d";
-
-export const revalidate = 0;
+import {loadEvents} from "../../../app/termine/EventsLoader";
+import {GetEventPermission} from "../../../app/termine/EventMapper";
+import {CalendarName} from "../../../app/termine/CalendarInfo";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -19,13 +15,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const readerData = await getCachedReaderData();
-    const events = await getCachedEvents(user.permissions[Permission.ReaderPlanning]
-        ? {permission: GetEventPermission.PRIVATE_ACCESS, getReaderData: getCachedReaderData}
+    const readerData = await loadReaderData();
+    const events = await loadEvents(user.permissions[Permission.ReaderPlanning]
+        ? {permission: GetEventPermission.PRIVATE_ACCESS, readerData}
         : {permission: GetEventPermission.READER, ids: Object.keys(readerData)}
     );
-    invalidateCachedReaderData();
-    const readers = await Cockpit.collectionGet("person").then(x => x.entries
+    const readers = await Cockpit.collectionGet("person")
+      .then(x => x.entries
         .filter(person => (person.competences?.includes('reader') || person.competences?.includes('communion_minister')) && person.active)
         .filter(person => user.parish === CalendarName.ALL || user.parish === person.parish)
         .map(person => ({
@@ -41,13 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 }
 
-let cachedReadingData: ReaderData | undefined;
-let cachedPersonData: Collections['person'][] | undefined;
-export const getCachedReaderData = async (): Promise<ReaderData> => {
-    if (!cachedReadingData)
-        cachedReadingData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data)
-    return cachedReadingData!;
-}
-export const invalidateCachedReaderData = () => {
-    cachedReadingData = undefined;
+export const loadReaderData = (): Promise<ReaderData> => {
+    return Cockpit.collectionGet("internal-data", {filter: {_id: Cockpit.InternalId.ReaderData}})
+      .then(x => x.entries[0].data)
 }

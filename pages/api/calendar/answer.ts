@@ -1,11 +1,12 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedGoogleAuthClient, GetEventPermission, mapGoogleEventToEniEvent} from '../../../util/calendar-events';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
-import {getCalendarInfo} from "../../../util/calendar-info";
 import {applySuggestionToPatch, getSuggestionFromDiff} from "../../../util/suggestion-utils";
 import {sendMail} from "../../../util/mailjet";
 import {Cockpit} from "../../../util/cockpit";
+import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
+import {getCalendarInfo} from "../../../app/termine/CalendarInfo";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -55,12 +56,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
     const eventData = {
-        auth: await getCachedGoogleAuthClient(),
+        auth: await getGoogleAuthClient(),
         calendarId: suggestionParish.calendarId,
         eventId: suggestion.eventId
     };
-    const existingGoogleEvent = await (suggestion.eventId ? google.calendar('v3').events.get(eventData).then(event => event.data) : Promise.resolve(undefined));
-    const existingEvent = mapGoogleEventToEniEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(existingGoogleEvent);
+    const existingGoogleEvent = await (suggestion.eventId
+      ? google.calendar('v3').events.get(eventData).then(event => event.data)
+      : Promise.resolve(undefined)
+    );
+    const existingEvent = mapEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(existingGoogleEvent);
     const patchedSuggestion = getSuggestionFromDiff(applySuggestionToPatch(suggestion, existingEvent ?? undefined).suggestion);
 
     const patchedEvent = {
@@ -78,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (suggestion.type === "add") {
         google.calendar('v3').events.insert({
-            auth: await getCachedGoogleAuthClient(),
+            auth: await getGoogleAuthClient(),
             calendarId: suggestionParish.calendarId,
             requestBody: patchedEvent
         }).then((event) => {

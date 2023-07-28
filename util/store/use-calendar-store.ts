@@ -1,9 +1,10 @@
 import create from 'zustand';
 import {fetchJson} from '../fetch-util';
-import {CalendarEvent, CalendarGroup, EventsObject} from "../calendar-types";
 import {useEffect} from "react";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
+import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
+import {CalendarGroup} from "../../app/termine/CalendarGroup";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({
