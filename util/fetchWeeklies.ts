@@ -3,8 +3,8 @@ import {Collections} from "cockpit-sdk";
 import {Cockpit} from "./cockpit";
 
 export async function fetchWeeklies(){
-    const articles = await Cockpit.collectionGet('weekly', {sort:{'date': '-1'}});
-    return articles.entries;
+    const {entries} = await Cockpit.collectionGet('weekly', {sort:{'date': '-1'}});
+    return entries;
 }
 export async function fetchCurrentWeeklies(){
     return fetchWeeklies().then(weeklies => weeklies[0]);

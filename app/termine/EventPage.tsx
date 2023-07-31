@@ -21,21 +21,24 @@ import {CalendarEvent, EventsObject} from "./EventMapper";
 import {CalendarGroup} from "./CalendarGroup";
 import {CalendarName, getCalendarInfo} from "./CalendarInfo";
 
-
 export function AddEvent() {
   const [isEditing, setIsEditing] = useState(false);
   const {user} = useAuthenticatedUserStore();
   return user?.permissions[Permission.PrivateCalendarAccess] ? <>
-    <div className={`p-3 rounded-lg bg-black/5 ${isEditing || 'cursor-pointer'} static lg:relative`}
-         onClick={() => setIsEditing(true)}>
+    <div
+      className={`p-3 rounded-lg bg-black/5 ${isEditing || 'cursor-pointer'} static lg:relative`}
+      onClick={() => setIsEditing(true)}
+    >
       <div className="w-6 aspect-square">
         <svg viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M45.5 9V82" stroke="#484848" strokeWidth="18" strokeLinecap="round"/>
           <path d="M82 45.5L9 45.5" stroke="#484848" strokeWidth="18" strokeLinecap="round"/>
         </svg>
       </div>
-      {isEditing && <EventEdit onClose={() => setIsEditing(false)} parish={user.parish}
-                               suggestion={{date: "", time: "", description: "", summary: ""}}/>}
+      {isEditing && <EventEdit
+          onClose={() => setIsEditing(false)} parish={user.parish}
+          suggestion={{date: "", time: "", description: "", summary: ""}}
+      />}
     </div>
     {isEditing && <EventEditBackground onClick={() => setIsEditing(false)}/>}
   </> : <></>;
@@ -69,12 +72,12 @@ export default function EventPage(props: {
   }, [searchParams]);
   useEffect(() => {
     if (!firstFilterUpdate) {
-      routerReplace("?"+Object.entries({
-          q: filter?.filterType !== "GROUP" ? null : filter.group,
-          p: filter?.filterType !== "PARISH" ? null : filter.parish
+      routerReplace("?" + Object.entries({
+        q: filter?.filterType !== "GROUP" ? null : filter.group,
+        p: filter?.filterType !== "PARISH" ? null : filter.parish
       })
-        .filter(([a,b]) => b)
-        .map(([a,b]) => `${a}=${b}`)
+        .filter(([a, b]) => b)
+        .map(([a, b]) => `${a}=${b}`)
         .join("&")
       )
     } else {
@@ -87,11 +90,13 @@ export default function EventPage(props: {
       <div data-testid="calendar" className="relative">
         <CalendarCacheNotice/>
         <div className="flex-grow mt-4 pb-4 relative">
-
           <div className="flex justify-between items-center mb-6">
             <div>
-              <div
-                className="font-bold text-4xl mb-6">Termine{filter !== null && ": "}{filter?.filterType === "GROUP" && filter.group}{filter?.filterType === "PARISH" && getCalendarInfo(filter.parish).shortName}</div>
+              <div className="font-bold text-4xl mb-6">
+                Termine{filter !== null && ": "}
+                {filter?.filterType === "GROUP" && filter.group}
+                {filter?.filterType === "PARISH" && getCalendarInfo(filter.parish).shortName}
+              </div>
             </div>
             <div className="flex gap-2">
               <AddEvent/>
