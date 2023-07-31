@@ -5,7 +5,7 @@ import {useAuthenticatedUserStore} from "./use-user-store";
 import {useEffect} from "react";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarEvent} from "../../app/termine/EventMapper.server";
 import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export function useAuthenticatedReaderStore() {

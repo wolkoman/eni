@@ -1,8 +1,8 @@
 import create from 'zustand';
-import {fetchJson} from '../fetch-util';
 import {useEffect} from "react";
 import {combine} from "zustand/middleware";
 import {Collections} from "cockpit-sdk";
+import {getAllSuggestionFromServer} from "./use-suggestion-store.server";
 
 export function useAuthenticatedSuggestionsStore() {
     const state = useSuggestionsStore(state => state);
@@ -23,7 +23,7 @@ export const useSuggestionsStore = create(combine(
         load: () => {
             if (get().loaded || get().loading) return;
             set({loading: true});
-            fetchJson("/api/calendar/allSuggestions")
+            getAllSuggestionFromServer()
                 .then((items: Collections['eventSuggestion'][]) => set({loaded: true, items}))
                 .finally(() => set({loading: false}))
         }

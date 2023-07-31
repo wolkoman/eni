@@ -8,9 +8,10 @@ import {Event} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
 import {SanitizeHTML} from "../../components/SanitizeHtml";
 import {EventDate, EventDateText} from "../../components/calendar/EventUtils";
-import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarEvent} from "../../app/termine/EventMapper.server";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
 import {CalendarName} from "../../app/termine/CalendarInfo";
+import {toast} from "react-toastify";
 
 export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
 export default function LimitedEventEditing() {
@@ -36,7 +37,7 @@ export default function LimitedEventEditing() {
     }, [currentEvent]);
 
     function saveMusic() {
-        fetchJson("/api/calendar/music", {json: {music, eventId: currentEvent?.id}}, {
+        toast.promise(fetchJson("/api/calendar/music", {json: {music, eventId: currentEvent?.id}}), {
             success: "Musik wurde gespeichert",
             error: "Ein Fehler hat das Speichern verhindert",
             pending: "Musik wird gespeichert..."

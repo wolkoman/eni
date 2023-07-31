@@ -18,7 +18,7 @@ import PDFMerger from 'pdf-merger-js/browser';
 import {toast} from "react-toastify";
 import {fetchJson} from "../../util/fetch-util";
 import {Cockpit} from "../../util/cockpit";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
+import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper.server";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
 import {getCalendarInfo} from "../../app/termine/CalendarInfo";
 

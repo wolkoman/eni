@@ -12,7 +12,8 @@ import {
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
 import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
-import {CalendarEvent} from "../../../app/termine/EventMapper";
+import {CalendarEvent} from "../../../app/termine/EventMapper.server";
+import {toast} from "react-toastify";
 
 export default function Index(props: { liturgy: LiturgyData }) {
 
@@ -24,9 +25,9 @@ export default function Index(props: { liturgy: LiturgyData }) {
     const parishReaders = readers.filter(person => person.parish === reader.parish || person.parish === "all");
 
     async function informPersonPerMail(tasks: ReaderTask<CalendarEvent>[]) {
-        await fetchJson("/api/reader/mail", {
+        await toast.promise(fetchJson("/api/reader/mail", {
             json: {eventIds: tasks.map(job => job.event.id), personId: tasks[0].data.userId}
-        }, {
+        }), {
             pending: "Mails wird gesendet",
             error: "Mail wurde nicht gesendet",
             success: "Mail wurde gesendet"
@@ -43,7 +44,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
                 status: 'informed'
             }
         }]));
-        return fetchJson("/api/reader/save", {json: changes({})}, {
+        return toast.promise(fetchJson("/api/reader/save", {json: changes({})}), {
             pending: "Status wird gespeichert",
             error: "Status wurde nicht gespeichert",
             success: "Status wurde gespeichert"

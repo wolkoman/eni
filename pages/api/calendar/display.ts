@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {site} from "../../../util/sites";
 import {loadReaderData} from "../reader";
-import {GetEventPermission} from "../../../app/termine/EventMapper";
+import {GetEventPermission} from "../../../app/termine/EventMapper.server";
 import {CalendarGroup} from "../../../app/termine/CalendarGroup";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
 import {loadEvents} from "../../../app/termine/EventsLoader";

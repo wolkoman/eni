@@ -1,10 +1,10 @@
 import create from 'zustand';
-import {fetchJson} from '../fetch-util';
 import {useEffect} from "react";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
+import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper.server";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
+import loadEventsFromServer from "../../app/termine/EventsLoader.server";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({
@@ -45,12 +45,13 @@ export const useCalendarStore = create(combine({
     error: false,
     cache: undefined as string | undefined,
     lastLoadedWithToken: 'none',
+    load: Function,
 },(set, get) => ({
     load: () => {
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
-        fetchJson('/api/calendar', {})
+        loadEventsFromServer()
             .then((data: EventsObject) => set({
                 items: data.events,
                 openSuggestions: data.openSuggestions,
@@ -63,8 +64,8 @@ export const useCalendarStore = create(combine({
             .catch((err) => {
                 console.log({err})
                 setTimeout(() => {
-                    // set(state => ({...state, loaded: false}));
-                    // get().load(userId);
+                    set(state => ({...state, loaded: false}));
+                    get().load();
                 }, 3000);
                 set({items: [], loaded: true, loading: false, error: true});
             });

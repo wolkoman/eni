@@ -3,8 +3,8 @@ import {site} from "../../util/sites";
 import {getTimeOfEvent} from "../../util/get-time-of-event";
 import {Cockpit} from "../../util/cockpit";
 import {notifyAdmin} from "../../util/telegram";
-import {loadCalendar} from "./CalendarLoader";
-import {EventsObject, GetEventOptions, GetEventPermission} from "./EventMapper";
+import {loadCalendar} from "./CalendarLoader.server";
+import {EventsObject, GetEventOptions, GetEventPermission} from "./EventMapper.server";
 import {CalendarName} from "./CalendarInfo";
 
 export const loadEvents = async (options: GetEventOptions): Promise<EventsObject> => {

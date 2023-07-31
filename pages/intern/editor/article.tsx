@@ -129,9 +129,9 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
     function saveStatus(newStatus: typeof article.status) {
         setStatusLoading(true);
-        return fetchJson("/api/editor/saveStatus", {
+        return toast.promise(fetchJson("/api/editor/saveStatus", {
             json: {status: newStatus, articleId},
-        }, {
+        }), {
             pending: "Status wird gespeichert",
             error: "Status konnte nicht gespeichert werden",
             success: "Status wurde gespeichert"
@@ -277,7 +277,7 @@ function MediaModal(props: { close: (files: string[]) => void, files: string[], 
     function closes() {
         setSaving(true);
         const files = mediaModalForm[0].files.map(({result}) => result);
-        fetchJson("/api/editor/saveMedia?articleId=" + props.articleId, {json: files}, {
+        toast.promise(fetchJson("/api/editor/saveMedia?articleId=" + props.articleId, {json: files}), {
             pending: "Speichere Medien..",
             success: "Medien gespeichert",
             error: "Fehler beim Speichern"

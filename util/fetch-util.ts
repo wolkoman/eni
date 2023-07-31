@@ -1,8 +1,7 @@
 
 type RequestInitPlus = RequestInit & { jwt?: string, json?: any };
 
-export const fetchJson = (input: RequestInfo, init?: RequestInitPlus, toastOptions?: { pending: string, success: string, error: string }) => {
-  const fetchPlus = (input: RequestInfo, init: RequestInitPlus = {}) => {
+export const fetchJson = (input: RequestInfo, init: RequestInitPlus = {}) => {
     if('jwt' in init){
       init = {...init, headers: {...init.headers, Authorization: `Bearer ${init.jwt}`}};
     }
@@ -15,6 +14,4 @@ export const fetchJson = (input: RequestInfo, init?: RequestInitPlus, toastOptio
       } else
         return response.json();
     });
-  };
-    return fetchPlus(input, init);
 };

@@ -4,6 +4,7 @@ import {usePermission} from '../../util/use-permission';
 import Button from '../../components/Button';
 import {fetchJson} from '../../util/fetch-util';
 import {useUserStore} from '../../util/store/use-user-store';
+import {toast} from "react-toastify";
 
 function Input(props: { label: string, value: string, onChange: (text: string) => any }) {
     return <div className="my-2">
@@ -19,9 +20,9 @@ export default function ChangePassword() {
 
     function save() {
         setState(x => ({...x, loading: true}));
-        fetchJson('/api/change-password', {
+        toast.promise(fetchJson('/api/change-password', {
             json: {password: state.current, neo: state.neo}
-        }, {
+        }), {
             pending: 'Ändere Passwort',
             error: 'Passwort konnte nicht geändert werden',
             success: 'Passwort wurde geändert'

@@ -3,7 +3,7 @@ import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {ReaderData} from "../../../util/reader";
 import {Cockpit} from "../../../util/cockpit";
 import {loadEvents} from "../../../app/termine/EventsLoader";
-import {GetEventPermission} from "../../../app/termine/EventMapper";
+import {GetEventPermission} from "../../../app/termine/EventMapper.server";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

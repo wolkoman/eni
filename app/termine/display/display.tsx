@@ -3,7 +3,7 @@ import {EventDateText, EventTime} from "../../../components/calendar/EventUtils"
 import {fetchJson} from "../../../util/fetch-util";
 import {useRouter} from "next/router";
 import {ReaderInfo} from "../../../util/reader";
-import {CalendarEvent, EventsObject} from "../EventMapper";
+import {CalendarEvent, EventsObject} from "../EventMapper.server";
 
 function Countdown() {
 

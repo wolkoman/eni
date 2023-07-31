@@ -11,9 +11,8 @@ import {Collections} from "cockpit-sdk";
 import {EventDate} from "../../components/calendar/EventUtils";
 import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
-import {unibox} from "../../util/styles";
-import {Clickable} from "../../app/(shared)/Clickable";
-import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarEvent} from "../../app/termine/EventMapper.server";
+import {toast} from "react-toastify";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const {removeSuggestion} = useAuthenticatedCalendarStore();
@@ -22,8 +21,8 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
     const [declineMessage, setDeclineMessage] = useState<string | undefined>();
 
     function answer(suggestion: Collections["eventSuggestion"], accepted: true | string) {
-        return fetchJson("/api/calendar/answer",
-            {json: {accepted: accepted === true, suggestionId: suggestion._id, reason: accepted}},
+        return toast.promise(fetchJson("/api/calendar/answer",
+            {json: {accepted: accepted === true, suggestionId: suggestion._id, reason: accepted}}),
             {pending: "Speichern..", error: "Konnte nicht gespeichert werden", success: "Speichern erfolgreich"}
         )
             .then(data => {

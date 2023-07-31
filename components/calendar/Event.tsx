@@ -3,7 +3,7 @@ import React from "react";
 import {EventDescription, EventTag} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
+import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper.server";
 import {CalendarName, getCalendarInfo} from "../../app/termine/CalendarInfo";
 
 export function Event({event, suggestion, ...props}: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'], small?: boolean }) {
@@ -11,7 +11,7 @@ export function Event({event, suggestion, ...props}: { event: Partial<CalendarEv
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'}`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'}  leading-6`}
         >
             <div className={`pr-3 pt-1.5 shrink-0 ${props.small ? "w-[40px]" : "w-[100px] lg:w-[110px]"}`}>
                 <ParishDot info={info} small={props.small}/>

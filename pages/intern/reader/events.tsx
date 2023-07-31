@@ -8,8 +8,9 @@ import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store"
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
 import {Clickable} from "../../../app/(shared)/Clickable";
-import {CalendarEvent} from "../../../app/termine/EventMapper";
+import {CalendarEvent} from "../../../app/termine/EventMapper.server";
 import {CalendarGroup} from "../../../app/termine/CalendarGroup";
+import {toast} from "react-toastify";
 
 function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {
 
@@ -112,7 +113,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;
-        fetchJson("/api/reader/save", {json: {[eventId]: {liturgy, date}}}, {
+        toast.promise(fetchJson("/api/reader/save", {json: {[eventId]: {liturgy, date}}}), {
             pending: "Liturgie wird gespeichert",
             error: "Liturgie wurde nicht gespeichert",
             success: "Liturgie wurde gespeichert"
@@ -122,9 +123,9 @@ export default function Index(props: { liturgy: LiturgyData }) {
     async function selectPerson(eventId: string, role: ReaderRole, userId: string | null) {
         const userName = [...readers, ...communionMinisters].find(reader => reader._id === userId)?.name ?? 'Unbekannt';
         const roleData = userId !== null ? {id: userId, name: userName, status: "assigned"} : null;
-        fetchJson("/api/reader/save", {
+        toast.promise(fetchJson("/api/reader/save", {
             json: {[eventId]: {[role]: roleData}}
-        }, {
+        }), {
             pending: "Person wird gespeichert",
             error: "Person wurde nicht gespeichert",
             success: "Person wurde gespeichert"

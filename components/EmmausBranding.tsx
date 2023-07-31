@@ -3,7 +3,7 @@ import Responsive from "./Responsive";
 import {getTimeOfEvent} from "../util/get-time-of-event";
 import {getWeekDayName} from "./calendar/Calendar";
 import {CalendarGroup} from "../app/termine/CalendarGroup";
-import {CalendarTag, EventsObject} from "../app/termine/EventMapper";
+import {CalendarTag, EventsObject} from "../app/termine/EventMapper.server";
 import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
 
 export function EmmausBranding(props: { eventsObject: EventsObject }) {

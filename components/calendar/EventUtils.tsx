@@ -3,7 +3,7 @@ import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
 import {roleToString} from "../../util/reader";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
+import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper.server";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
     return <div>

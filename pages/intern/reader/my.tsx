@@ -8,6 +8,7 @@ import Button from "../../../components/Button";
 import {fetchJson} from "../../../util/fetch-util";
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
 import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
+import {toast} from "react-toastify";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
     const order = ["H", "F", "G", "", "g"];
@@ -24,7 +25,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
         .sort((a, b) => new Date(a.event.date).getTime() - new Date(b.event.date).getTime());
 
     function cancel(eventId: string, role: ReaderRole) {
-        fetchJson("/api/reader/cancel", {json: {eventId, role}}, {
+        toast.promise(fetchJson("/api/reader/cancel", {json: {eventId, role}}), {
             pending: "Trage aus...",
             success: "Lesung ist ausgetragen!",
             error: "Ein Fehler ist aufgetreten"
@@ -39,7 +40,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
     function takeOver(eventId: string, role: ReaderRole) {
 
         const roleInfo: ReaderInfo = {id: user?._id!, status: "informed", name: user?.name!};
-        fetchJson("/api/reader/save", {json: {[eventId]: {[role]: roleInfo}}}, {
+        toast.promise(fetchJson("/api/reader/save", {json: {[eventId]: {[role]: roleInfo}}}), {
             pending: "Liturgie wird gespeichert",
             error: "Liturgie wurde nicht gespeichert",
             success: "Liturgie wurde gespeichert"

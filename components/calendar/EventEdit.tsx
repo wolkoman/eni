@@ -6,6 +6,7 @@ import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
 import Button from "../Button";
 import {createDiffSuggestion, EventSuggestion, getSuggestionFromEvent} from "../../util/suggestion-utils";
 import {CalendarName} from "../../app/termine/CalendarInfo";
+import {toast} from "react-toastify";
 
 
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
@@ -20,7 +21,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
 
     function save() {
         setLoading(true);
-        fetchJson("/api/calendar/suggest", {
+        toast.promise(fetchJson("/api/calendar/suggest", {
             json: {
                 eventId: props.eventId ?? null,
                 data: createDiffSuggestion(originalItem
@@ -29,7 +30,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
                     , form[0]),
                 parish: form[0].parish
             }
-        }, {
+        }), {
             error: "Änderung konnte nicht gespeichert werden",
             pending: "Speichere..",
             success: "Die Änderung wurde vorgeschlagen. Sie ist noch nicht öffentlich."

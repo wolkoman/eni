@@ -4,7 +4,7 @@ import {google} from "googleapis";
 import {musicDescriptionMatch} from "../../intern/limited-event-editing";
 import {loadReaderData} from "../reader";
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
+import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper.server";
 import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
 
 
