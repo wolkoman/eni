@@ -6,7 +6,7 @@ import {SectionHeader} from "./SectionHeader";
 import {groupEventsByDate} from '../util/store/use-calendar-store';
 import {EventDateText} from "./calendar/EventUtils";
 import React from "react";
-import {EventsObject} from "../app/termine/EventMapper.server";
+import {EventsObject} from "../app/termine/EventMapper";
 import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
 
 export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {

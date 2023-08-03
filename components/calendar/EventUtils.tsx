@@ -3,7 +3,7 @@ import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
 import {roleToString} from "../../util/reader";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper.server";
+import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
     return <div>
@@ -15,25 +15,6 @@ export function Tooltip(props: { tip: string, children: ReactNode }) {
             </div>
         </div>
     </div>
-}
-
-export function EventTag(props: { tag: CalendarTag }) {
-    if (props.tag === CalendarTag.inChurch) return <></>;
-    return <Tooltip tip={{
-        [CalendarTag.private]: "Vertraulich",
-        [CalendarTag.announcement]: "Ankündigung",
-        [CalendarTag.cancelled]: "Abgesagt",
-        [CalendarTag.suggestion]: "Noch nicht veröffentlicht",
-    }[props.tag]}>
-        <div className="bg-black/[4%] p-1 rounded">
-            {{
-                [CalendarTag.private]: <>🔒</>,
-                [CalendarTag.announcement]: <>⭐</>,
-                [CalendarTag.cancelled]: <>❌</>,
-                [CalendarTag.suggestion]: <>⚠️</>,
-            }[props.tag]}
-        </div>
-    </Tooltip>
 }
 
 export function EventDescription(props: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'] }) {

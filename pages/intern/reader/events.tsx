@@ -8,7 +8,7 @@ import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store"
 import {ReaderSite} from "./index";
 import {compareLiturgy} from "./my";
 import {Clickable} from "../../../app/(shared)/Clickable";
-import {CalendarEvent} from "../../../app/termine/EventMapper.server";
+import {CalendarEvent} from "../../../app/termine/EventMapper";
 import {CalendarGroup} from "../../../app/termine/CalendarGroup";
 import {toast} from "react-toastify";
 

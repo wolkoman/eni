@@ -1,6 +1,6 @@
 import React from 'react';
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
-import {GetEventPermission} from "../EventMapper.server";
+import {GetEventPermission} from "../EventMapper";
 import {loadEvents} from "../EventsLoader";
 
 export const revalidate = 300

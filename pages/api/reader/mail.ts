@@ -7,7 +7,7 @@ import {sign} from "jsonwebtoken";
 import {User} from "../../../util/user";
 import {sendMail} from "../../../util/mailjet";
 import {Cockpit} from "../../../util/cockpit";
-import {CalendarTag, GetEventPermission} from "../../../app/termine/EventMapper.server";
+import {CalendarTag, GetEventPermission} from "../../../app/termine/EventMapper";
 import {loadEvents} from "../../../app/termine/EventsLoader";
 
 const READER_ID = "637b85bc376231d51500018d";

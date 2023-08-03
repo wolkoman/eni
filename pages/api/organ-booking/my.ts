@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {GetEventPermission} from "../../../app/termine/EventMapper.server";
+import {GetEventPermission} from "../../../app/termine/EventMapper";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
 import {loadCalendar} from "../../../app/termine/CalendarLoader.server";
 

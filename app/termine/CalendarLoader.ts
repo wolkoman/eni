@@ -1,8 +1,8 @@
 import {getGoogleAuthClient} from "../(shared)/GoogleAuthClient";
 import {google} from "googleapis";
 
-import {CalendarEvent, GetEventOptions, GetEventPermission, mapEvent} from "./EventMapper.server";
 import {CALENDAR_INFOS, CalendarName} from "./CalendarInfo";
+import {CalendarEvent, GetEventOptions, GetEventPermission, mapEvent} from "./EventMapper";
 
 export async function loadCalendar(
   calendarName: CalendarName,

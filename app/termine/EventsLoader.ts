@@ -1,11 +1,26 @@
+"use server"
 import {getGoogleAuthClient} from "../(shared)/GoogleAuthClient";
 import {site} from "../../util/sites";
 import {getTimeOfEvent} from "../../util/get-time-of-event";
 import {Cockpit} from "../../util/cockpit";
 import {notifyAdmin} from "../../util/telegram";
-import {loadCalendar} from "./CalendarLoader.server";
-import {EventsObject, GetEventOptions, GetEventPermission} from "./EventMapper.server";
 import {CalendarName} from "./CalendarInfo";
+import {resolveUserFromServer} from "../(shared)/UserHandler";
+import {Permission} from "../../util/verify";
+import {loadReaderData} from "../../pages/api/reader";
+import {EventsObject, GetEventOptions, GetEventPermission} from "./EventMapper";
+import {loadCalendar} from "./CalendarLoader";
+
+export async function loadEventsFromServer() {
+  const user = await resolveUserFromServer();
+
+  const privateAccess = user && user.permissions[Permission.PrivateCalendarAccess];
+  const readerData = await (privateAccess ? loadReaderData : () => Promise.resolve(undefined))()
+  return await loadEvents({
+    permission: privateAccess ? GetEventPermission.PRIVATE_ACCESS : GetEventPermission.PUBLIC,
+    readerData
+  });
+}
 
 export const loadEvents = async (options: GetEventOptions): Promise<EventsObject> => {
   const authClient = await getGoogleAuthClient()

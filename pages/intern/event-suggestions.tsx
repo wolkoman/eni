@@ -10,7 +10,7 @@ import {Collections} from "cockpit-sdk";
 import {EventDate} from "../../components/calendar/EventUtils";
 import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
-import {CalendarEvent} from "../../app/termine/EventMapper.server";
+import {CalendarEvent} from "../../app/termine/EventMapper";
 import {toast} from "react-toastify";
 import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
 

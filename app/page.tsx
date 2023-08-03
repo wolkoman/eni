@@ -16,7 +16,7 @@ import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
-import {GetEventPermission} from "./termine/EventMapper.server";
+import {GetEventPermission} from "./termine/EventMapper";
 import {loadEvents} from "./termine/EventsLoader";
 
 export const revalidate = 300

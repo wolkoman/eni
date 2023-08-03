@@ -17,7 +17,7 @@ import {ListView} from "../../components/calendar/ListView";
 import {FilterSelector} from "../../components/calendar/FilterSelector";
 import {Permission} from "../../util/verify";
 import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
-import {CalendarEvent, EventsObject} from "./EventMapper.server";
+import {CalendarEvent, EventsObject} from "./EventMapper";
 import {CalendarGroup} from "./CalendarGroup";
 import {CalendarName, getCalendarInfo} from "./CalendarInfo";
 

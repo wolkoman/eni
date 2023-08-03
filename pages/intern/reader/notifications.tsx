@@ -12,7 +12,7 @@ import {
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
 import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
-import {CalendarEvent} from "../../../app/termine/EventMapper.server";
+import {CalendarEvent} from "../../../app/termine/EventMapper";
 import {toast} from "react-toastify";
 
 export default function Index(props: { liturgy: LiturgyData }) {

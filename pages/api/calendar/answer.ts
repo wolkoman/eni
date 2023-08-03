@@ -5,7 +5,7 @@ import {applySuggestionToPatch, getSuggestionFromDiff} from "../../../util/sugge
 import {sendMail} from "../../../util/mailjet";
 import {Cockpit} from "../../../util/cockpit";
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper.server";
+import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
 import {getCalendarInfo} from "../../../app/termine/CalendarInfo";
 
 

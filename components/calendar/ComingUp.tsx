@@ -9,7 +9,7 @@ import {site} from "../../util/sites";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
 import {Clickable} from "../../app/(shared)/Clickable";
-import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper.server";
+import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
 import {CalendarGroup, getGroupSorting} from "../../app/termine/CalendarGroup";
 import {CalendarName} from "../../app/termine/CalendarInfo";
 

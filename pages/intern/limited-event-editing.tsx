@@ -8,7 +8,7 @@ import {Event} from "../../components/calendar/Event";
 import {fetchJson} from "../../util/fetch-util";
 import {SanitizeHTML} from "../../components/SanitizeHtml";
 import {EventDate, EventDateText} from "../../components/calendar/EventUtils";
-import {CalendarEvent} from "../../app/termine/EventMapper.server";
+import {CalendarEvent} from "../../app/termine/EventMapper";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
 import {CalendarName} from "../../app/termine/CalendarInfo";
 import {toast} from "react-toastify";

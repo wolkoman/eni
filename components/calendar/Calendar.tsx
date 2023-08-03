@@ -1,4 +1,4 @@
-import {CalendarEvent} from "../../app/termine/EventMapper.server";
+import {CalendarEvent} from "../../app/termine/EventMapper";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
 import {CalendarName} from "../../app/termine/CalendarInfo";
 

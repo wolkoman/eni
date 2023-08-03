@@ -5,7 +5,7 @@ import {fetchJson} from '../../util/fetch-util';
 import {useState} from '../../util/use-state-util';
 
 import {Clickable} from "../../app/(shared)/Clickable";
-import {CalendarEvent} from "../../app/termine/EventMapper.server";
+import {CalendarEvent} from "../../app/termine/EventMapper";
 
 export default function Orgel() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean

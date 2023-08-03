@@ -4,9 +4,9 @@ import create from 'zustand';
 import {useEffect} from "react";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper.server";
+import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
-import loadEventsFromServer from "../../app/termine/EventsLoader.server";
+import {loadEventsFromServer} from "../../app/termine/EventsLoader";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({
@@ -63,8 +63,8 @@ export const useCalendarStore = create(combine({
                 error: false,
                 cache: data.cache,
             }))
-            .catch((err) => {
-                console.log({err})
+            .catch((error) => {
+                console.log({error})
                 setTimeout(() => {
                     set(state => ({...state, loaded: false}));
                     get().load();

@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {Temporal} from '@js-temporal/polyfill';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {CalendarTag, GetEventPermission} from "../../../app/termine/EventMapper.server";
+import {CalendarTag, GetEventPermission} from "../../../app/termine/EventMapper";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
 import {loadCalendar} from "../../../app/termine/CalendarLoader.server";
 
