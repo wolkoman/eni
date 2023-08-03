@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
 import {Event} from "../../components/calendar/Event";
 import {EniLoading} from "../../components/Loading";
 import Button from "../../components/Button";
@@ -13,6 +12,7 @@ import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
 import {CalendarEvent} from "../../app/termine/EventMapper.server";
 import {toast} from "react-toastify";
+import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const {removeSuggestion} = useAuthenticatedCalendarStore();

@@ -1,11 +1,10 @@
 "use server"
-import {resolveUserFromServer} from "../../app/(shared)/UserHandler";
-import {Permission} from "../verify";
 import {Cockpit} from "../cockpit";
+import {User} from "../user";
 
 export async function getAllSuggestionFromServer() {
-  const user = await resolveUserFromServer();
-  const privateAccess = user && user.permissions[Permission.CalendarAdministration];
+  const user: undefined | User = undefined;//await resolveUserFromServer();
+  const privateAccess = false; //user && user.permissions[Permission.CalendarAdministration];
   if (!privateAccess) {
     return []
   }
