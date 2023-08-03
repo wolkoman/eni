@@ -7,7 +7,7 @@ import {TemplateHandler} from 'easy-template-x';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
-import {groupEventsByDate, useAuthenticatedCalendarStore} from '../../util/store/use-calendar-store';
+import {groupEventsByDate, useCalendarStore} from '../../util/store/use-calendar-store';
 import {saveFile} from "../../util/save-file";
 import {useAuthenticatedUserStore, useUserStore} from "../../util/store/use-user-store";
 import CockpitSDK, {Collections} from "cockpit-sdk";
@@ -25,7 +25,7 @@ import {getCalendarInfo} from "../../app/termine/CalendarInfo";
 export default function InternArticles() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
-    const {items: events, loaded} = useAuthenticatedCalendarStore()
+    const [events, loaded] = useCalendarStore(state => [state.items, state.loaded])
     const {user} = useAuthenticatedUserStore()
 
     function pad(num: number) {

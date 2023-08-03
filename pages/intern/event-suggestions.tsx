@@ -12,10 +12,10 @@ import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
 import {CalendarEvent} from "../../app/termine/EventMapper";
 import {toast} from "react-toastify";
-import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
+import {useCalendarStore} from "../../util/store/use-calendar-store";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
-    const {removeSuggestion} = useAuthenticatedCalendarStore();
+    const removeSuggestion = useCalendarStore(state => state.removeSuggestion);
     const {add: addSuggestion} = useAuthenticatedSuggestionsStore();
     const [declineDialog, setDeclineDialog] = useState(false);
     const [declineMessage, setDeclineMessage] = useState<string | undefined>();
@@ -80,7 +80,7 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
 
 export default function Intern() {
     usePermission([Permission.CalendarAdministration]);
-    const {openSuggestions, items, loading} = useAuthenticatedCalendarStore();
+    const [openSuggestions, items, loading] = useCalendarStore(state => [state.openSuggestions, state.items, state.loading]);
     const {items: suggestions, loading: loading2} = useAuthenticatedSuggestionsStore();
 
     return <Site title="Terminvorschläge" showTitle={true}>

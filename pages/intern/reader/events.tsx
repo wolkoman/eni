@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
+import {groupEventsByDate, useCalendarStore} from "../../../util/store/use-calendar-store";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";
@@ -108,7 +108,7 @@ export default function Index(props: { liturgy: LiturgyData }) {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
-    const {items: events} = useAuthenticatedCalendarStore();
+    const events = useCalendarStore(state => state.items);
     const {readers, communionMinisters, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
 
     async function selectLiturgy(eventId: string, liturgy: string) {

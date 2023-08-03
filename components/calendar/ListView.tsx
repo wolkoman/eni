@@ -4,7 +4,7 @@ import {Preference, usePreference} from "../../util/store/use-preference";
 import {useState} from "../../util/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
-import {groupEventsByDate, useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
+import {groupEventsByDate, useCalendarStore} from "../../util/store/use-calendar-store";
 import {LiturgyInformation} from "./LiturgyInformation";
 import React, {ReactNode, useRef} from "react";
 import {EventSearch} from "./EventSearch";
@@ -27,7 +27,7 @@ export function ListView(props: { filter: FilterType, liturgy: LiturgyData, cale
     const [separateMass] = usePreference(Preference.SeparateMass);
     const [search, setSearch] = useState("");
     const {user} = useAuthenticatedUserStore();
-    const {openSuggestions: allOpenSuggestions} = useAuthenticatedCalendarStore();
+    const allOpenSuggestions = useCalendarStore(state => state.openSuggestions);
     const openSuggestions = allOpenSuggestions.filter(sug => sug.by === user?._id || user?.permissions[Permission.CalendarAdministration]);
     const items = Object.entries(groupEventsByDate(applyFilter(props.calendar.items
             .filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.map(group => `gruppe:${group}`).join(",")).toLowerCase().includes(search.toLowerCase())),

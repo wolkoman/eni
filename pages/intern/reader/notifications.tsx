@@ -11,13 +11,13 @@ import {
 } from "../../../util/reader";
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
-import {useAuthenticatedCalendarStore} from "../../../util/store/use-calendar-store";
+import {useCalendarStore} from "../../../util/store/use-calendar-store";
 import {CalendarEvent} from "../../../app/termine/EventMapper";
 import {toast} from "react-toastify";
 
 export default function Index(props: { liturgy: LiturgyData }) {
 
-    const {items: events} = useAuthenticatedCalendarStore();
+    const events = useCalendarStore(state => state.items);
     const {readers, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
 
     const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!)

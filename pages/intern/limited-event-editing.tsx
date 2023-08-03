@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
-import {groupEventsByDate, useAuthenticatedCalendarStore, useCalendarStore} from "../../util/store/use-calendar-store";
+import {groupEventsByDate, useCalendarStore} from "../../util/store/use-calendar-store";
 import {Permission} from "../../util/verify";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {Event} from "../../components/calendar/Event";
@@ -20,7 +20,7 @@ export default function LimitedEventEditing() {
     const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);
     const load = useCalendarStore(state => state.load);
     const {user} = useAuthenticatedUserStore();
-    const {items: events} = useAuthenticatedCalendarStore();
+    const events = useCalendarStore(state => state.items);
     usePermission([Permission.LimitedEventEditing]);
     useEffect(() => {
         setRecords(Object.entries(groupEventsByDate(events.filter(event =>

@@ -1,12 +1,12 @@
 "use client"
 
 import create from 'zustand';
-import {useEffect} from "react";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
 import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
 import {CalendarGroup} from "../../app/termine/CalendarGroup";
 import {loadEventsFromServer} from "../../app/termine/EventsLoader";
+import {autoloader} from "./store-loader";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({
@@ -30,15 +30,7 @@ export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolea
     }), {} as any)
 }
 
-export function useAuthenticatedCalendarStore() {
-    const state = useCalendarStore(state => state);
-    useEffect(() => {
-        state.load();
-    }, []);
-    return state;
-}
-
-export const useCalendarStore = create(combine({
+export const useCalendarStore = create(autoloader(combine({
     items: [] as CalendarEvent[],
     originalItems: [] as CalendarEvent[],
     openSuggestions: [] as Collections["eventSuggestion"][],
@@ -84,5 +76,5 @@ export const useCalendarStore = create(combine({
             })
         )
     }
-})));
+}))));
 
