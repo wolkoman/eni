@@ -7,7 +7,7 @@ import {TemplateHandler} from 'easy-template-x';
 import sanitize from 'sanitize-html';
 import {useState} from '../../util/use-state-util';
 import {getWeekDayName} from '../../components/calendar/Calendar';
-import {groupEventsByDate, useCalendarStore} from '../../util/store/use-calendar-store';
+import {groupEventsByDate, useCalendarStore} from '@/store/CalendarStore';
 import {saveFile} from "../../util/save-file";
 import {useAuthenticatedUserStore, useUserStore} from "../../util/store/use-user-store";
 import CockpitSDK, {Collections} from "cockpit-sdk";

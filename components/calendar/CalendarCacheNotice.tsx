@@ -1,5 +1,5 @@
 import React from 'react';
-import {useCalendarStore} from '../../util/store/use-calendar-store';
+import {useCalendarStore} from '@/store/CalendarStore';
 
 export function CalendarCacheNotice() {
   const cached = useCalendarStore(state => state.cache);

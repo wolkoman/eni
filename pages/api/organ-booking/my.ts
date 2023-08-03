@@ -3,7 +3,7 @@ import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
 import {GetEventPermission} from "../../../app/termine/EventMapper";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
-import {loadCalendar} from "../../../app/termine/CalendarLoader.server";
+import {loadCalendar} from "@/app/termine/CalendarLoader";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

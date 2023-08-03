@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import {groupEventsByDate, groupEventsByGroup,} from '../../util/store/use-calendar-store';
+import {groupEventsByDate, groupEventsByGroup,} from '../../app/(store)/CalendarStore';
 import Responsive from '../Responsive';
 import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {Preference, usePreference} from "../../util/store/use-preference";

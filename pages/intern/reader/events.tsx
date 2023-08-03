@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {groupEventsByDate, useCalendarStore} from "../../../util/store/use-calendar-store";
+import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
 import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
 import {fetchJson} from "../../../util/fetch-util";
 import {Collections} from "cockpit-sdk";

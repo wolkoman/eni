@@ -4,7 +4,7 @@ import {Preference, usePreference} from "../../util/store/use-preference";
 import {useState} from "../../util/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
-import {groupEventsByDate, useCalendarStore} from "../../util/store/use-calendar-store";
+import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
 import {LiturgyInformation} from "./LiturgyInformation";
 import React, {ReactNode, useRef} from "react";
 import {EventSearch} from "./EventSearch";

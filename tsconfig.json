@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/store/*": ["app/(store)/*"],
+        "@/app/*": ["app/*"],
+        "@/util/*": ["util/*"]
+      },
     "typeRoots": [
       "./util/types",
       "./node_modules/@types"

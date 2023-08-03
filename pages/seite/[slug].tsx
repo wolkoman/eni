@@ -2,7 +2,7 @@ import React from 'react';
 import {Collections} from "cockpit-sdk";
 import {GetStaticPaths, GetStaticProps} from "next";
 import Link from "next/link";
-import {fetchEmmausSites} from "../../util/fetchEmmausSites";
+import {fetchEmmausSites} from "@/util/fetchEmmausSites";
 import {site as siteDif} from "../../util/sites";
 import {Article} from "../../components/Article";
 

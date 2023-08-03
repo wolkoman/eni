@@ -12,7 +12,7 @@ import {applySuggestionToPatch} from "../../util/suggestion-utils";
 import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
 import {CalendarEvent} from "../../app/termine/EventMapper";
 import {toast} from "react-toastify";
-import {useCalendarStore} from "../../util/store/use-calendar-store";
+import {useCalendarStore} from "@/store/CalendarStore";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const removeSuggestion = useCalendarStore(state => state.removeSuggestion);

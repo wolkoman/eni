@@ -11,7 +11,7 @@ import {
 } from "../../../util/reader";
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import {ReaderSite} from "./index";
-import {useCalendarStore} from "../../../util/store/use-calendar-store";
+import {useCalendarStore} from "@/store/CalendarStore";
 import {CalendarEvent} from "../../../app/termine/EventMapper";
 import {toast} from "react-toastify";
 

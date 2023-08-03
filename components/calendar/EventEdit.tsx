@@ -1,4 +1,4 @@
-import {useCalendarStore} from "../../util/store/use-calendar-store";
+import {useCalendarStore} from "@/store/CalendarStore";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {useState} from "react";
 import {fetchJson} from "../../util/fetch-util";

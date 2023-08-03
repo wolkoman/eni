@@ -4,7 +4,6 @@ import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "../../util/use-state-util";
 import {FilterType} from "../../components/calendar/Calendar";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
-import {useCalendarStore} from "../../util/store/use-calendar-store";
 import {Preference, usePreference} from "../../util/store/use-preference";
 import {useRouter, useSearchParams} from "next/navigation";
 import React, {useEffect} from "react";
@@ -20,6 +19,7 @@ import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdi
 import {CalendarEvent, EventsObject} from "./EventMapper";
 import {CalendarGroup} from "./CalendarGroup";
 import {CalendarName, getCalendarInfo} from "./CalendarInfo";
+import {useCalendarStore} from "@/store/CalendarStore";
 
 export function AddEvent() {
   const [isEditing, setIsEditing] = useState(false);

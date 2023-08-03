@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
-import {groupEventsByDate, useCalendarStore} from "../../util/store/use-calendar-store";
+import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
 import {Permission} from "../../util/verify";
 import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {Event} from "../../components/calendar/Event";

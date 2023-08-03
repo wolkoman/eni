@@ -3,10 +3,10 @@
 import create from 'zustand';
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
-import {CalendarGroup} from "../../app/termine/CalendarGroup";
-import {loadEventsFromServer} from "../../app/termine/EventsLoader";
-import {autoloader} from "./store-loader";
+import {CalendarEvent, EventsObject} from "../termine/EventMapper";
+import {CalendarGroup} from "../termine/CalendarGroup";
+import {loadEventsFromServer} from "../termine/EventsLoader";
+import {autoloader} from "@/util/store/store-loader";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({

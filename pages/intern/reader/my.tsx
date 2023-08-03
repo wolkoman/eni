@@ -7,7 +7,7 @@ import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "../.
 import Button from "../../../components/Button";
 import {fetchJson} from "../../../util/fetch-util";
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
-import {useCalendarStore} from "../../../util/store/use-calendar-store";
+import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
