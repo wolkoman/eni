@@ -33,7 +33,8 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
                 {groups.slice(0, 6).map(([group, eventsObject]) =>
                     <Clickable
-                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
+                        key={group}
+                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
                         className={`p-4 pb-8 rounded-xl relative overflow-hidden`}
                     >
                         <div className="flex gap-2 items-start justify-center my-4">
@@ -51,6 +52,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 )}
                 {groups.slice(6).map(([group]) =>
                     <Clickable
+                        key={group}
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
                         className={`rounded-2xl text-xl text-center font-bold p-4 block`}
                     >

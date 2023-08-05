@@ -19,7 +19,6 @@ const autoloaderImpl: StoreLoaderImpl = (f, name) => (set, get, store) => {
     const loadedGet: typeof get = () => {
         const state: any = get();
         if (!loadCalled && 'load' in state) {
-            console.log("LOAD")
             loadCalled = true;
             state.load()
         }

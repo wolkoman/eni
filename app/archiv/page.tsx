@@ -1,5 +1,4 @@
 import React from 'react';
-import {Collections} from "cockpit-sdk";
 import Link from "next/link";
 import Site from "../../components/Site";
 import {site} from "../../util/sites";
@@ -11,11 +10,7 @@ export default async function HomePage() {
 
     const calendars = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT].map(name => getCalendarInfo(name));
     return <>
-        <Site
-            title="Archiv"
-            description="Drei Pfarren im Wiener Dekanat 23"
-            keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}
-        >
+        <Site title="Archiv">
             {await site(async () => <>
                 <div className="text-3xl font-bold">Wochenmitteilungen</div>
                 <div className="my-4 mb-16">

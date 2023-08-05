@@ -46,7 +46,6 @@ export const useCalendarStore = create(autoloader(combine({
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
-        console.error("useCalendarStore IS BEING CALLED")
         loadEventsFromServer()
             .then(data => set({
                 items: data.events,

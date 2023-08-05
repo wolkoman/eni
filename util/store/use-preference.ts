@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import {combine, persist} from "zustand/middleware";
 
 export enum Preference {

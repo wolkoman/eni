@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import Link from "next/link";
 import {fetchJson} from "../../../util/fetch-util";
-import {useRouter} from "next/router";
+import {useSearchParams} from "next/navigation";
 import Button from "../../../components/Button";
 import {usePermission} from "../../../util/use-permission";
 import {Permission} from "../../../util/verify";
@@ -12,11 +12,11 @@ import {EniLoading} from "../../../components/Loading";
 export default function Index() {
 
     const [project, setProject] = useState<{articles: Collections['paper_articles'][], name: string}>();
-    const {query: {projectId}} = useRouter();
+    const searchParams = useSearchParams();
     usePermission([Permission.Editor]);
     useEffect(() => {
-        fetchJson("/api/editor/project", {json: {projectId}}).then(projects => setProject(projects));
-    }, [projectId])
+        fetchJson("/api/editor/project", {json: {projectId: searchParams.get('projectId')}}).then(projects => setProject(projects));
+    }, [searchParams])
 
     return <Site title={`Projekt ${project?.name ?? ''}`} showTitle={true}>
         <div className="flex mb-4">

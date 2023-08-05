@@ -67,10 +67,6 @@ export function LoginPage() {
                         <Button className="" onClick={() => login()} label="Anmelden"
                                 disabled={buttonDisabled()}/>
                     </div>
-                    <div className="text-xs mt-2">
-                        oder{" "}
-                        <Link href="https://forms.gle/TJZjvqbvq688J57h7"><span className="text-blue-600 cursor-pointer">weitere Optionen</span></Link>
-                    </div>
                 </div>
             </div>
         </div>

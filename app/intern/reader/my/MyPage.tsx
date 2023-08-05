@@ -2,7 +2,7 @@
 import React from 'react';
 import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
-import {getLiturgyData, Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
+import {Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
 import {useAuthenticatedReaderStore} from "../../../../util/store/use-reader-store";
 import {useUserStore} from "../../../../util/store/use-user-store";
 import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "../../../../util/reader";
