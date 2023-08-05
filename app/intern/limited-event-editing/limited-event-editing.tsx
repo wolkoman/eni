@@ -1,20 +1,21 @@
+"use client"
 import React, {useEffect, useState} from 'react';
-import Site from '../../components/Site';
-import {usePermission} from '../../util/use-permission';
-import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
-import {Permission} from "../../util/verify";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
-import {Event} from "../../components/calendar/Event";
-import {fetchJson} from "../../util/fetch-util";
-import {SanitizeHTML} from "../../components/SanitizeHtml";
-import {EventDate, EventDateText} from "../../components/calendar/EventUtils";
-import {CalendarEvent} from "../../app/termine/EventMapper";
-import {CalendarGroup} from "../../app/termine/CalendarGroup";
-import {CalendarName} from "../../app/termine/CalendarInfo";
 import {toast} from "react-toastify";
+import {CalendarEvent} from "@/app/termine/EventMapper";
+import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
+import {useAuthenticatedUserStore} from "@/util/store/use-user-store";
+import {usePermission} from "@/util/use-permission";
+import {Permission} from "@/util/verify";
+import {CalendarName} from "@/app/termine/CalendarInfo";
+import {CalendarGroup} from "@/app/termine/CalendarGroup";
+import {fetchJson} from "@/util/fetch-util";
+import Site from "../../../components/Site";
+import {EventDate, EventDateText} from "../../../components/calendar/EventUtils";
+import {Event} from "../../../components/calendar/Event";
+import {SanitizeHTML} from "../../../components/SanitizeHtml";
 
 export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
-export default function LimitedEventEditing() {
+export function LimitedEventEditingPage() {
     const [music, setMusic] = useState("");
     const [currentEvent, setCurrentEvent] = useState<CalendarEvent | undefined>();
     const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);

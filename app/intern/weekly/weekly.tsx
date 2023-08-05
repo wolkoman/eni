@@ -1,28 +1,30 @@
-import React, {useEffect} from 'react';
-import {usePermission} from '../../util/use-permission';
-import Site from '../../components/Site';
-import Button from '../../components/Button';
-import {Permission} from '../../util/verify';
-import {TemplateHandler} from 'easy-template-x';
-import sanitize from 'sanitize-html';
-import {useState} from '../../util/use-state-util';
-import {getWeekDayName} from '../../components/calendar/Calendar';
-import {groupEventsByDate, useCalendarStore} from '@/store/CalendarStore';
-import {saveFile} from "../../util/save-file";
-import {useAuthenticatedUserStore, useUserStore} from "../../util/store/use-user-store";
-import CockpitSDK, {Collections} from "cockpit-sdk";
-import {cockpit} from "../../util/cockpit-sdk";
-import Link from "next/link";
-import {EniLoading} from "../../components/Loading";
-import PDFMerger from 'pdf-merger-js/browser';
-import {toast} from "react-toastify";
-import {fetchJson} from "../../util/fetch-util";
-import {Cockpit} from "../../util/cockpit";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
-import {CalendarGroup} from "../../app/termine/CalendarGroup";
-import {getCalendarInfo} from "../../app/termine/CalendarInfo";
+"use client";
 
-export default function InternArticles() {
+import React, {useEffect} from 'react';
+import {usePermission} from "../../../util/use-permission";
+import {Permission} from "../../../util/verify";
+import {groupEventsByDate, useCalendarStore} from "../../(store)/CalendarStore";
+import {useAuthenticatedUserStore, useUserStore} from "../../../util/store/use-user-store";
+import {CalendarEvent, CalendarTag} from "../../termine/EventMapper";
+import {CalendarGroup} from "../../termine/CalendarGroup";
+import sanitize from "sanitize-html";
+import {getWeekDayName} from "../../../components/calendar/Calendar";
+import {TemplateHandler} from "easy-template-x";
+import {saveFile} from "../../../util/save-file";
+import Site from "../../../components/Site";
+import Button from "../../../components/Button";
+import {useState} from "../../../util/use-state-util";
+import {fetchJson} from "../../../util/fetch-util";
+import {toast} from "react-toastify";
+import PDFMerger from 'pdf-merger-js/browser';
+import CockpitSDK, { Collections } from 'cockpit-sdk';
+import {cockpit} from "../../../util/cockpit-sdk";
+import {EniLoading} from "../../../components/Loading";
+import {Cockpit} from "../../../util/cockpit";
+import {getCalendarInfo} from "../../termine/CalendarInfo";
+import Link from "next/link";
+
+export function WeeklyPage() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
     const [events, loaded] = useCalendarStore(state => [state.items, state.loaded])

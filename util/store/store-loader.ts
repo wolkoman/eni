@@ -1,3 +1,4 @@
+"use client"
 import {State, StateCreator, StoreMutatorIdentifier} from "zustand";
 
 type StoreLoader = <

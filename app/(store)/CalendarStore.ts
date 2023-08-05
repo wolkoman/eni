@@ -1,9 +1,9 @@
 "use client"
 
-import create from 'zustand';
+import {create} from 'zustand';
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent, EventsObject} from "../termine/EventMapper";
+import {CalendarEvent} from "../termine/EventMapper";
 import {CalendarGroup} from "../termine/CalendarGroup";
 import {loadEventsFromServer} from "../termine/EventsLoader";
 import {autoloader} from "@/util/store/store-loader";
@@ -42,11 +42,13 @@ export const useCalendarStore = create(autoloader(combine({
     load: Function,
 },(set, get) => ({
     load: () => {
+        if (!process.browser) return;
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
+        console.error("useCalendarStore IS BEING CALLED")
         loadEventsFromServer()
-            .then((data: EventsObject) => set({
+            .then(data => set({
                 items: data.events,
                 openSuggestions: data.openSuggestions,
                 originalItems: data.events,

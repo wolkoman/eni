@@ -1,16 +1,18 @@
+"use client"
 import React, {useState} from 'react';
 import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
-import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
-import {fetchJson} from "../../../util/fetch-util";
-import {Collections} from "cockpit-sdk";
-import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../util/reader";
-import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
-import {ReaderSite} from "./index";
-import {compareLiturgy} from "./my";
-import {Clickable} from "../../../app/(shared)/Clickable";
-import {CalendarEvent} from "../../../app/termine/EventMapper";
-import {CalendarGroup} from "../../../app/termine/CalendarGroup";
 import {toast} from "react-toastify";
+import { Collections } from 'cockpit-sdk';
+import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../../util/reader";
+import {CalendarEvent} from "../../../termine/EventMapper";
+import {Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
+import {Clickable} from "../../../(shared)/Clickable";
+import {compareLiturgy} from "../my/MyPage";
+import {useAuthenticatedReaderStore} from "../../../../util/store/use-reader-store";
+import {fetchJson} from "../../../../util/fetch-util";
+import {CalendarGroup} from "../../../termine/CalendarGroup";
+import {ReaderSite} from "../IndexPage";
+
 
 function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {
 
@@ -104,7 +106,7 @@ function LiturgyEvent(props: {
     </Clickable>;
 }
 
-export default function Index(props: { liturgy: LiturgyData }) {
+export default function EventsPage(props: { liturgy: LiturgyData }) {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
@@ -171,13 +173,4 @@ export default function Index(props: { liturgy: LiturgyData }) {
             </div>)}
         </div>
     </ReaderSite>
-}
-
-export async function getStaticProps() {
-    return {
-        props: {
-            liturgy: await getLiturgyData(),
-        },
-        revalidate: 3600 * 24,
-    }
 }

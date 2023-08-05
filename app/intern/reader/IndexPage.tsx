@@ -1,6 +1,6 @@
+"use client"
 import React, {ReactNode} from 'react';
 import Site from '../../../components/Site';
-import {getLiturgyData} from "../../api/liturgy";
 import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
 import Responsive from "../../../components/Responsive";
 import Link from "next/link";
@@ -8,11 +8,6 @@ import {useAuthenticatedUserStore} from "../../../util/store/use-user-store";
 import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
-
-export default function Index() {
-
-    return <ReaderSite/>;
-}
 
 export function ReaderSite(props: { children?: ReactNode }) {
 
@@ -56,13 +51,4 @@ export function ReaderSite(props: { children?: ReactNode }) {
             </Responsive>
         </div>
     </Site>
-}
-
-export async function getStaticProps() {
-    return {
-        props: {
-            liturgy: await getLiturgyData(),
-        },
-        revalidate: 3600 * 24,
-    }
 }

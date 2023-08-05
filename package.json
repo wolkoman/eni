@@ -6,7 +6,6 @@
     "@js-temporal/polyfill": "^0.4.3",
     "@rive-app/canvas": "^1.0.97",
     "@rive-app/react-canvas": "^3.0.34",
-    "@tailwindcss/line-clamp": "^0.4.2",
     "@types/diff-match-patch": "^1.0.32",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.11.17",

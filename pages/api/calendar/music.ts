@@ -1,8 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
-import {musicDescriptionMatch} from "../../intern/limited-event-editing";
-import {loadReaderData} from "../reader";
+import {musicDescriptionMatch} from "@/app/intern/limited-event-editing/limited-event-editing";
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
 import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
 import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";

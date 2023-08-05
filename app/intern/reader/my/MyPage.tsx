@@ -1,21 +1,22 @@
+"use client"
 import React from 'react';
-import {useUserStore} from "../../../util/store/use-user-store";
-import {getLiturgyData, Liturgy, LiturgyData} from "../../api/liturgy";
-import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
-import {ReaderSite} from "./index";
-import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "../../../util/reader";
-import Button from "../../../components/Button";
-import {fetchJson} from "../../../util/fetch-util";
-import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
 import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
+import {getLiturgyData, Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
+import {useAuthenticatedReaderStore} from "../../../../util/store/use-reader-store";
+import {useUserStore} from "../../../../util/store/use-user-store";
+import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "../../../../util/reader";
+import {fetchJson} from "../../../../util/fetch-util";
+import {ReaderSite} from "../IndexPage";
+import Button from "../../../../components/Button";
+import {EventDateText, EventTime} from "../../../../components/calendar/EventUtils";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
     const order = ["H", "F", "G", "", "g"];
     return order.indexOf(a.rank) - order.indexOf(b.rank);
 }
 
-export default function Index(props: { liturgy: LiturgyData }) {
+export function MyPage(props: { liturgy: LiturgyData }) {
 
     const {readers, readerData, setReaderData,  ...reader} = useAuthenticatedReaderStore();
     const events = useCalendarStore(state => state.items);
@@ -113,13 +114,4 @@ export default function Index(props: { liturgy: LiturgyData }) {
                 </div>)}
         </div>
     </ReaderSite>
-}
-
-export async function getStaticProps() {
-    return {
-        props: {
-            liturgy: await getLiturgyData(),
-        },
-        revalidate: 3600 * 24,
-    }
 }

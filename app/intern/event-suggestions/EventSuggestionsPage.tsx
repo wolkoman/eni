@@ -1,18 +1,19 @@
-import React, {useState} from 'react';
-import Site from '../../components/Site';
-import {usePermission} from '../../util/use-permission';
-import {Permission} from '../../util/verify';
-import {Event} from "../../components/calendar/Event";
-import {EniLoading} from "../../components/Loading";
-import Button from "../../components/Button";
-import {fetchJson} from "../../util/fetch-util";
-import {Collections} from "cockpit-sdk";
-import {EventDate} from "../../components/calendar/EventUtils";
-import {applySuggestionToPatch} from "../../util/suggestion-utils";
-import {useAuthenticatedSuggestionsStore} from "../../util/store/use-suggestions-store";
-import {CalendarEvent} from "../../app/termine/EventMapper";
+"use client"
 import {toast} from "react-toastify";
 import {useCalendarStore} from "@/store/CalendarStore";
+import { Collections } from "cockpit-sdk";
+import {useAuthenticatedSuggestionsStore} from "../../../util/store/use-suggestions-store";
+import {CalendarEvent} from "../../termine/EventMapper";
+import React, {useState} from "react";
+import {EventDate} from "../../../components/calendar/EventUtils";
+import {Event} from "../../../components/calendar/Event";
+import {fetchJson} from "../../../util/fetch-util";
+import Button from "../../../components/Button";
+import {Permission} from "../../../util/verify";
+import {usePermission} from "../../../util/use-permission";
+import {applySuggestionToPatch} from "../../../util/suggestion-utils";
+import Site from "../../../components/Site";
+import {EniLoading} from "../../../components/Loading";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const removeSuggestion = useCalendarStore(state => state.removeSuggestion);
@@ -78,7 +79,7 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
     </div>;
 }
 
-export default function Intern() {
+export function EventSuggestionsPage() {
     usePermission([Permission.CalendarAdministration]);
     const [openSuggestions, items, loading] = useCalendarStore(state => [state.openSuggestions, state.items, state.loading]);
     const {items: suggestions, loading: loading2} = useAuthenticatedSuggestionsStore();
