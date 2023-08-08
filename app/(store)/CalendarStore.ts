@@ -1,12 +1,13 @@
 "use client"
 
-import create from 'zustand';
+import create, {createStore, StoreApi, UseBoundStore, useStore} from 'zustand';
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
 import {CalendarEvent, EventsObject} from "../termine/EventMapper";
 import {CalendarGroup} from "../termine/CalendarGroup";
 import {loadEventsFromServer} from "../termine/EventsLoader";
 import {autoloader} from "@/util/store/store-loader";
+import {useEffect} from "react";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {
     return events.reduce<Record<string, T[]>>((record, event) => ({
@@ -30,7 +31,23 @@ export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolea
     }), {} as any)
 }
 
-export const useCalendarStore = create(autoloader(combine({
+export function useCalendarStore(): CalendarState
+export function useCalendarStore<T>(
+    selector: (state: CalendarState) => T,
+    equals?: (a: T, b: T) => boolean
+): T
+export function useCalendarStore<T>(
+    selector?: (state: CalendarState) => T,
+    equals?: (a: T, b: T) => boolean
+) {
+    useEffect(() => {
+        calendarStore.getState().load()
+    }, [])
+    return useStore(calendarStore, selector!, equals)
+}
+type CalendarState = typeof calendarStore extends StoreApi<infer T> ? T : never
+
+export const calendarStore = createStore(combine({
     items: [] as CalendarEvent[],
     originalItems: [] as CalendarEvent[],
     openSuggestions: [] as Collections["eventSuggestion"][],
@@ -76,5 +93,5 @@ export const useCalendarStore = create(autoloader(combine({
             })
         )
     }
-}))));
+})));
 
