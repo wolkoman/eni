@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import {fetchJson} from '../fetch-util';
 import {User} from '../user';
 import {useEffect} from "react";

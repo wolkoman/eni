@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
 import {fetchJson} from "../../../util/fetch-util";
-import {useRouter} from "next/router";
+import {useSearchParams} from "next/navigation";
 import {ReaderInfo} from "../../../util/reader";
 import {CalendarEvent, EventsObject} from "../EventMapper";
 
@@ -32,7 +32,7 @@ function EventShow(props: { event: CalendarEvent, index: number }) {
 
 export default function EventPage(props: {eventsObject: EventsObject}) {
 
-    const {query, reload} = useRouter();
+    const params = useSearchParams()
     const [entries, setEntries] = useState<CalendarEvent[]>([]);
     const [start] = useState(new Date().getTime())
     const event = entries?.[2]
@@ -40,15 +40,15 @@ export default function EventPage(props: {eventsObject: EventsObject}) {
     useEffect(() => {
         const load = () => {
             if(new Date().getTime() - start > 1000 * 3600) {
-                reload();
+                location.reload();
             }
-            return fetchJson("/api/calendar/display?code=" + query.code)
+            return fetchJson("/api/calendar/display?code=" + params.get("code"))
                 .then(data => setEntries(data));
         };
         load().then();
         const interval = setInterval(load, 1000 * 60 * 5);
         return () => clearInterval(interval);
-    }, [setEntries, query])
+    }, [setEntries, params])
 
     return <div className="bg-black h-screen text-white flex overflow-auto snap-x snap-mandatory">
         {entries.map((event, index) => <EventShow event={event} key={event.id} index={index}/>)}

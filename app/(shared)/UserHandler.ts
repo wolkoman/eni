@@ -5,7 +5,6 @@ import {cookies} from "next/headers";
 
 export async function resolveUserFromServer(): Promise<User | undefined>{
   const jwt = cookies().get('jwt')?.value
-  console.log({jwt})
   if(!jwt) return undefined;
   return resolveUser(jwt);
 }

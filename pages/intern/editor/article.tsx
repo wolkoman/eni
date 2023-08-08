@@ -2,7 +2,7 @@ import {Collections} from 'cockpit-sdk';
 import React, {ReactNode, useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import {fetchJson} from "../../../util/fetch-util";
-import {useRouter} from "next/router";
+import {useSearchParams} from "next/navigation";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
 import {saveFile} from "../../../util/save-file";
@@ -66,7 +66,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     const [article, setArticle] = useState(props.article);
     const {user} = useAuthenticatedUserStore();
     const permission = user?.permissions?.[Permission.Editor] ?? false;
-    const {query: {articleId}} = useRouter();
+    const searchParams = useSearchParams();
     const [text, setText] = useState(props.versions[0]?.text ?? '');
     const [length, setLength] = useState(0);
     const [note, setNote] = useState<'unfinished' | 'perfect' | 'excess'>('unfinished');
@@ -112,7 +112,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
         if (!editable) return Promise.reject();
         if (saved === 'saved') return Promise.resolve();
         setSaved('saving');
-        return fetchJson("/api/editor/save", {json: {articleId, text}})
+        return fetchJson("/api/editor/save", {json: {articleId: searchParams.get('articleId'), text}})
             .then(() => setSaved('saved'))
             .catch(() => {
                 setSaved('error');
@@ -130,7 +130,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
     function saveStatus(newStatus: typeof article.status) {
         setStatusLoading(true);
         return toast.promise(fetchJson("/api/editor/saveStatus", {
-            json: {status: newStatus, articleId},
+            json: {status: newStatus, articleId: searchParams.get('articleId')},
         }), {
             pending: "Status wird gespeichert",
             error: "Status konnte nicht gespeichert werden",

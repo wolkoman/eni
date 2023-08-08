@@ -1,4 +1,4 @@
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/navigation';
 import {useEffect} from 'react';
 import {useAuthenticatedUserStore} from './store/use-user-store';
 import {Permission} from './verify';

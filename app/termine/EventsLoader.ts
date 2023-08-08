@@ -19,7 +19,7 @@ export async function loadEventsFromServer() {
   return await loadEvents({
     permission: privateAccess ? GetEventPermission.PRIVATE_ACCESS : GetEventPermission.PUBLIC,
     readerData
-  });
+  })
 }
 
 export const loadEvents = async (options: GetEventOptions): Promise<EventsObject> => {

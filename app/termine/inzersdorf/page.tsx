@@ -3,7 +3,7 @@ import {EventDateText, EventTime} from "../../../components/calendar/EventUtils"
 import {GetEventPermission} from "../EventMapper";
 import {loadEvents} from "../EventsLoader";
 
-export const revalidate = 300
+export const revalidate = 3000
 
 export default async function EventPage() {
 

@@ -1,7 +1,7 @@
 import {Liturgy} from "../../pages/api/liturgy";
 import {Preference, usePreference} from "../../util/store/use-preference";
-import {compareLiturgy} from "../../pages/intern/reader/my";
 import React from "react";
+import {compareLiturgy} from "@/app/intern/reader/my/MyPage";
 
 export function LiturgyInformation(props: { liturgies?: Liturgy[] }) {
     const [liturgyInformation] = usePreference(Preference.LiturgyInformation);

@@ -46,7 +46,7 @@ export const useCalendarStore = createLoadedStore(createStore(combine({
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
         loadEventsFromServer()
-            .then((data: EventsObject) => set({
+            .then(data => set({
                 items: data.events,
                 openSuggestions: data.openSuggestions,
                 originalItems: data.events,

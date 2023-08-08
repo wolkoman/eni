@@ -1,4 +1,4 @@
-import {ParishDot} from './ParishTag';
+import {ParishDot} from './ParishDot';
 import React from "react";
 import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
