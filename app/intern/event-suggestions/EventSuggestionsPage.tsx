@@ -2,7 +2,6 @@
 import {toast} from "react-toastify";
 import {useCalendarStore} from "@/store/CalendarStore";
 import { Collections } from "cockpit-sdk";
-import {useAuthenticatedSuggestionsStore} from "../../../util/store/use-suggestions-store";
 import {CalendarEvent} from "../../termine/EventMapper";
 import React, {useState} from "react";
 import {EventDate} from "../../../components/calendar/EventUtils";
@@ -14,10 +13,11 @@ import {usePermission} from "../../../util/use-permission";
 import {applySuggestionToPatch} from "../../../util/suggestion-utils";
 import Site from "../../../components/Site";
 import {EniLoading} from "../../../components/Loading";
+import {useSuggestionStore} from "../../(store)/SuggestionStore";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const removeSuggestion = useCalendarStore(state => state.removeSuggestion);
-    const {add: addSuggestion} = useAuthenticatedSuggestionsStore();
+    const {add: addSuggestion} = useSuggestionStore(state => state);
     const [declineDialog, setDeclineDialog] = useState(false);
     const [declineMessage, setDeclineMessage] = useState<string | undefined>();
 
@@ -82,7 +82,7 @@ function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], a
 export function EventSuggestionsPage() {
     usePermission([Permission.CalendarAdministration]);
     const [openSuggestions, items, loading] = useCalendarStore(state => [state.openSuggestions, state.items, state.loading]);
-    const {items: suggestions, loading: loading2} = useAuthenticatedSuggestionsStore();
+    const {items: suggestions, loading: loading2} = useSuggestionStore(state => state);
 
     return <Site title="Terminvorschläge" showTitle={true}>
         {(loading || loading2) && <EniLoading/>}

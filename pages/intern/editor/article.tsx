@@ -6,7 +6,6 @@ import {useSearchParams} from "next/navigation";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
 import {saveFile} from "../../../util/save-file";
-import {useAuthenticatedUserStore} from "../../../util/store/use-user-store";
 import {Permission} from "../../../util/verify";
 import Button from "../../../components/Button";
 import Responsive from "../../../components/Responsive";
@@ -15,6 +14,7 @@ import {AnimatePresence, motion} from 'framer-motion';
 import {SelfServiceFile, SelfServiceFileUpload} from "../../../components/SelfService";
 import Link from "next/link";
 import {Cockpit} from "../../../util/cockpit";
+import {useUserStore} from "@/store/UserStore";
 
 
 function Welcome(props: { article: any, project: any }) {
@@ -64,7 +64,7 @@ export default function Index(props: { article: Collections['paper_articles'], p
 
 
     const [article, setArticle] = useState(props.article);
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     const permission = user?.permissions?.[Permission.Editor] ?? false;
     const searchParams = useSearchParams();
     const [text, setText] = useState(props.versions[0]?.text ?? '');

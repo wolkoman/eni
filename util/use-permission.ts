@@ -1,10 +1,10 @@
 import {useRouter} from 'next/navigation';
 import {useEffect} from 'react';
-import {useAuthenticatedUserStore} from './store/use-user-store';
 import {Permission} from './verify';
+import {useUserStore} from "@/store/UserStore";
 
 export const usePermission = (requiredPermissions: Permission[] = []) => {
-    const {user, loaded} = useAuthenticatedUserStore()
+    const [user, loaded] = useUserStore(state => [state.user, state.loaded])
     const router = useRouter();
     useEffect(() => {
         if (!loaded) return;

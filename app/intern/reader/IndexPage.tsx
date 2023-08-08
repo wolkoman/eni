@@ -1,18 +1,18 @@
 "use client"
 import React, {ReactNode} from 'react';
 import Site from '../../../components/Site';
-import {useAuthenticatedReaderStore} from "../../../util/store/use-reader-store";
+import {useReaderStore} from "@/store/ReaderStore";
 import Responsive from "../../../components/Responsive";
 import Link from "next/link";
-import {useAuthenticatedUserStore} from "../../../util/store/use-user-store";
 import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
 import {CalendarName} from "../../../app/termine/CalendarInfo";
+import {useUserStore} from "@/store/UserStore";
 
 export function ReaderSite(props: { children?: ReactNode }) {
 
-    const {user} = useAuthenticatedUserStore();
-    const {parish, setParish, ...reader} = useAuthenticatedReaderStore();
+    const user = useUserStore(state => state.user);
+    const {parish, setParish, ...reader} = useReaderStore(state => state);
     const belongsTo = (calendar: CalendarName) => user?.parish === CalendarName.ALL || user?.parish === calendar;
 
     const inactive = 'grayscale opacity-20 contrast-50 cursor-pointer';

@@ -2,12 +2,12 @@ import React from 'react';
 import Site from '../../components/Site';
 import {usePermission} from '../../util/use-permission';
 import {Permission} from '../../util/verify';
-import {useAuthenticatedUserStore, useUserStore} from '../../util/store/use-user-store';
 import {InternButton} from "../../components/InternButton";
+import {useUserStore} from "@/store/UserStore";
 
 
 export default function Intern() {
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     const permissions = user?.permissions;
     const [logout] = useUserStore(state => [state.logout]);
     usePermission([]);

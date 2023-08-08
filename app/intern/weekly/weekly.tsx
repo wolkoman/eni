@@ -4,7 +4,6 @@ import React, {useEffect} from 'react';
 import {usePermission} from "../../../util/use-permission";
 import {Permission} from "../../../util/verify";
 import {groupEventsByDate, useCalendarStore} from "../../(store)/CalendarStore";
-import {useAuthenticatedUserStore, useUserStore} from "../../../util/store/use-user-store";
 import {CalendarEvent, CalendarTag} from "../../termine/EventMapper";
 import {CalendarGroup} from "../../termine/CalendarGroup";
 import sanitize from "sanitize-html";
@@ -23,12 +22,13 @@ import {EniLoading} from "../../../components/Loading";
 import {Cockpit} from "../../../util/cockpit";
 import {getCalendarInfo} from "../../termine/CalendarInfo";
 import Link from "next/link";
+import {useUserStore} from "../../(store)/UserStore";
 
 export function WeeklyPage() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
     const [events, loaded] = useCalendarStore(state => [state.items, state.loaded])
-    const {user} = useAuthenticatedUserStore()
+    const user = useUserStore(store => store.user)
 
     function pad(num: number) {
         return `${num < 10 ? '0' : ''}${num}`

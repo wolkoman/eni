@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {toast} from "react-toastify";
 import {CalendarEvent} from "@/app/termine/EventMapper";
 import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
-import {useAuthenticatedUserStore} from "@/util/store/use-user-store";
 import {usePermission} from "@/util/use-permission";
 import {Permission} from "@/util/verify";
 import {CalendarName} from "@/app/termine/CalendarInfo";
@@ -13,6 +12,7 @@ import Site from "../../../components/Site";
 import {EventDate, EventDateText} from "../../../components/calendar/EventUtils";
 import {Event} from "../../../components/calendar/Event";
 import {SanitizeHTML} from "../../../components/SanitizeHtml";
+import {useUserStore} from "@/store/UserStore";
 
 export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
 export function LimitedEventEditingPage() {
@@ -20,7 +20,7 @@ export function LimitedEventEditingPage() {
     const [currentEvent, setCurrentEvent] = useState<CalendarEvent | undefined>();
     const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);
     const load = useCalendarStore(state => state.load);
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     const events = useCalendarStore(state => state.items);
     usePermission([Permission.LimitedEventEditing]);
     useEffect(() => {

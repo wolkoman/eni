@@ -6,7 +6,6 @@ export function createLoadedStore<State extends { load: Function }>(store: Store
         selector: (state: State) => T
     ) => {
         useEffect(() => {
-            const state = store.getState()
             store.getState().load()
         }, [])
         return useStore(store, selector)

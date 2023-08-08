@@ -18,7 +18,7 @@ const _usePreferenceStore = create(persist(combine({
     set({preferences: {...get().preferences, [preference]: value}})
   }
 })), {name: "preferences-store"}));
-export const usePreference = (preference: Preference): [boolean, (x: boolean) => any] => {
+export const preferenceStore = (preference: Preference): [boolean, (x: boolean) => any] => {
   const store = _usePreferenceStore(state => state);
   return [
     store.preferences[preference],

@@ -1,5 +1,4 @@
 import {useCalendarStore} from "@/store/CalendarStore";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {useState} from "react";
 import {fetchJson} from "../../util/fetch-util";
 import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
@@ -7,12 +6,13 @@ import Button from "../Button";
 import {createDiffSuggestion, EventSuggestion, getSuggestionFromEvent} from "../../util/suggestion-utils";
 import {CalendarName} from "../../app/termine/CalendarInfo";
 import {toast} from "react-toastify";
+import {useUserStore} from "@/store/UserStore";
 
 
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
     const {addSuggestion, originalItems} = useCalendarStore(state => state);
     const originalItem = originalItems.find(e => e.id === props.eventId);
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     const form = useState<EventSuggestion & {parish?: string | null}>({
         ...props.suggestion,
         parish: props.parish

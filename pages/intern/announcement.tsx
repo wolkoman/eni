@@ -9,14 +9,14 @@ import {
 } from "../../components/SelfService";
 import Button from "../../components/Button";
 import {notifyAdminFromClientSide} from "../../util/telegram";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {usePermission} from "../../util/use-permission";
 import {Cockpit} from "../../util/cockpit";
+import {useUserStore} from "@/store/UserStore";
 
 
 export default function EventPage() {
     usePermission([]);
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     const emptyForm = { description: "", files: [] as SelfServiceFile[], parish: "", hidden: false};
     const form = useState(emptyForm);
     const {parish} = form[0];

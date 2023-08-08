@@ -3,7 +3,7 @@
 import React from 'react';
 import {toast} from "react-toastify";
 import {useCalendarStore} from "../../../(store)/CalendarStore";
-import {useAuthenticatedReaderStore} from "../../../../util/store/use-reader-store";
+import {useReaderStore} from "../../../(store)/ReaderStore";
 import {
   getTasksForPerson,
   getTasksFromReaderData,
@@ -20,7 +20,7 @@ import {LiturgyData} from "../../../../pages/api/liturgy";
 export default function NotificationsPage(props: { liturgy: LiturgyData }) {
 
   const events = useCalendarStore(state => state.items);
-  const {readers, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
+  const {readers, readerData, setReaderData, ...reader} = useReaderStore(state => state);
 
   const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!)
     .filter(task => new Date(task.event?.date) > new Date());

@@ -1,6 +1,6 @@
 import {applyFilter, FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
-import {Preference, usePreference} from "../../util/store/use-preference";
+import {Preference, preferenceStore} from "@/store/PreferenceStore";
 import {useState} from "../../util/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
@@ -10,7 +10,6 @@ import React, {ReactNode, useRef} from "react";
 import {EventSearch} from "./EventSearch";
 import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
 import {Permission} from "../../util/verify";
 import {
     applySuggestionToPatch,
@@ -22,11 +21,12 @@ import {ViewportList} from "react-viewport-list";
 import {EventEdit, EventEditBackground} from "./EventEdit";
 import {ReducedCalendarState} from "../../app/termine/EventPage";
 import {CalendarName} from "../../app/termine/CalendarInfo";
+import {useUserStore} from "@/store/UserStore";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
-    const [separateMass] = usePreference(Preference.SeparateMass);
+    const [separateMass] = preferenceStore(Preference.SeparateMass);
     const [search, setSearch] = useState("");
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     const allOpenSuggestions = useCalendarStore(state => state.openSuggestions);
     const openSuggestions = allOpenSuggestions.filter(sug => sug.by === user?._id || user?.permissions[Permission.CalendarAdministration]);
     const items = Object.entries(groupEventsByDate(applyFilter(props.calendar.items

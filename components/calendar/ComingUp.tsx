@@ -4,7 +4,7 @@ import React from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '../../app/(store)/CalendarStore';
 import Responsive from '../Responsive';
 import {useEmmausProd} from "../../util/use-emmaus-prod";
-import {Preference, usePreference} from "../../util/store/use-preference";
+import {Preference, preferenceStore} from "@/store/PreferenceStore";
 import {site} from "../../util/sites";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
@@ -14,7 +14,7 @@ import {CalendarGroup, getGroupSorting} from "../../app/termine/CalendarGroup";
 import {CalendarName} from "../../app/termine/CalendarInfo";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
-    const [separateMass] = usePreference(Preference.SeparateMass);
+    const [separateMass] = preferenceStore(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
         .sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
         .map(([group, events]) => [group,

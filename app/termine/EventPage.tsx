@@ -3,8 +3,7 @@
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "../../util/use-state-util";
 import {FilterType} from "../../components/calendar/Calendar";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
-import {Preference, usePreference} from "../../util/store/use-preference";
+import {Preference, preferenceStore} from "@/store/PreferenceStore";
 import {useRouter, useSearchParams} from "next/navigation";
 import React, {useEffect} from "react";
 import Site from "../../components/Site";
@@ -20,10 +19,11 @@ import {CalendarEvent, EventsObject} from "./EventMapper";
 import {CalendarGroup} from "./CalendarGroup";
 import {CalendarName, getCalendarInfo} from "./CalendarInfo";
 import {useCalendarStore} from "@/store/CalendarStore";
+import {useUserStore} from "@/store/UserStore";
 
 export function AddEvent() {
   const [isEditing, setIsEditing] = useState(false);
-  const {user} = useAuthenticatedUserStore();
+  const user = useUserStore(state => state.user);
   return user?.permissions[Permission.PrivateCalendarAccess] ? <>
     <div
       className={`p-3 rounded-lg bg-black/5 ${isEditing || 'cursor-pointer'} static lg:relative`}
@@ -57,12 +57,12 @@ export default function EventPage(props: {
 }) {
   const [filter, setFilter] = useState<FilterType>(null);
   const [firstFilterUpdate, setFirstFilterUpdate] = useState(true);
-  const {user} = useAuthenticatedUserStore();
+  const user = useUserStore(state => state.user);
   const calendarStore = useCalendarStore(state => state);
   const calendar = user
     ? calendarStore
     : {items: props.eventsObject.events, error: false, loading: false, loaded: true};
-  const [monthView] = usePreference(Preference.MonthView);
+  const [monthView] = preferenceStore(Preference.MonthView);
   const {replace: routerReplace} = useRouter();
   const searchParams = useSearchParams();
 

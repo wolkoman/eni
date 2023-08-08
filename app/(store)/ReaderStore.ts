@@ -1,37 +1,13 @@
-import create from 'zustand';
-import {fetchJson} from '../fetch-util';
-import {ReaderData} from "../reader";
-import {useAuthenticatedUserStore} from "./use-user-store";
-import {useEffect} from "react";
+import {createStore} from 'zustand';
+import {fetchJson} from '../../util/fetch-util';
+import {ReaderData} from "../../util/reader";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent} from "../../app/termine/EventMapper";
-import {CalendarName} from "../../app/termine/CalendarInfo";
+import {CalendarEvent} from "../termine/EventMapper";
+import {CalendarName} from "../termine/CalendarInfo";
+import {createLoadedStore} from "./CreateLoadedStore";
 
-export function useAuthenticatedReaderStore() {
-    const {user} = useAuthenticatedUserStore();
-    //const {items: events} = useAuthenticatedCalendarStore();
-    const store = useReaderStore(state => state);
-    useEffect(() => {
-        if (user?.parish && user.parish !== CalendarName.ALL) store.setParish(user.parish);
-    }, [user?.parish]);
-    useEffect(() => {
-        if (!store.loaded) store.load();
-    }, [store.loaded])
-    return {
-        loading: store.loading,
-        error: store.error,
-        readers: store.readers,
-        communionMinisters: store.communionMinisters,
-        readerData: store.readerData,
-        setReaderData: store.setReaderData,
-        parish: store.parish,
-        setParish: store.setParish,
-        //readerCount: store.getReaderCount(events)
-    };
-}
-
-export const useReaderStore = create(combine({
+export const useReaderStore = createLoadedStore(createStore(combine({
     readers: [] as Collections["person"][],
     communionMinisters: [] as Collections["person"][],
     readerData: {} as ReaderData,
@@ -82,4 +58,4 @@ export const useReaderStore = create(combine({
             name: get().readers.find(({_id}) => _id === id)?.name,
         })) as { name: string, count: number, id: string }[]
     }
-})));
+}))));

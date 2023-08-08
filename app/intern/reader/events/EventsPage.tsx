@@ -8,7 +8,7 @@ import {CalendarEvent} from "../../../termine/EventMapper";
 import {Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
 import {Clickable} from "../../../(shared)/Clickable";
 import {compareLiturgy} from "../my/MyPage";
-import {useAuthenticatedReaderStore} from "../../../../util/store/use-reader-store";
+import {useReaderStore} from "../../../(store)/ReaderStore";
 import {fetchJson} from "../../../../util/fetch-util";
 import {CalendarGroup} from "../../../termine/CalendarGroup";
 import {ReaderSite} from "../IndexPage";
@@ -111,7 +111,7 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
     const events = useCalendarStore(state => state.items);
-    const {readers, communionMinisters, readerData, setReaderData, ...reader} = useAuthenticatedReaderStore();
+    const {readers, communionMinisters, readerData, setReaderData, ...reader} = useReaderStore(state => state);
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;

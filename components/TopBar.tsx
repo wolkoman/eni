@@ -4,7 +4,8 @@ import Link from 'next/link';
 import {site} from '../util/sites';
 import React from 'react';
 import Responsive from "./Responsive";
-import {useAuthenticatedUserStore} from "../util/store/use-user-store";
+
+import {useUserStore} from "@/store/UserStore";
 
 function NavItem(props: {href: string, label: string}) {
     return <Link href={props.href}><div className="group relative px-2 py-1">
@@ -14,7 +15,7 @@ function NavItem(props: {href: string, label: string}) {
 }
 
 export default function TopBar(props: { hidePicture?: boolean, frontpage?: boolean }) {
-    const {user} = useAuthenticatedUserStore();
+    const user = useUserStore(state => state.user);
     return site(<div className="py-4 lg:py-6">
         <Responsive>
             <div className="flex justify-between items-center">

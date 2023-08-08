@@ -6,8 +6,8 @@ import Button from '../../../components/Button';
 import {toast} from 'react-toastify';
 import {useState} from '../../../util/use-state-util';
 import {useRouter, useSearchParams} from 'next/navigation';
-import {useUserStore} from '../../../util/store/use-user-store';
 import Link from "next/link";
+import {useUserStore} from "../../(store)/UserStore";
 
 export function LoginPage() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
