@@ -3,7 +3,8 @@ import {google} from "googleapis";
 
 import {CALENDAR_INFOS, CalendarName} from "./CalendarInfo";
 import {CalendarEvent, mapEvent} from "./EventMapper";
-import {EventLoadOptions, EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {EventLoadAccess, EventLoadOptions} from "@/domain/events/EventLoadOptions";
+import {unstable_cache} from "next/cache";
 
 export async function loadCalendar(
   calendarName: CalendarName,
@@ -25,16 +26,17 @@ export async function loadCalendar(
     ? options.readerData
     : {}
   ;
-  return google.calendar('v3').events.list({
-    maxResults: 1000,
-    calendarId: CALENDAR_INFOS[calendarName].calendarId,
-    auth: oauth2Client,
-    timeMin: (hasTimeframe ? options.timeFrame!.min : new Date(start)).toISOString(),
-    timeMax: (hasTimeframe ? options.timeFrame!.max : new Date(end)).toISOString(),
-    singleEvents: true,
-    timeZone: 'Europa/Vienna',
-    orderBy: 'startTime'
-  }).then(result => result
+  return unstable_cache(() => google.calendar('v3').events.list({
+        maxResults: 1000,
+        calendarId: CALENDAR_INFOS[calendarName].calendarId,
+        auth: oauth2Client,
+        timeMin: (hasTimeframe ? options.timeFrame!.min : new Date(start)).toISOString(),
+        timeMax: (hasTimeframe ? options.timeFrame!.max : new Date(end)).toISOString(),
+        singleEvents: true,
+        timeZone: 'Europa/Vienna',
+        orderBy: 'startTime'
+      }), ['calendar-events', calendarName], {revalidate: 300}
+  )().then(result => result
     .data.items!.map(mapEvent(calendarName, options))
     .filter((event): event is CalendarEvent => !!event?.summary)
     .filter(event => options.access !== EventLoadAccess.READER || options.ids.includes(event.id))
