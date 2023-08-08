@@ -1,12 +1,9 @@
 import {Collections} from 'cockpit-sdk';
 import React, {ReactNode, useEffect, useState} from 'react';
 import Site from '../../../components/Site';
-import {fetchJson} from "../../../util/fetch-util";
 import {useSearchParams} from "next/navigation";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
-import {saveFile} from "../../../util/save-file";
-import {Permission} from "../../../util/verify";
 import Button from "../../../components/Button";
 import Responsive from "../../../components/Responsive";
 import {Hamburger} from "../../../components/Hamburger";
@@ -15,6 +12,9 @@ import {SelfServiceFile, SelfServiceFileUpload} from "../../../components/SelfSe
 import Link from "next/link";
 import {Cockpit} from "../../../util/cockpit";
 import {useUserStore} from "@/store/UserStore";
+import {Permission} from "@/domain/users/Permission";
+import {saveFile} from "@/app/(shared)/BrowserBlobSaver";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 
 function Welcome(props: { article: any, project: any }) {

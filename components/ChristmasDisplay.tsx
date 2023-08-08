@@ -6,8 +6,8 @@ import {SectionHeader} from "./SectionHeader";
 import {groupEventsByDate} from '../app/(store)/CalendarStore';
 import {EventDateText} from "./calendar/EventUtils";
 import React from "react";
-import {EventsObject} from "../app/termine/EventMapper";
-import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
+import {EventsObject} from "@/domain/events/EventMapper";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
     const events = props.eventsObject.events.filter(event => ["12-24", "12-25"].includes(event.date.slice(5)));

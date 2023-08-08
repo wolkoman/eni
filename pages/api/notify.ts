@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {notifyAdmin} from "../../util/telegram";
+
+import {notifyAdmin} from "@/app/(shared)/Telegram";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 

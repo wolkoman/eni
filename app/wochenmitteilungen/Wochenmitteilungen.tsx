@@ -3,7 +3,7 @@
 import React from "react";
 import {motion} from "framer-motion";
 import Site from "../../components/Site";
-import {CalendarName, getCalendarInfo} from "../termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "../(domain)/events/CalendarInfo";
 
 export const MyPdfViewer = () => {
 

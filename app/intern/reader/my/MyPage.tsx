@@ -3,13 +3,13 @@ import React from 'react';
 import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 import {Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
-import {useReaderStore} from "@/store/use-reader-store";
-import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "../../../../util/reader";
-import {fetchJson} from "../../../../util/fetch-util";
 import {ReaderSite} from "../IndexPage";
 import Button from "../../../../components/Button";
 import {EventDateText, EventTime} from "../../../../components/calendar/EventUtils";
 import {useUserStore} from "@/store/UserStore";
+import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "@/domain/service/Service";
+import {fetchJson} from "@/app/(shared)/FetchJson";
+import {useReaderStore} from "@/store/ReaderStore";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
     const order = ["H", "F", "G", "", "g"];

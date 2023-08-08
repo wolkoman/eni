@@ -1,10 +1,10 @@
-import {User} from "@/util/user";
 import {JwtPayload, verify} from "jsonwebtoken";
 import {createLoadedStore} from "@/store/CreateLoadedStore";
 import {createStore} from "zustand";
-import {combine} from "zustand/esm/middleware";
+import {combine} from "zustand/middleware";
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
-import {fetchJson} from "@/util/fetch-util";
+import {User} from "@/domain/users/User";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 function decodeJwt(jwt: string): { user: User, exp: number } {
     const payload = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as JwtPayload;

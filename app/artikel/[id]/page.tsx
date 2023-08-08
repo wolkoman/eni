@@ -1,8 +1,8 @@
 import React from 'react';
 import {cockpit} from '../../../util/cockpit-sdk';
 import {Article as ArticleSite} from '../../../components/Article';
-import {site} from '../../../util/sites';
 import {Cockpit} from "../../../util/cockpit";
+import {site} from "../../(shared)/Instance";
 
 export const revalidate = 300
 

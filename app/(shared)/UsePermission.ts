@@ -1,7 +1,7 @@
-import {useRouter} from 'next/navigation';
-import {useEffect} from 'react';
-import {Permission} from './verify';
 import {useUserStore} from "@/store/UserStore";
+import {useRouter} from "next/navigation";
+import {useEffect} from "react";
+import {Permission} from "@/domain/users/Permission";
 
 export const usePermission = (requiredPermissions: Permission[] = []) => {
     const [user, loaded] = useUserStore(state => [state.user, state.loaded])
@@ -11,7 +11,7 @@ export const usePermission = (requiredPermissions: Permission[] = []) => {
         const unauthorized = requiredPermissions.some(p => !user?.permissions[p]);
         if (unauthorized) {
             router.push('/intern/login');
-        }else if (!user) {
+        } else if (!user) {
             router.push('/');
         }
     }, [loaded, user]);

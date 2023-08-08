@@ -6,7 +6,7 @@ import {Collections} from "cockpit-sdk";
 import {getCockpitResourceUrl} from "./Articles";
 import Button from "./Button";
 
-import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function EmmausSections(props: { emmausbote: Collections['Emmausbote'][] }) {
     const paper = props.emmausbote.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];

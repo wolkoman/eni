@@ -1,12 +1,12 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from '../../util/verify';
 import {sign} from 'jsonwebtoken';
-import {User} from '../../util/user';
 import {getPerson} from './change-password';
 import {setCookie} from "cookies-next";
 import {Cockpit} from "../../util/cockpit";
 import {cockpit} from "../../util/cockpit-sdk";
-import {CalendarName} from "../../app/termine/CalendarInfo";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {User} from "@/domain/users/User";
+import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from "@/domain/users/PermissionResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

@@ -1,11 +1,11 @@
-import {Cockpit} from "./cockpit";
+import {Cockpit} from "@/util/cockpit";
 
-async function getCachedPrompt(prompt: string): Promise<string>{
+async function getCachedPrompt(prompt: string): Promise<string> {
 
     const cache = await Cockpit.collectionGet("cache", {filter: {key: prompt}})
         .then(({entries}) => entries)
 
-    if(cache.length > 0) return cache[0].value;
+    if (cache.length > 0) return cache[0].value;
 
     const value = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -23,14 +23,14 @@ async function getCachedPrompt(prompt: string): Promise<string>{
 
 }
 
-function trimString(value: string){
+function trimString(value: string) {
     const trimable = "\" .\n";
     const start = value.split("").findIndex(c => trimable.indexOf(c) === -1);
     const end = value.split("").reverse().findIndex(c => trimable.indexOf(c) === -1);
     return value.substring(start, value.length - end);
 }
 
-export async function getInstagramTitle(description: string){
+export async function getInstagramTitle(description: string) {
     const value = await getCachedPrompt("Formuliere einen sehr kurzen Titel: " + description);
     return trimString(value);
 }

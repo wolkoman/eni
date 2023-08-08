@@ -3,8 +3,8 @@ import React from "react";
 import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
-import {CalendarName, getCalendarInfo} from "../../app/termine/CalendarInfo";
+import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function Event({event, suggestion, small}: {
     event: Partial<CalendarEvent>,

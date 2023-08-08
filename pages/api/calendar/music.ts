@@ -1,10 +1,12 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
 import {musicDescriptionMatch} from "@/app/intern/limited-event-editing/limited-event-editing";
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
-import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
+import {mapEvent} from "@/domain/events/EventMapper";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -44,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         requestBody: {description: newDescription.trim()}
     }).then((event) => {
         const eniEvent = mapEvent(CalendarName.INZERSDORF, {
-            permission: GetEventPermission.PRIVATE_ACCESS
+            access: EventLoadAccess.PRIVATE_ACCESS
         })(event.data);
         res.status(200).json(eniEvent);
     }).catch((err) => {

@@ -1,8 +1,10 @@
 import {calendar_v3} from "googleapis";
-import {ReaderData, ReaderInfo, ReaderRole} from "../../util/reader";
-import {CalendarGroup, getGroupFromEvent} from "./CalendarGroup";
+import {CalendarGroup} from "./CalendarGroup";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "./CalendarInfo";
+import {getGroupFromEvent} from "@/domain/events/CalendarGroupResolver";
+import {EventLoadOptions, EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {ReaderInfo, ReaderRole} from "@/domain/service/Service";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
 const cancelledRegex = /(abgesagt|findet nicht statt|entfällt)/gi;
@@ -38,12 +40,12 @@ export interface CalendarEvent {
   readerInfo: Partial<Record<ReaderRole, ReaderInfo>>
 }
 
-export function mapEvent(calendarName: CalendarName, options: GetEventOptions): (event?: calendar_v3.Schema$Event) => CalendarEvent | null {
+export function mapEvent(calendarName: CalendarName, options: EventLoadOptions): (event?: calendar_v3.Schema$Event) => CalendarEvent | null {
   return (event): CalendarEvent | null => {
     if (!event) return null;
     const mainPerson = event?.summary?.split("/", 2)?.[1]?.trim() ?? null;
     const summary = event?.summary?.split('/', 2)[0] ?? "";
-    const privateAccess = options.permission === GetEventPermission.PRIVATE_ACCESS;
+    const privateAccess = options.access === EventLoadAccess.PRIVATE_ACCESS;
     if (event.visibility === 'private' && !privateAccess) return null;
     return {
       id: event.id ?? "",
@@ -72,17 +74,3 @@ export function mapEvent(calendarName: CalendarName, options: GetEventOptions): 
   };
 }
 
-export enum GetEventPermission {
-  PUBLIC = "PUBLIC",
-  PRIVATE_ACCESS = "PRIVATE_ACCESS",
-  READER = "READER",
-}
-
-export type GetEventOptions =
-  { permission: GetEventPermission.PUBLIC }
-  | {
-  permission: GetEventPermission.PRIVATE_ACCESS,
-  timeFrame?: { min: Date, max: Date },
-  readerData?: ReaderData
-}
-  | { permission: GetEventPermission.READER, ids: string[] }

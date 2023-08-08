@@ -1,6 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {Cockpit} from "../../../util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const user = resolveUserFromRequest(req);

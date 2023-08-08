@@ -3,15 +3,15 @@
 import React from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '../../app/(store)/CalendarStore';
 import Responsive from '../Responsive';
-import {useEmmausProd} from "../../util/use-emmaus-prod";
 import {Preference, preferenceStore} from "@/store/PreferenceStore";
-import {site} from "../../util/sites";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
 import {Clickable} from "../../app/(shared)/Clickable";
-import {CalendarEvent, EventsObject} from "../../app/termine/EventMapper";
-import {CalendarGroup, getGroupSorting} from "../../app/termine/CalendarGroup";
-import {CalendarName} from "../../app/termine/CalendarInfo";
+import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
+import {site} from "@/app/(shared)/Instance";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = preferenceStore(Preference.SeparateMass);
@@ -25,7 +25,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 )
                 .sort((b, a) => b.start.dateTime?.localeCompare(a.start.dateTime))
             )]) as [string, Record<string, CalendarEvent[]>][]
-    const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
+    const urlPrefix = site('','https://eni.wien');
 
     return <Responsive>
         <div className="my-8">

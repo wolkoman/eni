@@ -1,12 +1,14 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {google} from "googleapis";
-import {applySuggestionToPatch, getSuggestionFromDiff} from "../../../util/suggestion-utils";
-import {sendMail} from "../../../util/mailjet";
 import {Cockpit} from "../../../util/cockpit";
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {GetEventPermission, mapEvent} from "../../../app/termine/EventMapper";
-import {getCalendarInfo} from "../../../app/termine/CalendarInfo";
+import {mapEvent} from "@/domain/events/EventMapper";
+import {getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {applySuggestionToPatch, getSuggestionFromDiff} from "@/domain/suggestions/SuggestionsMapper";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {sendMail} from "@/app/(shared)/Mailjet";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -64,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ? google.calendar('v3').events.get(eventData).then(event => event.data)
       : Promise.resolve(undefined)
     );
-    const existingEvent = mapEvent(suggestionParish.id, {permission: GetEventPermission.PRIVATE_ACCESS})(existingGoogleEvent);
+    const existingEvent = mapEvent(suggestionParish.id, {access: EventLoadAccess.PRIVATE_ACCESS})(existingGoogleEvent);
     const patchedSuggestion = getSuggestionFromDiff(applySuggestionToPatch(suggestion, existingEvent ?? undefined).suggestion);
 
     const patchedEvent = {

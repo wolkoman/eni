@@ -1,12 +1,13 @@
 import {useCalendarStore} from "@/store/CalendarStore";
 import {useState} from "react";
-import {fetchJson} from "../../util/fetch-util";
 import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
 import Button from "../Button";
-import {createDiffSuggestion, EventSuggestion, getSuggestionFromEvent} from "../../util/suggestion-utils";
-import {CalendarName} from "../../app/termine/CalendarInfo";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 import {toast} from "react-toastify";
 import {useUserStore} from "@/store/UserStore";
+import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
+import {createDiffSuggestion, getSuggestionFromEvent} from "@/domain/suggestions/SuggestionsMapper";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {

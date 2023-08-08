@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import Site from '../../components/Site';
 import {toast} from 'react-toastify';
-import {fetchJson} from '../../util/fetch-util';
-import {useState} from '../../util/use-state-util';
+import {useState} from '@/app/(shared)/use-state-util';
 
 import {Clickable} from "../../app/(shared)/Clickable";
-import {CalendarEvent} from "../../app/termine/EventMapper";
+import {CalendarEvent} from "@/domain/events/EventMapper";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 export default function Orgel() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean

@@ -1,10 +1,5 @@
 import Site from '../components/Site';
 import TopBar from '../components/TopBar';
-import {fetchArticles} from "../util/fetchArticles";
-import {fetchEmmausSites} from "../util/fetchEmmausSites";
-import {fetchInstagramFeed} from "../util/fetchInstagram";
-import {fetchEmmausbote} from "../util/fetchWeeklies";
-import {site} from '../util/sites';
 import {Instagram} from "../components/Instagram";
 import {ChristmasDisplay} from "../components/ChristmasDisplay";
 import {EniSections} from "../components/EniSections";
@@ -16,13 +11,18 @@ import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
-import {GetEventPermission} from "./termine/EventMapper";
-import {loadEvents} from "./termine/EventsLoader";
+import {loadEvents} from "./(domain)/events/EventsLoader";
+import {EventLoadAccess} from "./(domain)/events/EventLoadOptions";
+import {site} from "./(shared)/Instance";
+import {fetchInstagramFeed} from "./(shared)/Instagram";
+import {fetchEmmausSites} from "./(shared)/Sites";
+import {fetchArticles} from "./(shared)/Articles";
+import {fetchEmmausbote} from "./(shared)/Weekly";
 
 export const revalidate = 300
 
 export default async function HomePage() {
-  const eventsObject = await loadEvents({permission: GetEventPermission.PUBLIC})
+  const eventsObject = await loadEvents({access: EventLoadAccess.PUBLIC})
   return site(async () => <Site
     responsive={false} navbar={false}
     description="Drei Pfarren im Wiener Dekanat 23"

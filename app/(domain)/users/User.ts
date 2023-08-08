@@ -1,6 +1,7 @@
-import {Permissions} from './verify';
+import {CalendarName} from "@/domain/events/CalendarInfo";
 
-import {CalendarName} from "../app/termine/CalendarInfo";
+import {Permissions} from "@/domain/users/Permission";
+
 export interface User {
     name: string,
     email?: string,

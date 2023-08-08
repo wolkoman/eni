@@ -1,9 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {GetEventPermission} from "../../../app/termine/EventMapper";
-import {CalendarName} from "../../../app/termine/CalendarInfo";
-import {loadCalendar} from "@/app/termine/CalendarLoader";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {loadCalendar} from "@/domain/events/CalendarLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -17,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const oauth2Client = await getGoogleAuthClient();
   const events = await loadCalendar(
     CalendarName.INZERSDORF_ORGAN,
-    {permission: GetEventPermission.PRIVATE_ACCESS},
+    {access: EventLoadAccess.PRIVATE_ACCESS},
     oauth2Client
   )
     .then(events => events.filter(event => event.summary === user.name));

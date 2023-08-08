@@ -1,8 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {ReaderData, ReaderInfo} from "../../../util/reader";
-import {notifyAdmin} from "../../../util/telegram";
 import {Cockpit} from "../../../util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {ReaderData, ReaderInfo} from "@/domain/service/Service";
+import {notifyAdmin} from "@/app/(shared)/Telegram";
 
 const READER_ID = "637b85bc376231d51500018d";
 

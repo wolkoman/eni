@@ -1,7 +1,8 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from "../../../util/verify";
-import {slack} from "../../../util/slack";
 import {Cockpit} from "../../../util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {slack} from "@/app/(shared)/Slack";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

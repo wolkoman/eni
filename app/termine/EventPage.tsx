@@ -1,7 +1,7 @@
 "use client"
 
 import {LiturgyData} from "../../pages/api/liturgy";
-import {useState} from "../../util/use-state-util";
+import {useState} from "../(shared)/use-state-util";
 import {FilterType} from "../../components/calendar/Calendar";
 import {Preference, preferenceStore} from "@/store/PreferenceStore";
 import {useRouter, useSearchParams} from "next/navigation";
@@ -13,13 +13,13 @@ import {Settings} from "../../components/Settings";
 import {MonthView} from "../../components/calendar/MonthView";
 import {ListView} from "../../components/calendar/ListView";
 import {FilterSelector} from "../../components/calendar/FilterSelector";
-import {Permission} from "../../util/verify";
 import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
-import {CalendarEvent, EventsObject} from "./EventMapper";
-import {CalendarGroup} from "./CalendarGroup";
-import {CalendarName, getCalendarInfo} from "./CalendarInfo";
+import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {useCalendarStore} from "@/store/CalendarStore";
 import {useUserStore} from "@/store/UserStore";
+import {Permission} from "@/domain/users/Permission";
 
 export function AddEvent() {
   const [isEditing, setIsEditing] = useState(false);

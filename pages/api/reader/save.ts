@@ -1,7 +1,8 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {ReaderData, ReaderInfo, ReaderRole} from "../../../util/reader";
 import {Cockpit} from "../../../util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {ReaderData, ReaderInfo, ReaderRole} from "@/domain/service/Service";
 
 const READER_ID = "637b85bc376231d51500018d";
 

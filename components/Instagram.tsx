@@ -7,7 +7,7 @@ import {AnimatePresence, motion} from 'framer-motion'
 
 import {Clickable} from "../app/(shared)/Clickable";
 import {SectionHeader} from "./SectionHeader";
-import {CalendarInfo, CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
+import {CalendarInfo, CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export interface InstagramFeedItem {
   id: string,

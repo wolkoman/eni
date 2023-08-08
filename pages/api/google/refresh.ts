@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {cockpit} from '../../../util/cockpit-sdk';
-import {notifyAdmin} from "../../../util/telegram";
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {notifyAdmin} from "@/app/(shared)/Telegram";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 

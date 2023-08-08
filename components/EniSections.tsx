@@ -8,7 +8,7 @@ import Button from "./Button";
 import {Personal} from "./Personal";
 import Image from "next/image";
 import {motion} from 'framer-motion';
-import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function EniSections() {
     return <Responsive>

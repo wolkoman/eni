@@ -2,18 +2,18 @@
 import {toast} from "react-toastify";
 import {useCalendarStore} from "@/store/CalendarStore";
 import { Collections } from "cockpit-sdk";
-import {CalendarEvent} from "../../termine/EventMapper";
+import {CalendarEvent} from "../../(domain)/events/EventMapper";
 import React, {useState} from "react";
 import {EventDate} from "../../../components/calendar/EventUtils";
 import {Event} from "../../../components/calendar/Event";
-import {fetchJson} from "../../../util/fetch-util";
 import Button from "../../../components/Button";
-import {Permission} from "../../../util/verify";
-import {usePermission} from "../../../util/use-permission";
-import {applySuggestionToPatch} from "../../../util/suggestion-utils";
 import Site from "../../../components/Site";
 import {EniLoading} from "../../../components/Loading";
 import {useSuggestionStore} from "../../(store)/SuggestionStore";
+import {applySuggestionToPatch} from "../../(domain)/suggestions/SuggestionsMapper";
+import {usePermission} from "../../(shared)/UsePermission";
+import {Permission} from "../../(domain)/users/Permission";
+import {fetchJson} from "../../(shared)/FetchJson";
 
 function ActiveSuggestion(props: { suggestion: Collections['eventSuggestion'], applicable?: boolean, active?: boolean, event: CalendarEvent | {} }) {
     const removeSuggestion = useCalendarStore(state => state.removeSuggestion);

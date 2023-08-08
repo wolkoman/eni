@@ -26,7 +26,11 @@ export function sendMail(templateId: number, toName: string, toMail: string, sub
     }).then(response => console.log("MJ", response))
 
 }
-export function sendBulkMail(templateId: number, recipients: {mail: string, name: string}[], subject: string, variables: any, sendViaBcc = false) {
+
+export function sendBulkMail(templateId: number, recipients: {
+    mail: string,
+    name: string
+}[], subject: string, variables: any, sendViaBcc = false) {
     return fetch("https://api.mailjet.com/v3.1/send", {
         method: "POST",
         headers: {

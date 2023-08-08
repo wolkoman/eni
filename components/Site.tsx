@@ -2,7 +2,8 @@ import TopBar from './TopBar';
 import Responsive from './Responsive';
 import {ReactNode} from 'react';
 import Footer from './Footer';
-import {site} from '../util/sites';
+
+import {site} from "@/app/(shared)/Instance";
 
 export default function Site(props: {
     title?: string,

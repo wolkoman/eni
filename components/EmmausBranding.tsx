@@ -1,10 +1,10 @@
 import React from 'react';
 import Responsive from "./Responsive";
-import {getTimeOfEvent} from "../util/get-time-of-event";
 import {getWeekDayName} from "./calendar/Calendar";
-import {CalendarGroup} from "../app/termine/CalendarGroup";
-import {CalendarTag, EventsObject} from "../app/termine/EventMapper";
-import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarTag, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {getTimeOfEvent} from "@/domain/events/EventSorter";
 
 export function EmmausBranding(props: { eventsObject: EventsObject }) {
 

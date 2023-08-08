@@ -1,7 +1,7 @@
 import {applyFilter, FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
 import {Preference, preferenceStore} from "@/store/PreferenceStore";
-import {useState} from "../../util/use-state-util";
+import {useState} from "@/app/(shared)/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
 import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
@@ -10,18 +10,18 @@ import React, {ReactNode, useRef} from "react";
 import {EventSearch} from "./EventSearch";
 import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
-import {Permission} from "../../util/verify";
-import {
-    applySuggestionToPatch,
-    EventSuggestion,
-    getSuggestionFromDiff,
-    getSuggestionFromEvent
-} from "../../util/suggestion-utils";
 import {ViewportList} from "react-viewport-list";
 import {EventEdit, EventEditBackground} from "./EventEdit";
 import {ReducedCalendarState} from "../../app/termine/EventPage";
-import {CalendarName} from "../../app/termine/CalendarInfo";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useUserStore} from "@/store/UserStore";
+import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
+import {
+    applySuggestionToPatch,
+    getSuggestionFromDiff,
+    getSuggestionFromEvent
+} from "@/domain/suggestions/SuggestionsMapper";
+import {Permission} from "@/domain/users/Permission";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
     const [separateMass] = preferenceStore(Preference.SeparateMass);

@@ -1,10 +1,11 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {site} from "../../../util/sites";
 import {loadReaderData} from "../reader";
-import {CalendarGroup} from "../../../app/termine/CalendarGroup";
-import {CalendarName} from "../../../app/termine/CalendarInfo";
-import {loadEvents} from "../../../app/termine/EventsLoader";
-import {GetEventPermission} from "../../../app/termine/EventMapper";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {loadEvents} from "@/domain/events/EventsLoader";
+
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {site} from "@/app/(shared)/Instance";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -15,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const readerData = await loadReaderData()
     const {events} = await loadEvents({
-        permission: GetEventPermission.PRIVATE_ACCESS,
+        access: EventLoadAccess.PRIVATE_ACCESS,
         readerData,
         timeFrame: {
             min: new Date(new Date().getTime() - 1000 * 3600),

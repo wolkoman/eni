@@ -1,9 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {notifyAdmin} from "../../../util/telegram";
-import {slack} from "../../../util/slack";
-import {getSuggestionFromDiff} from "../../../util/suggestion-utils";
 import {Cockpit} from "../../../util/cockpit";
+import {getSuggestionFromDiff} from "@/domain/suggestions/SuggestionsMapper";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {slack} from "@/app/(shared)/Slack";
+import {notifyAdmin} from "@/app/(shared)/Telegram";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

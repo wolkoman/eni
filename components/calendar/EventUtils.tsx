@@ -2,8 +2,8 @@ import {getMonthName, getWeekDayName} from "./Calendar";
 import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
-import {roleToString} from "../../util/reader";
-import {CalendarEvent, CalendarTag} from "../../app/termine/EventMapper";
+import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
+import {roleToString} from "@/domain/service/Service";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
     return <div>

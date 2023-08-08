@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from "next/link";
 import Site from "../../components/Site";
-import {site} from "../../util/sites";
 import {getCockpitResourceUrl} from "../../components/Articles";
-import {fetchEmmausbote, fetchWeeklies} from "../../util/fetchWeeklies";
-import {CalendarName, getCalendarInfo} from "../termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "../(domain)/events/CalendarInfo";
+import {site} from "../(shared)/Instance";
+import {fetchEmmausbote, fetchWeeklies} from "../(shared)/Weekly";
 
 export default async function HomePage() {
 

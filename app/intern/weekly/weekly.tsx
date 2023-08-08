@@ -1,28 +1,28 @@
 "use client";
 
 import React, {useEffect} from 'react';
-import {usePermission} from "../../../util/use-permission";
-import {Permission} from "../../../util/verify";
 import {groupEventsByDate, useCalendarStore} from "../../(store)/CalendarStore";
-import {CalendarEvent, CalendarTag} from "../../termine/EventMapper";
-import {CalendarGroup} from "../../termine/CalendarGroup";
+import {CalendarEvent, CalendarTag} from "../../(domain)/events/EventMapper";
+import {CalendarGroup} from "../../(domain)/events/CalendarGroup";
 import sanitize from "sanitize-html";
 import {getWeekDayName} from "../../../components/calendar/Calendar";
 import {TemplateHandler} from "easy-template-x";
-import {saveFile} from "../../../util/save-file";
 import Site from "../../../components/Site";
 import Button from "../../../components/Button";
-import {useState} from "../../../util/use-state-util";
-import {fetchJson} from "../../../util/fetch-util";
+import {useState} from "../../(shared)/use-state-util";
 import {toast} from "react-toastify";
 import PDFMerger from 'pdf-merger-js/browser';
 import CockpitSDK, { Collections } from 'cockpit-sdk';
 import {cockpit} from "../../../util/cockpit-sdk";
 import {EniLoading} from "../../../components/Loading";
 import {Cockpit} from "../../../util/cockpit";
-import {getCalendarInfo} from "../../termine/CalendarInfo";
+import {getCalendarInfo} from "../../(domain)/events/CalendarInfo";
 import Link from "next/link";
 import {useUserStore} from "../../(store)/UserStore";
+import {usePermission} from "../../(shared)/UsePermission";
+import {Permission} from "../../(domain)/users/Permission";
+import {saveFile} from "../../(shared)/BrowserBlobSaver";
+import {fetchJson} from "../../(shared)/FetchJson";
 
 export function WeeklyPage() {
     usePermission([Permission.Admin]);

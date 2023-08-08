@@ -1,9 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from "../../../util/verify";
-import {sendBulkMail} from "../../../util/mailjet";
-import {fetchCurrentWeeklies} from "../../../util/fetchWeeklies";
 import {Cockpit} from "../../../util/cockpit";
-import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {sendBulkMail} from "@/app/(shared)/Mailjet";
+import {fetchCurrentWeeklies} from "@/app/(shared)/Weekly";
 
 const lastMailId = '640735d7353062f2d200017b';
 

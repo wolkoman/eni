@@ -1,7 +1,7 @@
 "use server";
-import {User} from "../../util/user";
-import {resolveUser} from "../../util/verify";
 import {cookies} from "next/headers";
+import {User} from "@/domain/users/User";
+import {resolveUser} from "@/domain/users/UserResolver";
 
 export async function resolveUserFromServer(): Promise<User | undefined>{
   const jwt = cookies().get('jwt')?.value

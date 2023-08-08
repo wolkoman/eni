@@ -1,10 +1,11 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {ReaderData} from "../../../util/reader";
 import {Cockpit} from "../../../util/cockpit";
-import {loadEvents} from "../../../app/termine/EventsLoader";
-import {GetEventPermission} from "../../../app/termine/EventMapper";
-import {CalendarName} from "../../../app/termine/CalendarInfo";
+import {loadEvents} from "@/domain/events/EventsLoader";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {ReaderData} from "@/domain/service/Service";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -17,8 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const readerData = await loadReaderData();
     const events = await loadEvents(user.permissions[Permission.ReaderPlanning]
-        ? {permission: GetEventPermission.PRIVATE_ACCESS, readerData}
-        : {permission: GetEventPermission.READER, ids: Object.keys(readerData)}
+        ? {access: EventLoadAccess.PRIVATE_ACCESS, readerData}
+        : {access: EventLoadAccess.READER, ids: Object.keys(readerData)}
     );
     const readers = await Cockpit.collectionGet("person")
       .then(x => x.entries

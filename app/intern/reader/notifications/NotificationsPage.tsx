@@ -4,18 +4,18 @@ import React from 'react';
 import {toast} from "react-toastify";
 import {useCalendarStore} from "../../../(store)/CalendarStore";
 import {useReaderStore} from "../../../(store)/ReaderStore";
+import {CalendarEvent} from "../../../(domain)/events/EventMapper";
+import {ReaderSite} from "../IndexPage";
+import Button from "../../../../components/Button";
+import {LiturgyData} from "../../../../pages/api/liturgy";
 import {
   getTasksForPerson,
   getTasksFromReaderData,
   getUninformedTasks,
   ReaderTask,
   roleToString
-} from "../../../../util/reader";
-import {CalendarEvent} from "../../../termine/EventMapper";
-import {fetchJson} from "../../../../util/fetch-util";
-import {ReaderSite} from "../IndexPage";
-import Button from "../../../../components/Button";
-import {LiturgyData} from "../../../../pages/api/liturgy";
+} from "../../../(domain)/service/Service";
+import {fetchJson} from "../../../(shared)/FetchJson";
 
 export default function NotificationsPage(props: { liturgy: LiturgyData }) {
 

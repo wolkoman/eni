@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
-import {fetchJson} from "../../../util/fetch-util";
 import {useSearchParams} from "next/navigation";
-import {ReaderInfo} from "../../../util/reader";
-import {CalendarEvent, EventsObject} from "../EventMapper";
+import {CalendarEvent, EventsObject} from "../../(domain)/events/EventMapper";
+import {ReaderInfo} from "../../(domain)/service/Service";
+import {fetchJson} from "../../(shared)/FetchJson";
 
 function Countdown() {
 

@@ -1,9 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {CalendarName, getCalendarInfo} from "../../../app/termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 

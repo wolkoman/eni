@@ -1,12 +1,12 @@
 import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
-import {fetchJson} from "../../../util/fetch-util";
 import {InternButton} from "../../../components/InternButton";
-import {usePermission} from "../../../util/use-permission";
-import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
 import {useUserStore} from "@/store/UserStore";
+import {usePermission} from "@/app/(shared)/UsePermission";
+import {Permission} from "@/domain/users/Permission";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 export default function Index() {
 

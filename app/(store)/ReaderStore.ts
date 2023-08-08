@@ -1,11 +1,11 @@
 import {createStore} from 'zustand';
-import {fetchJson} from '../../util/fetch-util';
-import {ReaderData} from "../../util/reader";
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent} from "../termine/EventMapper";
-import {CalendarName} from "../termine/CalendarInfo";
+import {CalendarEvent} from "@/domain/events/EventMapper";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 import {createLoadedStore} from "./CreateLoadedStore";
+import {ReaderData} from "@/domain/service/Service";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 export const useReaderStore = createLoadedStore(createStore(combine({
     readers: [] as Collections["person"][],

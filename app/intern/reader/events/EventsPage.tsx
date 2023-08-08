@@ -3,15 +3,15 @@ import React, {useState} from 'react';
 import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 import { Collections } from 'cockpit-sdk';
-import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../../util/reader";
-import {CalendarEvent} from "../../../termine/EventMapper";
+import {CalendarEvent} from "../../../(domain)/events/EventMapper";
 import {Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
 import {Clickable} from "../../../(shared)/Clickable";
 import {compareLiturgy} from "../my/MyPage";
 import {useReaderStore} from "../../../(store)/ReaderStore";
-import {fetchJson} from "../../../../util/fetch-util";
-import {CalendarGroup} from "../../../termine/CalendarGroup";
+import {CalendarGroup} from "../../../(domain)/events/CalendarGroup";
 import {ReaderSite} from "../IndexPage";
+import {ReaderData, ReaderRole, ReaderStatus, roleToString} from "../../../(domain)/service/Service";
+import {fetchJson} from "../../../(shared)/FetchJson";
 
 
 function PersonSelector(props: { persons: Collections['person'][], person?: string, onChange: (id: string | null) => any }) {

@@ -3,10 +3,9 @@
 import Link from 'next/link';
 import React, {ReactNode} from 'react';
 import Responsive from './Responsive';
-import {site} from '../util/sites';
 import Button from "./Button";
-import {useEmmausProd} from "../util/use-emmaus-prod";
 import {useUserStore} from "@/store/UserStore";
+import {site} from "@/app/(shared)/Instance";
 
 function Title(props: { children: ReactNode }) {
     return <div className="font-bold tracking-wider">{props.children}</div>;
@@ -14,7 +13,6 @@ function Title(props: { children: ReactNode }) {
 
 export default function Footer() {
     const user = useUserStore(state => state.user);
-    const emmausProd = useEmmausProd();
     return <>
         <div className="py-6 text-neutral-600 pt-12 mt-12 print:hidden bg-black/[2%]">
             <Responsive>

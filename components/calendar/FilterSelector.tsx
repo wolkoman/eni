@@ -1,9 +1,10 @@
-import {Permission, Permissions} from '../../util/verify';
 import {FilterType} from './Calendar';
 import {ReactNode} from "react";
 
-import {CalendarGroup, getGroupSorting} from "../../app/termine/CalendarGroup";
-import {CalendarName, getCalendarInfo} from "../../app/termine/CalendarInfo";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
+import {Permission, Permissions} from "@/domain/users/Permission";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div

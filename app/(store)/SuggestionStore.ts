@@ -2,7 +2,7 @@ import {createLoadedStore} from "./CreateLoadedStore";
 import {createStore} from "zustand";
 import {combine} from "zustand/middleware";
 import {Collections} from "cockpit-sdk";
-import {getAllSuggestionFromServer} from "../(domain)/suggestion.server.ts/use-suggestion-store.server";
+import {getAllSuggestionFromServer} from "../(domain)/suggestions/SuggestionsLoader";
 
 export const useSuggestionStore = createLoadedStore(createStore(combine(
     {

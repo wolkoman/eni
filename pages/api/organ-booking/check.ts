@@ -1,10 +1,12 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Temporal} from '@js-temporal/polyfill';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
 import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
-import {CalendarTag, GetEventPermission} from "../../../app/termine/EventMapper";
-import {CalendarName} from "../../../app/termine/CalendarInfo";
-import {loadCalendar} from "@/app/termine/CalendarLoader";
+import {CalendarTag} from "@/domain/events/EventMapper";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {loadCalendar} from "@/domain/events/CalendarLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -42,7 +44,7 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
     const events = await Promise.all([
         CalendarName.INZERSDORF,
         CalendarName.INZERSDORF_ORGAN
-    ].map(name => loadCalendar(name, {permission: GetEventPermission.PRIVATE_ACCESS, timeFrame:{min: timeMin, max: timeMax}}, oauth2Client)
+    ].map(name => loadCalendar(name, {access: EventLoadAccess.PRIVATE_ACCESS, timeFrame:{min: timeMin, max: timeMax}}, oauth2Client)
     )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)));
 
     if (events.some(event => event.wholeday)) {

@@ -2,9 +2,9 @@ import React from 'react';
 import {Collections} from "cockpit-sdk";
 import {GetStaticPaths, GetStaticProps} from "next";
 import Link from "next/link";
-import {fetchEmmausSites} from "@/util/fetchEmmausSites";
-import {site as siteDif} from "../../util/sites";
 import {Article} from "../../components/Article";
+import {site as siteDif} from "@/app/(shared)/Instance";
+import {fetchEmmausSites} from "@/app/(shared)/Sites";
 
 export default function HomePage(props: { site: Collections['site'] & {parent: Collections['site']}}) {
     return siteDif(<></>, <Article title={props.site.name}>

@@ -1,11 +1,11 @@
 "use client"
 
 import Link from 'next/link';
-import {site} from '../util/sites';
 import React from 'react';
 import Responsive from "./Responsive";
 
 import {useUserStore} from "@/store/UserStore";
+import {site} from "@/app/(shared)/Instance";
 
 function NavItem(props: {href: string, label: string}) {
     return <Link href={props.href}><div className="group relative px-2 py-1">

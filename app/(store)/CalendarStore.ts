@@ -3,9 +3,9 @@
 import {createStore} from 'zustand';
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent, EventsObject} from "../termine/EventMapper";
-import {CalendarGroup} from "../termine/CalendarGroup";
-import {loadEventsFromServer} from "../termine/EventsLoader";
+import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {loadEventsFromServer} from "@/domain/events/EventsLoader";
 import {createLoadedStore} from "@/store/CreateLoadedStore";
 
 export function groupEventsByDate<T extends CalendarEvent>(events: T[]): Record<string, T[]> {

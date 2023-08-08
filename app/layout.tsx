@@ -1,7 +1,7 @@
 import "../styles/globals.scss";
 import {Toasts} from "./ToastContainer";
-import {site} from "../util/sites";
 import {Metadata} from 'next'
+import {site} from "./(shared)/Instance";
 
 export const metadata: Metadata = {
   title: site("eni.wien", "Pfarre Emmaus"),

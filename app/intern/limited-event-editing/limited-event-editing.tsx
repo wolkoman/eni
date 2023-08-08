@@ -1,18 +1,18 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import {toast} from "react-toastify";
-import {CalendarEvent} from "@/app/termine/EventMapper";
+import {CalendarEvent} from "@/domain/events/EventMapper";
 import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
-import {usePermission} from "@/util/use-permission";
-import {Permission} from "@/util/verify";
-import {CalendarName} from "@/app/termine/CalendarInfo";
-import {CalendarGroup} from "@/app/termine/CalendarGroup";
-import {fetchJson} from "@/util/fetch-util";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import Site from "../../../components/Site";
 import {EventDate, EventDateText} from "../../../components/calendar/EventUtils";
 import {Event} from "../../../components/calendar/Event";
 import {SanitizeHTML} from "../../../components/SanitizeHtml";
 import {useUserStore} from "@/store/UserStore";
+import {usePermission} from "@/app/(shared)/UsePermission";
+import {Permission} from "@/domain/users/Permission";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 
 export const musicDescriptionMatch = /Musikal\. Gestaltung: ([^<\n]*)/m;
 export function LimitedEventEditingPage() {

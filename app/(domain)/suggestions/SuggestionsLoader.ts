@@ -1,6 +1,7 @@
 "use server"
 import {Cockpit} from "../../../util/cockpit";
-import {User} from "../../../util/user";
+
+import {User} from "../users/User";
 
 export async function getAllSuggestionFromServer() {
   const user: undefined | User = undefined;//await resolveUserFromServer();

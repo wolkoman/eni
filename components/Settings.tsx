@@ -1,5 +1,5 @@
 import {useRive, useStateMachineInput} from "@rive-app/react-canvas";
-import {useState} from "../util/use-state-util";
+import {useState} from "@/app/(shared)/use-state-util";
 import React, {useEffect} from "react";
 import {Preference, preferenceStore} from "@/store/PreferenceStore";
 

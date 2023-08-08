@@ -4,10 +4,10 @@ import Site from '../../../components/Site';
 import {useReaderStore} from "@/store/ReaderStore";
 import Responsive from "../../../components/Responsive";
 import Link from "next/link";
-import {Permission} from "../../../util/verify";
 import {EniLoading} from "../../../components/Loading";
-import {CalendarName} from "../../../app/termine/CalendarInfo";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useUserStore} from "@/store/UserStore";
+import {Permission} from "@/domain/users/Permission";
 
 export function ReaderSite(props: { children?: ReactNode }) {
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {CalendarEvent} from "../app/termine/EventMapper";
+import {CalendarEvent} from "@/domain/events/EventMapper";
 
 export function WorshipNotice(props: { worshipEvents: CalendarEvent[] }) {
     const nextEvent = props.worshipEvents.filter(event => Math.abs(

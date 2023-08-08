@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction} from "react";
 import {EniLoading} from "./Loading";
-import {CalendarName, getCalendarInfo} from "../app/termine/CalendarInfo";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;

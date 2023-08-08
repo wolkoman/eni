@@ -1,9 +1,9 @@
 import React from 'react';
 import Site from '../../components/Site';
-import {usePermission} from '../../util/use-permission';
-import {Permission} from '../../util/verify';
 import {InternButton} from "../../components/InternButton";
 import {useUserStore} from "@/store/UserStore";
+import {usePermission} from "@/app/(shared)/UsePermission";
+import {Permission} from "@/domain/users/Permission";
 
 
 export default function Intern() {

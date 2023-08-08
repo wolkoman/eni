@@ -4,7 +4,7 @@ import React, {useEffect} from 'react';
 import Site from '../../../components/Site';
 import Button from '../../../components/Button';
 import {toast} from 'react-toastify';
-import {useState} from '../../../util/use-state-util';
+import {useState} from '../../(shared)/use-state-util';
 import {useRouter, useSearchParams} from 'next/navigation';
 import Link from "next/link";
 import {useUserStore} from "../../(store)/UserStore";
