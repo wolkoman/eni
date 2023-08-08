@@ -9,6 +9,7 @@
 *.iml
 *.xml
 .env
+.idea
 
 # testing
 /coverage

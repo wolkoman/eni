@@ -1,10 +1,10 @@
-import { create } from 'zustand';
 import {fetchJson} from '../fetch-util';
 import {User} from '../user';
 import {useEffect} from "react";
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
 import {JwtPayload, verify} from "jsonwebtoken";
 import {combine} from "zustand/middleware";
+import create from "zustand";
 
 export function useAuthenticatedUserStore() {
     const state = useUserStore(state => state);
