@@ -2,10 +2,12 @@
 import {Cockpit} from "../../../util/cockpit";
 
 import {User} from "../users/User";
+import {resolveUserFromServer} from "../../(shared)/UserHandler";
+import {Permission} from "../users/Permission";
 
 export async function getAllSuggestionFromServer() {
-  const user: undefined | User = undefined;//await resolveUserFromServer();
-  const privateAccess = false; //user && user.permissions[Permission.CalendarAdministration];
+  const user: undefined | User = await resolveUserFromServer();
+  const privateAccess = user && user.permissions[Permission.CalendarAdministration];
   if (!privateAccess) {
     return []
   }

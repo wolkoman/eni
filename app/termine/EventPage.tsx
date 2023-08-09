@@ -76,7 +76,7 @@ export default function EventPage(props: {
         q: filter?.filterType !== "GROUP" ? null : filter.group,
         p: filter?.filterType !== "PARISH" ? null : filter.parish
       })
-        .filter(([a, b]) => b)
+        .filter(([_, b]) => b)
         .map(([a, b]) => `${a}=${b}`)
         .join("&")
       )

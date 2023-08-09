@@ -28,7 +28,6 @@ export function WeeklyPage() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
     const [events, loaded] = useCalendarStore(state => [state.items, state.loaded])
-    const user = useUserStore(store => store.user)
 
     function pad(num: number) {
         return `${num < 10 ? '0' : ''}${num}`
@@ -163,7 +162,7 @@ function AnnouncementsUpload() {
         })
             .then(res => res.json())
             .then(data => data.map((file: string) => `https://api.eni.wien/files-v0/uploads/${file}`))
-            .catch(err => setUploadPossible('idle'));
+            .catch(() => setUploadPossible('idle'));
 
         if (!uploadedFiles) return;
         const date = new Date().toISOString().split("T")[0];
@@ -207,10 +206,10 @@ function AnnouncementsEntries() {
         }).then(({entries}) => setAnn(entries));
     }, [apiKey])
 
-    function hide(id: string) {
+    async function hide(id: string) {
         const obj = ann?.find(announcement => announcement._id === id)
         const adminCockpit = new CockpitSDK({host: cockpit.host, accessToken: apiKey});
-        adminCockpit.collectionSave(('announcements') as any, {...obj, hidden: true});
+        await adminCockpit.collectionSave(('announcements') as any, {...obj, hidden: true});
         setAnn(rest => rest?.filter(a => a._id !== id) ?? null);
     }
 

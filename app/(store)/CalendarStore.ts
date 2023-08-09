@@ -3,7 +3,7 @@
 import {createStore} from 'zustand';
 import {Collections} from "cockpit-sdk";
 import {combine} from "zustand/middleware";
-import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {loadEventsFromServer} from "@/domain/events/EventsLoader";
 import {createLoadedStore} from "@/store/CreateLoadedStore";

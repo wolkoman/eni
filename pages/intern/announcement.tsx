@@ -8,7 +8,7 @@ import {
     SelfServiceParish
 } from "../../components/SelfService";
 import Button from "../../components/Button";
-import {Cockpit} from "../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {useUserStore} from "@/store/UserStore";
 import {usePermission} from "@/app/(shared)/UsePermission";
 import {notifyAdminFromClientSide} from "@/app/(shared)/Telegram";

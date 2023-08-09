@@ -9,5 +9,5 @@ export function notifyAdmin(message: string) {
 }
 
 export function notifyAdminFromClientSide(message: string) {
-    fetchJson("/api/notify", {json: {message}})
+    return fetchJson("/api/notify", {json: {message}})
 }

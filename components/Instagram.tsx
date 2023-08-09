@@ -5,7 +5,7 @@ import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import React, {MouseEventHandler, useState} from "react";
 import {AnimatePresence, motion} from 'framer-motion'
 
-import {Clickable} from "../app/(shared)/Clickable";
+import {Clickable} from "@/app/(shared)/Clickable";
 import {SectionHeader} from "./SectionHeader";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 

@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Collections} from 'cockpit-sdk';
-import {Cockpit} from "../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {doubleHash, resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

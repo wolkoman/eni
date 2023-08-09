@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Temporal} from '@js-temporal/polyfill';
-import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
 import {CalendarTag} from "@/domain/events/EventMapper";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {loadCalendar} from "@/domain/events/CalendarLoader";

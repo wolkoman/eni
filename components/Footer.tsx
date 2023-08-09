@@ -12,7 +12,7 @@ function Title(props: { children: ReactNode }) {
 }
 
 export default function Footer() {
-    const user = useUserStore(state => state.user);
+    useUserStore(state => state.user);
     return <>
         <div className="py-6 text-neutral-600 pt-12 mt-12 print:hidden bg-black/[2%]">
             <Responsive>

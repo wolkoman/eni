@@ -17,7 +17,7 @@ import {
 } from "../../../(domain)/service/Service";
 import {fetchJson} from "../../../(shared)/FetchJson";
 
-export default function NotificationsPage(props: { liturgy: LiturgyData }) {
+export default function NotificationsPage() {
 
   const events = useCalendarStore(state => state.items);
   const {readers, readerData, setReaderData, ...reader} = useReaderStore(state => state);

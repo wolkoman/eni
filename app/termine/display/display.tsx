@@ -30,12 +30,12 @@ function EventShow(props: { event: CalendarEvent, index: number }) {
     </div>;
 }
 
-export default function EventPage(props: {eventsObject: EventsObject}) {
+export default function EventPage() {
 
     const params = useSearchParams()
     const [entries, setEntries] = useState<CalendarEvent[]>([]);
     const [start] = useState(new Date().getTime())
-    const event = entries?.[2]
+
 
     useEffect(() => {
         const load = () => {

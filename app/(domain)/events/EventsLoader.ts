@@ -1,8 +1,8 @@
 "use server"
 import {getGoogleAuthClient} from "../../(shared)/GoogleAuthClient";
-import {Cockpit} from "../../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {CalendarName} from "./CalendarInfo";
-import {resolveUserFromServer} from "../../(shared)/UserHandler";
+import {resolveUserFromServer} from "@/app/(shared)/UserHandler";
 import {loadReaderData} from "../../../pages/api/reader";
 import {EventsObject} from "./EventMapper";
 import {loadCalendar} from "./CalendarLoader";

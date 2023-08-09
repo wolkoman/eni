@@ -10,7 +10,7 @@ import {Hamburger} from "../../../components/Hamburger";
 import {AnimatePresence, motion} from 'framer-motion';
 import {SelfServiceFile, SelfServiceFileUpload} from "../../../components/SelfService";
 import Link from "next/link";
-import {Cockpit} from "../../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import {saveFile} from "@/app/(shared)/BrowserBlobSaver";

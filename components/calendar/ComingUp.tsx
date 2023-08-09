@@ -1,12 +1,12 @@
 "use client"
 
 import React from 'react';
-import {groupEventsByDate, groupEventsByGroup,} from '../../app/(store)/CalendarStore';
+import {groupEventsByDate, groupEventsByGroup,} from '@/store/CalendarStore';
 import Responsive from '../Responsive';
 import {Preference, preferenceStore} from "@/store/PreferenceStore";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {Clickable} from "../../app/(shared)/Clickable";
+import {Clickable} from "@/app/(shared)/Clickable";
 import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {CalendarName} from "@/domain/events/CalendarInfo";

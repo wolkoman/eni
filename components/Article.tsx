@@ -4,7 +4,7 @@ import React, {ReactNode} from "react";
 
 export const Article = (props: { image?: string, title: string, created?: number, author?: string, children: ReactNode }) => {
     return <Site responsive={false} title={props.title} >
-        <div className={`relative ${props.image ? '' : ''}`}>
+        <div className={`relative ${''}`}>
             {props.image && <div className="overflow-hidden absolute w-full h-full inset-0"><div className="blur-lg scale-125 absolute w-full h-full inset-0">
                 <div className="absolute w-full h-full inset-0 overflow-hidden"
                      style={{

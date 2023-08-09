@@ -13,7 +13,7 @@ import {fetchJson} from "@/app/(shared)/FetchJson";
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
     const {addSuggestion, originalItems} = useCalendarStore(state => state);
     const originalItem = originalItems.find(e => e.id === props.eventId);
-    const user = useUserStore(state => state.user);
+    useUserStore(state => state.user);
     const form = useState<EventSuggestion & {parish?: string | null}>({
         ...props.suggestion,
         parish: props.parish

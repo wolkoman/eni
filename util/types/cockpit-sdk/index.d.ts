@@ -2,7 +2,7 @@
 
 declare module 'cockpit-sdk' {
 
-  import {Diff, diff_match_patch, patch_obj} from "diff-match-patch";
+  import {Diff} from "diff-match-patch";
   import {CalendarName} from "@/domain/events/CalendarInfo";
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {

@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {loadCalendar} from "@/domain/events/CalendarLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";

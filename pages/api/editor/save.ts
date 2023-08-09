@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Cockpit} from "../../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {Permission} from "@/domain/users/Permission";
 import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 

@@ -3,7 +3,7 @@ import Site from '../../components/Site';
 import {toast} from 'react-toastify';
 import {useState} from '@/app/(shared)/use-state-util';
 
-import {Clickable} from "../../app/(shared)/Clickable";
+import {Clickable} from "@/app/(shared)/Clickable";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {fetchJson} from "@/app/(shared)/FetchJson";
 

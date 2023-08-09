@@ -20,7 +20,7 @@ export function LimitedEventEditingPage() {
     const [currentEvent, setCurrentEvent] = useState<CalendarEvent | undefined>();
     const [records, setRecords] = useState<[string, CalendarEvent[]][]>([]);
     const load = useCalendarStore(state => state.load);
-    const user = useUserStore(state => state.user);
+    useUserStore(state => state.user);
     const events = useCalendarStore(state => state.items);
     usePermission([Permission.LimitedEventEditing]);
     useEffect(() => {

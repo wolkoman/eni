@@ -2,7 +2,7 @@ import {Collections} from 'cockpit-sdk';
 import {AnimatePresence, motion} from 'framer-motion';
 import React, {useState} from 'react';
 import Site from '../../../components/Site';
-import {Cockpit} from "../../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 
 export default function Version(props: { versions: Collections['paper_texts'][] }) {
     const [open, setOpen] = useState<string>();

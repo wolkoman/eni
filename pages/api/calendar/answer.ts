@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {google} from "googleapis";
-import {Cockpit} from "../../../util/cockpit";
-import {getGoogleAuthClient} from "../../../app/(shared)/GoogleAuthClient";
+import {Cockpit} from "@/util/cockpit";
+import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
 import {mapEvent} from "@/domain/events/EventMapper";
 import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";

@@ -14,12 +14,7 @@ export function applyFilter<T extends CalendarEvent>(events: T[], filter: Filter
 
 }
 
-export const LoadingEvents = () => <div className="animate-pulse">
-  <ShadowEventDate/>
-  {[120, 100, 150].map((width, index) => <ShadowEvent key={index} width={width} description={index===0}/>)}
-  <ShadowEventDate/>
-  {[180, 120].map((width, index) => <ShadowEvent key={index} width={width} description={index===2}/>)}
-</div>
+
 const ShadowEventDate = () => <div className="w-36 h-4 mb-1.5 mt-4 rounded bg-black/10"/>
 export const ShadowEvent = ({width, description}: { width: number, description?: boolean }) => <div className="flex mb-3">
   <div className="w-10 h-5 bg-black/10 rounded mr-2"/>

@@ -52,7 +52,7 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
 
     const onDelete = (fileUrl: string) => {
         setFileList(list => list.filter(file => file.result !== fileUrl))
-        fetch(
+        return fetch(
             `https://api.eni.wien/files-v0/delete.php?file=${fileUrl.split("/").at(-1)}`,
             {method: 'POST'}
         )

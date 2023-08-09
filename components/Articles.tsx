@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import * as React from 'react';
-import {cockpit} from '../util/cockpit-sdk';
+import {cockpit} from '@/util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";

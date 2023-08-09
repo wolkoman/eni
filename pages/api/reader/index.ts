@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Cockpit} from "../../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {loadEvents} from "@/domain/events/EventsLoader";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";

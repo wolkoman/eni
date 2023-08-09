@@ -1,6 +1,6 @@
 import {Tooltip} from "./EventUtils";
 import React from "react";
-import {CalendarInfo, CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {CalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function ParishDot({info, small, ...props}: { info: CalendarInfo, small?: boolean, private: boolean }) {
     return <Tooltip tip={info?.fullName}>
