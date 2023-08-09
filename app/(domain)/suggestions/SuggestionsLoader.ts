@@ -6,7 +6,7 @@ import {resolveUserFromServer} from "../../(shared)/UserHandler";
 import {Permission} from "../users/Permission";
 
 export async function getAllSuggestionFromServer() {
-  const user: undefined | User = await resolveUserFromServer();
+  const user = await resolveUserFromServer();
   const privateAccess = user && user.permissions[Permission.CalendarAdministration];
   if (!privateAccess) {
     return []

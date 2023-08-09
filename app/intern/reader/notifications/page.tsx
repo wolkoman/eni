@@ -6,6 +6,5 @@ const revalidate = 3600 * 24;
 
 
 export default async function HomePage() {
-  const liturgy = await getLiturgyData();
-  return <NotificationsPage liturgy={liturgy}/>
+  return <NotificationsPage/>
 }

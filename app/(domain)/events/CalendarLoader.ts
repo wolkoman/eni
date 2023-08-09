@@ -26,16 +26,19 @@ export async function loadCalendar(
     ? options.readerData
     : {}
   ;
-  return unstable_cache(() => google.calendar('v3').events.list({
-        maxResults: 1000,
-        calendarId: CALENDAR_INFOS[calendarName].calendarId,
-        auth: oauth2Client,
-        timeMin: (hasTimeframe ? options.timeFrame!.min : new Date(start)).toISOString(),
-        timeMax: (hasTimeframe ? options.timeFrame!.max : new Date(end)).toISOString(),
-        singleEvents: true,
-        timeZone: 'Europa/Vienna',
-        orderBy: 'startTime'
-      }), ['calendar-events', calendarName], {revalidate: 300}
+  return unstable_cache(() => {
+            console.log("GET google calendar " + calendarName)
+          return google.calendar('v3').events.list({
+              maxResults: 1000,
+              calendarId: CALENDAR_INFOS[calendarName].calendarId,
+              auth: oauth2Client,
+              timeMin: (hasTimeframe ? options.timeFrame!.min : new Date(start)).toISOString(),
+              timeMax: (hasTimeframe ? options.timeFrame!.max : new Date(end)).toISOString(),
+              singleEvents: true,
+              timeZone: 'Europa/Vienna',
+              orderBy: 'startTime'
+          });
+      }, ['calendar-events', calendarName], {revalidate: 300}
   )().then(result => result
     .data.items!.map(mapEvent(calendarName, options))
     .filter((event): event is CalendarEvent => !!event?.summary)
