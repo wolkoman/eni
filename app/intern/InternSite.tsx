@@ -15,7 +15,7 @@ export function InternPage() {
     usePermission([]);
     return <Site title="Mitgliedsbereich">
         <div>
-            <div className="text-4xl my-8">Hallo {user?.name?.split(' ')?.[0] ?? 'Benutzer:in'}!</div>
+            <div className="text-4xl my-8">Hallo {user?.name?.split(' ')?.[0] ?? '😃'}!</div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             <InternButton href="/" label="Startseite"/>

@@ -71,8 +71,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         info: `${{
                             reading1: "1. Lesung",
                             reading2: "2. Lesung",
-                            communionMinister1: "1. Kommunionsspender:in:",
-                            communionMinister2: "2. Kommunionsspender:in:",
+                            communionMinister1: "1. Kommunionshelfer:in",
+                            communionMinister2: "2. Kommunionshelfer:in",
                         }[task.data.role]} ${reading}`,
                         link: reading ? `https://www.bibleserver.com/EU/${encodeURI(reading)}` : '',
                     }))
