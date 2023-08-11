@@ -1,15 +1,16 @@
+"use client"
 import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
-import Site from '../../../components/Site';
+import Site from '../../../../components/Site';
 import Link from "next/link";
 import {useSearchParams} from "next/navigation";
-import Button from "../../../components/Button";
-import {EniLoading} from "../../../components/Loading";
-import {usePermission} from "@/app/(shared)/UsePermission";
-import {Permission} from "@/domain/users/Permission";
-import {fetchJson} from "@/app/(shared)/FetchJson";
+import Button from "../../../../components/Button";
+import {EniLoading} from "../../../../components/Loading";
+import {usePermission} from "../../../(shared)/UsePermission";
+import {Permission} from "../../../(domain)/users/Permission";
+import {fetchJson} from "../../../(shared)/FetchJson";
 
-export default function Index() {
+export function EditorProjectPage() {
 
     const [project, setProject] = useState<{articles: Collections['paper_articles'][], name: string}>();
     const searchParams = useSearchParams();

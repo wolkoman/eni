@@ -1,12 +1,14 @@
+"use client"
+
 import React from 'react';
 import Site from '../../components/Site';
 import {InternButton} from "../../components/InternButton";
-import {useUserStore} from "@/store/UserStore";
-import {usePermission} from "@/app/(shared)/UsePermission";
-import {Permission} from "@/domain/users/Permission";
+import {useUserStore} from "../(store)/UserStore";
+import {usePermission} from "../(shared)/UsePermission";
+import {Permission} from "../(domain)/users/Permission";
 
 
-export default function Intern() {
+export function InternPage() {
     const user = useUserStore(state => state.user);
     const permissions = user?.permissions;
     const [logout] = useUserStore(state => [state.logout]);

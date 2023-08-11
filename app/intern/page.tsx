@@ -1,6 +1,7 @@
 import React from "react";
-import {WeeklyPage} from "./weekly";
+import {InternPage} from "./InternSite";
+
 
 export default async function HomePage() {
-  return <WeeklyPage/>
+  return <InternPage/>
 }

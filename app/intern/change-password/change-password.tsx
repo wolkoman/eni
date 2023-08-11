@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import Site from '../../components/Site';
-import Button from '../../components/Button';
+import Site from '../../../components/Site';
+import Button from '../../../components/Button';
 import {toast} from "react-toastify";
-import {usePermission} from "@/app/(shared)/UsePermission";
-import {fetchJson} from "@/app/(shared)/FetchJson";
+import {usePermission} from "../../(shared)/UsePermission";
+import {fetchJson} from "../../(shared)/FetchJson";
 
 function Input(props: { label: string, value: string, onChange: (text: string) => any }) {
     return <div className="my-2">

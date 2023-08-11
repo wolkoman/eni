@@ -1,13 +1,15 @@
+"use client"
+
 import React, {useEffect} from 'react';
-import Site from '../../components/Site';
+import Site from '../../../components/Site';
 import {toast} from 'react-toastify';
-import {useState} from '@/app/(shared)/use-state-util';
+import {useState} from '../../(shared)/use-state-util';
 
-import {Clickable} from "@/app/(shared)/Clickable";
-import {CalendarEvent} from "@/domain/events/EventMapper";
-import {fetchJson} from "@/app/(shared)/FetchJson";
+import {Clickable} from "../../(shared)/Clickable";
+import {CalendarEvent} from "../../(domain)/events/EventMapper";
+import {fetchJson} from "../../(shared)/FetchJson";
 
-export default function Orgel() {
+export function OrgelPage() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
   }>({
     date: '',
@@ -92,8 +94,8 @@ export default function Orgel() {
                 {new Date(booking.start.dateTime).toLocaleDateString("de-AT")}
               </div>
               <div>
-                {new Date(booking.start.dateTime).toLocaleTimeString().substring(0, 5)}{' - '}
-                {new Date(booking.end.dateTime).toLocaleTimeString().substring(0, 5)} Uhr
+                {new Date(booking.start.dateTime).toLocaleTimeString("de-AT").substring(0, 5)}{' - '}
+                {new Date(booking.end.dateTime).toLocaleTimeString("de-AT").substring(0, 5)} Uhr
               </div>
             </div>
             <div className="cursor-pointer relative w-2 hover:opacity-80" onClick={() => unbookHour(booking)}>
@@ -118,9 +120,9 @@ export default function Orgel() {
               return <Clickable
                 disabled={unavailable}
                 key={slot}
-                className={`h-14 rounded-lg text-center flex justify-center items-center`}
+                className={`h-14 rounded-lg text-center flex justify-center items-center ${unavailable ? 'line-through' : ''}`}
                 onClick={() => unavailable ? null : bookHour(slot)}>
-                <div>{new Date(slot).toLocaleTimeString().substring(0,5)}</div>
+                <div>{new Date(slot).toLocaleTimeString("de-AT").substring(0,5)}</div>
               </Clickable>;
             })
           }

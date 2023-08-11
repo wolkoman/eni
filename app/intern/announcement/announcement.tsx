@@ -1,30 +1,36 @@
+"use client"
 import React, {useState} from 'react';
-import Site from '../../components/Site';
+import Site from '../../../components/Site';
 import {
     Field,
     SelfServiceFile,
     SelfServiceFileUpload,
     SelfServiceInput,
     SelfServiceParish
-} from "../../components/SelfService";
-import Button from "../../components/Button";
-import {Cockpit} from "@/util/cockpit";
-import {useUserStore} from "@/store/UserStore";
-import {usePermission} from "@/app/(shared)/UsePermission";
-import {notifyAdminFromClientSide} from "@/app/(shared)/Telegram";
+} from "../../../components/SelfService";
+import Button from "../../../components/Button";
+import {useUserStore} from "../../(store)/UserStore";
+import {usePermission} from "../../(shared)/UsePermission";
+import {notifyAdminFromClientSide} from "../../(shared)/Telegram";
+import {saveAnnouncement} from "./saveAnnouncement";
 
 
-export default function EventPage() {
+export function AnnouncementPage() {
     usePermission([]);
     const user = useUserStore(state => state.user);
-    const emptyForm = { description: "", files: [] as SelfServiceFile[], parish: "", hidden: false};
+    const emptyForm = {description: "", files: [] as SelfServiceFile[], parish: "", hidden: false};
     const form = useState(emptyForm);
     const {parish} = form[0];
     const [state, setState] = useState<'form' | 'loading' | 'success' | 'error'>('form');
 
     async function submit() {
         setState("loading");
-        Cockpit.collectionSave('announcements', {...form[0], files: form[0].files.map(f => f.result), by: user?._id, byName: user?.name})
+        saveAnnouncement({
+            ...form[0],
+            files: form[0].files.map(f => f.result),
+            by: user?._id,
+            byName: user?.name
+        })
             .then(() => form[1](emptyForm))
             .then(() => {
                 setState("success");
@@ -57,7 +63,8 @@ export default function EventPage() {
                 <SelfServiceFileUpload name="files" form={form}/>
             </Field>
             <div className={`my-8 flex flex justify-end font-bold ${state === "loading" ? 'animate-pulse' : ''}`}>
-                <Button label="Absenden" big={true} onClick={submit} disabled={state === "loading" || parish === "" || form[0].files.some(f => !f.finished)}/>
+                <Button label="Absenden" big={true} onClick={submit}
+                        disabled={state === "loading" || parish === "" || form[0].files.some(f => !f.finished)}/>
             </div>
             {state === "error" && <div className="text-red-700 font-bold my-8">
                 Die Ankündigung konnte nicht hochgeladen werden.

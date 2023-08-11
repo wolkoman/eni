@@ -1,20 +1,21 @@
+"use client"
 import {Collections} from 'cockpit-sdk';
 import React, {ReactNode, useEffect, useState} from 'react';
-import Site from '../../../components/Site';
+import Site from '../../../../components/Site';
 import {useSearchParams} from "next/navigation";
 import {useBeforeunload} from "react-beforeunload";
 import {toast} from "react-toastify";
-import Button from "../../../components/Button";
-import Responsive from "../../../components/Responsive";
-import {Hamburger} from "../../../components/Hamburger";
+import Button from "../../../../components/Button";
+import Responsive from "../../../../components/Responsive";
+import {Hamburger} from "../../../../components/Hamburger";
 import {AnimatePresence, motion} from 'framer-motion';
-import {SelfServiceFile, SelfServiceFileUpload} from "../../../components/SelfService";
+import {SelfServiceFile, SelfServiceFileUpload} from "../../../../components/SelfService";
 import Link from "next/link";
-import {Cockpit} from "@/util/cockpit";
-import {useUserStore} from "@/store/UserStore";
-import {Permission} from "@/domain/users/Permission";
-import {saveFile} from "@/app/(shared)/BrowserBlobSaver";
-import {fetchJson} from "@/app/(shared)/FetchJson";
+import {Cockpit} from "../../../../util/cockpit";
+import {useUserStore} from "../../../(store)/UserStore";
+import {Permission} from "../../../(domain)/users/Permission";
+import {saveFile} from "../../../(shared)/BrowserBlobSaver";
+import {fetchJson} from "../../../(shared)/FetchJson";
 
 
 function Welcome(props: { article: any, project: any }) {
@@ -33,7 +34,7 @@ function Welcome(props: { article: any, project: any }) {
     </div>;
 }
 
-export default function Index(props: { article: Collections['paper_articles'], project: Collections['paper_projects'], versions: Collections['paper_texts'][] }) {
+export function EditorArticlePage(props: { article: Collections['paper_articles'], project: Collections['paper_projects'], versions: Collections['paper_texts'][] }) {
 
     function MoreOptions(cprops: { editable: any, onSave: () => Promise<void>, saved: "saving" | "saved" | "justnow" | "error", permission: boolean, status: Collections['paper_articles']['status'], disabled: boolean, onSaveStatusChange: (status: Collections['paper_articles']['status']) => any, onFinish: () => void }) {
         return <div className="flex gap-2 text-black/80">
@@ -295,14 +296,4 @@ function MediaModal(props: { close: (files: string[]) => void, files: string[], 
 }
 
 
-export async function getServerSideProps(context: any) {
-    const article = (await Cockpit.collectionGet('paper_articles', {filter: {_id: context.query.articleId}})).entries[0];
-    const project = (await Cockpit.collectionGet('paper_projects', {filter: {_id: article.project._id}})).entries[0];
-    const versions = (await Cockpit.collectionGet('paper_texts', {
-        filter: {article: context.query.articleId},
-        sort: {_created: -1}
-    })).entries
-        .map((entry, index) => index === 0 ? entry : {_id: entry._id, _created: entry._created});
 
-    return article ? {props: {article, versions, project}} : {notFound: true}
-}

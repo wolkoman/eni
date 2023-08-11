@@ -1,14 +1,15 @@
+"use client"
 import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
 import {InternButton} from "../../../components/InternButton";
 import {EniLoading} from "../../../components/Loading";
-import {useUserStore} from "@/store/UserStore";
-import {usePermission} from "@/app/(shared)/UsePermission";
-import {Permission} from "@/domain/users/Permission";
-import {fetchJson} from "@/app/(shared)/FetchJson";
+import {useUserStore} from "../../(store)/UserStore";
+import {usePermission} from "../../(shared)/UsePermission";
+import {Permission} from "../../(domain)/users/Permission";
+import {fetchJson} from "../../(shared)/FetchJson";
 
-export default function Index() {
+export default function EditorPage() {
 
     const [projects, setProjects] = useState<Collections['paper_projects'][]>();
     const user = useUserStore(state => state.user);

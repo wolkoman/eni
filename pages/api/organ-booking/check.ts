@@ -47,6 +47,8 @@ export async function getAvailableOrganSlotsForDate(date: Date): Promise<string[
     ].map(name => loadCalendar(name, {access: EventLoadAccess.PRIVATE_ACCESS, timeFrame:{min: timeMin, max: timeMax}}, oauth2Client)
     )).then(eventList => eventList.flat().filter(event => event.tags.includes(CalendarTag.inChurch)));
 
+    console.log({events})
+
     if (events.some(event => event.wholeday)) {
         return [];
     }
