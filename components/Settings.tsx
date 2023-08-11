@@ -1,10 +1,10 @@
 import {useRive, useStateMachineInput} from "@rive-app/react-canvas";
 import {useState} from "@/app/(shared)/use-state-util";
 import React, {useEffect} from "react";
-import {Preference, preferenceStore} from "@/store/PreferenceStore";
+import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 
 function SettingsOption(props: { title: string, description: string, name: Preference }) {
-    const [preference, setPreference] = preferenceStore(props.name);
+    const [preference, setPreference] = usePreferenceStore(props.name);
     return <div className="flex items-start cursor-pointer select-none" onClick={() => setPreference(!preference)}>
         <input
             type="checkbox" className="mt-2 mr-4 pointer-events-none" checked={preference}

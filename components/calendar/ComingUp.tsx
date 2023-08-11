@@ -3,7 +3,7 @@
 import React from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '@/store/CalendarStore';
 import Responsive from '../Responsive';
-import {Preference, preferenceStore} from "@/store/PreferenceStore";
+import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
 import {Clickable} from "@/app/(shared)/Clickable";
@@ -14,7 +14,7 @@ import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
 import {site} from "@/app/(shared)/Instance";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
-    const [separateMass] = preferenceStore(Preference.SeparateMass);
+    const [separateMass] = usePreferenceStore(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
         .sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
         .map(([group, events]) => [group,

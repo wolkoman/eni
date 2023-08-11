@@ -1,10 +1,10 @@
 import {Liturgy} from "../../pages/api/liturgy";
-import {Preference, preferenceStore} from "@/store/PreferenceStore";
+import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import React from "react";
 import {compareLiturgy} from "@/app/intern/reader/my/MyPage";
 
 export function LiturgyInformation(props: { liturgies?: Liturgy[] }) {
-    const [liturgyInformation] = preferenceStore(Preference.LiturgyInformation);
+    const [liturgyInformation] = usePreferenceStore(Preference.LiturgyInformation);
 
     return liturgyInformation ? <div className="mb-3 text-sm relative z-10">
         {props.liturgies?.sort(compareLiturgy).map((liturgy) =>

@@ -1,6 +1,6 @@
 import {applyFilter, FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
-import {Preference, preferenceStore} from "@/store/PreferenceStore";
+import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {useState} from "@/app/(shared)/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
@@ -24,7 +24,7 @@ import {
 import {Permission} from "@/domain/users/Permission";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
-    const [separateMass] = preferenceStore(Preference.SeparateMass);
+    const [separateMass] = usePreferenceStore(Preference.SeparateMass);
     const [search, setSearch] = useState("");
     const user = useUserStore(state => state.user);
     const allOpenSuggestions = useCalendarStore(state => state.openSuggestions);

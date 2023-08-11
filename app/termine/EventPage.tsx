@@ -3,7 +3,7 @@
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "../(shared)/use-state-util";
 import {FilterType} from "../../components/calendar/Calendar";
-import {Preference, preferenceStore} from "@/store/PreferenceStore";
+import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {useRouter, useSearchParams} from "next/navigation";
 import React, {useEffect} from "react";
 import Site from "../../components/Site";
@@ -62,7 +62,7 @@ export default function EventPage(props: {
   const calendar = user
     ? calendarStore
     : {items: props.eventsObject.events, error: false, loading: false, loaded: true};
-  const [monthView] = preferenceStore(Preference.MonthView);
+  const [monthView] = usePreferenceStore(Preference.MonthView);
   const {replace: routerReplace} = useRouter();
   const searchParams = useSearchParams();
 

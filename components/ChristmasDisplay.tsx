@@ -1,5 +1,3 @@
-"use client"
-
 import {Event} from './calendar/Event';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
