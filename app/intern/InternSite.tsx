@@ -32,6 +32,7 @@ export function InternPage() {
             {user?.is_person && <InternButton href="intern/change-password" label="Passwort ändern"/>}
             {user && !user?.is_person && <InternButton href="https://data.eni.wien" label="Cockpit"/>}
             {permissions?.[Permission.Editor] && <InternButton href="intern/weekly" label="Wochenmitteilung"/>}
+            {permissions?.[Permission.PrivateDocumentAccess] && <InternButton href="intern/scans" label="Gescannte Dokumente"/>}
             <InternButton onClick={logout} label="Logout"/>
         </div>
     </Site>

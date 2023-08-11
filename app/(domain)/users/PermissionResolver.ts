@@ -13,6 +13,7 @@ export function resolvePermissionsForGroup(group: CockpitUser['group'] = ''): Pe
         [Permission.Editor]: ['admin', 'master', 'ArticleEditor'].includes(group),
         [Permission.OrganBooking]: ['admin', 'OrganAccess', 'OrganMaster'].includes(group),
         [Permission.LimitedEventEditing]: ['admin', 'master', 'OrganMaster'].includes(group),
+        [Permission.PrivateDocumentAccess]: ['admin'].includes(group),
     };
 }
 
@@ -27,6 +28,7 @@ export function resolvePermissionsForCompetences(competences: Collections['perso
         [Permission.Reader]: competences.includes("reader"),
         [Permission.CommunionMinister]: competences.includes("communion_minister"),
         [Permission.ReaderPlanning]: competences.includes("reader_planning"),
-        [Permission.OrganBooking]: competences.includes("organ")
+        [Permission.OrganBooking]: competences.includes("organ"),
+        [Permission.PrivateDocumentAccess]: competences.includes("private_document_access"),
     };
 }

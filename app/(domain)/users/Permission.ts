@@ -9,6 +9,7 @@ export enum Permission {
     ReaderPlanning = "READER_PLANNING",
     CalendarAdministration = "CALENDAR_ADMINISTRATION",
     CommunionMinister = "COMMUNION_MINISTER",
+    PrivateDocumentAccess = "PrivateDocumentAccess"
 }
 
 export type Permissions = Partial<Record<Permission, boolean>>;

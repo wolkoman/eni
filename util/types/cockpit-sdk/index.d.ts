@@ -47,7 +47,7 @@ declare module 'cockpit-sdk' {
       name: string,
       username: string,
       parish: CalendarName,
-      competences: ('calendar_administration' | 'organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning' | 'communion_minister')[],
+      competences: ('calendar_administration' | 'organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning' | 'communion_minister' | 'private_document_access')[],
       code?: string,
       email?: string,
       last_login: string,
