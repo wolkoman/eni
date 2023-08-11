@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from 'react';
 import Site from '../../../components/Site';
 import Button from '../../../components/Button';
@@ -13,7 +14,7 @@ function Input(props: { label: string, value: string, onChange: (text: string) =
     </div>;
 }
 
-export default function ChangePassword() {
+export function ChangePassword() {
     const [state, setState] = useState({current: '', neo: '', neoRepeat: '', loading: false});
     usePermission([]);
 

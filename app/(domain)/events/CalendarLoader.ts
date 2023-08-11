@@ -38,7 +38,7 @@ export async function loadCalendar(
               timeZone: 'Europa/Vienna',
               orderBy: 'startTime'
           });
-      }, ['calendar-events', calendarName], {revalidate: 300}
+      }, ['calendar-events', calendarName, JSON.stringify(options)], {revalidate: 300}
   )().then(result => result
     .data.items!.map(mapEvent(calendarName, options))
     .filter((event): event is CalendarEvent => !!event?.summary)

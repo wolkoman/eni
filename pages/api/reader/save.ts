@@ -9,7 +9,7 @@ const READER_ID = "637b85bc376231d51500018d";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const user = resolveUserFromRequest(req);
-    const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
+    const data: ReaderData = await Cockpit.collectionGetUncached("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
 
     if (user === undefined) {
         res.status(401).json({errorMessage: 'No permission'});
