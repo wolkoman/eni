@@ -6,7 +6,7 @@ import {EniLoading} from "../../../components/Loading";
 import {getCalendarInfo} from "../../(domain)/events/CalendarInfo";
 import Link from "next/link";
 import Button from "../../../components/Button";
-import {loadAnnouncements} from "./LoadAnnouncements";
+import {loadAnnouncements} from "./loadAnnouncements";
 import {hideAnnouncement} from "./hideAnnouncement";
 
 

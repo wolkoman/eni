@@ -15,7 +15,7 @@ import {Permission} from "../../(domain)/users/Permission";
 import {saveFile} from "../../(shared)/BrowserBlobSaver";
 import {AnnouncementsEntries} from "./AnnouncementsEntries";
 import {WeeklyUpload} from "./WeeklyUpload";
-import {WeeklySend} from "./weeklySend";
+import {WeeklySend} from "./WeeklySend";
 
 export function WeeklyPage() {
     usePermission([Permission.Admin]);
