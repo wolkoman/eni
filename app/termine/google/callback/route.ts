@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_KEY,
-    "http://localhost:3000/termine/google/callback"
+    "https://eni.wien/termine/google/callback"
   );
 
   console.log(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_KEY)
