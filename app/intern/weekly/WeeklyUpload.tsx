@@ -16,7 +16,7 @@ export function WeeklyUpload() {
             const merger = new PDFMerger();
             await merger.add(file, pages)
             await merger.setMetadata({
-                producer: "eni.wien - Wochenmitteilung Generator",
+                producer: "eni.wien - Wochenmitteilungen Generator",
                 title: "Wochenmitteilungen"
             });
             files.append("WM" + i + ".pdf", await merger.saveAsBlob(), "WM" + i + ".pdf")

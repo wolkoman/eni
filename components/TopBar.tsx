@@ -26,7 +26,7 @@ export default function TopBar(props: { hidePicture?: boolean, frontpage?: boole
                 </Link>
                 <div className="flex justify-between items-center font-semibold">
                     <NavItem href="/termine" label="Termine"/>
-                    <NavItem href="/wochenmitteilungen" label="Wochenmitteilung"/>
+                    <NavItem href="/wochenmitteilungen" label="Wochenmitteilungen"/>
                     <NavItem href={user ? "/intern" : "/intern/login"} label={'Login'}/>
                 </div>
             </div>

@@ -64,7 +64,7 @@ export function EniSections() {
                 </div>
             </div>
         <Personal/>
-        <Section title="Pfarren">
+        <Section title="Pfarren" id="pfarrzeitungen">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
                 <Parish name={CalendarName.EMMAUS} index={0}/>
                 <Parish name={CalendarName.INZERSDORF} index={1}/>
