@@ -2,12 +2,14 @@
 import {Collections} from 'cockpit-sdk';
 import React, {useEffect, useState} from 'react';
 import Site from '../../../components/Site';
-import {InternButton} from "../../../components/InternButton";
 import {EniLoading} from "../../../components/Loading";
 import {useUserStore} from "../../(store)/UserStore";
 import {usePermission} from "../../(shared)/UsePermission";
 import {Permission} from "../../(domain)/users/Permission";
 import {fetchJson} from "../../(shared)/FetchJson";
+import {InternButton} from "../InternSite";
+import Link from "next/link";
+import {Clickable} from "../../(shared)/Clickable";
 
 export default function EditorPage() {
 
@@ -25,11 +27,11 @@ export default function EditorPage() {
                 || (project.name.startsWith("EB") && user?.parish === 'emmaus')
                 || (project.name.toLowerCase().startsWith("blick") && user?.parish === 'inzersdorf')
             )
-                .map(project => <InternButton href={`editor/project?projectId=${project._id}`} key={project._id}>
+                .map(project => <Clickable href={`editor/project?projectId=${project._id}`} key={project._id}><div className="p-4">
                     <div className="text-2xl font-bold">{project.name}</div>
                     <div
                         className="text-lg font-medium">Redaktionsschluss: {new Date(project.deadline).toLocaleDateString("de-AT")}</div>
-                </InternButton>)}
+                </div></Clickable>)}
         </div>
     </Site>
 }

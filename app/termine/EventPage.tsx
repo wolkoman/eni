@@ -61,7 +61,7 @@ export default function EventPage(props: {
   const calendarStore = useCalendarStore(state => state);
   const calendar = user
     ? calendarStore
-    : {items: props.eventsObject.events, error: false, loading: false, loaded: true};
+    : {items: props.eventsObject.events, error: false, loading: false, loaded: true, load: () => {}};
   const [monthView] = usePreferenceStore(Preference.MonthView);
   const {replace: routerReplace} = useRouter();
   const searchParams = useSearchParams();
@@ -84,6 +84,9 @@ export default function EventPage(props: {
       setFirstFilterUpdate(false);
     }
   }, [filter]);
+  useEffect(() => {
+    calendar.load()
+  }, [])
 
   return <Site responsive={false}>
     <Responsive>
