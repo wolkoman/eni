@@ -1,7 +1,7 @@
 import React from 'react';
-import {MyPdfViewer} from "./Wochenmitteilungen";
+import {WochenmitteilungenSite} from "./Wochenmitteilungen";
 
 
 export default async function Page(){
-    return <MyPdfViewer/>
+    return <WochenmitteilungenSite/>
 }

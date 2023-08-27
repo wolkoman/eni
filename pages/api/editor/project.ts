@@ -13,8 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     res.json({
-        articles: (await Cockpit.collectionGetUncached('paper_articles', {filter: {project: req.body.projectId}})).entries,
-        name: (await Cockpit.collectionGetUncached('paper_projects', {filter: {_id: req.body.projectId}})).entries[0].name,
+        articles: (await Cockpit.collectionGet('paper_articles', {filter: {project: req.body.projectId}})).entries,
+        name: (await Cockpit.collectionGet('paper_projects', {filter: {_id: req.body.projectId}})).entries[0].name,
     });
 
 }

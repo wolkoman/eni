@@ -39,6 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 export const loadReaderData = (): Promise<ReaderData> => {
-    return Cockpit.collectionGetUncached("internal-data", {filter: {_id: Cockpit.InternalId.ReaderData}})
+    return Cockpit.collectionGet("internal-data", {filter: {_id: Cockpit.InternalId.ReaderData}})
       .then(x => x.entries[0].data)
 }

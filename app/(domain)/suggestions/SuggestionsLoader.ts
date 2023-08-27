@@ -11,5 +11,5 @@ export async function getAllSuggestionFromServer() {
   if (!privateAccess) {
     return []
   }
-  return await Cockpit.collectionGetUncached('eventSuggestion', {filter: {open: false}}).then(({entries}) => entries);
+  return await Cockpit.collectionGet('eventSuggestion', {filter: {open: false}}).then(({entries}) => entries);
 }

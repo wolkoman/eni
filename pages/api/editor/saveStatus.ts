@@ -6,7 +6,7 @@ import {slack} from "@/app/(shared)/Slack";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    const article = (await Cockpit.collectionGetUncached('paper_articles', {filter: {_id: req.body.articleId}})).entries[0];
+    const article = (await Cockpit.collectionGet('paper_articles', {filter: {_id: req.body.articleId}})).entries[0];
 
     if(!article){
         res.status(400).end();
@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if(article.project.display?.startsWith("EB")){
         const channel = process.env.STAGE === "prod" ? 'C047C4D4R7B' : 'U0HJVFER4';
-        const articles = (await Cockpit.collectionGetUncached('paper_articles', {filter: {project: article.project._id as any}})).entries;
+        const articles = (await Cockpit.collectionGet('paper_articles', {filter: {project: article.project._id as any}})).entries;
         const sameStatus = {
             writing: articles.filter(a => a.status === 'writing'),
             written: articles.filter(a => a.status === 'finished' || a.status === 'corrected' || a.status === 'written'),

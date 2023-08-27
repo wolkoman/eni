@@ -5,7 +5,7 @@ import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    const article = (await Cockpit.collectionGetUncached('paper_articles', {filter: {_id: req.query.articleId as string}})).entries[0];
+    const article = (await Cockpit.collectionGet('paper_articles', {filter: {_id: req.query.articleId as string}})).entries[0];
 
     if (!article) {
         res.status(400).end();

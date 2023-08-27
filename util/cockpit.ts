@@ -8,11 +8,11 @@ export const Cockpit = {
         ReaderData: "637b85bc376231d51500018d",
         InstagramCache: "64956068666237420d000118"
     },
-    collectionGetUncached: <T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> => {
+    collectionGet: <T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> => {
         console.log(`GET ${collectionName} ${JSON.stringify(props)}`)
         return cockpit.collectionGet(collectionName, props)
     },
-    collectionGet: <T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> => {
+    collectionGetCached: <T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> => {
         console.log(`CACHEGET ${collectionName} ${JSON.stringify(props)}`)
         return unstable_cache(() => {
                 console.log(`GET ${collectionName} ${JSON.stringify(props)}`)
@@ -25,7 +25,7 @@ export const Cockpit = {
     },
     collectionSave: <T extends keyof Collections>(collectionName: T, object: Partial<Collections[T]>): Promise<Collections[T]> => {
         console.log(`SAVE ${collectionName} `)
-        revalidateTag(`cockpit-${collectionName}`)
+        //revalidateTag(`cockpit-${collectionName}`)
         return cockpit.collectionSave(collectionName, object)
     }
 }

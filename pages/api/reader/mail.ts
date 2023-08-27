@@ -25,9 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const events = await loadEvents({access: EventLoadAccess.PRIVATE_ACCESS}).then(x => x.events);
-    const data: ReaderData = await Cockpit.collectionGetUncached("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
-    const liturgy: LiturgyData = await Cockpit.collectionGetUncached("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
-    const persons = await Cockpit.collectionGetUncached('person').then(x => x.entries);
+    const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
+    const liturgy: LiturgyData = await Cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
+    const persons = await Cockpit.collectionGet('person').then(x => x.entries);
     const person = persons.find(p => p._id === req.body.personId)!;
     if (!person) {
         res.status(500).json({error: "Person not found"});

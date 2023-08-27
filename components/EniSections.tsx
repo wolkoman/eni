@@ -9,6 +9,7 @@ import {Personal} from "./Personal";
 import Image from "next/image";
 import {motion} from 'framer-motion';
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {Links} from "@/app/(shared)/Links";
 
 export function EniSections() {
     return <Responsive>
@@ -25,7 +26,7 @@ export function EniSections() {
                     </div>
                     <div className="flex flex-col lg:flex-row gap-2">
                         {['emmaus', 'inzersdorf', 'neustift'].map(id => getCalendarInfo(id as any)).map(info =>
-                            <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
+                            <Link href={Links.Weekly(info.id)} key={info.id}>
                                 <Button label={<div className="flex gap-2 items-center">
                                     <Image src={info.dot} alt="Emmaus" width={20} height={20}/>
                                     {info.shortName}

@@ -12,6 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    res.json((await Cockpit.collectionGetUncached('paper_projects', {sort: {_created: -1}})).entries);
+    res.json((await Cockpit.collectionGet('paper_projects', {sort: {_created: -1}})).entries);
 
 }

@@ -4,8 +4,9 @@ import React from "react";
 import {motion} from "framer-motion";
 import Site from "../../components/Site";
 import {CalendarName, getCalendarInfo} from "../(domain)/events/CalendarInfo";
+import {Links} from "../(shared)/Links";
 
-export const MyPdfViewer = () => {
+export const WochenmitteilungenSite = () => {
 
   return (
     <Site title="Wochenmitteilungen">
@@ -20,9 +21,9 @@ export const MyPdfViewer = () => {
             kanzlei@eni.wien.
           </div>
           <div className="grid lg:grid-cols-3 gap-2">
-            <Page href="/api/weekly?parish=emmaus" index={0} calendar={CalendarName.EMMAUS}/>
-            <Page href="/api/weekly?parish=inzersdorf" index={1} calendar={CalendarName.INZERSDORF}/>
-            <Page href="/api/weekly?parish=neustift" index={2} calendar={CalendarName.NEUSTIFT}/>
+            <Page href={Links.Weekly(CalendarName.EMMAUS)} index={0} calendar={CalendarName.EMMAUS}/>
+            <Page href={Links.Weekly(CalendarName.INZERSDORF)} index={1} calendar={CalendarName.INZERSDORF}/>
+            <Page href={Links.Weekly(CalendarName.NEUSTIFT)} index={2} calendar={CalendarName.NEUSTIFT}/>
           </div>
         </div>
       </div>
