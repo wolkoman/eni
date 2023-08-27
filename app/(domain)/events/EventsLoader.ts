@@ -49,7 +49,7 @@ export const loadEvents = async (options: EventLoadOptions): Promise<EventsObjec
     .catch(async err => {
       console.log('Google Calendar failed: ' + err);
       await notifyAdmin('Google Calendar failed: ' + err);
-      return await Cockpit.collectionGet('internal-data', {filter: {_id: Cockpit.InternalId.CalendarCache}})
+      return await Cockpit.collectionGetCached('internal-data', {filter: {_id: Cockpit.InternalId.CalendarCache}})
         .then(x => x.entries[0].data);
     });
 }
