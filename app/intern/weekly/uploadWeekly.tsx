@@ -1,4 +1,4 @@
-"use sever"
+"use server";
 import {Cockpit} from "../../../util/cockpit";
 import {resolveUserFromServer} from "../../(shared)/UserHandler";
 import {Permission} from "../../(domain)/users/Permission";

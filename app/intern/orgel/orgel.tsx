@@ -8,6 +8,7 @@ import {useState} from '../../(shared)/use-state-util';
 import {Clickable} from "../../(shared)/Clickable";
 import {CalendarEvent} from "../../(domain)/events/EventMapper";
 import {fetchJson} from "../../(shared)/FetchJson";
+import {Links} from "../../(shared)/Links";
 
 export function OrgelPage() {
   const [data, , setPartialData] = useState<{ date: string, slots: string[], availableSlots: string[], myBookings: CalendarEvent[], slotsLoading: boolean, bookingLoading: boolean
@@ -22,7 +23,7 @@ export function OrgelPage() {
 
   useEffect(() => {
       setPartialData({bookingLoading: true});
-      fetchJson(`/api/organ-booking/my`)
+      fetchJson(Links.ApiOrganBookingMy)
           .then(myBookings => setPartialData({myBookings}))
           .catch(() => toast(`Buchungen konnten nicht geladen werden`, {type: 'error'}))
           .finally(() => setPartialData({bookingLoading: false}));
@@ -31,13 +32,13 @@ export function OrgelPage() {
 
   function loadAvailableHours(value: string) {
     setPartialData({date: value, slots: [], slotsLoading: true});
-    fetchJson(`/api/organ-booking/check?date=${value}`)
+    fetchJson(Links.ApiOrganBookingCheck(value))
       .then(data => setPartialData({slots: data.slots, availableSlots: data.availableSlots, slotsLoading: false}));
   }
 
   function bookHour(hour: string) {
     setPartialData(data => ({availableSlots: data.availableSlots.filter(h => h !== hour)}))
-    toast.promise(fetchJson(`/api/organ-booking/book?slot=${hour}`),
+    toast.promise(fetchJson(Links.ApiOrganBookingBook(hour)),
       {pending: 'Buche Orgel...', success: 'Buchung erfolgreich', error: 'Buchung war nicht erfolgreich'})
       .then((booking) => setPartialData(data => ({
         availableSlots: data.availableSlots.filter(h => h !== hour),
@@ -57,7 +58,7 @@ export function OrgelPage() {
 
   function unbookHour(booking: CalendarEvent) {
     setMyBookingStatus(booking, false);
-    toast.promise(fetchJson(`/api/organ-booking/delete?id=${booking.id}`),
+    toast.promise(fetchJson(Links.ApiOrganBookingDelete(booking.id)),
       {pending: 'Lösche Buchung', success: 'Buchung gelöscht', error: 'Fehler ist aufgetreten'})
       .then(() => {
         const myBookings = data.myBookings.filter(b => b.id !== booking.id);

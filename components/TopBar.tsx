@@ -6,6 +6,7 @@ import Responsive from "./Responsive";
 
 import {useUserStore} from "@/store/UserStore";
 import {site} from "@/app/(shared)/Instance";
+import {Links} from "@/app/(shared)/Links";
 
 function NavItem(props: {href: string, label: string}) {
     return <Link href={props.href}><div className="group relative px-2 py-1">
@@ -19,21 +20,21 @@ export default function TopBar(props: { hidePicture?: boolean, frontpage?: boole
     return site(<div className="py-4 lg:py-6">
         <Responsive>
             <div className="flex justify-between items-center">
-                <Link href="/">
+                <Link href={Links.Hauptseite}>
                     <div className="font-bold text-xl">
                         eni.wien
                     </div>
                 </Link>
                 <div className="flex justify-between items-center font-semibold">
-                    <NavItem href="/termine" label="Termine"/>
-                    <NavItem href="/wochenmitteilungen" label="Wochenmitteilungen"/>
-                    <NavItem href={user ? "/intern" : "/intern/login"} label={'Login'}/>
+                    <NavItem href={Links.Termine} label="Termine"/>
+                    <NavItem href={Links.Wochenmitteilungen()} label="Wochenmitteilungen"/>
+                    <NavItem href={user ? Links.Intern : Links.Login} label={'Login'}/>
                 </div>
             </div>
         </Responsive>
     </div>, <div
         className={`flex flex-row justify-between py-4 px-10 lg:px-24 z-10 bg-emmaus text-white`} data-testid="navbar">
-        <Link href="/">
+        <Link href={Links.Hauptseite}>
             <div className="text-3xl cursor-pointer">
                 {props.frontpage ? <></> : <div className="flex space-x-4">
                     <div>Pfarre Emmaus</div>

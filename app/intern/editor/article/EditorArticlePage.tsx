@@ -16,6 +16,7 @@ import {useUserStore} from "../../../(store)/UserStore";
 import {Permission} from "../../../(domain)/users/Permission";
 import {saveFile} from "../../../(shared)/BrowserBlobSaver";
 import {fetchJson} from "../../../(shared)/FetchJson";
+import {Links} from "../../../(shared)/Links";
 
 
 function Welcome(props: { article: any, project: any }) {
@@ -48,7 +49,7 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
                 onClick={() => setMediaModalOpen(true)}/>
             }
             {cprops.permission ? <>
-                <Link href={`/intern/editor/version?articleId=${props.article._id}`} target="_blank">
+                <Link href={Links.ProjektplattformVersion(props.article._id)} target="_blank">
                     <Button label={<img src="/logo/icon_versions.svg" className="w-5 mt-0.5"/>}/>
                 </Link>
                 <select
@@ -113,7 +114,7 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
         if (!editable) return Promise.reject();
         if (saved === 'saved') return Promise.resolve();
         setSaved('saving');
-        return fetchJson("/api/editor/save", {json: {articleId: searchParams.get('articleId'), text}})
+        return fetchJson(Links.ApiEditorSave, {json: {articleId: searchParams.get('articleId'), text}})
             .then(() => setSaved('saved'))
             .catch(() => {
                 setSaved('error');
@@ -130,7 +131,7 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
 
     function saveStatus(newStatus: typeof article.status) {
         setStatusLoading(true);
-        return toast.promise(fetchJson("/api/editor/saveStatus", {
+        return toast.promise(fetchJson(Links.ApiEditorSaveStatus, {
             json: {status: newStatus, articleId: searchParams.get('articleId')},
         }), {
             pending: "Status wird gespeichert",
@@ -278,7 +279,7 @@ function MediaModal(props: { close: (files: string[]) => void, files: string[], 
     function closes() {
         setSaving(true);
         const files = mediaModalForm[0].files.map(({result}) => result);
-        toast.promise(fetchJson("/api/editor/saveMedia?articleId=" + props.articleId, {json: files}), {
+        toast.promise(fetchJson(Links.ApiEditorSaveMedia + props.articleId, {json: files}), {
             pending: "Speichere Medien..",
             success: "Medien gespeichert",
             error: "Fehler beim Speichern"

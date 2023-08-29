@@ -21,9 +21,9 @@ export const WochenmitteilungenSite = () => {
             kanzlei@eni.wien.
           </div>
           <div className="grid lg:grid-cols-3 gap-2">
-            <Page href={Links.Weekly(CalendarName.EMMAUS)} index={0} calendar={CalendarName.EMMAUS}/>
-            <Page href={Links.Weekly(CalendarName.INZERSDORF)} index={1} calendar={CalendarName.INZERSDORF}/>
-            <Page href={Links.Weekly(CalendarName.NEUSTIFT)} index={2} calendar={CalendarName.NEUSTIFT}/>
+            <Page href={Links.Wochenmitteilungen(CalendarName.EMMAUS)} index={0} calendar={CalendarName.EMMAUS}/>
+            <Page href={Links.Wochenmitteilungen(CalendarName.INZERSDORF)} index={1} calendar={CalendarName.INZERSDORF}/>
+            <Page href={Links.Wochenmitteilungen(CalendarName.NEUSTIFT)} index={2} calendar={CalendarName.NEUSTIFT}/>
           </div>
         </div>
       </div>

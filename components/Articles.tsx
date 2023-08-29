@@ -4,6 +4,7 @@ import {cockpit} from '@/util/cockpit-sdk';
 import {Collections} from 'cockpit-sdk';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
+import {Links} from "@/app/(shared)/Links";
 
 export function getCockpitResourceUrl(url: string) {
     if (url.startsWith('https')) return url;
@@ -13,7 +14,7 @@ export function getCockpitResourceUrl(url: string) {
 }
 
 export function getArticleLink(article?: Collections['article']) {
-    return article ? (article.external_url || `/artikel/${article._id}`) : '';
+    return article ? (article.external_url || Links.Artikel(article._id)) : '';
 }
 
 function ArticleCard(props: { article?: Collections['article'] }) {
@@ -42,7 +43,7 @@ export default function Articles(props: { items: Collections['article'][], sites
                     <div><ArticleCard article={props.items[1]}/></div>
                     <div>
                         <ArticleCard article={props.items[2]}/>
-                        <Link href="/artikel">
+                        <Link href={Links.Artikel()}>
                         <div
                             className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle
                             Beiträge

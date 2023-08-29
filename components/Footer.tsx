@@ -6,6 +6,7 @@ import Responsive from './Responsive';
 import Button from "./Button";
 import {useUserStore} from "@/store/UserStore";
 import {site} from "@/app/(shared)/Instance";
+import {Links} from "@/app/(shared)/Links";
 
 function Title(props: { children: ReactNode }) {
     return <div className="font-bold tracking-wider">{props.children}</div>;
@@ -39,14 +40,14 @@ export default function Footer() {
                               Röm.-kath. Pfarre Emmaus am Wienerberg,<br/>
                               Röm.-kath. Pfarre Inzersdorf,<br/>
                               Röm.-kath. Pfarre Inzersdorf-Neustift
-                              <Link href="/impressum">
+                              <Link href={Links.Impressum}>
                                   <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
                               </Link>
                           </>,
                           <>
                               HerausgeberIn, Alleininhaber, Redaktion:<br/>
                               Röm.-kath. Pfarre Emmaus am Wienerberg
-                              <Link href="/impressum">
+                              <Link href={Links.Impressum}>
                                   <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
                               </Link>
                           </>
@@ -57,7 +58,7 @@ export default function Footer() {
                         Wenn Sie Zugang zu den internen Systemen der {site(<>Pfarren</>, <>Pfarre</>)} brauchen, melden Sie sich in der
                         Pfarrkanzlei unter kanzlei@eni.wien.
                         {site(<div className="mt-2">
-                            <Link href={"/intern/login"}>
+                            <Link href={Links.Login}>
                                 <Button label="Login"/>
                             </Link>
                         </div>, <></>)}

@@ -10,6 +10,7 @@ import {fetchJson} from "../../(shared)/FetchJson";
 import {InternButton} from "../InternSite";
 import Link from "next/link";
 import {Clickable} from "../../(shared)/Clickable";
+import {Links} from "../../(shared)/Links";
 
 export default function EditorPage() {
 
@@ -17,7 +18,7 @@ export default function EditorPage() {
     const user = useUserStore(state => state.user);
     usePermission([Permission.Editor]);
     useEffect(() => {
-        fetchJson("/api/editor/projects").then(projects => setProjects(projects));
+        fetchJson(Links.ApiEditorProjects).then(projects => setProjects(projects));
     }, [setProjects])
 
     return <Site title="Projekte der Redaktionen" showTitle={true}>
@@ -27,7 +28,7 @@ export default function EditorPage() {
                 || (project.name.startsWith("EB") && user?.parish === 'emmaus')
                 || (project.name.toLowerCase().startsWith("blick") && user?.parish === 'inzersdorf')
             )
-                .map(project => <Clickable href={`editor/project?projectId=${project._id}`} key={project._id}><div className="p-4">
+                .map(project => <Clickable href={Links.ProjektplattformProjekt(project._id)} key={project._id}><div className="p-4">
                     <div className="text-2xl font-bold">{project.name}</div>
                     <div
                         className="text-lg font-medium">Redaktionsschluss: {new Date(project.deadline).toLocaleDateString("de-AT")}</div>

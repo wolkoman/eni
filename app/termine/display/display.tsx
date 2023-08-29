@@ -4,6 +4,7 @@ import {useSearchParams} from "next/navigation";
 import {CalendarEvent, EventsObject} from "../../(domain)/events/EventMapper";
 import {ReaderInfo} from "../../(domain)/service/Service";
 import {fetchJson} from "../../(shared)/FetchJson";
+import {Links} from "../../(shared)/Links";
 
 function Countdown() {
 
@@ -42,7 +43,7 @@ export default function EventPage() {
             if(new Date().getTime() - start > 1000 * 3600) {
                 location.reload();
             }
-            return fetchJson("/api/calendar/display?code=" + params.get("code"))
+            return fetchJson(Links.ApiCalendarDisplay + params.get("code"))
                 .then(data => setEntries(data));
         };
         load().then();

@@ -21,7 +21,7 @@ export function LiturgyEvent(props: {
 }) {
     const activeLiturgy = props.liturgies.find(liturgy => liturgy.name === props.readerData?.liturgy);
     return <Clickable
-        disabled={!props.active}
+        disabled={props.active}
         className={`rounded-lg overflow-hidden ${!activeLiturgy && "print:hidden"}`}>
         <div
             className={`flex gap-1 px-3 py-0.5 w-full print:p-0 print:hidden`}
