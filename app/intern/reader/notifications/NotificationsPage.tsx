@@ -16,6 +16,7 @@ import {
   roleToString
 } from "../../../(domain)/service/Service";
 import {fetchJson} from "../../../(shared)/FetchJson";
+import {Links} from "../../../(shared)/Links";
 
 export default function NotificationsPage() {
 
@@ -27,7 +28,7 @@ export default function NotificationsPage() {
   const parishReaders = readers.filter(person => person.parish === reader.parish || person.parish === "all");
 
   async function informPersonPerMail(tasks: ReaderTask<CalendarEvent>[]) {
-    await toast.promise(fetchJson("/api/reader/mail", {
+    await toast.promise(fetchJson(Links.ApiReaderMail, {
       json: {eventIds: tasks.map(job => job.event.id), personId: tasks[0].data.userId}
     }), {
       pending: "Mails wird gesendet",
@@ -46,7 +47,7 @@ export default function NotificationsPage() {
         status: 'informed'
       }
     }]));
-    return toast.promise(fetchJson("/api/reader/save", {json: changes({})}), {
+    return toast.promise(fetchJson(Links.ApiReaderSave, {json: changes({})}), {
       pending: "Status wird gespeichert",
       error: "Status wurde nicht gespeichert",
       success: "Status wurde gespeichert"

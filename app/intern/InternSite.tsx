@@ -6,6 +6,7 @@ import {useUserStore} from "../(store)/UserStore";
 import {usePermission} from "../(shared)/UsePermission";
 import {Permission} from "../(domain)/users/Permission";
 import Link from "next/link";
+import {Links} from "../(shared)/Links";
 
 
 export function InternButton({href, label, onClick, children}: {
@@ -29,35 +30,35 @@ export function InternPage() {
     <div className="text-4xl my-8 font-semibold">Hallo {user?.name?.split(' ')?.[0] ?? '😃'}!</div>
     <div className="grid lg:grid-cols-2 gap-6">
       <Section title="Termine" picture="icons/icon_calendar.svg">
-        <InternButton href="/termine" label="Ansehen"/>
+        <InternButton href={Links.Termine} label="Ansehen"/>
         {permissions?.[Permission.CalendarAdministration] &&
-            <InternButton href="intern/event-suggestions" label="Terminvorschläge"/>}
+            <InternButton href={Links.Terminvorschläge} label="Terminvorschläge"/>}
         {(permissions?.[Permission.Reader] || permissions?.[Permission.ReaderPlanning] || permissions?.[Permission.CommunionMinister]) &&
-            <InternButton href="intern/reader/my" label="Liturgische Dienste"/>}
+            <InternButton href={Links.DiensteÜbersicht} label="Liturgische Dienste"/>}
       </Section>
       <Section title="Wochenmitteilungen" picture="icons/icon_weekly.svg">
-        <InternButton href="/wochenmitteilungen" label="Ansehen"/>
-        <InternButton href="/intern/announcement" label="Ankündigung erstellen"/>
-        {permissions?.[Permission.Editor] && <InternButton href="intern/weekly" label="Erstellen"/>}
+        <InternButton href={Links.Wochenmitteilungen()} label="Ansehen"/>
+        <InternButton href={Links.Ankündigung} label="Ankündigung erstellen"/>
+        {permissions?.[Permission.Editor] && <InternButton href={Links.WochenmitteilungenErstellen} label="Erstellen"/>}
       </Section>
       <Section title="Pfarrzeitschriften" picture="icons/icon_papers.svg">
-        <InternButton href="/#pfarrzeitungen" label="Ansehen"/>
-        {permissions?.[Permission.Editor] && <InternButton href="intern/editor" label="Projektplattform"/>}
+        <InternButton href={Links.Pfarrzeitungen} label="Ansehen"/>
+        {permissions?.[Permission.Editor] && <InternButton href={Links.Projektplattform} label="Projektplattform"/>}
       </Section>
       <Section title="Musik in Inzersdorf" picture="icons/icon_music.svg">
-        {permissions?.[Permission.OrganBooking] && <InternButton href="intern/orgel" label="Orgel Buchung"/>}
+        {permissions?.[Permission.OrganBooking] && <InternButton href={Links.Orgel} label="Orgel Buchung"/>}
         {permissions?.[Permission.LimitedEventEditing] &&
-            <InternButton href="intern/limited-event-editing" label="Musikalische Gestaltung"/>}
+            <InternButton href={Links.MusikInzersdorf} label="Musikalische Gestaltung"/>}
       </Section>
       {permissions?.[Permission.PrivateDocumentAccess] &&
           <Section title="Kanzlei" picture="icons/icon_office.svg">
-              <InternButton href="intern/scans" label="Gescannte Dokumente"/>
+              <InternButton href={Links.Scans} label="Gescannte Dokumente"/>
           </Section>
       }
       <Section title="Einstellungen" picture="icons/icon_settings.svg">
-        <InternButton href="https://forms.gle/vCeFKfYwXL7E8ct7A" label="Feedback"/>
-        {user?.is_person && <InternButton href="intern/change-password" label="Passwort ändern"/>}
-        {user && !user?.is_person && <InternButton href="https://data.eni.wien" label="Cockpit"/>}
+        <InternButton href={Links.Feedback} label="Feedback"/>
+        {user?.is_person && <InternButton href={Links.PasswortÄndern} label="Passwort ändern"/>}
+        {user && !user?.is_person && <InternButton href={Links.Cockpit} label="Cockpit"/>}
         <InternButton onClick={logout} label="Logout"/>
       </Section>
     </div>

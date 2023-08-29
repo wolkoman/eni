@@ -4,6 +4,7 @@ import {Article} from "../../../components/Article";
 import {site as siteDif} from "../../(shared)/Instance";
 import {fetchEmmausSites} from "../../(shared)/Sites";
 import {notFound} from "next/navigation";
+import {Links} from "../../(shared)/Links";
 
 export default async function SitePage({params}: { params: { slug: string } }) {
     const sites = await siteDif(() => notFound(), () => fetchEmmausSites())();
@@ -13,11 +14,11 @@ export default async function SitePage({params}: { params: { slug: string } }) {
     }
     return siteDif(<></>, <Article title={site.name}>
             {(site.children.length > 0 || site.parent) && <div className="mb-12 flex font-sans flex-wrap bg-emmaus/20 rounded-xl p-2 text-center">
-                {!!site.parent && <Link href={`/seite/${site.parent.slug}`}>
+                {!!site.parent && <Link href={Links.Seite(site.parent.slug)}>
                     <div
                         className="p-5 rounded-lg md:px-4 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">Zurück zu {site.parent.name}</div>
                 </Link>}
-                {site.children.map((child: any) => <Link href={`/seite/${child.slug}`}>
+                {site.children.map((child: any) => <Link href={Links.Seite(site.slug)}>
                     <div
                         className="p-5 rounded-lg md:px-4 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">{child.name}</div>
                 </Link>)}

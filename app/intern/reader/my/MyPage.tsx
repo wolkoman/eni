@@ -10,6 +10,7 @@ import {useUserStore} from "@/store/UserStore";
 import {getTasksFromReaderData, ReaderInfo, ReaderRole, roleToString} from "@/domain/service/Service";
 import {fetchJson} from "@/app/(shared)/FetchJson";
 import {useReaderStore} from "@/store/ReaderStore";
+import {Links} from "@/app/(shared)/Links";
 
 export function compareLiturgy(a: Liturgy, b: Liturgy) {
     const order = ["H", "F", "G", "", "g"];
@@ -26,7 +27,7 @@ export function MyPage(props: { liturgy: LiturgyData }) {
         .sort((a, b) => new Date(a.event.date).getTime() - new Date(b.event.date).getTime());
 
     function cancel(eventId: string, role: ReaderRole) {
-        toast.promise(fetchJson("/api/reader/cancel", {json: {eventId, role}}), {
+        toast.promise(fetchJson(Links.ApiReaderCancel, {json: {eventId, role}}), {
             pending: "Trage aus...",
             success: "Lesung ist ausgetragen!",
             error: "Ein Fehler ist aufgetreten"
@@ -41,7 +42,7 @@ export function MyPage(props: { liturgy: LiturgyData }) {
     function takeOver(eventId: string, role: ReaderRole) {
 
         const roleInfo: ReaderInfo = {id: user?._id!, status: "informed", name: user?.name!};
-        toast.promise(fetchJson("/api/reader/save", {json: {[eventId]: {[role]: roleInfo}}}), {
+        toast.promise(fetchJson(Links.ApiReaderSave, {json: {[eventId]: {[role]: roleInfo}}}), {
             pending: "Liturgie wird gespeichert",
             error: "Liturgie wurde nicht gespeichert",
             success: "Liturgie wurde gespeichert"

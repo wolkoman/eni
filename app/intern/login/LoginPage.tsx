@@ -7,6 +7,7 @@ import {toast} from 'react-toastify';
 import {useState} from '../../(shared)/use-state-util';
 import {useRouter, useSearchParams} from 'next/navigation';
 import {useUserStore} from "../../(store)/UserStore";
+import {Links} from "../../(shared)/Links";
 
 export function LoginPage() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
@@ -26,7 +27,7 @@ export function LoginPage() {
 
     function onLogin() {
         setDisabled(true);
-        router.push(searchParams.has("redirect") ? searchParams.get("redirect") as string : '/intern');
+        router.push(searchParams.has("redirect") ? searchParams.get("redirect") as string : Links.Intern);
     }
 
     function login() {

@@ -27,7 +27,7 @@ export function WeeklyUpload() {
         })
         if (!splittingSuccess) return;
 
-        const uploadedFiles = await fetch('https://api.eni.wien/files-v0/upload.php', {
+        const uploadedFiles: string[] = await fetch('https://api.eni.wien/files-v0/upload.php', {
             method: 'POST',
             body: files,
         })
@@ -37,7 +37,7 @@ export function WeeklyUpload() {
 
         if (!uploadedFiles) return;
         const date = new Date().toISOString().split("T")[0];
-        uploadWeekly(date, uploadedFiles.includes("WM0"), uploadedFiles.includes("WM1"), uploadedFiles.includes("WM2"))
+        uploadWeekly(date, uploadedFiles.find(file => file.includes("WM0"))!, uploadedFiles.find(file => file.includes("WM1"))!, uploadedFiles.find(file => file.includes("WM2"))!)
             .then(() => setUploadPossible('success'));
     }
 

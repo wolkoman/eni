@@ -5,6 +5,7 @@ import {fetchJson} from "../../(shared)/FetchJson";
 import {toast} from "react-toastify";
 import Button from "../../../components/Button";
 import React from "react";
+import {Links} from "../../(shared)/Links";
 
 export function WeeklySend() {
 
@@ -14,7 +15,7 @@ export function WeeklySend() {
     function load() {
         if (state !== 'idle') return;
         setState('loading');
-        fetchJson("/api/weekly/send-mail", {json: {message}})
+        fetchJson(Links.ApiWeeklySendMail, {json: {message}})
             .then(({errorMessage}) => {
                 setState(errorMessage ? 'idle' : 'success');
                 if (errorMessage) toast.error(errorMessage)

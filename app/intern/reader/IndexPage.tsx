@@ -8,6 +8,11 @@ import {EniLoading} from "../../../components/Loading";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
+import {Links} from "@/app/(shared)/Links";
+
+function ParishSpecificSite(props: {children?: ReactNode}){
+
+}
 
 export function ReaderSite(props: { children?: ReactNode }) {
 
@@ -21,23 +26,23 @@ export function ReaderSite(props: { children?: ReactNode }) {
             <div className="print:hidden">
                 <div
                     className="flex lg:flex-col h-20 lg:h-auto lg:w-20 p-4 gap-2 bg-black/5 rounded-r-xl grow-0 lg:sticky top-0">
-                    <img src="/dot/edot.svg"
+                    {belongsTo(CalendarName.EMMAUS) && <img src="/dot/edot.svg"
                          onClick={() => setParish(CalendarName.EMMAUS)}
-                         className={`${parish === CalendarName.EMMAUS ? '' : inactive} ${belongsTo(CalendarName.EMMAUS) || 'hidden'}`}/>
-                    <img src="/dot/idot.svg"
+                         className={`${parish === CalendarName.EMMAUS ? '' : inactive}`}/>}
+                    {belongsTo(CalendarName.INZERSDORF) && <img src="/dot/idot.svg"
                          onClick={() => setParish(CalendarName.INZERSDORF)}
-                         className={`${parish === CalendarName.INZERSDORF ? '' : inactive} ${belongsTo(CalendarName.INZERSDORF) || 'hidden'}`}/>
-                    <img src="/dot/ndot.svg"
-                         onClick={() => setParish(CalendarName.NEUSTIFT)}
-                         className={`${parish === CalendarName.NEUSTIFT ? '' : inactive} ${belongsTo(CalendarName.NEUSTIFT) || 'hidden'}`}/>
-                    <Link href="/intern/reader/my" legacyBehavior={true}>
+                         className={`${parish === CalendarName.INZERSDORF ? '' : inactive}`}/>}
+                    {belongsTo(CalendarName.NEUSTIFT) && <img src="/dot/ndot.svg"
+                             onClick={() => setParish(CalendarName.NEUSTIFT)}
+                             className={`${parish === CalendarName.NEUSTIFT ? '' : inactive}`}/>}
+                    <Link href={Links.DiensteÜbersicht}>
                         <img src="/logo/persons.svg" className="cursor-pointer"/>
                     </Link>
                     {user?.permissions[Permission.ReaderPlanning] && <>
-                        <Link href="/intern/reader/events" legacyBehavior={true}>
+                        <Link href={Links.DienstePlanung}>
                             <img src="/logo/events.svg" className="cursor-pointer"/>
                         </Link>
-                        <Link href="/intern/reader/notifications" legacyBehavior={true}>
+                        <Link href={Links.DiensteBenachrichtigung}>
                             <img src="/logo/notifications.svg" className="cursor-pointer"/>
                         </Link>
                     </>}

@@ -7,6 +7,7 @@ import {getCockpitResourceUrl} from "./Articles";
 import Button from "./Button";
 
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {Links} from "@/app/(shared)/Links";
 
 export function EmmausSections(props: { emmausbote: Collections['Emmausbote'][] }) {
     const paper = props.emmausbote.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
@@ -25,7 +26,7 @@ export function EmmausSections(props: { emmausbote: Collections['Emmausbote'][] 
                     </div>
                     <div className="flex space-x-2">
                         {[CalendarName.EMMAUS].map(id => getCalendarInfo(id as any)).map(info =>
-                            <Link href={`/api/weekly?parish=${info.id}`} key={info.id}>
+                            <Link href={Links.Wochenmitteilungen(info.id)} key={info.id}>
                                 <Button label="Ansehen" className={info.className}/>
                             </Link>
                         )}
@@ -44,7 +45,7 @@ export function EmmausSections(props: { emmausbote: Collections['Emmausbote'][] 
                         <Link href={getCockpitResourceUrl(paper.file)}>
                             <Button label="Ansehen" className={getCalendarInfo(CalendarName.EMMAUS).className}/>
                         </Link>
-                        <Link href="/archiv">
+                        <Link href={Links.Archiv}>
                             <Button label="Archiv"/>
                         </Link>
                     </div>

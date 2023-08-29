@@ -6,6 +6,7 @@ import {CalendarName} from "@/domain/events/CalendarInfo";
 import {createLoadedStore} from "./CreateLoadedStore";
 import {ReaderData} from "@/domain/service/Service";
 import {fetchJson} from "@/app/(shared)/FetchJson";
+import {Links} from "@/app/(shared)/Links";
 
 export const useReaderStore = createLoadedStore(createStore(combine({
     readers: [] as Collections["person"][],
@@ -28,7 +29,7 @@ export const useReaderStore = createLoadedStore(createStore(combine({
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
-        fetchJson('/api/reader')
+        fetchJson(Links.ApiReader)
             .then(data => set(state => ({
                 ...state,
                 loading: false,

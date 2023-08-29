@@ -8,6 +8,7 @@ import {useUserStore} from "@/store/UserStore";
 import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
 import {createDiffSuggestion, getSuggestionFromEvent} from "@/domain/suggestions/SuggestionsMapper";
 import {fetchJson} from "@/app/(shared)/FetchJson";
+import {Links} from "@/app/(shared)/Links";
 
 
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
@@ -22,7 +23,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
 
     function save() {
         setLoading(true);
-        toast.promise(fetchJson("/api/calendar/suggest", {
+        toast.promise(fetchJson(Links.ApiCalendarSuggest, {
             json: {
                 eventId: props.eventId ?? null,
                 data: createDiffSuggestion(originalItem

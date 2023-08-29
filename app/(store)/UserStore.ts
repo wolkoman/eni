@@ -5,6 +5,7 @@ import {combine} from "zustand/middleware";
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
 import {User} from "@/domain/users/User";
 import {fetchJson} from "@/app/(shared)/FetchJson";
+import {Links} from "@/app/(shared)/Links";
 
 function decodeJwt(jwt: string): { user: User, exp: number } {
     const payload = verify(jwt, Buffer.from(process.env.NEXT_PUBLIC_KEY!, 'base64')) as JwtPayload;
@@ -26,7 +27,7 @@ export const useUserStore = createLoadedStore(createStore(combine({
     login: (data: { username: string, password: string }) => {
         if (get().loading) return Promise.resolve();
         set(state => ({...state, loading: true}));
-        return fetchJson('/api/login', {body: JSON.stringify(data), method: 'POST'})
+        return fetchJson(Links.ApiLogin, {body: JSON.stringify(data), method: 'POST'})
             .then(() => {
                 const {user} = decodeJwt(getCookie("jwt") as string);
                 set({user, loaded: true, loading: false});

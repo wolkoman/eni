@@ -9,6 +9,7 @@ import {EniLoading} from "../../../../components/Loading";
 import {usePermission} from "../../../(shared)/UsePermission";
 import {Permission} from "../../../(domain)/users/Permission";
 import {fetchJson} from "../../../(shared)/FetchJson";
+import {Links} from "../../../(shared)/Links";
 
 export function EditorProjectPage() {
 
@@ -16,7 +17,7 @@ export function EditorProjectPage() {
     const searchParams = useSearchParams();
     usePermission([Permission.Editor]);
     useEffect(() => {
-        fetchJson("/api/editor/project", {json: {projectId: searchParams.get('projectId')}}).then(projects => setProject(projects));
+        fetchJson(Links.ApiEditorProject, {json: {projectId: searchParams.get('projectId')}}).then(projects => setProject(projects));
     }, [searchParams])
 
     return <Site title={`Projekt ${project?.name ?? ''}`} showTitle={true}>

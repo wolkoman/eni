@@ -10,6 +10,7 @@ import {ReaderRole} from "../../../(domain)/service/Service";
 import {fetchJson} from "../../../(shared)/FetchJson";
 import {LiturgyEvent} from "./LiturgyEvent";
 import {resolveAvailableLiturgies} from "./resolveAvailableLiturgies";
+import {Links} from "../../../(shared)/Links";
 
 
 export default function EventsPage(props: { liturgy: LiturgyData }) {
@@ -21,7 +22,7 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;
-        toast.promise(fetchJson("/api/reader/save", {json: {[eventId]: {liturgy, date}}}), {
+        toast.promise(fetchJson(Links.ApiReaderSave, {json: {[eventId]: {liturgy, date}}}), {
             pending: "Liturgie wird gespeichert",
             error: "Liturgie wurde nicht gespeichert",
             success: "Liturgie wurde gespeichert"
@@ -31,7 +32,7 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
     async function selectPerson(eventId: string, role: ReaderRole, userId: string | null) {
         const userName = [...readers, ...communionMinisters].find(reader => reader._id === userId)?.name ?? 'Unbekannt';
         const roleData = userId !== null ? {id: userId, name: userName, status: "assigned"} : null;
-        toast.promise(fetchJson("/api/reader/save", {
+        toast.promise(fetchJson(Links.ApiReaderSave, {
             json: {[eventId]: {[role]: roleData}}
         }), {
             pending: "Person wird gespeichert",

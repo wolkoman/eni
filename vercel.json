@@ -1,8 +1,4 @@
 {
   "crons": [
-    {
-      "path": "/api/google/refresh",
-      "schedule": "0 5 * * *"
-    }
   ]
 }

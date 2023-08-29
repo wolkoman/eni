@@ -5,6 +5,7 @@ import Button from '../../../components/Button';
 import {toast} from "react-toastify";
 import {usePermission} from "../../(shared)/UsePermission";
 import {fetchJson} from "../../(shared)/FetchJson";
+import {Links} from "../../(shared)/Links";
 
 function Input(props: { label: string, value: string, onChange: (text: string) => any }) {
     return <div className="my-2">
@@ -20,7 +21,7 @@ export function ChangePassword() {
 
     function save() {
         setState(x => ({...x, loading: true}));
-        toast.promise(fetchJson('/api/change-password', {
+        toast.promise(fetchJson(Links.ApiChangePassword, {
             json: {password: state.current, neo: state.neo}
         }), {
             pending: 'Ändere Passwort',
