@@ -5,6 +5,7 @@ import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
 import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {site} from "@/app/(shared)/Instance";
 
 export function Event({event, suggestion, small}: {
     event: Partial<CalendarEvent>,
@@ -15,11 +16,11 @@ export function Event({event, suggestion, small}: {
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'}  leading-6`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'}`}
         >
-            <div className={`pr-3 pt-1.5 shrink-0 ${small ? "w-[40px]" : "w-[100px]"}`}>
+            {site(<div className={`pr-3 pt-1.5 shrink-0 ${small ? "w-[40px]" : "w-[100px]"}`}>
                 <ParishDot info={info} small={small} private={event.tags?.includes(CalendarTag.private) ?? false}/>
-            </div>
+            </div>, <></>)}
             <div
                 className={`${small ? "w-[50px]" : "w-[50px] lg:w-[60px]"} flex-shrink-0 mr-2 font-semibold ${cancelled && 'line-through'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
