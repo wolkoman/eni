@@ -18,7 +18,7 @@ export default async function SitePage({params}: { params: { slug: string } }) {
                     <div
                         className="p-5 rounded-lg md:px-4 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">Zurück zu {site.parent.name}</div>
                 </Link>}
-                {site.children.map((child: any) => <Link href={Links.Seite(site.slug)}>
+                {site.children.map((child: any) => <Link href={Links.Seite(child.slug)}>
                     <div
                         className="p-5 rounded-lg md:px-4 md:py-1 cursor-pointer hover:text-white hover:bg-emmaus">{child.name}</div>
                 </Link>)}

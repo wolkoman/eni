@@ -16,6 +16,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
         .filter(event => event.tags.includes(CalendarTag.announcement))
 
     return <div className={"bg-emmaus pt-8 md:pt-24 relative overflow-hidden"}>
+        <div className="bg-gradient-to-t from-black/40 to-black/0 absolute bottom-0 w-full h-12"/>
         <Responsive>
             <div className="flex flex-col md:flex-row justify-around">
                 <div className="text-white relative flex flex-col">
