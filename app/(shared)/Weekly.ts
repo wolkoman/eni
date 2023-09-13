@@ -1,6 +1,6 @@
 import {Cockpit} from "@/util/cockpit";
 import {Collections} from "cockpit-sdk";
-import {getCockpitResourceUrl} from "../../components/Articles";
+import {getCockpitResourceUrl} from "../EmmausSections";
 
 export async function fetchWeeklies() {
     const {entries} = await Cockpit.collectionGet('weekly', {sort: {'date': '-1'}});

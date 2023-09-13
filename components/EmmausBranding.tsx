@@ -15,14 +15,14 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
     const annoucments = props.eventsObject.events
         .filter(event => event.tags.includes(CalendarTag.announcement))
 
-    return <div className={"bg-emmaus pt-8 md:pt-24 relative overflow-hidden"}>
-        <div className="bg-gradient-to-t from-black/40 to-black/0 absolute bottom-0 w-full h-12"/>
+    return <div className="bg-emmaus pt-16 md:pt-36 relative overflow-hidden">
         <Responsive>
             <div className="flex flex-col md:flex-row justify-around">
                 <div className="text-white relative flex flex-col">
                     <div>
-                        <div className="text-5xl md:text-7xl font-bold">Pfarre Emmaus</div>
-                        <div className="text-4xl">am Wienerberg</div>
+                        <div className="text-2xl md:text-3xl opacity-50">Römisch-katholische</div>
+                        <div className="text-4xl md:text-6xl font-bold">Pfarre Emmaus</div>
+                        <div className="text-4xl md:text-6xl font-bold">am Wienerberg</div>
                     </div>
                     <div>
                         {event && <div>

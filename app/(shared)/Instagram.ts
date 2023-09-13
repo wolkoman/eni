@@ -18,10 +18,11 @@ export async function fetchInstagramFeed() {
             title: await getInstagramTitle(item.caption)
         }))))
         .then(async data => {
-            await Cockpit.collectionSave("internal-data", {_id: Cockpit.InternalId.InstagramCache, data});
+            //await Cockpit.collectionSave("internal-data", {_id: Cockpit.InternalId.InstagramCache, data});
             return data;
         })
         .catch(() => {
+            console.log("INSTAGRAM FAILED")
             return Cockpit.collectionGet("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
         });
 

@@ -34,12 +34,6 @@ declare module 'cockpit-sdk' {
       title: string,
       preview_image: { path: string },
       author: string,
-      content: string,
-      resort: string,
-      external_url: string,
-      external_image: string,
-      slug: string,
-      platform: string[] | string,
       layout: {component: string, settings: {text: string}}[],
     } & Object,
     'person': {

@@ -106,7 +106,7 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
   }));
   const [item, setItem] = useState<InstagramFeedItem | null>();
 
-  return <div className="my-8">
+  return feed.length === 0 ? <></> : <div className="my-8">
     <SectionHeader id="einblick">Einblick ins Pfarrleben</SectionHeader>
     <AnimatePresence>{item && <InstagramScreen item={item} close={() => setItem(null)}/>}</AnimatePresence>
     <div className="grid lg:grid-cols-2 gap-8">

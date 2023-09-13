@@ -1,6 +1,6 @@
 import Site from '../../components/Site';
 import React from 'react';
-import {getArticleLink, getCockpitResourceUrl} from '../../components/Articles';
+import {getArticleLink, getCockpitResourceUrl} from '../EmmausSections';
 import {Clickable} from "../(shared)/Clickable";
 import {Cockpit} from "../../util/cockpit";
 import {site} from "../(shared)/Instance";

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from "next/link";
 import Site from "../../components/Site";
-import {getCockpitResourceUrl} from "../../components/Articles";
+import {getCockpitResourceUrl} from "../EmmausSections";
 import {CalendarName, getCalendarInfo} from "../(domain)/events/CalendarInfo";
 import {site} from "../(shared)/Instance";
 import {fetchEmmausbote, fetchWeeklies} from "../(shared)/Weekly";
@@ -9,8 +9,7 @@ import {fetchEmmausbote, fetchWeeklies} from "../(shared)/Weekly";
 export default async function HomePage() {
 
     const calendars = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT].map(name => getCalendarInfo(name));
-    return <>
-        <Site title="Archiv">
+    return  <Site title="Archiv">
             {await site(async () => <>
                 <div className="text-3xl font-bold">Wochenmitteilungen</div>
                 <div className="my-4 mb-16">
@@ -31,7 +30,7 @@ export default async function HomePage() {
                         </div>)}
                 </div>
             </>, async () => <>
-                <div className="text-3xl font-bold">Emmausbote</div>
+                <div className="text-4xl font-bold mt-20 mb-10">Emmausbote</div>
                 <div className="flex flex-wrap mb-12">
                     {(await fetchEmmausbote())
                         .map(issue => <Link href={getCockpitResourceUrl(issue.file)}><img
@@ -40,6 +39,5 @@ export default async function HomePage() {
                         /></Link>)}
                 </div>
             </>)()}
-        </Site>
-    </>;
+        </Site>;
 }
