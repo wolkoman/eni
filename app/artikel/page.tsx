@@ -15,9 +15,8 @@ export default async function Events() {
     {articles.map(article => <Clickable href={getArticleLink(article)} className="flex items-start mt-4">
       <img src={getCockpitResourceUrl(article.preview_image.path)} className="w-20 mx-2 mt-4 rounded" alt="article-review"/>
       <div className="py-3">
-        <div className="italic -mb-1">{new Date(article._created * 1000).toLocaleDateString("de-AT")} {article.external_url ? " - extern" : ""}</div>
+        <div className="italic -mb-1">{new Date(article._created * 1000).toLocaleDateString("de-AT")}</div>
         <div className="font-bold text-xl">{article.title}</div>
-        <div className="">{article.content}</div>
       </div>
     </Clickable>)}
   </Site>;

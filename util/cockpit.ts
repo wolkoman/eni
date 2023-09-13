@@ -1,6 +1,6 @@
 import {CollectionGetProps, CollectionResponse, Collections} from "cockpit-sdk";
 import {cockpit} from "./cockpit-sdk";
-import {revalidateTag, unstable_cache} from "next/cache";
+import {unstable_cache} from "next/cache";
 
 export const Cockpit = {
     InternalId: {

@@ -35,6 +35,7 @@ declare module 'cockpit-sdk' {
       preview_image: { path: string },
       author: string,
       layout: {component: string, settings: {text: string}}[],
+      platform: 'eni' | 'emmaus'
     } & Object,
     'person': {
       active: boolean,

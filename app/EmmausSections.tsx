@@ -17,7 +17,7 @@ export function getCockpitResourceUrl(url: string) {
 }
 
 export function getArticleLink(article?: Collections['article']) {
-  return article ? (article.external_url || Links.Artikel(article._id)) : '';
+  return article ? Links.Artikel(article._id) : '';
 }
 
 function ArticleCard(props: { article?: Collections['article'] }) {
