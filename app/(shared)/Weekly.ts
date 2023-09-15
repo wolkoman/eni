@@ -12,7 +12,7 @@ export async function fetchCurrentWeeklies() {
 }
 
 export async function fetchEmmausbote() {
-    const articles = await Cockpit.collectionGet('Emmausbote', {sort: {'date': '-1'}});
+    const articles = await Cockpit.collectionGetCached('Emmausbote', {sort: {'date': '-1'}});
     return articles.entries;
 }
 

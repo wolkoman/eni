@@ -11,7 +11,6 @@ export async function GET(request: Request) {
   );
 
   console.log(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_KEY)
-  console.log("req.query", searchParams.get('code'))
   const {tokens} = await oauth2Client.getToken(searchParams.get('code') as string);
 
 

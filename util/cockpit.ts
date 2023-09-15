@@ -19,7 +19,7 @@ export const Cockpit = {
                 return cockpit.collectionGet(collectionName, props)
             },
             ["cockpit", collectionName, JSON.stringify(props)], {
-                revalidate: 3600,
+                revalidate: 300,
                 tags: [`cockpit-${collectionName}`]
             })()
     },
