@@ -12,6 +12,7 @@ import {notifyAdmin} from "@/app/(shared)/Telegram";
 import {site} from "@/app/(shared)/Instance";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
 import {unstable_cache} from "next/cache";
+import { OAuth2Client } from "google-auth-library";
 
 export async function loadEventsFromServer() {
   const user = await resolveUserFromServer();
@@ -24,8 +25,9 @@ export async function loadEventsFromServer() {
   })
 }
 
-export const loadCachedEvents = (options: EventLoadOptions): Promise<EventsObject> => {
-  return unstable_cache(() => loadEvents(options),
+export const loadCachedEvents = async (options: EventLoadOptions): Promise<EventsObject> => {
+  const authClient = await getGoogleAuthClient();
+  return await unstable_cache(() => loadEvents(options, authClient),
     ["events", JSON.stringify(options)],
     {
       revalidate: 60,
@@ -33,9 +35,9 @@ export const loadCachedEvents = (options: EventLoadOptions): Promise<EventsObjec
     })()
 }
 
-export const loadEvents = async (options: EventLoadOptions): Promise<EventsObject> => {
+export const loadEvents = async (options: EventLoadOptions, authClient?: OAuth2Client): Promise<EventsObject> => {
 
-  const authClient = getGoogleAuthClient()
+  if(!authClient) authClient = await getGoogleAuthClient()
   return Promise.all(site(
       [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
       [CalendarName.ALL, CalendarName.EMMAUS]
