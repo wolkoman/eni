@@ -28,7 +28,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
                         {event && <div>
                             <div className={`${annoucments.length > 0 ? 'bg-white/70' : 'bg-emmaus-sec'} text-black text-xl inline-flex px-4 py-2 rounded mt-12`}>
                                 <div className="mr-2">
-                                    {getWeekDayName(new Date(event.date).getDay())}, {new Date(event.start.dateTime).toLocaleTimeString("de-AT").substring(0, 5)} Uhr:
+                                    {getWeekDayName(new Date(event.date).getDay())}, {event.time} Uhr:
                                 </div>
                                 <div className="font-bold">{event.summary}</div>
                             </div>
