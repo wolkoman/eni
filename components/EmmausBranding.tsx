@@ -36,7 +36,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
                         {annoucments.map(annoucment => <div>
                             <div className="bg-emmaus-sec text-black text-xl inline-flex px-4 py-2 rounded mt-2">
                                 <div className="mr-2">
-                                    {new Date(annoucment.date).toLocaleDateString("de-AT")}, {new Date(annoucment.start.dateTime).toLocaleTimeString("de-AT").substring(0, 5)} Uhr:
+                                    {new Date(annoucment.date).toLocaleDateString("de-AT")}, {annoucment.time} Uhr:
                                 </div>
                                 <div className="font-bold">{annoucment.summary}</div>
                             </div>
