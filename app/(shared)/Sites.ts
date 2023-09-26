@@ -2,7 +2,7 @@ import {Cockpit} from "@/util/cockpit";
 import {Collections} from "cockpit-sdk";
 
 export async function fetchEmmausSites() {
-    const {entries: articles} = await Cockpit.collectionGet('site');
+    const {entries: articles} = await Cockpit.collectionGetCached('site');
     const main = articles?.find(article => article.name == "emmaus.wien")!;
 
     function getChildren(site: Collections['site'], level = 0, parent?: Collections['site']): Collections['site'][] {

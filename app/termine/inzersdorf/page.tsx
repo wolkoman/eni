@@ -23,8 +23,7 @@ export default async function EventPage() {
                         {event.summary}
                     </div>
                     <div className="text-[13px]">
-                        <EventDateText date={new Date(event.date)}/> um <EventTime
-                        date={new Date(event.start.dateTime)}/> Uhr
+                        <EventDateText date={new Date(event.date)}/> um {event.time} Uhr
                     </div>
                 </div>)}
             <div className="font-bold text-sm mb-4 text-[#1e74a9]">

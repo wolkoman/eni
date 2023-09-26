@@ -6,11 +6,13 @@ import {resolveUserFromServer} from "@/app/(shared)/UserHandler";
 import {loadReaderData} from "../../../pages/api/reader";
 import {EventsObject} from "./EventMapper";
 import {loadCalendar} from "./CalendarLoader";
-import {EventLoadOptions, EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {EventLoadAccess, EventLoadOptions} from "@/domain/events/EventLoadOptions";
 import {Permission} from "@/domain/users/Permission";
 import {notifyAdmin} from "@/app/(shared)/Telegram";
 import {site} from "@/app/(shared)/Instance";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
+import {unstable_cache} from "next/cache";
+import { OAuth2Client } from "google-auth-library";
 
 export async function loadEventsFromServer() {
   const user = await resolveUserFromServer();
@@ -23,8 +25,19 @@ export async function loadEventsFromServer() {
   })
 }
 
-export const loadEvents = async (options: EventLoadOptions): Promise<EventsObject> => {
-  const authClient = await getGoogleAuthClient()
+export const loadCachedEvents = async (options: EventLoadOptions): Promise<EventsObject> => {
+  const authClient = await getGoogleAuthClient();
+  return await unstable_cache(() => loadEvents(options, authClient),
+    ["events", JSON.stringify(options)],
+    {
+      revalidate: 60,
+      tags: ["calendar"]
+    })()
+}
+
+export const loadEvents = async (options: EventLoadOptions, authClient?: OAuth2Client): Promise<EventsObject> => {
+
+  if(!authClient) authClient = await getGoogleAuthClient()
   return Promise.all(site(
       [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
       [CalendarName.ALL, CalendarName.EMMAUS]

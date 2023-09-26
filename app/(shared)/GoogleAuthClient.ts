@@ -1,5 +1,6 @@
-import {get} from "@vercel/edge-config";
+"use server"
 import {google} from "googleapis";
+import {get} from "@vercel/edge-config";
 
 export async function getGoogleAuthClient() {
     const google_config: any = await get('google_config');

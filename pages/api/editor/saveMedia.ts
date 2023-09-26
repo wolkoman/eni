@@ -16,8 +16,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(401).end();
         return;
     }
-
-    console.log(await Cockpit.collectionSave('paper_articles', {_id: article._id, files: (<string[]>req.body).map(value => ({value}))}));
     res.status(200).json({});
 
 }

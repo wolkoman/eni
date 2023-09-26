@@ -9,7 +9,7 @@ import {EniHero} from "../components/EniHero";
 import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
-import {loadEvents} from "./(domain)/events/EventsLoader";
+import {loadCachedEvents} from "./(domain)/events/EventsLoader";
 import {EventLoadAccess} from "./(domain)/events/EventLoadOptions";
 import {site} from "./(shared)/Instance";
 import {fetchInstagramFeed} from "./(shared)/Instagram";
@@ -22,7 +22,7 @@ import {EniInformation} from "./EniInformation";
 export const revalidate = 300
 
 export default async function HomePage() {
-  const eventsObject = await loadEvents({access: EventLoadAccess.PUBLIC})
+  const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})
   return site(async () => <Site
     responsive={false} navbar={false}
     description="Drei Pfarren im Wiener Dekanat 23"
@@ -46,7 +46,11 @@ export default async function HomePage() {
     </div>
     <WorshipNotice worshipEvents={eventsObject.events.filter(event => event.summary === "Worship")}/>
     <div className="relative z-10 bg-white">
-      <EmmausSections items={await fetchArticles()} sites={await fetchEmmausSites()} emmausbote={await fetchEmmausbote()}/>
+      <EmmausSections
+        items={await fetchArticles()}
+        sites={await fetchEmmausSites()}
+        emmausbote={await fetchEmmausbote()}
+      />
       <ComingUp eventsObject={eventsObject}/>
       <Responsive>
         <Instagram items={await fetchInstagramFeed()}/>
