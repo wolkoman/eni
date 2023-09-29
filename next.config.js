@@ -17,6 +17,11 @@ module.exports = {
                 destination: "/intern/login",
                 permanent: true,
             },
+            {
+                source: '/w',
+                destination: "/worship",
+                permanent: true,
+            },
         ];
     },
 };
