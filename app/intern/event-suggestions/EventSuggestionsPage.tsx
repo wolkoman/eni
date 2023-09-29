@@ -50,7 +50,7 @@ function ActiveSuggestion(props: {
     </div>
     <div className="flex flex-col items-end">
       <div className="">
-        {props.suggestion.byName} ({new Date(props.suggestion._modified * 1000).toLocaleString("de-AT")})
+        {props.suggestion.byName} ({new Date(props.suggestion._created * 1000).toLocaleString("de-AT")})
       </div>
 
       {props.active && <div className="flex  gap-2 relative">
@@ -73,7 +73,7 @@ function ActiveSuggestion(props: {
                 <textarea
                     className="h-24 p-2 border border-black/20 rounded-lg"
                     value={declineMessage}
-                    onChange={({target}) => setDeclineMessage(target.value)}
+                    onChange={({target}: {target: HTMLTextAreaElement}) => setDeclineMessage(target.value)}
                 />
                 <div className="flex gap-2 flex-row-reverse">
                     <Button label="Mail senden" disabled={!declineMessage}

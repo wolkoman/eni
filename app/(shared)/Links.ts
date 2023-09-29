@@ -18,7 +18,6 @@ export const Links = {
   ProjektplattformProjekt: (id: string) => `/intern/editor/project?projectId=${id}`,
   ProjektplattformVersion: (id: any) => `/intern/editor/version?articleId=${id}`,
   Orgel: "intern/orgel",
-  MusikInzersdorf: "intern/limited-event-editing",
   Scans: "intern/scans",
   PasswortÄndern: "intern/change-password",
   Cockpit: "https://data.eni.wien",
