@@ -1,6 +1,6 @@
 export interface ReaderTask<T> {
     event: T;
-    data: { role: ReaderRole, userId: string, status: string };
+    data: { role: ReaderRole, userId: string, status: ReaderStatus };
 }
 
 export type ReaderRole = 'reading1' | 'reading2' | 'communionMinister1' | 'communionMinister2';

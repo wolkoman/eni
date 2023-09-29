@@ -45,11 +45,11 @@ export function InternPage() {
         <InternButton href={Links.Pfarrzeitungen} label="Ansehen"/>
         {permissions?.[Permission.Editor] && <InternButton href={Links.Projektplattform} label="Projektplattform"/>}
       </Section>
-      <Section title="Musik in Inzersdorf" picture="icons/icon_music.svg">
+      {permissions?.[Permission.OrganBooking] &&
+          <Section title="Musik in Inzersdorf" picture="icons/icon_music.svg">
         {permissions?.[Permission.OrganBooking] && <InternButton href={Links.Orgel} label="Orgel Buchung"/>}
-        {permissions?.[Permission.LimitedEventEditing] &&
-            <InternButton href={Links.MusikInzersdorf} label="Musikalische Gestaltung"/>}
       </Section>
+      }
       {permissions?.[Permission.PrivateDocumentAccess] &&
           <Section title="Kanzlei" picture="icons/icon_office.svg">
               <InternButton href={Links.Scans} label="Gescannte Dokumente"/>
