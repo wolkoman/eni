@@ -36,7 +36,12 @@ export function EventDescription(props: { event: Partial<CalendarEvent>, suggest
         </div>
         {roles.some(role => props.event.readerInfo?.[role]) &&
         <div className="px-2 py-1 bg-black/[4%] rounded grow mx-4">
-            {roles.filter(role => props.event.readerInfo?.[role]).map(role => <div>{roleToString(role)}: {props.event.readerInfo?.[role]?.name}</div>)}
+            {roles.filter(role => props.event.readerInfo?.[role]).map(role => {
+                const info = props.event.readerInfo?.[role];
+                const cancelled = info?.status === "cancelled";
+                return <div key={role}>{roleToString(role)}: <span className={cancelled ? 'line-through' : ''}>{info?.name}</span> {cancelled && ' (abgesagt)'}</div>;
+              }
+            )}
         </div>
         }
     </div>;
