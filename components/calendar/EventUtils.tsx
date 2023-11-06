@@ -4,6 +4,8 @@ import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
 import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
 import {roleToString} from "@/domain/service/Service";
+import {compareLiturgy} from "@/app/intern/reader/my/MyPage";
+import {Liturgy} from "../../pages/api/liturgy";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
     return <div>
@@ -47,13 +49,24 @@ export function EventDescription(props: { event: Partial<CalendarEvent>, suggest
     </div>;
 }
 
-export const EventDate = ({date}: { date: Date }) => {
+export const EventDate = ({date, liturgies}: { date: Date, liturgies?: Liturgy[] }) => {
     const day = date.getDay();
+    const liturgy = liturgies?.sort(compareLiturgy)?.[0]
+    const decoration = {
+        v: "decoration-[#f0f]",
+        w: "decoration-[#ddd]",
+        g: "decoration-[#0c0]",
+        r: "decoration-[#f00]",
+        "": ""
+    }[liturgy?.color ?? ""]
+    const weekDayName = getWeekDayName(day);
     return <>
-        <div className="text-lg lg:hidden">{getWeekDayName(day)}, {date.getDate()}. {getMonthName(date.getMonth())}</div>
+        <div className={`text-lg font-semibold lg:hidden underline decoration-2 ${decoration}`}>{weekDayName}, {date.getDate()}. {getMonthName(date.getMonth())}</div>
         <div className={`hidden lg:flex flex-col`}>
-            <div className="text-lg font-semibold">{date.getDate()}. {getMonthName(date.getMonth())}</div>
-            <div className="text-2xl text-sm">{getWeekDayName(day)}</div>
+            <div className={`text-lg font-semibold underline decoration-2 ${decoration}`}>{date.getDate()}. {getMonthName(date.getMonth())}</div>
+            <div className={`text-xs`}>{liturgy?.name.toLowerCase().includes(weekDayName.toLowerCase()) ? "" : weekDayName}</div>
+            <div className="mr-1 text-xs">{liturgy?.name}</div>
+            <div className="mt-1 text-xs italic">{liturgy?.rank === "H" ? "Hochfest":""}</div>
     </div></>;
 }
 
