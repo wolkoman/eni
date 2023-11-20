@@ -91,7 +91,7 @@ export function MyPage(props: { liturgy: LiturgyData }) {
             <div className="my-4 text-lg font-bold">Alle Dienste</div>
             {Object.entries(readerData)
                 .map(([eventId, data]) => ({...data, event: events.find(event => event.id === eventId)!}))
-                .filter(data => new Date(data.event?.date) > new Date())
+                .filter(data => new Date(data.event?.date).getTime() > new Date().getTime() - 1000*3600*24)
                 .sort((a,b) => new Date(a.event?.date).getTime() - new Date(b.event?.date).getTime())
                 .map((data) => <div className="flex border-black/10 border-t py-1">
                     <div className="w-60">

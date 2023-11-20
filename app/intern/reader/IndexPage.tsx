@@ -10,10 +10,6 @@ import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import {Links} from "@/app/(shared)/Links";
 
-function ParishSpecificSite(props: {children?: ReactNode}){
-
-}
-
 export function ReaderSite(props: { children?: ReactNode }) {
 
     const user = useUserStore(state => state.user);
