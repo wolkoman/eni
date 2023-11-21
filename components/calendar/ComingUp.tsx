@@ -38,7 +38,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                         className={`p-4 pb-8 rounded-xl border border-black/20`}
                     >
                         <div className="flex gap-2 mb-4 mt-2">
-                            <div className="text-3xl font-bold">{group}</div>
+                            <div className="text-3xl font-semibold">{group}</div>
                         </div>
                         <div>
                             <ListView search="" editable={false} items={Object.values(eventsObject).flat()} liturgy={{}} filter={null}/>
