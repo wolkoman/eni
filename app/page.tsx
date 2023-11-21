@@ -29,8 +29,8 @@ export default async function HomePage() {
     <TopBar frontpage={true}/>
     <EniHero/>
     <ChristmasDisplay eventsObject={eventsObject}/>
+    <ComingUp eventsObject={eventsObject}/>
     <Responsive size="md">
-      <ComingUp eventsObject={eventsObject}/>
       <EniSections/>
       <Instagram items={await fetchInstagramFeed()}/>
       <EniInformation/>

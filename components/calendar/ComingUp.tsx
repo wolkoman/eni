@@ -41,12 +41,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                             <div className="text-2xl font-bold">{group}</div>
                         </div>
                         <div>
-                            <ListView editable={false} calendar={{
-                                items: Object.values(eventsObject).flat(),
-                                error: false,
-                                loading: false,
-                                loaded: true
-                            }} liturgy={{}} filter={null}/>
+                            <ListView search="" editable={false} items={Object.values(eventsObject).flat()} liturgy={{}} filter={null}/>
                         </div>
                     </Clickable>
                 )}
