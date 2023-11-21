@@ -1,4 +1,3 @@
-import React from "react";
 import {getLiturgyData} from "../../../../pages/api/liturgy";
 import {MyPage} from "./MyPage";
 

@@ -3,7 +3,6 @@ import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
 import {groupEventsByDate} from '@/store/CalendarStore';
 import {EventDateText} from "./calendar/EventUtils";
-import React from "react";
 import {EventsObject} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 

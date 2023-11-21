@@ -1,7 +1,7 @@
 import {get} from "@vercel/edge-config";
-import {site} from "@/app/(shared)/Instance";
-import {getInstagramTitle} from "@/app/(shared)/ChatGpt";
-import {Cockpit} from "@/util/cockpit";
+import {site} from "./Instance";
+import {getInstagramTitle} from "./ChatGpt";
+import {Cockpit} from "../../util/cockpit";
 
 export async function fetchInstagramFeed() {
     const {token}: any = await get('instagram_config')
@@ -23,7 +23,7 @@ export async function fetchInstagramFeed() {
         })
         .catch(() => {
             console.log("INSTAGRAM FAILED")
-            return Cockpit.collectionGet("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
+            return Cockpit.collectionGetCached("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
         });
 
 }

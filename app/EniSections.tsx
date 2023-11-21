@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link";
-import React from "react";
 import {Links} from "./(shared)/Links";
 import {EniSection} from "@/app/(shared)/EniSection";
 import {ParishButton} from "./(shared)/ParishButton";

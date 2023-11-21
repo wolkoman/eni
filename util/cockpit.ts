@@ -1,6 +1,6 @@
 import {CollectionGetProps, CollectionResponse, Collections} from "cockpit-sdk";
 import {cockpit} from "./cockpit-sdk";
-import {unstable_cache} from "next/cache";
+import {revalidateTag, unstable_cache} from "next/cache";
 
 export const Cockpit = {
     InternalId: {
@@ -25,7 +25,7 @@ export const Cockpit = {
     },
     collectionSave: <T extends keyof Collections>(collectionName: T, object: Partial<Collections[T]>): Promise<Collections[T]> => {
         console.log(`SAVE ${collectionName} `)
-        //revalidateTag(`cockpit-${collectionName}`)
+        revalidateTag(`cockpit-${collectionName}`)
         return cockpit.collectionSave(collectionName, object)
     }
 }

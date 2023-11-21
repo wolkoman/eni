@@ -1,5 +1,4 @@
 import {useRive} from "@rive-app/react-canvas";
-import React from "react";
 
 export function EniLoading(props: {noPadding?: boolean}) {
     const {RiveComponent} = useRive({

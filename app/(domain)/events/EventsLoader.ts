@@ -19,7 +19,7 @@ export async function loadEventsFromServer() {
 
   const privateAccess = user && user.permissions[Permission.PrivateCalendarAccess];
   const readerData = await (privateAccess ? loadReaderData : () => Promise.resolve(undefined))()
-  return await loadEvents({
+  return await loadCachedEvents({
     access: privateAccess ? EventLoadAccess.PRIVATE_ACCESS : EventLoadAccess.PUBLIC,
     readerData
   })

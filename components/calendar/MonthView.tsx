@@ -4,7 +4,6 @@ import {useState} from "@/app/(shared)/use-state-util";
 import {Settings} from "../Settings";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
-import React from "react";
 import {EventSearch} from "./EventSearch";
 import {ReducedCalendarState} from "@/app/termine/EventPage";
 import {getCalendarInfo} from "@/domain/events/CalendarInfo";

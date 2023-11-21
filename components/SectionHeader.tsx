@@ -1,5 +1,5 @@
-import React from 'react';
+import {ReactNode} from "react";
 
-export function SectionHeader(props: {children: React.ReactNode, id?: string}) {
+export function SectionHeader(props: {children: ReactNode, id?: string}) {
   return <div id={props.id} className="text-3xl mt-8 mb-8 font-semibold">{props.children}</div>;
 }

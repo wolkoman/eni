@@ -3,7 +3,6 @@ import PDFMerger from "pdf-merger-js/browser";
 import {toast} from "react-toastify";
 import {uploadWeekly} from "./uploadWeekly";
 import {EniLoading} from "../../../components/Loading";
-import React from "react";
 
 export function WeeklyUpload() {
 

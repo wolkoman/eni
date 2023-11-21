@@ -1,5 +1,4 @@
 import {ParishDot} from './ParishDot';
-import React from "react";
 import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";

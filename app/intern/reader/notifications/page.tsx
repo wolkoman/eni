@@ -1,4 +1,3 @@
-import React from "react";
 import NotificationsPage from "./NotificationsPage";
 import {getLiturgyData} from "../../../../pages/api/liturgy";
 

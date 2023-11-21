@@ -2,7 +2,6 @@
 
 import {Section} from "../components/Section";
 import {CalendarName, getCalendarInfo} from "./(domain)/events/CalendarInfo";
-import React from "react";
 import {motion} from "framer-motion";
 import Link from "next/link";
 import {SectionHeader} from "../components/SectionHeader";

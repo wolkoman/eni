@@ -6,7 +6,6 @@ import {Clickable} from "../../../(shared)/Clickable";
 import {LiturgyStatus} from "./LiturgyStatus";
 import {compareLiturgy} from "../my/MyPage";
 import {PersonSelector} from "./PersonSelector";
-import React from "react";
 
 export function LiturgyEvent(props: {
     setActive: () => void,

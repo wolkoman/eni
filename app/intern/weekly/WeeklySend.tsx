@@ -4,7 +4,6 @@ import {useState} from "../../(shared)/use-state-util";
 import {fetchJson} from "../../(shared)/FetchJson";
 import {toast} from "react-toastify";
 import Button from "../../../components/Button";
-import React from "react";
 import {Links} from "../../(shared)/Links";
 
 export function WeeklySend() {

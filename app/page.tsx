@@ -6,7 +6,6 @@ import {EmmausBranding} from "../components/EmmausBranding";
 import EmmausSections from "./EmmausSections";
 import {ComingUp} from "../components/calendar/ComingUp";
 import {EniHero} from "../components/EniHero";
-import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
 import {loadCachedEvents} from "./(domain)/events/EventsLoader";

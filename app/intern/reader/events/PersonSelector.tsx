@@ -1,5 +1,4 @@
 import {Collections} from "cockpit-sdk";
-import React from "react";
 
 export function PersonSelector(props: {
     persons: Collections['person'][],
