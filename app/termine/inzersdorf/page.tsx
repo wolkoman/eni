@@ -1,5 +1,5 @@
-import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
-import {loadCachedEvents, loadEvents} from "../../(domain)/events/EventsLoader";
+import {EventDateText} from "../../../components/calendar/EventUtils";
+import {loadCachedEvents} from "../../(domain)/events/EventsLoader";
 import {EventLoadAccess} from "../../(domain)/events/EventLoadOptions";
 
 export const revalidate = 3000

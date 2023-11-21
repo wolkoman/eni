@@ -9,7 +9,6 @@ export default async function Page(){
 }
 
 const WochenmitteilungenSite = () => {
-
     return (
       <Site title="Wochenmitteilungen">
           <div className="flex">

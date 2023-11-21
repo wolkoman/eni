@@ -11,7 +11,7 @@ import Responsive from "../components/Responsive";
 import {loadCachedEvents} from "./(domain)/events/EventsLoader";
 import {EventLoadAccess} from "./(domain)/events/EventLoadOptions";
 import {site} from "./(shared)/Instance";
-import {fetchInstagramFeed} from "./(shared)/Instagram";
+import {fetchCachedInstagramFeed} from "./(shared)/Instagram";
 import {fetchEmmausSites} from "./(shared)/Sites";
 import {fetchArticles} from "./(shared)/Articles";
 import {fetchEmmausbote} from "./(shared)/Weekly";
@@ -32,7 +32,7 @@ export default async function HomePage() {
     <ComingUp eventsObject={eventsObject}/>
     <Responsive size="md">
       <EniSections/>
-      <Instagram items={await fetchInstagramFeed()}/>
+      <Instagram items={await fetchCachedInstagramFeed()}/>
       <EniInformation/>
     </Responsive>
   </Site>, async () => <Site
@@ -52,7 +52,7 @@ export default async function HomePage() {
       />
       <ComingUp eventsObject={eventsObject}/>
       <Responsive>
-        <Instagram items={await fetchInstagramFeed()}/>
+        <Instagram items={await fetchCachedInstagramFeed()}/>
       </Responsive>
     </div>
   </Site>)();

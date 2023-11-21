@@ -2,9 +2,14 @@ import {get} from "@vercel/edge-config";
 import {site} from "./Instance";
 import {getInstagramTitle} from "./ChatGpt";
 import {Cockpit} from "../../util/cockpit";
+import {unstable_cache} from "next/cache";
 
-export async function fetchInstagramFeed() {
+export const fetchCachedInstagramFeed = async () => {
     const {token}: any = await get('instagram_config')
+    return await unstable_cache(() => fetchInstagramFeed(token), ["instagram"], {revalidate: 3600, tags: ["instagram"]})();
+};
+
+export async function fetchInstagramFeed(token: string) {
     const fields = "id,media_type,media_url,permalink,timestamp,caption";
 
     return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=100&access_token=${token}`)

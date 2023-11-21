@@ -45,7 +45,7 @@ export function ListView(props: {
                     className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                 >
                     <div className="lg:w-[130px] my-1 shrink-0">
-                        <EventDate date={new Date(date)} liturgies={props.liturgy[date]}/>
+                        <EventDate date={new Date(date)} liturgies={props.liturgy[date]} showLiturgyInfo={props.editable}/>
                     </div>
                     <div className="grow">
                         <LiturgyInformation liturgies={props.liturgy[date]}/>

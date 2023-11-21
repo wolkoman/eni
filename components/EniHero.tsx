@@ -1,17 +1,21 @@
+"use client"
 import Responsive from "./Responsive";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {motion, useScroll} from "framer-motion";
+import {useRef} from "react";
 
 export function EniHero() {
-  return <div className="relative overflow-hidden">
-    <div
-      className="absolute inset-0 bg-[url(/bg-grad-mobile.svg)] lg:bg-[url(/bg-grad.svg)] bg-center bg-cover animate-colorful"/>
-    <Responsive>
-      <div className="flex justify-between flex-col items-center relative">
-        <div className="mt-20 text-4xl lg:text-5xl leading-tight text-white text-center lg:mb-12">
-          <span className="font-bold">Miteinander der Pfarren</span><br/>
-          Emmaus, St.&nbsp;Nikolaus und Neustift
+
+  return <Responsive>
+    <motion.div  className="bg-cover rounded-2xl lg:-mx-20 bg flex flex-col lg:flex-row justify-between px-12 items-end text-white"
+    style={{background: "url(bg-grad.svg)"}}>
+        <div className="flex flex-col py-12 gap-4">
+          <div className=" text-2xl">Miteinander der Pfarren</div>
+          <div className="font-bold text-5xl">Emmaus, St.&nbsp;Nikolaus und Neustift</div>
         </div>
-        <div
-          className="bg-[url(/logo/parish_all.svg)] bg-contain bg-no-repeat bg-bottom lg:w-[1300px] w-full h-[150px] grow-0"/>
-      </div>
-    </Responsive></div>;
+      <div className="w-52 h-52 shrink-0 bg-contain bg-bottom bg-no-repeat" style={{backgroundImage: `url(${getCalendarInfo(CalendarName.EMMAUS).image})`}}/>
+      <div className="w-52 h-52 shrink-0 bg-contain bg-bottom bg-no-repeat" style={{backgroundImage: `url(${getCalendarInfo(CalendarName.INZERSDORF).image})`}}/>
+      <div className="w-52 h-52 shrink-0 bg-contain bg-bottom bg-no-repeat" style={{backgroundImage: `url(${getCalendarInfo(CalendarName.NEUSTIFT).image})`}}/>
+    </motion.div>
+    </Responsive>;
 }

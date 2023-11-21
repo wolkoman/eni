@@ -34,7 +34,7 @@ export const loadCachedEvents = async (options: EventLoadOptions): Promise<Event
   return await unstable_cache(() => loadEvents(options, authClient),
     ["events", JSON.stringify(options)],
     {
-      revalidate: 60,
+      revalidate: 300,
       tags: ["calendar"]
     })()
 }

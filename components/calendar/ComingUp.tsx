@@ -6,12 +6,12 @@ import Responsive from '../Responsive';
 import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {Clickable} from "@/app/(shared)/Clickable";
 import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
 import {site} from "@/app/(shared)/Instance";
+import Link from "next/link";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreferenceStore(Preference.SeparateMass);
@@ -32,32 +32,32 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             <SectionHeader id="coming-up">Die nächsten Tage</SectionHeader>
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
                 {groups.slice(0, 6).map(([group, eventsObject]) =>
-                    <Clickable
+                    <Link
                         key={group}
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                        className={`p-4 pb-8 rounded-xl relative overflow-hidden`}
+                        className={`p-4 pb-8 rounded-xl border border-black/20`}
                     >
-                        <div className="flex gap-2 items-start justify-center my-4">
-                            <div className="text-2xl font-bold">{group}</div>
+                        <div className="flex gap-2 mb-4 mt-2">
+                            <div className="text-3xl font-bold">{group}</div>
                         </div>
                         <div>
                             <ListView search="" editable={false} items={Object.values(eventsObject).flat()} liturgy={{}} filter={null}/>
                         </div>
-                    </Clickable>
+                    </Link>
                 )}
                 {groups.slice(6).map(([group]) =>
-                    <Clickable
+                    <Link
                         key={group}
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                        className={`rounded-2xl text-xl text-center font-bold p-4 block`}
+                        className={`rounded-xl text-xl text-center font-bold p-4 border border-black/20`}
                     >
                         {group}
-                    </Clickable>)}
+                    </Link>)}
+                <Link href={`${urlPrefix}/termine`}
+                      className={`rounded-xl text-xl text-center font-bold p-4 mt-2 border border-black/20`}>
+                    Alle Termine
+                </Link>
             </div>
-            <Clickable href={`${urlPrefix}/termine`}
-                  className={`rounded-2xl text-xl text-center font-bold p-4 mt-2 block`}>
-                Alle Termine
-            </Clickable>
         </div>
     </Responsive>;
 }
