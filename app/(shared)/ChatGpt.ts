@@ -31,6 +31,6 @@ function trimString(value: string) {
 }
 
 export async function getInstagramTitle(description: string) {
-    const value = await getCachedPrompt("Formuliere einen sehr kurzen Titel: " + description);
+    const value = await getCachedPrompt("Formuliere einen sehr kurzen Titel (max. 5 Wörter): " + description);
     return trimString(value);
 }

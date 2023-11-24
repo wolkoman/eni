@@ -40,10 +40,6 @@ export function Settings() {
                 title="Separate heilige Messen"
                 description="Hl. Messen und Gottesdienste getrennt anzeigen"/>
             <SettingsOption
-                name={Preference.LiturgyInformation}
-                title="Liturgie Informationen"
-                description="Zusätzliche liturgische Information im Kalendar anzeigen"/>
-            <SettingsOption
                 name={Preference.MonthView}
                 title="Monatsansicht (In-Entwicklung)"
                 description="Eine Monatsansicht anstelle der Terminliste anzeigen"/>

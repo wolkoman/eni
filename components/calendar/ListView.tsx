@@ -48,7 +48,6 @@ export function ListView(props: {
                         <EventDate date={new Date(date)} liturgies={props.liturgy[date]} showLiturgyInfo={props.editable}/>
                     </div>
                     <div className="grow">
-                        <LiturgyInformation liturgies={props.liturgy[date]}/>
                         {events
                             .map(event => ({
                                 event,

@@ -12,11 +12,11 @@ export const fetchCachedInstagramFeed = async () => {
 export async function fetchInstagramFeed(token: string) {
     const fields = "id,media_type,media_url,permalink,timestamp,caption";
 
-    return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=100&access_token=${token}`)
+    return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=9&access_token=${token}`)
         .then(response => response.json())
         .then(response => response.data
             ?.filter((post: any) => post.caption?.toLowerCase().includes(site('', 'emmaus')))
-            .slice(0, 9) ?? []
+            .slice(0, 3) ?? []
         )
         .then(items => Promise.all(items.map(async (item: any) => ({
             ...item,

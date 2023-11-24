@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {groupEventsByDate, groupEventsByGroup,} from '@/store/CalendarStore';
 import Responsive from '../Responsive';
 import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
@@ -11,7 +11,7 @@ import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
 import {site} from "@/app/(shared)/Instance";
-import Link from "next/link";
+import {motion, PanInfo, useMotionValue} from 'framer-motion';
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreferenceStore(Preference.SeparateMass);
@@ -27,36 +27,66 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             )]) as [string, Record<string, CalendarEvent[]>][]
     const urlPrefix = site('','https://eni.wien');
 
+    const [page, setPage] = useState(0)
+    const ref = useRef<HTMLDivElement>(null)
+
+    function onDragEnd(event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo){
+        const step = -Math.sign(info.velocity.x)
+        const newPage = Math.min( Math.max(page + step, 0), groups.length - 1)
+        setPage(newPage)
+    }
+
     return <Responsive>
         <div className="my-8">
-            <SectionHeader id="coming-up">Die nächsten Tage</SectionHeader>
-            <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
-                {groups.slice(0, 6).map(([group, eventsObject]) =>
-                    <Link
+            <SectionHeader id="coming-up">Termine und Angebote</SectionHeader>
+            <div className={`flex gap-8 py-4 lg:overflow-hidden relative`}>
+                <div className="bg-white rounded-lg p-4 px-6 w-60 z-10 relative lg:overflow-hidden shrink-0 hidden lg:block">
+                    <div className="bg-black/5 z-10 absolute inset-0"/>
+                    {groups.map(([group], index) =>
+                      <motion.div
                         key={group}
-                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                        className={`p-4 pb-8 rounded-xl border border-black/20`}
-                    >
-                        <div className="flex gap-2 mb-4 mt-2">
-                            <div className="text-3xl font-semibold">{group}</div>
-                        </div>
-                        <div>
-                            <ListView search="" editable={false} items={Object.values(eventsObject).flat()} liturgy={{}} filter={null}/>
-                        </div>
-                    </Link>
+                        className={`p-1 cursor-pointer z-20 relative`}
+                        onClick={() => setPage(index)}
+                        animate={{fontWeight: index === page ? 800 : 400 }}
+                      >
+                          {group}
+                      </motion.div>
+                    )}
+                </div>
+                <div className="hidden lg:block absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"/>
+                <motion.div
+                  ref={ref}
+                  className="flex cursor-grab"
+                  drag="x"
+                  onDragEnd={onDragEnd}
+                  dragConstraints={{right: 0, left: (groups.length-1) * -500}}
+                  animate={{x: page * -500}}
+                  transition={{type: "keyframes", ease: "easeInOut" }}
+                >
+                {groups.map(([group, eventsObject], index) => {
+                    const clickToJump = Math.abs(index - page) === 1
+                      return <motion.div
+                        key={group}
+                        data-link={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
+                        className={`py-4 px-7 rounded-xl border border-black/20 w-52 lg:w-[500px] shrink-0 ${clickToJump && "cursor-pointer"}`}
+                        onClick={clickToJump ? () => setPage(index) : undefined}
+                        animate={[
+                            {opacity: 0.5, scale: 0.95},
+                            {opacity: 1},
+                            {opacity: 0.5, scale: 0.95},
+                        ][Math.sign(index - page) + 1]}
+                      >
+                          <div className="flex gap-2 mb-4 mt-2">
+                              <div className="text-3xl font-semibold">{group}</div>
+                          </div>
+                          <div>
+                              <ListView search="" editable={false} items={Object.values(eventsObject).flat()} liturgy={{}}
+                                        filter={null}/>
+                          </div>
+                      </motion.div>;
+                  }
                 )}
-                {groups.slice(6).map(([group]) =>
-                    <Link
-                        key={group}
-                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
-                        className={`rounded-xl text-xl text-center font-bold p-4 border border-black/20`}
-                    >
-                        {group}
-                    </Link>)}
-                <Link href={`${urlPrefix}/termine`}
-                      className={`rounded-xl text-xl text-center font-bold p-4 mt-2 border border-black/20`}>
-                    Alle Termine
-                </Link>
+                </motion.div>
             </div>
         </div>
     </Responsive>;
