@@ -1,7 +1,6 @@
 import Site from '../components/Site';
 import TopBar from '../components/TopBar';
 import {Instagram} from "../components/Instagram";
-import {ChristmasDisplay} from "../components/ChristmasDisplay";
 import {EmmausBranding} from "../components/EmmausBranding";
 import EmmausSections from "./EmmausSections";
 import {ComingUp} from "../components/calendar/ComingUp";
@@ -28,7 +27,6 @@ export default async function HomePage() {
     keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
     <TopBar frontpage={true}/>
     <EniHero/>
-    <ChristmasDisplay eventsObject={eventsObject}/>
     <ComingUp eventsObject={eventsObject}/>
     <Responsive size="md">
       <EniSections/>

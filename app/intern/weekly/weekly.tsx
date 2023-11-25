@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import {groupEventsByDate, useCalendarStore} from "../../(store)/CalendarStore";
+import {useCalendarStore} from "../../(store)/CalendarStore";
 import {CalendarEvent, CalendarTag} from "../../(domain)/events/EventMapper";
 import {CalendarGroup} from "../../(domain)/events/CalendarGroup";
 import sanitize from "sanitize-html";
@@ -16,6 +16,7 @@ import {saveFile} from "../../(shared)/BrowserBlobSaver";
 import {AnnouncementsEntries} from "./AnnouncementsEntries";
 import {WeeklyUpload} from "./WeeklyUpload";
 import {WeeklySend} from "./WeeklySend";
+import {groupEventsByDate} from "../../(domain)/events/CalendarGrouper";
 
 export function WeeklyPage() {
     usePermission([Permission.Admin]);

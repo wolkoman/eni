@@ -1,8 +1,7 @@
 import {FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "@/app/(shared)/use-state-util";
-import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
-import {LiturgyInformation} from "./LiturgyInformation";
+import {useCalendarStore} from "@/store/CalendarStore";
 import React, {useRef} from "react";
 import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
@@ -17,6 +16,7 @@ import {
     getSuggestionFromEvent
 } from "@/domain/suggestions/SuggestionsMapper";
 import {Permission} from "@/domain/users/Permission";
+import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 
 export function ListView(props: {

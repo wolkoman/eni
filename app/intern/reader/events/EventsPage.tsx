@@ -1,6 +1,6 @@
 "use client"
 import React, {useState} from 'react';
-import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
+import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 import {LiturgyData} from "../../../../pages/api/liturgy";
 import {useReaderStore} from "../../../(store)/ReaderStore";
@@ -11,6 +11,7 @@ import {fetchJson} from "../../../(shared)/FetchJson";
 import {LiturgyEvent} from "./LiturgyEvent";
 import {resolveAvailableLiturgies} from "./resolveAvailableLiturgies";
 import {Links} from "../../../(shared)/Links";
+import {groupEventsByDate} from "../../../(domain)/events/CalendarGrouper";
 
 
 export default function EventsPage(props: { liturgy: LiturgyData }) {
