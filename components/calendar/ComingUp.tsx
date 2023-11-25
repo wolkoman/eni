@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react';
-import {groupEventsByDate, groupEventsByGroup,} from '@/store/CalendarStore';
 import Responsive from '../Responsive';
 import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {ListView} from "./ListView";
@@ -12,6 +11,7 @@ import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
 import {site} from "@/app/(shared)/Instance";
+import {groupEventsByDate, groupEventsByGroup} from "@/domain/events/CalendarGrouper";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
     const [separateMass] = usePreferenceStore(Preference.SeparateMass);

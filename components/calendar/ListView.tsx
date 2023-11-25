@@ -4,7 +4,7 @@ import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {useState} from "@/app/(shared)/use-state-util";
 import {CalendarErrorNotice} from "./CalendarErrorNotice";
 import {EniLoading} from "../Loading";
-import {groupEventsByDate, useCalendarStore} from "@/store/CalendarStore";
+import {useCalendarStore} from "@/store/CalendarStore";
 import {LiturgyInformation} from "./LiturgyInformation";
 import React, {ReactNode, useRef} from "react";
 import {EventSearch} from "./EventSearch";
@@ -22,6 +22,7 @@ import {
     getSuggestionFromEvent
 } from "@/domain/suggestions/SuggestionsMapper";
 import {Permission} from "@/domain/users/Permission";
+import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 
 export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
     const [separateMass] = usePreferenceStore(Preference.SeparateMass);

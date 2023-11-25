@@ -29,7 +29,6 @@ export default async function HomePage() {
     keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
     <TopBar frontpage={true}/>
     <EniHero/>
-    <ChristmasDisplay eventsObject={eventsObject}/>
     <Responsive size="md">
       <ComingUp eventsObject={eventsObject}/>
       <EniSections/>
