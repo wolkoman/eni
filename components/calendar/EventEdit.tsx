@@ -1,17 +1,20 @@
-import {CalendarName} from "../../util/calendar-info";
-import {useAuthenticatedCalendarStore} from "../../util/store/use-calendar-store";
-import {useAuthenticatedUserStore} from "../../util/store/use-user-store";
+import {useCalendarStore} from "@/store/CalendarStore";
 import {useState} from "react";
-import {fetchJson} from "../../util/fetch-util";
 import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
 import Button from "../Button";
-import {createDiffSuggestion, EventSuggestion, getSuggestionFromEvent} from "../../util/suggestion-utils";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {toast} from "react-toastify";
+import {useUserStore} from "@/store/UserStore";
+import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
+import {createDiffSuggestion, getSuggestionFromEvent} from "@/domain/suggestions/SuggestionsMapper";
+import {fetchJson} from "@/app/(shared)/FetchJson";
+import {Links} from "@/app/(shared)/Links";
 
 
 export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
-    const {addSuggestion, originalItems} = useAuthenticatedCalendarStore();
+    const {addSuggestion, originalItems} = useCalendarStore(state => state);
     const originalItem = originalItems.find(e => e.id === props.eventId);
-    const {user} = useAuthenticatedUserStore();
+    useUserStore(state => state.user);
     const form = useState<EventSuggestion & {parish?: string | null}>({
         ...props.suggestion,
         parish: props.parish
@@ -20,7 +23,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
 
     function save() {
         setLoading(true);
-        fetchJson("/api/calendar/suggest", {
+        toast.promise(fetchJson(Links.ApiCalendarSuggest, {
             json: {
                 eventId: props.eventId ?? null,
                 data: createDiffSuggestion(originalItem
@@ -29,7 +32,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
                     , form[0]),
                 parish: form[0].parish
             }
-        }, {
+        }), {
             error: "Änderung konnte nicht gespeichert werden",
             pending: "Speichere..",
             success: "Die Änderung wurde vorgeschlagen. Sie ist noch nicht öffentlich."

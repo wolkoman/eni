@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction} from "react";
-import {CalendarName, getCalendarInfo} from "../util/calendar-info";
 import {EniLoading} from "./Loading";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;
@@ -59,7 +59,7 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
 
     const onDelete = (fileUrl: string) => {
         setFileList(list => list.filter(file => file.result !== fileUrl))
-        fetch(
+        return fetch(
             `https://api.eni.wien/files-v0/delete.php?file=${fileUrl.split("/").at(-1)}`,
             {method: 'POST'}
         )

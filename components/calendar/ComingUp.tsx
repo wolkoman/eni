@@ -1,20 +1,20 @@
 "use client"
 
 import React from 'react';
-import {groupEventsByDate, groupEventsByGroup,} from '../../util/store/use-calendar-store';
 import Responsive from '../Responsive';
-import {useEmmausProd} from "../../util/use-emmaus-prod";
-import {CalendarEvent, CalendarGroup, EventsObject} from "../../util/calendar-types";
-import {Preference, usePreference} from "../../util/store/use-preference";
-import {CalendarName} from "../../util/calendar-info";
-import {site} from "../../util/sites";
-import {getGroupSorting} from "../../util/calendar-group";
+import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {Clickable} from "../../app/(components)/Clickable";
+import {Clickable} from "@/app/(shared)/Clickable";
+import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {getGroupSorting} from "@/domain/events/CalendarGroupSorter";
+import {site} from "@/app/(shared)/Instance";
+import {groupEventsByDate, groupEventsByGroup} from "@/domain/events/CalendarGrouper";
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
-    const [separateMass] = usePreference(Preference.SeparateMass);
+    const [separateMass] = usePreferenceStore(Preference.SeparateMass);
     const groups = Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
         .sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
         .map(([group, events]) => [group,
@@ -25,7 +25,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 )
                 .sort((b, a) => b.start.dateTime?.localeCompare(a.start.dateTime))
             )]) as [string, Record<string, CalendarEvent[]>][]
-    const urlPrefix = useEmmausProd() ? 'https://eni.wien' : '';
+    const urlPrefix = site('','https://eni.wien');
 
     return <Responsive>
         <div className="my-8">
@@ -33,7 +33,8 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
             <div className={`grid lg:grid-cols-2 gap-8 py-4`}>
                 {groups.slice(0, 6).map(([group, eventsObject]) =>
                     <Clickable
-                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`} key={group}
+                        key={group}
+                        href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
                         className={`p-4 pb-8 rounded-xl relative overflow-hidden`}
                     >
                         <div className="flex gap-2 items-start justify-center my-4">
@@ -51,6 +52,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
                 )}
                 {groups.slice(6).map(([group]) =>
                     <Clickable
+                        key={group}
                         href={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
                         className={`rounded-2xl text-xl text-center font-bold p-4 block`}
                     >

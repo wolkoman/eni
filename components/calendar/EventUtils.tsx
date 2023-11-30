@@ -1,9 +1,9 @@
 import {getMonthName, getWeekDayName} from "./Calendar";
-import {CalendarEvent, CalendarTag} from "../../util/calendar-types";
 import React, {ReactNode} from "react";
 import {DiffView} from "./Event";
 import {Collections} from "cockpit-sdk";
-import {roleToString} from "../../util/reader";
+import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
+import {roleToString} from "@/domain/service/Service";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
     return <div>
@@ -15,25 +15,6 @@ export function Tooltip(props: { tip: string, children: ReactNode }) {
             </div>
         </div>
     </div>
-}
-
-export function EventTag(props: { tag: CalendarTag }) {
-    if (props.tag === CalendarTag.inChurch) return <></>;
-    return <Tooltip tip={{
-        [CalendarTag.private]: "Vertraulich",
-        [CalendarTag.announcement]: "Ankündigung",
-        [CalendarTag.cancelled]: "Abgesagt",
-        [CalendarTag.suggestion]: "Noch nicht veröffentlicht",
-    }[props.tag]}>
-        <div className="bg-black/[4%] p-1 rounded">
-            {{
-                [CalendarTag.private]: <>🔒</>,
-                [CalendarTag.announcement]: <>⭐</>,
-                [CalendarTag.cancelled]: <>❌</>,
-                [CalendarTag.suggestion]: <>⚠️</>,
-            }[props.tag]}
-        </div>
-    </Tooltip>
 }
 
 export function EventDescription(props: { event: Partial<CalendarEvent>, suggestion?: Collections['eventSuggestion'] }) {
@@ -55,7 +36,12 @@ export function EventDescription(props: { event: Partial<CalendarEvent>, suggest
         </div>
         {roles.some(role => props.event.readerInfo?.[role]) &&
         <div className="px-2 py-1 bg-black/[4%] rounded grow mx-4">
-            {roles.filter(role => props.event.readerInfo?.[role]).map(role => <div>{roleToString(role)}: {props.event.readerInfo?.[role]?.name}</div>)}
+            {roles.filter(role => props.event.readerInfo?.[role]).map(role => {
+                const info = props.event.readerInfo?.[role];
+                const cancelled = info?.status === "cancelled";
+                return <div key={role}>{roleToString(role)}: <span className={cancelled ? 'line-through' : ''}>{info?.name}</span> {cancelled && ' (abgesagt)'}</div>;
+              }
+            )}
         </div>
         }
     </div>;

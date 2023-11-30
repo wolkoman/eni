@@ -1,14 +1,15 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {cockpit} from "../../../util/cockpit-sdk";
-import {ReaderData, ReaderInfo, ReaderRole} from "../../../util/reader";
+import {Cockpit} from "@/util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {ReaderData, ReaderInfo, ReaderRole} from "@/domain/service/Service";
 
 const READER_ID = "637b85bc376231d51500018d";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const user = resolveUserFromRequest(req);
-    const data: ReaderData = await cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
+    const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
 
     if (user === undefined) {
         res.status(401).json({errorMessage: 'No permission'});
@@ -44,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     {...(data[id] ? data[id] : {}), ...record}
                 ]))
     };
-    await cockpit.collectionSave("internal-data", {_id: READER_ID, data: updatedData});
+    await Cockpit.collectionSave("internal-data", {_id: READER_ID, data: updatedData});
     res.json({ok: true});
 
 }

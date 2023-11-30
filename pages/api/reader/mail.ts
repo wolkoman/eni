@@ -1,14 +1,17 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolvePermissionsForCompetences, resolveUserFromRequest} from '../../../util/verify';
-import {cockpit} from "../../../util/cockpit-sdk";
-import {getTasksForPerson, getTasksFromReaderData, getUninformedTasks, ReaderData} from "../../../util/reader";
-import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
 import {getWeekDayName} from "../../../components/calendar/Calendar";
-import {CalendarTag} from "../../../util/calendar-types";
 import {LiturgyData} from "../liturgy";
 import {sign} from "jsonwebtoken";
-import {User} from "../../../util/user";
-import {sendMail} from "../../../util/mailjet";
+import {Cockpit} from "@/util/cockpit";
+import {CalendarTag} from "@/domain/events/EventMapper";
+import {loadEvents} from "@/domain/events/EventsLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {User} from "@/domain/users/User";
+import {Permission} from "@/domain/users/Permission";
+import {resolvePermissionsForCompetences} from "@/domain/users/PermissionResolver";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {getTasksForPerson, getTasksFromReaderData, getUninformedTasks, ReaderData} from "@/domain/service/Service";
+import {sendMail} from "@/app/(shared)/Mailjet";
 
 const READER_ID = "637b85bc376231d51500018d";
 
@@ -21,10 +24,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const events = await getCachedEvents({permission: GetEventPermission.PRIVATE_ACCESS}).then(x => x.events);
-    const data: ReaderData = await cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
-    const liturgy: LiturgyData = await cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
-    const persons = await cockpit.collectionGet('person').then(x => x.entries);
+    const events = await loadEvents({access: EventLoadAccess.PRIVATE_ACCESS}).then(x => x.events);
+    const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
+    const liturgy: LiturgyData = await Cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
+    const persons = await Cockpit.collectionGet('person').then(x => x.entries);
     const person = persons.find(p => p._id === req.body.personId)!;
     if (!person) {
         res.status(500).json({error: "Person not found"});
@@ -68,8 +71,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         info: `${{
                             reading1: "1. Lesung",
                             reading2: "2. Lesung",
-                            communionMinister1: "1. Kommunionsspender:in:",
-                            communionMinister2: "2. Kommunionsspender:in:",
+                            communionMinister1: "1. Kommunionshelfer:in",
+                            communionMinister2: "2. Kommunionshelfer:in",
                         }[task.data.role]} ${reading}`,
                         link: reading ? `https://www.bibleserver.com/EU/${encodeURI(reading)}` : '',
                     }))

@@ -1,7 +1,9 @@
+
+
 declare module 'cockpit-sdk' {
 
-  import {CalendarName} from "../../calendar-info";
   import {Diff} from "diff-match-patch";
+  import {CalendarName} from "@/domain/events/CalendarInfo";
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
@@ -40,20 +42,15 @@ declare module 'cockpit-sdk' {
       title: string,
       preview_image: { path: string },
       author: string,
-      content: string,
-      resort: string,
-      external_url: string,
-      external_image: string,
-      slug: string,
-      platform: string[] | string,
-      layout: { component: string, settings: { text: string } }[],
+      layout: {component: string, settings: {text: string}}[],
+      platform: 'eni' | 'emmaus'
     } & Object,
     'person': {
       active: boolean,
       name: string,
       username: string,
       parish: CalendarName,
-      competences: ('calendar_administration' | 'organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning' | 'communion_minister')[],
+      competences: ('calendar_administration' | 'organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning' | 'communion_minister' | 'private_document_access')[],
       code?: string,
       email?: string,
       last_login: string,
@@ -102,13 +99,13 @@ declare module 'cockpit-sdk' {
   }
   type Reference = {
     _id: string,
-    link: string,
-    display: string
+    link?: string,
+    display?: string
   }
   type Singletons = {
     impressum: { content: string } & Object
   }
-  type CollectionResponse<T> = {
+  export type CollectionResponse<T> = {
     entries: T[]
   }
 

@@ -2,12 +2,12 @@
 
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
-import {CalendarInfo, CalendarName, getCalendarInfo} from "../util/calendar-info";
 import React, {MouseEventHandler, useState} from "react";
 import {AnimatePresence, motion} from 'framer-motion'
 
-import {Clickable} from "../app/(components)/Clickable";
+import {Clickable} from "@/app/(shared)/Clickable";
 import {SectionHeader} from "./SectionHeader";
+import {CalendarInfo, CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export interface InstagramFeedItem {
   id: string,
@@ -37,9 +37,9 @@ function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHand
 }
 
 function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => void }) {
-  return <div className="fixed inset-0 flex items-center justify-center z-30 p-4">
+  return <div className="fixed inset-0 flex items-center justify-center z-30">
     <motion.div
-      className="absolute inset-0 bg-black/10"
+      className="absolute inset-0 bg-black/10 max-h-screen"
       onClick={close}
       initial={{opacity: 0}}
       animate={{opacity: 1}}
@@ -49,14 +49,15 @@ function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => 
       initial={{opacity: 0, scale: 0.8}}
       animate={{opacity: 1, scale: 1}}
       exit={{opacity: 0, scale: 0.8}}
-      className="flex flex-col items-center z-50 max-h-full"
+      className="flex flex-col justify-end lg:justify-center items-center z-50"
     >
       <motion.div
-        className="relative grid lg:grid-cols-2 p-4 bg-white max-w-6xl rounded-xl max-h-full">
+        className="grid lg:grid-cols-2 p-4 bg-white max-w-6xl lg:rounded-xl">
         <motion.div
           layoutId={item.id}
           style={{backgroundImage: `url(${item?.media_url})`}}
-          className="max-w-full rounded-lg aspect-square bg-cover bg-center"/>
+          className="max-w-full rounded-lg aspect-square bg-cover bg-center"
+        />
         <div className="p-4 flex flex-col gap-4">
           <motion.div className="text-3xl font-bold" layoutId={item.id + "title"}>{item.title}</motion.div>
           <div className="flex gap-4">
@@ -68,11 +69,17 @@ function InstagramScreen({item, close}: { item: InstagramFeedItem, close: () => 
                     Pfarre {item.calendar?.shortName}
                 </div>}
           </div>
-          <div className="max-h-32 lg:max-h-80 overflow-y-auto">{item.caption}</div>
+          <div className="max-h-32 lg:max-h-80">{item.caption}</div>
+        </div>
+        <div className="flex justify-end">
+          <img
+            src="/logo/close.svg" className="w-16 bg-white rounded-xl mt-4 cursor-pointer lg:hidden"
+            onClick={close}
+          />
         </div>
       </motion.div>
       <motion.img
-        src="/logo/close.svg" className="w-16 bg-white rounded-xl mt-4 cursor-pointer"
+        src="/logo/close.svg" className="w-16 bg-white rounded-xl mt-4 cursor-pointer hidden lg:block"
         onClick={close}
         initial={{translateY: -20}}
         animate={{translateY: 0}}
@@ -99,7 +106,7 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
   }));
   const [item, setItem] = useState<InstagramFeedItem | null>();
 
-  return <div className="my-8">
+  return feed.length === 0 ? <></> : <div className="my-8">
     <SectionHeader id="einblick">Einblick ins Pfarrleben</SectionHeader>
     <AnimatePresence>{item && <InstagramScreen item={item} close={() => setItem(null)}/>}</AnimatePresence>
     <div className="grid lg:grid-cols-2 gap-8">

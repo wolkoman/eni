@@ -1,13 +1,11 @@
-"use client"
-
 import {Event} from './calendar/Event';
 import Responsive from "./Responsive";
 import {SectionHeader} from "./SectionHeader";
-import {CalendarName, getCalendarInfo} from '../util/calendar-info';
-import {EventsObject} from '../util/calendar-types';
-import {groupEventsByDate} from '../util/store/use-calendar-store';
 import {EventDateText} from "./calendar/EventUtils";
 import React from "react";
+import {EventsObject} from "@/domain/events/EventMapper";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 
 export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
     const events = props.eventsObject.events.filter(event => ["12-24", "12-25"].includes(event.date.slice(5)));
@@ -29,7 +27,7 @@ export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
                             {Object.entries(groupEventsByDate(events.filter(e => e.calendar === calendar.id)))
                                 .map(([date, events]) => <div key={date}>
                                     <div className="my-2"><EventDateText date={new Date(date)} /></div>
-                                    {(events ?? []).map(event => <Event key={event.id} event={event} />)}
+                                    {(events ?? []).map(event => <Event key={event.id} event={event} small={true} />)}
                                 </div>
                                 )}
                         </div>

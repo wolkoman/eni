@@ -1,9 +1,10 @@
 import React from 'react';
 import Responsive from "./Responsive";
-import {CalendarName, getCalendarInfo} from "../util/calendar-info";
-import {getTimeOfEvent} from "../util/get-time-of-event";
 import {getWeekDayName} from "./calendar/Calendar";
-import {CalendarGroup, CalendarTag, EventsObject} from "../util/calendar-types";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarTag, EventsObject} from "@/domain/events/EventMapper";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {getTimeOfEvent} from "@/domain/events/EventSorter";
 
 export function EmmausBranding(props: { eventsObject: EventsObject }) {
 
@@ -14,19 +15,20 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
     const annoucments = props.eventsObject.events
         .filter(event => event.tags.includes(CalendarTag.announcement))
 
-    return <div className={"bg-emmaus pt-8 md:pt-24 relative overflow-hidden"}>
+    return <div className="bg-emmaus pt-16 md:pt-36 relative overflow-hidden">
         <Responsive>
             <div className="flex flex-col md:flex-row justify-around">
                 <div className="text-white relative flex flex-col">
                     <div>
-                        <div className="text-5xl md:text-7xl font-bold">Pfarre Emmaus</div>
-                        <div className="text-4xl">am Wienerberg</div>
+                        <div className="text-2xl md:text-3xl opacity-50">Römisch-katholische</div>
+                        <div className="text-4xl md:text-6xl font-bold">Pfarre Emmaus</div>
+                        <div className="text-4xl md:text-6xl font-bold">am Wienerberg</div>
                     </div>
                     <div>
                         {event && <div>
                             <div className={`${annoucments.length > 0 ? 'bg-white/70' : 'bg-emmaus-sec'} text-black text-xl inline-flex px-4 py-2 rounded mt-12`}>
                                 <div className="mr-2">
-                                    {getWeekDayName(new Date(event.date).getDay())}, {new Date(event.start.dateTime).toLocaleTimeString("de-AT").substring(0, 5)} Uhr:
+                                    {getWeekDayName(new Date(event.date).getDay())}, {event.time} Uhr:
                                 </div>
                                 <div className="font-bold">{event.summary}</div>
                             </div>
@@ -34,7 +36,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
                         {annoucments.map(annoucment => <div>
                             <div className="bg-emmaus-sec text-black text-xl inline-flex px-4 py-2 rounded mt-2">
                                 <div className="mr-2">
-                                    {new Date(annoucment.date).toLocaleDateString("de-AT")}, {new Date(annoucment.start.dateTime).toLocaleTimeString("de-AT").substring(0, 5)} Uhr:
+                                    {new Date(annoucment.date).toLocaleDateString("de-AT")}, {annoucment.time} Uhr:
                                 </div>
                                 <div className="font-bold">{annoucment.summary}</div>
                             </div>

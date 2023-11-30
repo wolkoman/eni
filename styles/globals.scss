@@ -41,7 +41,7 @@
 }
 
 body {
-  font-family: "Source Sans Pro";
+  font-family: "Source Sans Pro", sans-serif;
   color: #333;
 }
 
@@ -97,7 +97,7 @@ body ::-webkit-scrollbar-thumb:hover {
 .border-neustift{ border-color: #f4ac11; }
 
 .text-stroke {
-  -webkit-text-stroke: 8px rgba(#000, 1);
+  -webkit-text-stroke: 8px rgba(255,255,255, 1);
 }
 
 .clickable{

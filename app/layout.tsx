@@ -1,14 +1,15 @@
 import "../styles/globals.scss";
 import {Toasts} from "./ToastContainer";
-import {site} from "../util/sites";
 import {Metadata} from 'next'
+import {site} from "./(shared)/Instance";
+import {ReactNode} from "react";
 
 export const metadata: Metadata = {
   title: site("eni.wien", "Pfarre Emmaus"),
   description: site("Miteinander der Pfarren Emmaus, St. Nikolaus und Neustift", "Katholische Pfarre im zehnten Wiener Gemeindebezirk")
 }
 
-export default function RootLayout({children,}: { children: React.ReactNode }) {
+export default function RootLayout({children,}: { children: ReactNode }) {
   return (
     <html>
     <head>

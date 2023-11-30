@@ -1,6 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {Permission, resolveUserFromRequest} from "../../../util/verify";
-import {cockpit} from "../../../util/cockpit-sdk";
+import {Cockpit} from "@/util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -11,6 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    res.json((await cockpit.collectionGet('paper_projects', {sort: {_created: -1}})).entries);
+    res.json((await Cockpit.collectionGet('paper_projects', {sort: {_created: -1}})).entries);
 
 }

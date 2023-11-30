@@ -1,9 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedGoogleAuthClient} from '../../../util/calendar-events';
 import {google} from 'googleapis';
 import {getAvailableOrganSlotsForDate} from './check';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {CalendarName, getCalendarInfo} from "../../../util/calendar-info";
+import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest & {query: {token: string, date: string, hour: string, userId: string, }}, res: NextApiResponse) {
 
@@ -29,7 +30,7 @@ export default async function handler(req: NextApiRequest & {query: {token: stri
   const endDateTime = date();
   endDateTime.setMinutes(endDateTime.getMinutes() + 60);
 
-  const oauth2Client = await getCachedGoogleAuthClient();
+  const oauth2Client = await getGoogleAuthClient();
   const calendar = google.calendar('v3');
 
   calendar.events.insert({

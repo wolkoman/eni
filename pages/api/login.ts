@@ -1,11 +1,12 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {cockpit} from '../../util/cockpit-sdk';
-import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from '../../util/verify';
 import {sign} from 'jsonwebtoken';
-import {User} from '../../util/user';
 import {getPerson} from './change-password';
-import {CalendarName} from "../../util/calendar-info";
 import {setCookie} from "cookies-next";
+import {Cockpit} from "@/util/cockpit";
+import {cockpit} from "@/util/cockpit-sdk";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {User} from "@/domain/users/User";
+import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from "@/domain/users/PermissionResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -23,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             api_key: `person_${person._id}`,
             is_person: true
         };
-        await cockpit.collectionSave('person', {...person, last_login: new Date().toISOString()})
+        await Cockpit.collectionSave('person', {...person, last_login: new Date().toISOString()})
     } else {
         const cockpitUser = await cockpit.authUser(body.username, body.password);
         if ('error' in cockpitUser) {

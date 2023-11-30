@@ -1,9 +1,11 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedEvents, GetEventPermission} from '../../../util/calendar-events';
-import {site} from "../../../util/sites";
-import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
-import {CalendarName} from "../../../util/calendar-info";
-import {CalendarGroup} from "../../../util/calendar-types";
+import {loadReaderData} from "../reader";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {loadEvents} from "@/domain/events/EventsLoader";
+
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {site} from "@/app/(shared)/Instance";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -12,12 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return
     }
 
-    const {events} = await getCachedEvents({
-        permission: GetEventPermission.PRIVATE_ACCESS,
-        getReaderData: getCachedReaderData,
-        timeFrame: {min: new Date(new Date().getTime() - 1000 * 3600), max: new Date(new Date().getTime() + 1000 * 3600 * 24 * 7)}
+    const readerData = await loadReaderData()
+    const {events} = await loadEvents({
+        access: EventLoadAccess.PRIVATE_ACCESS,
+        readerData,
+        timeFrame: {
+            min: new Date(new Date().getTime() - 1000 * 3600),
+            max: new Date(new Date().getTime() + 1000 * 3600 * 24 * 7)
+        }
     });
-    invalidateCachedReaderData();
 
     res.json(events.filter(event => event.calendar === CalendarName.EMMAUS && event.groups.some(group => [CalendarGroup.Messe, CalendarGroup.Gottesdienst].includes(group))));
 }

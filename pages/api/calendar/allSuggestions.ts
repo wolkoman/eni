@@ -1,8 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {getCachedEvents, GetEventPermission} from '../../../util/calendar-events';
-import {Permission, resolveUserFromRequest} from '../../../util/verify';
-import {getCachedReaderData, invalidateCachedReaderData} from "../reader";
-import {cockpit} from "../../../util/cockpit-sdk";
+import {Cockpit} from "@/util/cockpit";
+import {Permission} from "@/domain/users/Permission";
+import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const user = resolveUserFromRequest(req);
@@ -11,5 +10,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(401).json({});
         return
     }
-    res.json(await cockpit.collectionGet('eventSuggestion', {filter: {open: false}}).then(({entries}) => entries));
+    res.json(await Cockpit.collectionGet('eventSuggestion', {filter: {open: false}}).then(({entries}) => entries));
 }

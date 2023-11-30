@@ -1,9 +1,9 @@
-import {Permission, Permissions} from '../../util/verify';
-import {CalendarName, getCalendarInfo} from '../../util/calendar-info';
 import {FilterType} from './Calendar';
 import {ReactNode} from "react";
-import {CalendarGroup} from "../../util/calendar-types";
-import {getGroupSorting} from "../../util/calendar-group";
+
+import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {Permissions} from "@/domain/users/Permission";
+import {site} from "@/app/(shared)/Instance";
 
 function FilterButton(props: { active?: boolean, onClick?: () => void, label: string, activeColor?: string }) {
     return <div
@@ -22,7 +22,7 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
     const calendarNames: CalendarName[] = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
     const calendarInfos = calendarNames.map(getCalendarInfo);
 
-    return <FilterButtons>
+    return site(<FilterButtons>
             <FilterButton
                 label="Alle Pfarren"
                 onClick={() => props.setFilter(null)}
@@ -36,5 +36,5 @@ export function FilterSelector(props: { filter: FilterType, setFilter: (filter: 
                     activeColor={filt.className}
                 />
             )}
-        </FilterButtons>;
+        </FilterButtons>, <></>);
 }

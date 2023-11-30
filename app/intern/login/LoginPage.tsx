@@ -4,10 +4,10 @@ import React, {useEffect} from 'react';
 import Site from '../../../components/Site';
 import Button from '../../../components/Button';
 import {toast} from 'react-toastify';
-import {useState} from '../../../util/use-state-util';
+import {useState} from '../../(shared)/use-state-util';
 import {useRouter, useSearchParams} from 'next/navigation';
-import {useUserStore} from '../../../util/store/use-user-store';
-import Link from "next/link";
+import {useUserStore} from "../../(store)/UserStore";
+import {Links} from "../../(shared)/Links";
 
 export function LoginPage() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
@@ -27,7 +27,7 @@ export function LoginPage() {
 
     function onLogin() {
         setDisabled(true);
-        router.push(searchParams.has("redirect") ? searchParams.get("redirect") as string : '/intern');
+        router.push(searchParams.has("redirect") ? searchParams.get("redirect") as string : Links.Intern);
     }
 
     function login() {
@@ -66,10 +66,6 @@ export function LoginPage() {
                     <div className={`${loading ? "animate-pulse" : ""} mt-4 w-full text-center grid`}>
                         <Button className="" onClick={() => login()} label="Anmelden"
                                 disabled={buttonDisabled()}/>
-                    </div>
-                    <div className="text-xs mt-2">
-                        oder{" "}
-                        <Link href="https://forms.gle/TJZjvqbvq688J57h7"><span className="text-blue-600 cursor-pointer">weitere Optionen</span></Link>
                     </div>
                 </div>
             </div>

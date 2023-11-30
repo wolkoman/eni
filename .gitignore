@@ -9,6 +9,7 @@
 *.iml
 *.xml
 .env
+.idea
 
 # testing
 /coverage
@@ -29,3 +30,4 @@ yarn-error.log*
 
 # Sentry
 .sentryclirc
+.vercel

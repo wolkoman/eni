@@ -2,7 +2,8 @@ import TopBar from './TopBar';
 import Responsive from './Responsive';
 import {ReactNode} from 'react';
 import Footer from './Footer';
-import {site} from '../util/sites';
+
+import {site} from "@/app/(shared)/Instance";
 
 export default function Site(props: {
     title?: string,
@@ -24,7 +25,7 @@ export default function Site(props: {
                     {site(<></>, props.showTitle && <div className="bg-emmaus text-6xl font-bold pt-8 mb-16 px-10">
                         <div className="translate-y-6 max-w-5xl mx-auto relative">
                             {props.title}
-                            <div className="absolute inset-0 text-stroke">{props.title}</div>
+                            <div className="absolute inset-0 text-stroke z-[-1]">{props.title}</div>
                         </div>
                     </div>)}
                 </>}

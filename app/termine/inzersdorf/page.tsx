@@ -1,12 +1,13 @@
 import React from 'react';
-import {getCachedEvents, GetEventPermission} from "../../../util/calendar-events";
 import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
+import {loadEvents} from "../../(domain)/events/EventsLoader";
+import {EventLoadAccess} from "../../(domain)/events/EventLoadOptions";
 
-export const revalidate = 300
+export const revalidate = 3000
 
 export default async function EventPage() {
 
-    const eventsObject= await getCachedEvents({permission: GetEventPermission.PUBLIC})
+    const eventsObject= await loadEvents({access: EventLoadAccess.PUBLIC})
 
     return <div data-testid="calendar" className="relative">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -22,8 +23,7 @@ export default async function EventPage() {
                         {event.summary}
                     </div>
                     <div className="text-[13px]">
-                        <EventDateText date={new Date(event.date)}/> um <EventTime
-                        date={new Date(event.start.dateTime)}/> - <EventTime date={new Date(event.end.dateTime)}/>
+                        <EventDateText date={new Date(event.date)}/> um {event.time} Uhr
                     </div>
                 </div>)}
             <div className="font-bold text-sm mb-4 text-[#1e74a9]">

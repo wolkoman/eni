@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {fetchCurrentWeeklies, fetchWeeklies, fetchWeeklyEdition} from "../../../util/fetchWeeklies";
+import {fetchCurrentWeeklies, fetchWeeklyEdition} from "@/app/(shared)/Weekly";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
