@@ -1,7 +1,7 @@
 "use server"
 import {cockpit} from "../../../util/cockpit-sdk";
-import {getPrayerSuggestion} from "../../../util/getCachedPrompt";
 import {revalidatePath} from "next/cache";
+import {getPrayerSuggestion} from "../../(shared)/ChatGpt";
 
 export async function submitPrayer(prayer: { name: string; concern: string }) {
   const suggestion = await getPrayerSuggestion(prayer.concern)

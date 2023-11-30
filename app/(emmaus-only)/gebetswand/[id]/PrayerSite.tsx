@@ -6,16 +6,16 @@ import Link from "next/link";
 import Button from "../../../../components/Button";
 import {prayedFor} from "../prayer.server";
 import {useRouter} from "next/navigation";
-import {useAuthenticatedUserStore} from "../../../../util/store/use-user-store";
 import {EniLoading} from "../../../../components/Loading";
 import {motion} from 'framer-motion'
+import {useUserStore} from "../../../(store)/UserStore";
 
 export function PrayerSite(props: {
   prayer: Collections['prayers'],
 }) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const {user} = useAuthenticatedUserStore()
+  const user = useUserStore(state => state.user)
 
   async function onPrayed() {
     setLoading(true)

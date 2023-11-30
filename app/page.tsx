@@ -1,7 +1,6 @@
 import Site from '../components/Site';
 import TopBar from '../components/TopBar';
 import {Instagram} from "../components/Instagram";
-import {ChristmasDisplay} from "../components/ChristmasDisplay";
 import {EmmausBranding} from "../components/EmmausBranding";
 import EmmausSections from "./EmmausSections";
 import {ComingUp} from "../components/calendar/ComingUp";
@@ -10,6 +9,15 @@ import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
 import {PrayerWall} from "./(emmaus-only)/gebetswand/PrayerWall";
+import {loadCachedEvents} from "./(domain)/events/EventsLoader";
+import {EventLoadAccess} from "./(domain)/events/EventLoadOptions";
+import {site} from "./(shared)/Instance";
+import {EniSections} from "./EniSections";
+import {fetchInstagramFeed} from "./(shared)/Instagram";
+import {EniInformation} from "./EniInformation";
+import {fetchArticles} from "./(shared)/Articles";
+import {fetchEmmausSites} from "./(shared)/Sites";
+import {fetchEmmausbote} from "./(shared)/Weekly";
 
 export const revalidate = 300
 
