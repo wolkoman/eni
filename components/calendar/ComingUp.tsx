@@ -7,7 +7,7 @@ import {SectionHeader} from "../SectionHeader";
 import {EventsObject} from "@/domain/events/EventMapper";
 import {site} from "@/app/(shared)/Instance";
 import {groupEventsByGroupAndDate} from "@/domain/events/CalendarGrouper";
-import {motion, PanInfo} from 'framer-motion';
+import {motion, PanInfo, useMotionValue} from 'framer-motion';
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
   const [separateMass] = usePreferenceStore(Preference.SeparateMass);
@@ -16,16 +16,12 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
 
   const [page, setPage] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
-  const offsetLeft = useMemo(() => {
-    console.log("calc", page, ref, -(ref.current?.children[page] as HTMLDivElement)?.offsetLeft)
-    return -(ref.current?.children[page] as HTMLDivElement)?.offsetLeft;
-  }, [page, ref]);
+  const [offsetLeft, setOffsetLeft] = useState(0)
   useEffect(() => {
-    setPage(0)
-  } ,[ref])
+    setOffsetLeft(-(ref.current?.children[page] as HTMLDivElement)?.offsetLeft)
+  }, [page, ref]);
 
   return <div className="my-8">
-    {offsetLeft}
     <SectionHeader id="coming-up">Termine und Angebote</SectionHeader>
     <div className={`flex gap-8  overflow-hidden relative -mx-4 px-4 lg:m-0 lg:p-0 py-4`}>
       <div className="bg-white rounded-lg p-4 px-6 w-60 z-10 relative overflow-hidden shrink-0 hidden lg:block">
@@ -43,7 +39,7 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
         className="hidden lg:block absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"/>
       <motion.div
         ref={ref}
-        className="flex cursor-grab"
+        className="flex cursor-grab relative"
         drag="x"
         onDragEnd={(_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
           const step = -Math.sign(info.velocity.x)

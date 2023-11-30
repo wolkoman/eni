@@ -7,8 +7,8 @@ import {SectionHeader} from "../components/SectionHeader";
 
 export function EniSections() {
   return <>
-    <SectionHeader>Von uns, für Sie</SectionHeader>
-    <div className="grid lg:grid-cols-2 my-12 gap-24 lg:gap-12 text-center" id="wochenmitteilungen">
+    <SectionHeader id="pfarrzeitschriften">Von uns, für Sie</SectionHeader>
+    <div className="grid lg:grid-cols-2 my-4 gap-12 lg:gap-12 text-center" id="wochenmitteilungen">
       <EniSection
         picture="/icons/icon_weekly.svg"
         title={<>Wochen&shy;mitteilungen</>}
@@ -23,7 +23,7 @@ export function EniSections() {
       </EniSection>
       <EniSection
         picture="/icons/icon_papers.svg"
-        title={<>Pfarr&shy;zeitungen</>}
+        title={<>Pfarr&shy;zeitschriften</>}
         parish={info =>
           <Link key={info.id} href={{
             emmaus: "https://emmaus.wien/#ueber-uns",
@@ -39,7 +39,7 @@ export function EniSections() {
           </Link>
         }>
         Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken
-        und vieles mehr finden Sie in den Pfarrzeitungen der Pfarren.
+        und vieles mehr finden Sie in den Pfarrzeitschriften der Pfarren.
       </EniSection>
       {false && <EniSection
         picture="/icons/icon_music.svg"

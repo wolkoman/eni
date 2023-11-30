@@ -42,7 +42,7 @@ export function InternPage() {
         {permissions?.[Permission.Editor] && <InternButton href={Links.WochenmitteilungenErstellen} label="Erstellen"/>}
       </Section>
       <Section title="Pfarrzeitschriften" picture="icons/icon_papers.svg">
-        <InternButton href={Links.Pfarrzeitungen} label="Ansehen"/>
+        <InternButton href={Links.Pfarrzeitschriften} label="Ansehen"/>
         {permissions?.[Permission.Editor] && <InternButton href={Links.Projektplattform} label="Projektplattform"/>}
       </Section>
       {permissions?.[Permission.OrganBooking] &&

@@ -8,14 +8,14 @@ export function EniSection(props: {
   parish?: (info: CalendarInfo) => ReactNode | null
 }) {
   return <div className="flex flex-col items-center">
-    <img src={props.picture} className="h-44"/>
+    <img src={props.picture} className="h-40"/>
     <div className="text-3xl font-bold">
       {props.title}
     </div>
     <div className="text-lg my-3 grow text-center flex flex-col items-center">
       {props.children}
     </div>
-    {props.parish && <div className="flex flex-col lg:flex-row gap-2">
+    {props.parish && <div className="flex justify-center flex-wrap gap-2">
       {["emmaus", "inzersdorf", "neustift"].map(id => getCalendarInfo(id as any)).map(props.parish)}
     </div>}
   </div>;

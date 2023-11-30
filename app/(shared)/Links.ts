@@ -5,7 +5,7 @@ export const Links = {
   Archiv: "/archiv",
   Impressum: "/impressum",
   WorshipShort: "/w",
-  Pfarrzeitungen: "/#pfarrzeitungen",
+  Pfarrzeitschriften: "/#pfarrzeitschriften",
   Termine: "/termine", ApiCalendarSuggest: "/api/calendar/suggest", ApiEditorProjects: "/api/editor/projects",
   Wochenmitteilungen: (parish?: CalendarName) => `/wochenmitteilungen${parish ? `/${parish}` : ""}`,
   Artikel: (artikel?: string) =>  `/artikel${artikel ? `/${artikel}` : ""}`,
