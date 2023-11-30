@@ -16,6 +16,8 @@ import {fetchArticles} from "./(shared)/Articles";
 import {fetchEmmausbote} from "./(shared)/Weekly";
 import {EniSections} from "./EniSections";
 import {EniInformation} from "./EniInformation";
+import {ChristmasDisplay} from "../components/ChristmasDisplay";
+import {TodayAndTomorrow} from "../components/TodayAndTomorrow";
 
 export const revalidate = 300
 
@@ -27,8 +29,9 @@ export default async function HomePage() {
     keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
     <TopBar frontpage={true}/>
     <EniHero/>
-    <ComingUp eventsObject={eventsObject}/>
     <Responsive size="md">
+      <TodayAndTomorrow eventsObject={eventsObject}/>
+      <ComingUp eventsObject={eventsObject}/>
       <EniSections/>
       <Instagram items={await fetchCachedInstagramFeed()}/>
       <EniInformation/>
@@ -48,8 +51,8 @@ export default async function HomePage() {
         sites={await fetchEmmausSites()}
         emmausbote={await fetchEmmausbote()}
       />
-      <ComingUp eventsObject={eventsObject}/>
       <Responsive>
+        <ComingUp eventsObject={eventsObject}/>
         <Instagram items={await fetchCachedInstagramFeed()}/>
       </Responsive>
     </div>

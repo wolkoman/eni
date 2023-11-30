@@ -11,8 +11,7 @@ export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
 
     if(events.length === 0) return <></>;
 
-    return <Responsive>
-        <div className="mb-20">
+    return <div className="mb-20">
             <div className="flex justify-between">
                 <SectionHeader id="termine">Heilig Abend und Weihnachten</SectionHeader>
             </div>
@@ -33,7 +32,6 @@ export function ChristmasDisplay(props: { eventsObject: EventsObject; }) {
                     </div>
                     )}
             </div>
-        </div>
-    </Responsive>;
+        </div>;
 
 }

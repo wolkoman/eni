@@ -25,7 +25,7 @@ export function Event({event, suggestion, small}: {
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">
-                <div className={`font-semibold ${cancelled && 'line-through'} pb-1`}>
+                <div className={`font-semibold ${cancelled && 'line-through'} pb-0.5`}>
                     <DiffView>{suggestion?.data.summary ?? event.summary ?? ""}</DiffView>
                 </div>
                 <EventDescription event={event} suggestion={suggestion}/>
