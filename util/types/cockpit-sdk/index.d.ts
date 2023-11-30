@@ -123,7 +123,7 @@ declare module 'cockpit-sdk' {
     error: string
   }
 
-  type CollectionGetProps<T> = {
+  export type CollectionGetProps<T> = {
     token?: string,
     filter?: Partial<Collections[T]>,
     sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'>
