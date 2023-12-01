@@ -6,16 +6,23 @@ type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;
 
 export function Field(props: { children: ReactNode, label: string }) {
-    return <div className=" my-2">
+    return <div className="my-2">
         <div className="text-sm">{props.label}</div>
         {props.children}
     </div>;
 }
+export function DisplayField(props: { children: ReactNode, label: string }) {
+    return <div className="my-2">
+        <div className="text-sm">{props.label}</div>
+        <div className="font-bold text-lg">{props.children}</div>
+    </div>;
+}
 
-export function SelfServiceInput<S extends SSType>(props: { type?: string, input?: 'textarea', disabled?: boolean } & SSProps<S>) {
+export function SelfServiceInput<S extends SSType>(props: { type?: string, input?: 'textarea', disabled?: boolean, placeholder?: string } & SSProps<S>) {
     const Tag = props.input ?? "input";
     return <Tag
         {...(Tag === "input" ? {type: props.type} : {})}
+        placeholder={props.placeholder}
         disabled={props.disabled}
         value={props.form[0][props.name]}
         onChange={({target}) => props.form[1](rest => ({...rest, [props.name]: target.value}))}

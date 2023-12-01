@@ -7,14 +7,16 @@ import {ComingUp} from "../components/calendar/ComingUp";
 import {EniHero} from "../components/EniHero";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
+import {PrayerWall} from "./(emmaus-only)/gebetswand/PrayerWall";
 import {loadCachedEvents} from "./(domain)/events/EventsLoader";
 import {EventLoadAccess} from "./(domain)/events/EventLoadOptions";
 import {site} from "./(shared)/Instance";
 import {fetchCachedInstagramFeed} from "./(shared)/Instagram";
 import {fetchEmmausSites} from "./(shared)/Sites";
+import {EniSections} from "./EniSections";
+import {fetchInstagramFeed} from "./(shared)/Instagram";
 import {fetchArticles} from "./(shared)/Articles";
 import {fetchEmmausbote} from "./(shared)/Weekly";
-import {EniSections} from "./EniSections";
 import {EniInformation} from "./EniInformation";
 import {ChristmasDisplay} from "../components/ChristmasDisplay";
 import {TodayAndTomorrow} from "../components/TodayAndTomorrow";
@@ -53,7 +55,8 @@ export default async function HomePage() {
       />
       <Responsive>
         <ComingUp eventsObject={eventsObject}/>
-        <Instagram items={await fetchCachedInstagramFeed()}/>
+        <PrayerWall/>
+        <Instagram items={await fetchInstagramFeed()}/>
       </Responsive>
     </div>
   </Site>)();

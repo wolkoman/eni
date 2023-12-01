@@ -7,6 +7,14 @@ declare module 'cockpit-sdk' {
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
+    'prayers': {
+      name: string,
+      concern: string,
+      prayedCount: string,
+      publicPrayer: string,
+      suggestion: string,
+      blocked: boolean
+    } & Object,
     'cache': {
       key: string,
       value: string,
@@ -26,7 +34,7 @@ declare module 'cockpit-sdk' {
     'site': {
       name: string,
       slug: string,
-      layout: {component: string, settings: {text: string}}[]
+      layout: { component: string, settings: { text: string } }[]
       children: Collections['site'][],
       level: number
     } & Object,
@@ -56,7 +64,7 @@ declare module 'cockpit-sdk' {
       guideline_link: string,
       deadline: string
     } & Object,
-    announcements:{
+    announcements: {
       "files": string[],
       "mail": string,
       "description": string,
@@ -66,10 +74,10 @@ declare module 'cockpit-sdk' {
       hidden: boolean
     } & Object,
 
-    eventSuggestion:{
+    eventSuggestion: {
       "eventId": string,
       "parish": CalendarName,
-      "data": { summary: Diff[], description: Diff[], date: Diff[], time: Diff[]},
+      "data": { summary: Diff[], description: Diff[], date: Diff[], time: Diff[] },
       "byName": string,
       "by": string,
       "open": boolean,
@@ -83,7 +91,7 @@ declare module 'cockpit-sdk' {
       project: Reference,
       author: string,
       email: string,
-      files: {value: string}[],
+      files: { value: string }[],
       char_min: string,
       char_max: string
       status: 'finished' | 'corrected' | 'written' | 'writing'
@@ -115,7 +123,11 @@ declare module 'cockpit-sdk' {
     error: string
   }
 
-  export type CollectionGetProps<T> = { token?: string, filter?: Partial<Collections[T]>, sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'> }
+  export type CollectionGetProps<T> = {
+    token?: string,
+    filter?: Partial<Collections[T]>,
+    sort?: Partial<Record<keyof Collections[T]>, '1' | '-1'>
+  }
 
   class CockpitSDK {
     public host: string;

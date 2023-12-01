@@ -34,3 +34,7 @@ export async function getInstagramTitle(description: string) {
     const value = await getCachedPrompt("Formuliere einen sehr kurzen Titel (max. 5 Wörter): " + description);
     return trimString(value);
 }
+
+export function getPrayerSuggestion(concern: string){
+    return getCachedPrompt("Formuliere ein katholisches Gebet (max 10 Zeilen, keine Reime) für dieses Anliegen einer Person: " + concern);
+}
