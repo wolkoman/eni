@@ -18,27 +18,26 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
 
   if (events.length === 0) return <></>;
 
-  const calendarEvents = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
-      .map(c => (events ?? []).filter(e => e.calendar === c))
-      .filter(events => events.length > 0);
-
   return <div className="">
     <SectionHeader id="termine">{date === today ? "Heute" : "Morgen"}</SectionHeader>
-    <div className={`grid gap-4 pb-4 ${["", "md:grid-cols-2", "md:grid-cols-3"][calendarEvents.length - 1]}`}>
-      {calendarEvents
-        .map(events => {
+    <div className={`grid gap-4 pb-4 md:grid-cols-3`}>
+      {[CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
+        .map(c => {
+          const calendarEvents = (events ?? []).filter(e => e.calendar === c)
           return <div className={`overflow-hidden rounded-2xl relative p-1 pb-6 flex flex-col border border-black/20`}>
                 <div className="text-2xl font-semibold text-center mt-4 mb-4">
-                  Pfarre {getCalendarInfo(events[0].calendar).shortName}
+                  Pfarre {getCalendarInfo(c).shortName}
                 </div>
                 <div className="px-3">
-                  <div className="my-2"><EventDateText date={new Date(date)}/></div>
-                  {events.map(event => <Event key={event.id} event={event} small={true}/>)}
+                  {calendarEvents.length > 0
+                      ? <div className="my-2"><EventDateText date={new Date(date)}/>
+                        {calendarEvents.map(event => <Event key={event.id} event={event} small={true}/>)}
+                      </div>
+                      : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
+                  }
                 </div>
               </div>;
-            }
-        )}
+            })}
     </div>
   </div>;
-
 }
