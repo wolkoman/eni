@@ -14,11 +14,9 @@ import {site} from "./(shared)/Instance";
 import {fetchCachedInstagramFeed} from "./(shared)/Instagram";
 import {fetchEmmausSites} from "./(shared)/Sites";
 import {EniSections} from "./EniSections";
-import {fetchInstagramFeed} from "./(shared)/Instagram";
 import {fetchArticles} from "./(shared)/Articles";
 import {fetchEmmausbote} from "./(shared)/Weekly";
 import {EniInformation} from "./EniInformation";
-import {ChristmasDisplay} from "../components/ChristmasDisplay";
 import {TodayAndTomorrow} from "../components/TodayAndTomorrow";
 
 export const revalidate = 300
@@ -56,7 +54,7 @@ export default async function HomePage() {
       <Responsive>
         <ComingUp eventsObject={eventsObject}/>
         <PrayerWall/>
-        <Instagram items={await fetchInstagramFeed()}/>
+        <Instagram items={await fetchCachedInstagramFeed()}/>
       </Responsive>
     </div>
   </Site>)();
