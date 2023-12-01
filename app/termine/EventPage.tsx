@@ -2,10 +2,8 @@
 
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "../(shared)/use-state-util";
-import {FilterType} from "../../components/calendar/Calendar";
 import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
-import {useRouter, useSearchParams} from "next/navigation";
-import React, {useEffect} from "react";
+import React from "react";
 import Site from "../../components/Site";
 import Responsive from "../../components/Responsive";
 import {CalendarCacheNotice} from "../../components/calendar/CalendarCacheNotice";
@@ -15,11 +13,15 @@ import {ListView} from "../../components/calendar/ListView";
 import {FilterSelector} from "../../components/calendar/FilterSelector";
 import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
 import {CalendarEvent, EventsObject} from "@/domain/events/EventMapper";
-import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {useCalendarStore} from "@/store/CalendarStore";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
+import {useFilterState} from "@/app/termine/useFilterState";
+import {EventSearch} from "../../components/calendar/EventSearch";
+import {CalendarErrorNotice} from "../../components/calendar/CalendarErrorNotice";
+import {EniLoading} from "../../components/Loading";
+import {applyFilter} from "../../components/calendar/Calendar";
 
 export function AddEvent() {
   const [isEditing, setIsEditing] = useState(false);
@@ -55,69 +57,53 @@ export default function EventPage(props: {
   liturgy: LiturgyData,
   eventsObject: EventsObject,
 }) {
-  const [filter, setFilter] = useState<FilterType>(null);
-  const [firstFilterUpdate, setFirstFilterUpdate] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useFilterState()
   const user = useUserStore(state => state.user);
   const calendarStore = useCalendarStore(state => state);
   const calendar = user
     ? calendarStore
     : {items: props.eventsObject.events, error: false, loading: false, loaded: true, load: () => {}};
   const [monthView] = usePreferenceStore(Preference.MonthView);
-  const {replace: routerReplace} = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (searchParams.get("q")) setFilter({filterType: "GROUP", group: searchParams.get("q") as CalendarGroup})
-    if (searchParams.get("p")) setFilter({filterType: "PARISH", parish: searchParams.get("p") as CalendarName})
-  }, [searchParams]);
-  useEffect(() => {
-    if (!firstFilterUpdate) {
-      routerReplace("?" + Object.entries({
-        q: filter?.filterType !== "GROUP" ? null : filter.group,
-        p: filter?.filterType !== "PARISH" ? null : filter.parish
-      })
-        .filter(([_, b]) => b)
-        .map(([a, b]) => `${a}=${b}`)
-        .join("&")
-      )
-    } else {
-      setFirstFilterUpdate(false);
-    }
-  }, [filter]);
-  useEffect(() => {
-    calendar.load()
-  }, [])
+  const [seperateMass] = usePreferenceStore(Preference.SeparateMass)
+  const items = applyFilter(calendar.items, filter, seperateMass).filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.join(" ")).toLowerCase().includes(search.toLowerCase()));
 
   return <Site responsive={false}>
     <Responsive>
-      <div data-testid="calendar" className="relative">
-        <CalendarCacheNotice/>
-        <div className="flex-grow mt-4 pb-4 relative">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <div className="font-bold text-4xl mb-6">
-                Termine{filter !== null && ": "}
-                {filter?.filterType === "GROUP" && filter.group}
-                {filter?.filterType === "PARISH" && getCalendarInfo(filter.parish).shortName}
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <AddEvent/>
-              <Settings/>
+      <CalendarCacheNotice/>
+      <div className="flex-grow mt-4 pb-4 relative">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <div className="font-bold text-4xl mb-6">
+              Termine{filter !== null && ": "}
+              {filter?.filterType === "GROUP" && filter.group}
+              {filter?.filterType === "PARISH" && getCalendarInfo(filter.parish).shortName}
             </div>
           </div>
-          {monthView
-            ? <MonthView calendar={calendar} liturgy={props.liturgy} filter={filter}/>
-            : <ListView calendar={calendar} liturgy={props.liturgy} filter={filter} editable={true} filterSlot={
-              <FilterSelector
+          <div className="flex gap-2">
+            <AddEvent/>
+            <Settings/>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1 my-4">
+            <EventSearch onChange={setSearch} filter={filter}/>
+            <FilterSelector
                 filter={filter}
                 setFilter={filter => setFilter(filter)}
                 userPermissions={user?.permissions ?? {}}
-              />
-            }/>
-          }
+            />
         </div>
+
+        {calendar.error && <CalendarErrorNotice/>}
+        {calendar.loading && <EniLoading/>}
       </div>
     </Responsive>
+    {monthView
+      ? <MonthView search={search} items={items} liturgy={props.liturgy} filter={filter}/>
+      : <Responsive>
+        <ListView search={search} items={items} liturgy={props.liturgy} filter={filter} editable={true}/>
+      </Responsive>
+    }
   </Site>;
 }

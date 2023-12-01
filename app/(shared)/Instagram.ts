@@ -1,17 +1,22 @@
 import {get} from "@vercel/edge-config";
-import {site} from "@/app/(shared)/Instance";
-import {getInstagramTitle} from "@/app/(shared)/ChatGpt";
-import {Cockpit} from "@/util/cockpit";
+import {site} from "./Instance";
+import {getInstagramTitle} from "./ChatGpt";
+import {Cockpit} from "../../util/cockpit";
+import {unstable_cache} from "next/cache";
 
-export async function fetchInstagramFeed() {
+export const fetchCachedInstagramFeed = async () => {
     const {token}: any = await get('instagram_config')
+    return await unstable_cache(() => fetchInstagramFeed(token), ["instagram"], {revalidate: 3600, tags: ["instagram"]})();
+};
+
+export async function fetchInstagramFeed(token: string) {
     const fields = "id,media_type,media_url,permalink,timestamp,caption";
 
-    return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=100&access_token=${token}`)
+    return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=9&access_token=${token}`)
         .then(response => response.json())
         .then(response => response.data
             ?.filter((post: any) => post.caption?.toLowerCase().includes(site('', 'emmaus')))
-            .slice(0, 9) ?? []
+            .slice(0, 3) ?? []
         )
         .then(items => Promise.all(items.map(async (item: any) => ({
             ...item,
@@ -23,7 +28,7 @@ export async function fetchInstagramFeed() {
         })
         .catch(() => {
             console.log("INSTAGRAM FAILED")
-            return Cockpit.collectionGet("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
+            return Cockpit.collectionGetCached("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
         });
 
 }

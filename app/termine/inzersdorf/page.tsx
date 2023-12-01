@@ -1,13 +1,12 @@
-import React from 'react';
-import {EventDateText, EventTime} from "../../../components/calendar/EventUtils";
-import {loadEvents} from "../../(domain)/events/EventsLoader";
+import {EventDateText} from "../../../components/calendar/EventUtils";
+import {loadCachedEvents} from "../../(domain)/events/EventsLoader";
 import {EventLoadAccess} from "../../(domain)/events/EventLoadOptions";
 
 export const revalidate = 3000
 
 export default async function EventPage() {
 
-    const eventsObject= await loadEvents({access: EventLoadAccess.PUBLIC})
+    const eventsObject= await loadCachedEvents({access: EventLoadAccess.PUBLIC})
 
     return <div data-testid="calendar" className="relative">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>

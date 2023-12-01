@@ -1,4 +1,3 @@
-import React from "react";
 
 export function Hamburger(props: {onClick?: () => any}) {
     return <div className="flex flex-col justify-center items-center md:hidden gap-2" onClick={props.onClick}>

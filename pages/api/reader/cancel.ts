@@ -6,7 +6,6 @@ import {ReaderData, ReaderInfo} from "@/domain/service/Service";
 import {notifyAdmin} from "@/app/(shared)/Telegram";
 
 const READER_ID = "637b85bc376231d51500018d";
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const user = resolveUserFromRequest(req);

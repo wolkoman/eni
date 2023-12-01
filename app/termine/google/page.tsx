@@ -1,5 +1,4 @@
 import {getGoogleAuthClient} from "../../(shared)/GoogleAuthClient";
-import React from "react";
 import Site from "../../../components/Site";
 import Button from "../../../components/Button";
 

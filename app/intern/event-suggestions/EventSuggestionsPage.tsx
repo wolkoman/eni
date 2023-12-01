@@ -45,6 +45,7 @@ function ActiveSuggestion(props: {
 
     <div className="flex flex-col lg:flex-row gap-4 items-start">
       <EventDate
+        showLiturgyInfo={false}
         date={new Date(props.suggestion.data.date.filter(([i]) => i >= 0).map(([_, str]) => str).join(""))}/>
       <Event event={props.event} suggestion={props.suggestion}/>
     </div>

@@ -23,6 +23,10 @@ module.exports = {
           '100%': { transform: 'scale(100%)', filter: 'saturate(125%)' },
         }
       },
+      backgroundImage: {
+        'gradient': "url('/bg-grad.svg')",
+        'gradient-mobile': "url('/bg-grad-mobile.svg')",
+      },
       colors: {
         emmaus: "#2a6266",
         'emmaus-sec':"#FF8A44",

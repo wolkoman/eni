@@ -1,4 +1,3 @@
-import React from "react";
 import {Cockpit} from "../../../../util/cockpit";
 import {EditorArticlePage} from "./EditorArticlePage";
 import {notFound} from "next/navigation";

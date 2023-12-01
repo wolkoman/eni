@@ -22,16 +22,19 @@ export const useCalendarStore = createLoadedStore(createStore(combine({
         if (get().loading) return;
         if (get().loaded) return;
         set(state => ({...state, loading: true}));
-        loadEventsFromServer()
-            .then(data => set({
-                items: data.events,
-                openSuggestions: data.openSuggestions,
-                originalItems: data.events,
-                loaded: true,
-                loading: false,
-                error: false,
-                cache: data.cache,
-            }))
+        loadEventsFromServer(true)
+            .then(data => {
+                if(data === null) return;
+                set({
+                    items: data.events,
+                    openSuggestions: data.openSuggestions,
+                    originalItems: data.events,
+                    loaded: true,
+                    loading: false,
+                    error: false,
+                    cache: data.cache,
+                });
+            })
             .catch((error) => {
                 console.log({error})
                 setTimeout(() => {

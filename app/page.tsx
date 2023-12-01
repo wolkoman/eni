@@ -5,19 +5,19 @@ import {EmmausBranding} from "../components/EmmausBranding";
 import EmmausSections from "./EmmausSections";
 import {ComingUp} from "../components/calendar/ComingUp";
 import {EniHero} from "../components/EniHero";
-import React from "react";
 import {WorshipNotice} from "../components/WorshipNotice";
 import Responsive from "../components/Responsive";
 import {PrayerWall} from "./(emmaus-only)/gebetswand/PrayerWall";
 import {loadCachedEvents} from "./(domain)/events/EventsLoader";
 import {EventLoadAccess} from "./(domain)/events/EventLoadOptions";
 import {site} from "./(shared)/Instance";
-import {EniSections} from "./EniSections";
-import {fetchInstagramFeed} from "./(shared)/Instagram";
-import {EniInformation} from "./EniInformation";
-import {fetchArticles} from "./(shared)/Articles";
+import {fetchCachedInstagramFeed} from "./(shared)/Instagram";
 import {fetchEmmausSites} from "./(shared)/Sites";
+import {EniSections} from "./EniSections";
+import {fetchArticles} from "./(shared)/Articles";
 import {fetchEmmausbote} from "./(shared)/Weekly";
+import {EniInformation} from "./EniInformation";
+import {TodayAndTomorrow} from "../components/TodayAndTomorrow";
 
 export const revalidate = 300
 
@@ -30,9 +30,10 @@ export default async function HomePage() {
     <TopBar frontpage={true}/>
     <EniHero/>
     <Responsive size="md">
+      <TodayAndTomorrow eventsObject={eventsObject}/>
       <ComingUp eventsObject={eventsObject}/>
       <EniSections/>
-      <Instagram items={await fetchInstagramFeed()}/>
+      <Instagram items={await fetchCachedInstagramFeed()}/>
       <EniInformation/>
     </Responsive>
   </Site>, async () => <Site
@@ -50,10 +51,10 @@ export default async function HomePage() {
         sites={await fetchEmmausSites()}
         emmausbote={await fetchEmmausbote()}
       />
-      <ComingUp eventsObject={eventsObject}/>
       <Responsive>
+        <ComingUp eventsObject={eventsObject}/>
         <PrayerWall/>
-        <Instagram items={await fetchInstagramFeed()}/>
+        <Instagram items={await fetchCachedInstagramFeed()}/>
       </Responsive>
     </div>
   </Site>)();

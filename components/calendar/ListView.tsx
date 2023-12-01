@@ -1,18 +1,12 @@
-import {applyFilter, FilterType} from "./Calendar";
+import {FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
-import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import {useState} from "@/app/(shared)/use-state-util";
-import {CalendarErrorNotice} from "./CalendarErrorNotice";
-import {EniLoading} from "../Loading";
 import {useCalendarStore} from "@/store/CalendarStore";
-import {LiturgyInformation} from "./LiturgyInformation";
-import React, {ReactNode, useRef} from "react";
-import {EventSearch} from "./EventSearch";
+import React, {useRef} from "react";
 import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
 import {ViewportList} from "react-viewport-list";
 import {EventEdit, EventEditBackground} from "./EventEdit";
-import {ReducedCalendarState} from "@/app/termine/EventPage";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useUserStore} from "@/store/UserStore";
 import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
@@ -23,83 +17,76 @@ import {
 } from "@/domain/suggestions/SuggestionsMapper";
 import {Permission} from "@/domain/users/Permission";
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
+import {CalendarEvent} from "@/domain/events/EventMapper";
 
-export function ListView(props: { filter: FilterType, liturgy: LiturgyData, calendar: ReducedCalendarState, filterSlot?: ReactNode, editable: boolean, hideDate?: boolean }) {
-    const [separateMass] = usePreferenceStore(Preference.SeparateMass);
-    const [search, setSearch] = useState("");
+export function ListView(props: {
+    search: string,
+    filter: FilterType,
+    liturgy: LiturgyData,
+    items: CalendarEvent[],
+    editable: boolean
+}) {
     const user = useUserStore(state => state.user);
     const allOpenSuggestions = useCalendarStore(state => state.openSuggestions);
     const openSuggestions = allOpenSuggestions.filter(sug => sug.by === user?._id || user?.permissions[Permission.CalendarAdministration]);
-    const items = Object.entries(groupEventsByDate(applyFilter(props.calendar.items
-            .filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.map(group => `gruppe:${group}`).join(",")).toLowerCase().includes(search.toLowerCase())),
-        props.filter, separateMass)));
+    const items = Object.entries(groupEventsByDate(props.items));
 
     const [editEventId, setEditEventId] = useState<string | undefined>(undefined);
     const ref = useRef<HTMLDivElement | null>(null);
     return <div>
-        {props.filterSlot && <div className="flex flex-col gap-1 my-4">
-            <EventSearch onChange={setSearch} filter={props.filter}/>
-            {props.filterSlot}
-        </div>}
-
-        {props.calendar.error && <CalendarErrorNotice/>}
-        {props.calendar.loading && <EniLoading/>}
-        {props.calendar.loading ||
-
-            <div ref={ref}>
-                <ViewportList
-                    viewportRef={ref}
-                    items={items}
+        <div ref={ref}>
+            <ViewportList
+                viewportRef={ref}
+                items={items}
+            >
+                {(([date, events], index, all) => <div
+                    key={date + index}
+                    data-date={date}
+                    className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                 >
-                    {(([date, events], index, all) => <div
-                        key={date + index}
-                        data-date={date}
-                        className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
-                    >
-                        {!props.hideDate && <div className="lg:w-[130px] my-1 shrink-0">
-                            <EventDate date={new Date(date)}/>
-                        </div>}
-                        <div className="grow">
-                            <LiturgyInformation liturgies={props.liturgy[date]}/>
-                            {events
-                                .map(event => ({
-                                    event,
-                                    suggestion: openSuggestions.find(sug => sug.eventId === event.id)
-                                }))
-                                .map(({event, suggestion}) => ({
-                                    event,
-                                    suggestion: suggestion ? applySuggestionToPatch(suggestion, event) : null
-                                }))
-                                .map(({event, suggestion}) =>
-                                    <EditableEvent
-                                        key={event.id}
-                                        small={!props.filterSlot}
-                                        editable={!!(user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && (user.parish === "all" || user.parish === event.calendar)) && props.editable}
-                                        isEdited={event.id === editEventId}
-                                        id={event.id} parish={event.calendar}
-                                        suggestionForm={suggestion?.suggestion ? getSuggestionFromDiff(suggestion.suggestion) : getSuggestionFromEvent(event)}
-                                        onEditEvent={setEditEventId}
-                                        arguments={{event, suggestion: suggestion?.suggestion}}
-                                    />)}
+                    <div className="lg:w-[130px] my-1 shrink-0">
+                        <EventDate date={new Date(date)} liturgies={props.liturgy[date]} showLiturgyInfo={props.editable}/>
+                    </div>
+                    <div className="grow">
+                        {events
+                            .map(event => ({
+                                event,
+                                suggestion: openSuggestions.find(sug => sug.eventId === event.id)
+                            }))
+                            .map(({event, suggestion}) => ({
+                                event,
+                                suggestion: suggestion ? applySuggestionToPatch(suggestion, event) : null
+                            }))
+                            .map(({event, suggestion}) =>
+                                <EditableEvent
+                                    key={event.id}
+                                    small={!props.editable}
+                                    editable={!!(user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && (user.parish === "all" || user.parish === event.calendar)) && props.editable}
+                                    isEdited={event.id === editEventId}
+                                    id={event.id} parish={event.calendar}
+                                    suggestionForm={suggestion?.suggestion ? getSuggestionFromDiff(suggestion.suggestion) : getSuggestionFromEvent(event)}
+                                    onEditEvent={setEditEventId}
+                                    arguments={{event, suggestion: suggestion?.suggestion}}
+                                />)}
 
-                            {openSuggestions
-                                .filter(suggestion => suggestion.type === "add" && suggestion.data.date[0][1] === date)
-                                .map((suggestion, index) =>
-                                    <EditableEvent
-                                      key={index}
-                                        small={!props.filterSlot}
-                                        editable={props.editable}
-                                        isEdited={`suggestion_${suggestion._id}` === editEventId}
-                                        id={`suggestion_${suggestion._id}`}
-                                        parish={suggestion.parish}
-                                        suggestionForm={getSuggestionFromDiff(suggestion)}
-                                        onEditEvent={setEditEventId}
-                                        arguments={{event: {}, suggestion}}
-                                    />)}
-                        </div>
-                    </div>)}
-                </ViewportList>
-            </div>}
+                        {openSuggestions
+                            .filter(suggestion => suggestion.type === "add" && suggestion.data.date[0][1] === date)
+                            .map((suggestion, index) =>
+                                <EditableEvent
+                                    key={index}
+                                    small={!props.editable}
+                                    editable={props.editable}
+                                    isEdited={`suggestion_${suggestion._id}` === editEventId}
+                                    id={`suggestion_${suggestion._id}`}
+                                    parish={suggestion.parish}
+                                    suggestionForm={getSuggestionFromDiff(suggestion)}
+                                    onEditEvent={setEditEventId}
+                                    arguments={{event: {}, suggestion}}
+                                />)}
+                    </div>
+                </div>)}
+            </ViewportList>
+        </div>
         {editEventId && <EventEditBackground onClick={() => setEditEventId(undefined)}/>}
     </div>;
 }

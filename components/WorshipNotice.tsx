@@ -1,4 +1,3 @@
-import React from "react";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {Links} from "@/app/(shared)/Links";
 

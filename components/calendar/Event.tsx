@@ -1,5 +1,4 @@
 import {ParishDot} from './ParishDot';
-import React from "react";
 import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
@@ -16,7 +15,7 @@ export function Event({event, suggestion, small}: {
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'}`}
+            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} leading-6 `}
         >
             {site(<div className={`pr-3 pt-1.5 shrink-0 ${small ? "w-[40px]" : "w-[100px]"}`}>
                 <ParishDot info={info} small={small} private={event.tags?.includes(CalendarTag.private) ?? false}/>
@@ -26,7 +25,7 @@ export function Event({event, suggestion, small}: {
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">
-                <div className={`font-semibold ${cancelled && 'line-through'}`}>
+                <div className={`font-semibold ${cancelled && 'line-through'} pb-0.5`}>
                     <DiffView>{suggestion?.data.summary ?? event.summary ?? ""}</DiffView>
                 </div>
                 <EventDescription event={event} suggestion={suggestion}/>

@@ -14,12 +14,16 @@ import {getTimeOfEvent} from "@/domain/events/EventSorter";
 import {unstable_cache} from "next/cache";
 import { OAuth2Client } from "google-auth-library";
 
-export async function loadEventsFromServer() {
+export async function loadEventsFromServer(privateOnly?: boolean) {
   const user = await resolveUserFromServer();
-
   const privateAccess = user && user.permissions[Permission.PrivateCalendarAccess];
+
+  if(!privateAccess && privateOnly){
+    return null;
+  }
+
   const readerData = await (privateAccess ? loadReaderData : () => Promise.resolve(undefined))()
-  return await loadEvents({
+  return await loadCachedEvents({
     access: privateAccess ? EventLoadAccess.PRIVATE_ACCESS : EventLoadAccess.PUBLIC,
     readerData
   })
@@ -30,7 +34,7 @@ export const loadCachedEvents = async (options: EventLoadOptions): Promise<Event
   return await unstable_cache(() => loadEvents(options, authClient),
     ["events", JSON.stringify(options)],
     {
-      revalidate: 60,
+      revalidate: 300,
       tags: ["calendar"]
     })()
 }

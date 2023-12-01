@@ -2,22 +2,9 @@
 
 import {Section} from "../components/Section";
 import {CalendarName, getCalendarInfo} from "./(domain)/events/CalendarInfo";
-import React from "react";
 import {motion} from "framer-motion";
 import Link from "next/link";
-import {SectionHeader} from "../components/SectionHeader";
 
-export function Personal() {
-  return <>
-    <SectionHeader id="personal">Unsere Priester</SectionHeader>
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 mb-24">
-      <Person img="/personal/zvonko.png" name="Dr. Zvonko Brezovski" role="Pfarrer" mail="pfarrer"/>
-      <Person img="/personal/marcin.png" name="Marcin Wojciech" role="Pfarrvikar" mail="pfarrvikar"/>
-      <Person img="/personal/gil.png" name="Gil Vicente Thomas" role="Aushilfskaplan" mail="kaplan.e"/>
-      <Person img="/personal/david.png" name="David Campos" role="Aushilfskaplan" mail="kaplan.in"/>
-    </div>
-  </>;
-}
 
 function Person(props: { img: string; name: string; role: string; mail: string; }) {
   return <div className="flex flex-col items-center text-center">
@@ -31,9 +18,17 @@ function Person(props: { img: string; name: string; role: string; mail: string; 
 }
 
 export function EniInformation() {
-  return <><Personal/>
+  return <>
+    <Section id="personal" title="Unsere Priester">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
+        <Person img="/personal/zvonko.png" name="Dr. Zvonko Brezovski" role="Pfarrer" mail="pfarrer"/>
+        <Person img="/personal/marcin.png" name="Marcin Wojciech" role="Pfarrvikar" mail="pfarrvikar"/>
+        <Person img="/personal/gil.png" name="Gil Vicente Thomas" role="Aushilfskaplan" mail="kaplan.e"/>
+        <Person img="/personal/david.png" name="David Campos" role="Aushilfskaplan" mail="kaplan.in"/>
+      </div>
+    </Section>
     <Section title="Unsere Pfarren">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 ">
         <Parish name={CalendarName.EMMAUS} index={0}/>
         <Parish name={CalendarName.INZERSDORF} index={1}/>
         <Parish name={CalendarName.NEUSTIFT} index={2}/>

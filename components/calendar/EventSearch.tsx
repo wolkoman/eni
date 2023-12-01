@@ -1,5 +1,4 @@
 import {FilterType} from "./Calendar";
-import React from "react";
 import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function EventSearch(props: { onChange: (value: string) => any, filter: FilterType }) {

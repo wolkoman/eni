@@ -1,4 +1,3 @@
-import React from "react";
 import {EditorVersionPage} from "./EditorVersionPage";
 import {Cockpit} from "../../../../util/cockpit";
 import {notFound} from "next/navigation";
