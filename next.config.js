@@ -18,6 +18,11 @@ module.exports = {
                 destination: "/worship",
                 permanent: true,
             },
+            {
+                source: '/ig',
+                destination: "https://www.instagram.com/eni.wien",
+                permanent: true,
+            },
         ];
     },
 };
