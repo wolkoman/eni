@@ -13,7 +13,7 @@ function Title(props: { children: ReactNode }) {
 }
 
 export default function Footer() {
-    useUserStore(state => state.user);
+    const user = useUserStore(state => state.user);
     return <>
         <div className="py-6 text-neutral-600 pt-12 mt-12 print:hidden bg-black/[2%]">
             <Responsive>
@@ -58,7 +58,7 @@ export default function Footer() {
                         Wenn Sie Zugang zu den internen Systemen der {site(<>Pfarren</>, <>Pfarre</>)} brauchen, melden Sie sich in der
                         Pfarrkanzlei unter kanzlei@eni.wien.
                         {site(<div className="mt-2">
-                            <Link href={Links.Login}>
+                            <Link href={user ? Links.Intern : Links.Login}>
                                 <Button label="Login"/>
                             </Link>
                         </div>, <></>)}
