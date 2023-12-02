@@ -2,9 +2,10 @@
 
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
-import React, {MouseEventHandler, useState} from "react";
+import React, {useState} from "react";
 import {SectionHeader} from "./SectionHeader";
 import {CalendarInfo, CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import Button from "./Button";
 
 export interface InstagramFeedItem {
   id: string,
@@ -18,11 +19,11 @@ export interface InstagramFeedItem {
   calendar: CalendarInfo | null,
 }
 
-function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHandler<HTMLElement> }) {
-  return <div className="flex items-start lg:items-stretch gap-2 p-4 border border-black/20 rounded-lg">
+function InstagramItem(props: { item: InstagramFeedItem }) {
+  return <div className="flex flex-col lg:flex-row items-start lg:items-stretch gap-2 p-4 border border-black/20 rounded-lg">
     <div
       style={{backgroundImage: `url(${props.item?.media_url})`}}
-      className="bg-cover relative bg-center w-24 lg:w-72 aspect-square rounded-lg shrink-0"
+      className="bg-cover relative bg-center w-full lg:w-72 aspect-square rounded-lg shrink-0"
     />
     <div className="px-4 py-2 flex flex-col gap-2 grow">
       <div className="text-2xl font-bold">{props.item?.title}</div>
@@ -37,7 +38,8 @@ function InstagramItem(props: { item: InstagramFeedItem, onClick: MouseEventHand
 }
 
 export function Instagram(props: { items: InstagramFeedItem[] }) {
-  const feed = props.items.slice(0, 3).map(item => ({
+  const [length, setLength] = useState(3);
+  const feed = props.items.slice(0, length).map(item => ({
     ...item,
     caption: Aesthetically.unformat(item?.caption.normalize() ?? ''),
   })).map(item => ({
@@ -51,14 +53,15 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
             : null
         ))
   }));
-  const [item, setItem] = useState<InstagramFeedItem | null>();
 
   return feed.length === 0 ? <></> : <div className="my-8">
     <SectionHeader id="einblick">Einblick ins Pfarrleben</SectionHeader>
     <div className="grid gap-8">
       {feed.map((item, index) =>
-        <InstagramItem key={index} item={item} onClick={item ? () => setItem(item) : () => {
-        }}/>)}
+        <InstagramItem key={index} item={item}/>)}
     </div>
+    {props.items.length > length && <div className="flex justify-end my-4">
+        <Button label={<>Mehr</>} onClick={() => setLength(x => x +3)}/>
+    </div>}
   </div>;
 }

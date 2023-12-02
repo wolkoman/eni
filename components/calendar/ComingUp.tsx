@@ -35,6 +35,16 @@ export function ComingUp(props: { eventsObject: EventsObject }) {
           />
         )}
       </div>
+      <motion.div
+        className="lg:hidden absolute top-1/2 right-4 z-20 -translate-x-full -translate-y-1/2 p-1">
+        <motion.svg width="12" height="20" className="text-black"
+             animate={{
+               opacity: page === 0 ? 1 : 0,
+               x:  page === 0 ? 0 : 50
+             }}>
+          <path d={"M 0 0 L 10 10 L 0 20"} stroke="currentColor" strokeWidth="3" fill="none"/>
+        </motion.svg>
+      </motion.div>
       <div
         className="hidden lg:block absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"/>
       <motion.div

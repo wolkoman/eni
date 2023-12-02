@@ -36,5 +36,5 @@ export async function getInstagramTitle(description: string) {
 }
 
 export function getPrayerSuggestion(concern: string){
-    return getCachedPrompt("Formuliere ein katholisches Gebet (max 10 Zeilen, keine Reime) für dieses Anliegen einer Person: " + concern);
+    return getCachedPrompt("Formuliere ein katholisches Gebet (max 10 Zeilen, keine Reime) für dieses aus der Sicht der Gemeinde: " + concern);
 }
