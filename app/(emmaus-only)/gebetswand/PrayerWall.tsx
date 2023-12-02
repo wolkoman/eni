@@ -24,16 +24,16 @@ export function PrayerWall() {
     </div>
     <div className="">
       {prayer === undefined && <EniLoading/>}
-      <div className="grid grid-cols-2 gap-4 my-4">
+      <div className="grid lg:grid-cols-2 gap-4 my-4">
         {prayer?.map(prayer =>
           <PrayerCard key={prayer._id} prayer={prayer}/>
         )}
       </div>
-      <div className="flex justify-end gap-2">
-        <Link href="/gebetswand/neu">
-          <Button label="Anliegen einbringen"/>
-        </Link>
-      </div>
+    </div>
+    <div className="flex justify-end gap-2">
+      <Link href="/gebetswand/neu">
+        <Button label="Anliegen einbringen" className="bg-emmaus font-semibold text-white"/>
+      </Link>
     </div>
   </Section>;
 }

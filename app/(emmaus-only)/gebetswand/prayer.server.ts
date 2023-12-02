@@ -2,10 +2,12 @@
 import {cockpit} from "../../../util/cockpit-sdk";
 import {revalidatePath} from "next/cache";
 import {getPrayerSuggestion} from "../../(shared)/ChatGpt";
+import {notifyAdmin} from "../../(shared)/Telegram";
 
 export async function submitPrayer(prayer: { name: string; concern: string }) {
   const suggestion = await getPrayerSuggestion(prayer.concern)
-  await cockpit.collectionSave("prayers", {name: prayer.name, concern: prayer.concern, prayedCount: 0, publicPrayer: 0, blocked: false, suggestion})
+  await notifyAdmin(`New prayer from ${prayer.name}: ${prayer.concern}`)
+  await cockpit.collectionSave("prayers", {name: prayer.name, concern: prayer.concern, prayedCount: 0, publicPrayer: "", blocked: false, suggestion})
 }
 
 

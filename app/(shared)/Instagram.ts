@@ -16,7 +16,7 @@ export async function fetchInstagramFeed(token: string) {
         .then(response => response.json())
         .then(response => response.data
             ?.filter((post: any) => post.caption?.toLowerCase().includes(site('', 'emmaus')))
-            .slice(0, 3) ?? []
+            .slice(0, 15) ?? []
         )
         .then(items => Promise.all(items.map(async (item: any) => ({
             ...item,
