@@ -1,4 +1,4 @@
-import {loadAndSaveLiturgyData, loadCachedLiturgyData} from "../../../../pages/api/liturgy";
+import {loadCachedLiturgyData} from "../../../../pages/api/liturgy";
 import EventsPage from "./EventsPage";
 
 export default async function HomePage() {
