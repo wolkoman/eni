@@ -46,13 +46,6 @@ export function AddEvent() {
   </> : <></>;
 }
 
-export interface ReducedCalendarState {
-  items: CalendarEvent[],
-  error: boolean,
-  loading: boolean,
-  loaded: boolean
-}
-
 export default function EventPage(props: {
   liturgy: LiturgyData,
   eventsObject: EventsObject,
