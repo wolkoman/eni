@@ -2,7 +2,7 @@ import Site from '../components/Site';
 import TopBar from '../components/TopBar';
 import {Instagram} from "../components/Instagram";
 import {EmmausBranding} from "../components/EmmausBranding";
-import EmmausSections from "./EmmausSections";
+import EmmausSections, {Articles} from "./EmmausSections";
 import {ComingUp} from "../components/calendar/ComingUp";
 import {EniHero} from "../components/EniHero";
 import {WorshipNotice} from "../components/WorshipNotice";
@@ -46,8 +46,13 @@ export default async function HomePage() {
     </div>
     <WorshipNotice worshipEvents={eventsObject.events.filter(event => event.summary === "Worship")}/>
     <div className="relative z-10 bg-white">
+    <Responsive>
+      <div className="grid lg:grid-cols-2 gap-8 my-8">
+        <TodayAndTomorrow eventsObject={eventsObject}/>
+        <Articles items={await fetchArticles()}/>
+      </div>
+    </Responsive>
       <EmmausSections
-        items={await fetchArticles()}
         sites={await fetchEmmausSites()}
         emmausbote={await fetchEmmausbote()}
       />

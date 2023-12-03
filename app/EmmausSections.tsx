@@ -20,48 +20,13 @@ export function getArticleLink(article?: Collections['article']) {
   return article ? Links.Artikel(article._id) : '';
 }
 
-function ArticleCard(props: { article?: Collections['article'] }) {
-  return <Link href={getArticleLink(props.article)}>
-    <div
-      className={`flex flex-row cursor-pointer bg-emmaus/20 hover:bg-emmaus/5 rounded-lg p-2 gap-3`}>
-      <div className="w-32 aspect-square flex-shrink-0 rounded-lg"
-           style={!props.article ? {} : {
-             backgroundImage: `url(${getCockpitResourceUrl(props.article.preview_image.path)})`,
-             backgroundSize: 'cover',
-             backgroundPosition: '50% 50%'
-           }}/>
-      <div className="flex flex-col justify-center overflow-hidden">
-        <div className="line-clamp-3 font-semibold text-lg">{props.article?.title}</div>
-      </div>
-    </div>
-  </Link>;
-}
 
 export default function EmmausSections(props: {
-  items: Collections['article'][],
   sites: Collections['site'][],
   emmausbote: Collections['Emmausbote'][]
 }) {
   const paper = props.emmausbote.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
   return <div className="flex flex-col">
-    <div className="py-6"><Responsive>
-      <SectionHeader>Artikel</SectionHeader>
-      <div className="grid md:grid-cols-3 gap-4">
-        <div><ArticleCard article={props.items[0]}/></div>
-        <div><ArticleCard article={props.items[1]}/></div>
-        <div>
-          <ArticleCard article={props.items[2]}/>
-          <Link href={Links.Artikel()}>
-            <div
-              className="p-4 mt-4 rounded bg-emmaus/20 hover:bg-emmaus/10 font-bold text-lg cursor-pointer">Alle
-              Beiträge
-            </div>
-          </Link>
-        </div>
-      </div>
-    </Responsive>
-    </div>
-
     <div className="bg-emmaus/5 py-6" id="ueber-uns"><Responsive>
       <SectionHeader>Über uns</SectionHeader>
       <div className="grid lg:grid-cols-2 gap-4">
@@ -114,4 +79,37 @@ export default function EmmausSections(props: {
       </div>
     </Responsive></div>
   </div>;
+}
+
+export function Articles(props: {
+  items: Collections['article'][], }) {
+  return <div>
+    <SectionHeader>Artikel</SectionHeader>
+    <div className="grid gap-4">
+      <ArticleCard article={props.items[0]}/>
+      <ArticleCard article={props.items[1]}/>
+      <div className="flex justify-end">
+        <Link href={Links.Artikel()}><Button label="Alle Beiträge"/></Link>
+      </div>
+    </div>
+  </div>;
+}
+
+function ArticleCard(props: { article?: Collections['article'] }) {
+  const readTime = Math.ceil((props.article?.layout.map(x => x.settings.text).join("").split(" ").length ?? 600) / 200);
+  return <Link href={getArticleLink(props.article)}>
+    <div
+      className={`flex flex-row cursor-pointer border border-black/20 rounded-xl p-2 gap-5`}>
+      <div className="w-32 aspect-square flex-shrink-0 rounded-lg"
+           style={!props.article ? {} : {
+             backgroundImage: `url(${getCockpitResourceUrl(props.article.preview_image.path)})`,
+             backgroundSize: 'cover',
+             backgroundPosition: '50% 50%'
+           }}/>
+      <div className="flex flex-col justify-center items-start gap-2">
+        <div className="font-semibold text-xl line-clamp-3">{props.article?.title}</div>
+        <div className="bg-black/5 px-1 text-sm rounded">{readTime}min Lesezeit</div>
+      </div>
+    </div>
+  </Link>;
 }
