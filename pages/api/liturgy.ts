@@ -3,6 +3,7 @@ import {XMLParser} from "fast-xml-parser";
 import {Cockpit} from "@/util/cockpit";
 import {Permission} from "@/domain/users/Permission";
 import {resolveUserFromRequest} from "@/domain/users/UserResolver";
+import {unstable_cache} from "next/cache";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
@@ -12,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  res.json(await getLiturgyData());
+  res.json(await loadCachedLiturgyData());
 
 }
 export type LiturgyData = Record<string, Liturgy[]>;
@@ -41,19 +42,26 @@ async function fetchLiturgyData(): Promise<LiturgyData>{
       , []).map(({date, liturgies}: any) => [date, liturgies]));
 }
 
-export async function getLiturgyData(): Promise<LiturgyData>{
-
+async function loadAndSaveLiturgyData(): Promise<LiturgyData>{
   const liturgyCache = (await Cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
-  //await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
-
+  const merged = fetchLiturgyData()
+  await Cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
   return liturgyCache.data;
 
 }
 
-export async function getLiturgyDataTill(until: Date): Promise<LiturgyData>{
-  return getLiturgyData().then(data => Object.fromEntries(Object.entries(data).filter(([date]) =>
-      new Date(date).getTime() > new Date().getTime() - 1000*3600*24
-      && new Date(date) < until))) ;
+export async function loadCachedLiturgyData(): Promise<LiturgyData> {
+  const key = new Date().toISOString().substring(0, 7)
+  return unstable_cache(() => {
+      const until = new Date(new Date().getTime() + 1000 * 3600 * 24 * 180);
+      const today = new Date(new Date().getTime() - 1000 * 3600 * 24);
+      return loadAndSaveLiturgyData()
+        .then(data => Object.fromEntries(Object.entries(data)
+          .filter(([date]) => new Date(date) > today && new Date(date) < until)
+        ));
+    },
+    [key], {revalidate: 3600 * 24 * 10}
+  )();
 
 }
 
