@@ -15,7 +15,8 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
   const today = new Date().toISOString().substring(0, 10);
   const tomorrow = new Date(new Date().getTime() + 3_600_000 * 24).toISOString().substring(0, 10);
   const eventsByDate = groupEventsByDate(props.eventsObject.events);
-  const date = eventsByDate[today].some(event =>
+
+  const date = eventsByDate[today]?.some(event =>
     new Date(`${event.date} ${event.time}`) > new Date()
   ) ? today : tomorrow;
   const events = eventsByDate[date]
