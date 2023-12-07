@@ -45,7 +45,7 @@ async function fetchLiturgyData(): Promise<LiturgyData>{
 
 async function loadAndSaveLiturgyData(): Promise<LiturgyData>{
   const liturgyCache = (await Cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
-  const merged = fetchLiturgyData()
+  const merged = {};// fetchLiturgyData()
   await Cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
   return liturgyCache.data;
 
