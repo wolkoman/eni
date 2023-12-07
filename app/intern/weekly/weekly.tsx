@@ -32,7 +32,7 @@ export function WeeklyPage() {
         return `${pad(date.getHours())}:${pad(date.getMinutes())}`
     }
 
-    function toCalEevent(event: CalendarEvent) {
+    function toCalEvent(event: CalendarEvent) {
         const special = event.groups.includes(CalendarGroup.Messe);
         const isDescription = event.description.toString().trim().length > 0;
         const description = `\n${sanitize(event.description.replaceAll("<br/>", "\n").trim(), {allowedTags: []})}`
@@ -64,9 +64,9 @@ export function WeeklyPage() {
                     return ({
                         sundaydate: day === 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
                         date: day !== 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
-                        emmaus: events.filter(event => event.calendar === 'emmaus').map(toCalEevent),
-                        inzersdorf: events.filter(event => event.calendar === 'inzersdorf').map(toCalEevent),
-                        neustift: events.filter(event => event.calendar === 'neustift').map(toCalEevent),
+                        emmaus: events.filter(event => event.calendar === 'emmaus').map(toCalEvent),
+                        inzersdorf: events.filter(event => event.calendar === 'inzersdorf').map(toCalEvent),
+                        neustift: events.filter(event => event.calendar === 'neustift').map(toCalEvent),
                     });
                 }),
         };
@@ -74,7 +74,7 @@ export function WeeklyPage() {
         const handler = new TemplateHandler();
         const doc = await handler.process(templateFile, wordData as any);
 
-        saveFile('wochenmitteilung.docx', doc);
+        saveFile(`ENI_Wochenmitteilungen_KW${week.toString().padStart(2,'0')}-${year}.docx`, doc);
     }
 
 

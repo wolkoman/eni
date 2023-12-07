@@ -6,6 +6,7 @@ module.exports = {
         })
         return config
     },
+    swcMinify: false,
     async redirects() {
         return [
             {
