@@ -41,6 +41,7 @@ async function fetchLiturgyData(): Promise<LiturgyData>{
       , []).map(({date, liturgies}: any) => [date, liturgies]));
 }
 
+
 export async function getLiturgyData(): Promise<LiturgyData>{
 
   const liturgyCache = (await Cockpit.collectionGet("internal-data", {filter: {id: 'liturgy'}})).entries[0];
