@@ -9,6 +9,7 @@ import {ReaderData} from "@/domain/service/Service";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
+
     const user = resolveUserFromRequest(req);
 
     if (user === undefined || (!user.permissions[Permission.ReaderPlanning] && !user.permissions[Permission.Reader] && !user.permissions[Permission.CommunionMinister])) {
