@@ -48,7 +48,6 @@ export async function getLiturgyData(): Promise<LiturgyData>{
   //await cockpit.collectionSave("internal-data", {...liturgyCache, data: {...liturgyCache.data, ...merged}});
 
   return liturgyCache.data;
-
 }
 
 export async function getLiturgyDataTill(until: Date): Promise<LiturgyData>{
