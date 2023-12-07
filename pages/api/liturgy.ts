@@ -4,6 +4,7 @@ import {Cockpit} from "@/util/cockpit";
 import {Permission} from "@/domain/users/Permission";
 import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 import {unstable_cache} from "next/cache";
+import {notifyAdmin} from "@/app/(shared)/Telegram";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
@@ -52,15 +53,18 @@ async function loadAndSaveLiturgyData(): Promise<LiturgyData>{
 
 export async function loadCachedLiturgyData(): Promise<LiturgyData> {
   const key = new Date().toISOString().substring(0, 7)
-  return unstable_cache(() => {
-      const until = new Date(new Date().getTime() + 1000 * 3600 * 24 * 180);
-      const today = new Date(new Date().getTime() - 1000 * 3600 * 24);
-      return loadAndSaveLiturgyData()
-        .then(data => Object.fromEntries(Object.entries(data)
-          .filter(([date]) => new Date(date) > today && new Date(date) < until)
-        ));
-    },
-    [key], {revalidate: 3600 * 24 * 10}
+  return unstable_cache(async () => {
+        const until = new Date(new Date().getTime() + 1000 * 3600 * 24 * 180);
+        const today = new Date(new Date().getTime() - 1000 * 3600 * 24);
+        let data = await loadAndSaveLiturgyData().catch(async () => {
+          await notifyAdmin("loading liturgy data failed "+JSON.stringify({key, today: today.getTime()}));
+          return {};
+        });
+        return Object.fromEntries(Object.entries(data)
+            .filter(([date]) => new Date(date) > today && new Date(date) < until)
+        );
+      },
+    [`liturgy-${key}`], {revalidate: 3600 * 24 * 10}
   )();
 
 }
