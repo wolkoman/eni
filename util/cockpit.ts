@@ -9,7 +9,7 @@ export const Cockpit = {
         ReaderData: "637b85bc376231d51500018d",
         InstagramCache: "64956068666237420d000118"
     },
-    "collectionGet": <T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> => {
+    collectionGet<T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> {
         console.log(`GET ${collectionName} ${JSON.stringify(props)}`)
         return cockpit.collectionGet(collectionName, props)
             .catch(async () => {
@@ -34,7 +34,7 @@ export const Cockpit = {
     },
     collectionSave<T extends keyof Collections>(collectionName: T, object: Partial<Collections[T]>): Promise<Collections[T]> {
         console.log(`SAVE ${collectionName} `)
-        revalidateTag(`cockpit-${collectionName}`)
+        //revalidateTag(`cockpit-${collectionName}`)
         return cockpit.collectionSave(collectionName, object)
             .catch(async () => {
                 await notifyAdmin("Cockpit cacheSave " + collectionName + "failed " + JSON.stringify(object));
