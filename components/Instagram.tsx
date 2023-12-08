@@ -56,7 +56,7 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
 
   return feed.length === 0 ? <></> : <div className="my-8">
     <SectionHeader id="einblick">Einblick ins Pfarrleben</SectionHeader>
-    <div className="grid gap-8">
+    <div className="grid gap-8" id="instagram-items">
       {feed.map((item, index) =>
         <InstagramItem key={index} item={item}/>)}
     </div>
