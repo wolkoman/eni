@@ -6,7 +6,6 @@ import {CalendarEvent, CalendarTag} from "../../(domain)/events/EventMapper";
 import {CalendarGroup} from "../../(domain)/events/CalendarGroup";
 import sanitize from "sanitize-html";
 import {getWeekDayName} from "../../../components/calendar/Calendar";
-import {TemplateHandler} from "easy-template-x";
 import Site from "../../../components/Site";
 import Button from "../../../components/Button";
 import {useState} from "../../(shared)/use-state-util";
@@ -70,11 +69,12 @@ export function WeeklyPage() {
                     });
                 }),
         };
-
+        /*
         const handler = new TemplateHandler();
         const doc = await handler.process(templateFile, wordData as any);
 
         saveFile(`ENI_Wochenmitteilungen_KW${week.toString().padStart(2,'0')}-${year}.docx`, doc);
+        */
     }
 
 
