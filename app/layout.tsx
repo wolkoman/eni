@@ -3,6 +3,7 @@ import {Toasts} from "./ToastContainer";
 import {Metadata} from 'next'
 import {site} from "./(shared)/Instance";
 import {ReactNode} from "react";
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
   title: site("eni.wien", "Pfarre Emmaus"),
@@ -22,6 +23,7 @@ export default function RootLayout({children,}: { children: ReactNode }) {
     </head>
     <body>
     {children}
+    <Analytics/>
     <Toasts/>
     </body>
     </html>
