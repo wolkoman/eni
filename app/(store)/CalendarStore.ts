@@ -6,6 +6,8 @@ import {combine} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {loadEventsFromServer} from "@/domain/events/EventsLoader";
 import {createLoadedStore} from "@/store/CreateLoadedStore";
+import {userStore} from "@/store/UserStore";
+import {Permission} from "@/domain/users/Permission";
 
 export const useCalendarStore = createLoadedStore(createStore(combine({
     items: [] as CalendarEvent[],
@@ -21,6 +23,9 @@ export const useCalendarStore = createLoadedStore(createStore(combine({
     load: () => {
         if (get().loading) return;
         if (get().loaded) return;
+        userStore.getState().load()
+        const user = userStore.getState().user;
+        if(!user?.permissions[Permission.PrivateCalendarAccess]) return;
         set(state => ({...state, loading: true}));
         loadEventsFromServer(true)
             .then(data => {

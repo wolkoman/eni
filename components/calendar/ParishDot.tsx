@@ -9,7 +9,7 @@ export function ParishDot({info, small, ...props}: { info: CalendarInfo, small?:
                 {!small && <div
                     className={info.className + " pt-0.5 grow text-sm -ml-3 -mt-1 pl-3 h-6 rounded-r-full font-bold"}>{props.custom ?? info.tagName}</div>}
             </div>
-            {props.private && <div className={info.borderColor + " text-xs border-2 pt-1.5 -mt-2 z-[-1] rounded-b-lg"}>Vertraulich</div>}
+            {props.private && <div className={info.borderColor + " text-xs border-2 pt-1.5 -mt-2 z-[-1] rounded-b-lg"} data-testid="private-tag">Vertraulich</div>}
         </div>
     </Tooltip>;
 }
