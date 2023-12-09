@@ -12,7 +12,7 @@ function decodeJwt(jwt: string): { user: User, exp: number } {
     return {user: payload as User, exp: payload.exp!};
 }
 
-export const useUserStore = createLoadedStore(createStore(combine({
+export const userStore = createStore(combine({
     user: null as User | null,
     loaded: false,
     loading: false,
@@ -44,7 +44,11 @@ export const useUserStore = createLoadedStore(createStore(combine({
         if (get().loaded) return;
         set({loaded: true});
         const jwt = getCookie('jwt');
-        if (typeof jwt !== "string") return;
-        set({user: decodeJwt(jwt).user, loaded: true});
+        if (typeof jwt !== "string") return undefined;
+        const user = decodeJwt(jwt).user;
+        console.log("userload", user)
+        set({user, loaded: true});
+        return user;
     }
-}))));
+})));
+export const useUserStore = createLoadedStore(userStore);
