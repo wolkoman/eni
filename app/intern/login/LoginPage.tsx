@@ -8,6 +8,7 @@ import {useState} from '../../(shared)/use-state-util';
 import {useRouter, useSearchParams} from 'next/navigation';
 import {useUserStore} from "../../(store)/UserStore";
 import {Links} from "../../(shared)/Links";
+import Link from "next/link";
 
 export function LoginPage() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
@@ -48,7 +49,7 @@ export function LoginPage() {
         <div
           className="w-full h-screen relative flex flex-col justify-center items-center ">
             <div
-              className={`z-10 bg-white shadow-lg  border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
+              className={`z-10 bg-white shadow border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
                     <div className="font-bold text-2xl mb-5">eni.wien</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
@@ -69,6 +70,9 @@ export function LoginPage() {
                     </div>
                 </div>
             </div>
+            <Link href={Links.Status}>
+                <img src="https://api.checklyhq.com/v1/badges/groups/699811?style=for-the-badge&theme=light" alt="Status badge" className="mt-8 bg-white shadow rounded"/>
+            </Link>
         </div>
     </Site>;
 }
