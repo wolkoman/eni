@@ -16,6 +16,7 @@ import {AnnouncementsEntries} from "./AnnouncementsEntries";
 import {WeeklyUpload} from "./WeeklyUpload";
 import {WeeklySend} from "./WeeklySend";
 import {groupEventsByDate} from "../../(domain)/events/CalendarGrouper";
+import {TemplateHandler} from "easy-template-x";
 
 export function WeeklyPage() {
     usePermission([Permission.Admin]);
@@ -69,12 +70,10 @@ export function WeeklyPage() {
                     });
                 }),
         };
-        /*
         const handler = new TemplateHandler();
         const doc = await handler.process(templateFile, wordData as any);
 
-        saveFile(`ENI_Wochenmitteilungen_KW${week.toString().padStart(2,'0')}-${year}.docx`, doc);
-        */
+        saveFile(`ENI_Wochenmitteilungen_KW${week.toString().padStart(2,'0')}-${data.end.getFullYear()}.docx`, doc);
     }
 
 

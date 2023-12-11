@@ -24,9 +24,15 @@ export function WeeklySend() {
 
     return <>
         <div className="text-3xl font-bold my-4 mt-10">Senden</div>
+        <div className="relative">
         <textarea onChange={({target}) => setMessage(target.value)} value={message}
-                  className="block my-4 border border-black/30 px-2 py-1 rounded outline-none w-full h-48"/>
-        <Button label="Senden" sure={true} disabled={state !== 'idle'} onClick={load}/>
+                  className="block my-4 border border-black/20 p-3 rounded-lg outline-none w-full h-52"
+        >
+        </textarea>
+        <div className="absolute right-4 bottom-4 z-10">
+            <Button label="Senden" sure={true} disabled={state !== 'idle'} onClick={load}/>
+        </div>
+        </div>
         {state === 'success' && <div className="my-4 bg-black/5 p-4 rounded-lg">
             Die Mails wurden gesendet!
         </div>}
