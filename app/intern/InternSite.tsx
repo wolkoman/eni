@@ -22,9 +22,8 @@ export function InternButton({href, label, onClick, children}: {
 }
 
 export function InternPage() {
-  const user = useUserStore(state => state.user);
+  const [user, logout] = useUserStore(state => [state.user, state.logout]);
   const permissions = user?.permissions;
-  const [logout] = useUserStore(state => [state.logout]);
   usePermission([]);
   return <Site title="Mitgliedsbereich">
     <div className="text-4xl my-8 font-semibold">Hallo {user?.name?.split(' ')?.[0] ?? '😃'}!</div>
@@ -50,18 +49,16 @@ export function InternPage() {
         {permissions?.[Permission.OrganBooking] && <InternButton href={Links.Orgel} label="Orgel Buchung"/>}
       </Section>
       }
-      {permissions?.[Permission.PrivateDocumentAccess] &&
-          <Section title="Kanzlei" picture="icons/icon_office.svg">
-              <InternButton href={Links.Scans} label="Gescannte Dokumente"/>
-          </Section>
-      }
       <Section title="Einstellungen" picture="icons/icon_settings.svg">
-        <InternButton href={Links.Feedback} label="Feedback"/>
         {user?.is_person && <InternButton href={Links.PasswortÄndern} label="Passwort ändern"/>}
         {user && !user?.is_person && <InternButton href={Links.Cockpit} label="Cockpit"/>}
         <InternButton onClick={logout} label="Logout"/>
       </Section>
     </div>
+
+    <Link href={Links.Status}>
+      <img src="https://api.checklyhq.com/v1/badges/groups/699811?style=for-the-badge&theme=light" alt="Status badge" className="border-black/20 border mt-8 bg-white rounded-lg"/>
+    </Link>
   </Site>
 }
 
