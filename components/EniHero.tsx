@@ -6,7 +6,7 @@ import {motion} from "framer-motion";
 export function EniHero() {
 
   return <Responsive>
-    <div  className="bg-[#193765] rounded-2xl xl:-mx-20 flex flex-col lg:flex-row justify-between items-end text-white relative overflow-hidden">
+    <div  className="bg-[#193765] rounded-2xl xl:-mx-20 flex flex-col lg:flex-row justify-between items-end text-white relative overflow-hidden shadow-[0_5px_10px_10px_#19376555]">
       {Array.from({length: 20}).map((_, index) => {
         const rand = ((index*17 * 16807 % 2147483647) % 1000) / 10;
         const rand2 = (((index*9) * 16807 % 2147483647) % 1000) / 10;
@@ -26,17 +26,6 @@ export function EniHero() {
           </svg>
         </motion.div>;
       })}
-
-      <svg width="215" height="88" viewBox="0 0 215 88" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-1/4 -translate-y-1/2 right-1/4">
-        <path d="M172.271 3.55231L182.651 27.1472L208.299 24.5662L189.066 41.7296L199.447 65.3244L177.18 52.3372L157.948 69.5006L163.419 44.3106L141.152 31.3233L166.8 28.7423L172.271 3.55231Z" fill="#F4AC11"/>
-        <path d="M175.49 38.8867C129.324 31.422 31.6268 44.3394 12.1967 80.9688" stroke="url(#paint0_linear_1120_357)" stroke-width="26.7769"/>
-        <defs>
-          <linearGradient id="paint0_linear_1120_357" x1="171.127" y1="38.9891" x2="20.2504" y2="71.113" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#F4AC11"/>
-            <stop offset="1" stop-color="#F4AC11" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-      </svg>
 
       <div className="flex flex-col p-10 lg:p-16  gap-4">
           <div className=" text-2xl">Miteinander der Pfarren</div>
