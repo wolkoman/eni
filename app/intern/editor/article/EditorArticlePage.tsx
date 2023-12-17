@@ -1,6 +1,6 @@
 "use client"
 import {Collections} from 'cockpit-sdk';
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Site from '../../../../components/Site';
 import {useSearchParams} from "next/navigation";
 import {useBeforeunload} from "react-beforeunload";
@@ -8,62 +8,19 @@ import {toast} from "react-toastify";
 import Button from "../../../../components/Button";
 import Responsive from "../../../../components/Responsive";
 import {Hamburger} from "../../../../components/Hamburger";
-import {AnimatePresence, motion} from 'framer-motion';
-import {SelfServiceFile, SelfServiceFileUpload} from "../../../../components/SelfService";
-import Link from "next/link";
-import {Cockpit} from "../../../../util/cockpit";
+import {AnimatePresence} from 'framer-motion';
 import {useUserStore} from "../../../(store)/UserStore";
 import {Permission} from "../../../(domain)/users/Permission";
 import {saveFile} from "../../../(shared)/BrowserBlobSaver";
 import {fetchJson} from "../../../(shared)/FetchJson";
 import {Links} from "../../../(shared)/Links";
+import {WelcomeScreen} from "./WelcomeScreen";
+import {MoreOptions} from "./MoreOptions";
+import {MediaModal} from "./MediaModal";
+import {Modal} from "./Modal";
 
-
-function Welcome(props: { article: any, project: any }) {
-    return <div className="py-12 max-w-lg mx-auto">
-        <div className="font-bold text-5xl mb-4">Schreibmaske</div>
-        <div className="text-xl">Artikel: <span
-            className="bg-white px-2 py-1">{props.article.name}</span></div>
-        <div className="text-xl">Autor:in: <span
-            className="bg-white px-2 py-1">{props.article.author}</span></div>
-        <div className="text-xl">Zeichen: <span
-            className="bg-white px-2 py-1">{props.article.char_min}-{props.article.char_max} Zeichen</span>
-        </div>
-        <div className="text-xl">Redaktionsschluss: <span
-            className="bg-white px-2 py-1">{new Date(props.project.deadline).toLocaleDateString()}</span>
-        </div>
-    </div>;
-}
 
 export function EditorArticlePage(props: { article: Collections['paper_articles'], project: Collections['paper_projects'], versions: Collections['paper_texts'][] }) {
-
-    function MoreOptions(cprops: { editable: any, onSave: () => Promise<void>, saved: "saving" | "saved" | "justnow" | "error", permission: boolean, status: Collections['paper_articles']['status'], disabled: boolean, onSaveStatusChange: (status: Collections['paper_articles']['status']) => any, onFinish: () => void }) {
-        return <div className="flex gap-2 text-black/80">
-            {cprops.editable && <Button
-                label={<img src="/logo/icon_save.svg" className="w-5 mt-0.5"/>}
-                onClick={cprops.onSave}
-                disabled={cprops.saved === "saving" || cprops.saved === "saved"}/>
-            }
-            {cprops.editable && <Button
-                label={<img src="/logo/icon_media.svg" className="w-5 mt-0.5"/>}
-                onClick={() => setMediaModalOpen(true)}/>
-            }
-            {cprops.permission ? <>
-                <Link href={Links.ProjektplattformVersion(props.article._id)} target="_blank">
-                    <Button label={<img src="/logo/icon_versions.svg" className="w-5 mt-0.5"/>}/>
-                </Link>
-                <select
-                    className="px-3 py-1 bg-black/5 rounded-lg cursor-pointer"
-                    value={cprops.status} disabled={cprops.disabled}
-                    onChange={event => cprops.onSaveStatusChange(event.target?.value as any)}>
-                    <option value="writing">In Arbeit</option>
-                    <option value="written">Geschrieben</option>
-                    <option value="corrected">Lektoriert</option>
-                    <option value="finished">Fertiggestellt</option>
-                </select></> : cprops.editable && <Button label="Abgeben" onClick={cprops.onFinish}/>}
-        </div>;
-    }
-
 
     const [article, setArticle] = useState(props.article);
     const user = useUserStore(state => state.user);
@@ -145,7 +102,7 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
     function finish() {
         return save()
             .then(() => saveStatus('written'))
-            .then(() => window.location.reload())
+            .then(() => (window as any).location.reload())
             .catch(() => toast.error("Abgabe war nicht erfolgreich"));
     }
 
@@ -176,7 +133,7 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
         <div className="flex flex-col h-screen">
             <div className="p-4">
                 <Responsive>
-                    {length === 0 ? <Welcome article={article} project={props.project}/> :
+                    {length === 0 ? <WelcomeScreen article={article} project={props.project}/> :
                         <div className="flex justify-between">
                             <div>
                                 <div className="flex flex-row text-black/80">
@@ -201,22 +158,29 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
                                 </div>
                                 <div className="hidden md:flex">
                                     <MoreOptions
+                                      articleId={article._id}
                                         editable={editable} onSave={saveAndDownload} saved={saved}
                                         permission={permission} status={status} disabled={statusLoading}
                                         onSaveStatusChange={saveStatus}
                                         onFinish={() => setFinishModalOpen(true)}
+                                        openMediaModel={() => setMediaModalOpen(true)}
                                     />
                                 </div>
                             </div>
                         </div>}
                 </Responsive>
             </div>
-            <div className="h-full "><Responsive className="h-full relative">
+            <div className="h-full ">
+                <Responsive className="h-full relative">
                 {mobilMenuOpen &&
                     <div className="bg-gray-200 absolute top-0 left-0 w-full p-4 md:hidden flex justify-center z-10">
-                        <MoreOptions editable={editable} onSave={saveAndDownload} saved={saved} permission={permission}
-                                     status={status} disabled={statusLoading} onSaveStatusChange={saveStatus}
-                                     onFinish={() => setFinishModalOpen(true)}/>
+                        <MoreOptions
+                          articleId={article._id}
+                          editable={editable} onSave={saveAndDownload} saved={saved} permission={permission}
+                         status={status} disabled={statusLoading} onSaveStatusChange={saveStatus}
+                         onFinish={() => setFinishModalOpen(true)}
+                         openMediaModel={() => setMediaModalOpen(true)}
+                        />
                     </div>}
                 <textarea
                     readOnly={!editable}
@@ -225,7 +189,7 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
                         perfect: `border-2 border-green-700`,
                         excess: 'border-2 border-red-600',
                     }[note]}`}
-                    onChange={e => setText(e.target!.value)} defaultValue={props.versions[0]?.text ?? ''}>
+                    onChange={(e:any) => setText(e.target.value)} defaultValue={props.versions[0]?.text ?? ''}>
             </textarea></Responsive></div>
             <div className={`py-2 px-4 transition-all ${{
                 unfinished: ``,
@@ -243,57 +207,6 @@ export function EditorArticlePage(props: { article: Collections['paper_articles'
             </Responsive></div>
         </div>
     </Site>
-}
-
-function Modal(props: { children: ReactNode, title?: string }) {
-    return <div
-        className="absolute inset-0 w-screen h-screen flex items-center justify-center z-20">
-        <motion.div
-            className="absolute inset-0 bg-black/40"
-            initial={{opacity: 0}}
-            exit={{opacity: 0}}
-            animate={{opacity: 1}}
-        />
-        <motion.div
-            className="relative bg-white rounded-lg shadow-lg text-center p-8"
-            initial={{opacity: 0, scale: 0.2}}
-            exit={{opacity: 0, scale: 0.2}}
-            animate={{opacity: 1, scale: 1}}>
-            {props.title && <div className="font-bold mb-2">{props.title}</div>}
-            <div>{props.children}</div>
-        </motion.div>
-    </div>
-}
-
-function MediaModal(props: { close: (files: string[]) => void, files: string[], articleId: string }) {
-    const mediaModalForm = useState({files: props.files.map((file, index) => ({
-            result: file,
-            finished: true,
-            name: file.split("/").reverse()[0].substring(14),
-            id: file,
-            index
-        })) as SelfServiceFile[]});
-    const [saving, setSaving] = useState(false);
-    const uploading = mediaModalForm[0].files.some(file => !file.finished);
-
-    function closes() {
-        setSaving(true);
-        const files = mediaModalForm[0].files.map(({result}) => result);
-        toast.promise(fetchJson(Links.ApiEditorSaveMedia + props.articleId, {json: files}), {
-            pending: "Speichere Medien..",
-            success: "Medien gespeichert",
-            error: "Fehler beim Speichern"
-        })
-            .then(() => props.close(files));
-    }
-
-    return <Modal>
-        <div className="flex flex-col gap-2 max-w-screen w-80">
-            <SelfServiceFileUpload name="files" form={mediaModalForm}/>
-            <Button label="Schließen" secondary={true} onClick={closes}
-                    disabled={uploading || saving}/>
-        </div>
-    </Modal>;
 }
 
 
