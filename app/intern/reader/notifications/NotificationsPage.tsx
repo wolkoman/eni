@@ -20,8 +20,7 @@ import {Links} from "../../../(shared)/Links";
 
 export default function NotificationsPage() {
 
-  const events = useCalendarStore(state => state.items);
-  const {readers, readerData, setReaderData, ...reader} = useReaderStore(state => state);
+  const {readers, readerData, setReaderData, events, ...reader} = useReaderStore(state => state);
 
   const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!)
     .filter(task => new Date(task.event?.date) > new Date());

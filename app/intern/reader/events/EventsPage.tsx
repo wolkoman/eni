@@ -18,8 +18,7 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
 
     const [currentEvent, setCurrentEvent] = useState("");
     const [showOnlySpecial, setShowOnlySpecial] = useState(true);
-    const events = useCalendarStore(state => state.items);
-    const {readers, communionMinisters, readerData, setReaderData, ...reader} = useReaderStore(state => state);
+    const {readers, communionMinisters, readerData, setReaderData, events, ...reader} = useReaderStore(state => state);
 
     async function selectLiturgy(eventId: string, liturgy: string) {
         const date = events.find(event => event.id === eventId)!.date;
