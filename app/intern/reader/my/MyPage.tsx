@@ -19,8 +19,7 @@ export function compareLiturgy(a: Liturgy, b: Liturgy) {
 
 export function MyPage(props: { liturgy: LiturgyData }) {
 
-    const {readers, readerData, setReaderData,  ...reader} = useReaderStore(state => state);
-    const events = useCalendarStore(state => state.items);
+    const {readers, readerData, setReaderData, events,  ...reader} = useReaderStore(state => state);
     const [user] = useUserStore(state => [state.user]);
     const myTasks = getTasksFromReaderData(readerData, eventId => events.find(e => e.id === eventId)!)
         .filter(task => task.data.userId === user?._id && task.event.calendar === reader.parish)
