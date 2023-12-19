@@ -18,8 +18,7 @@ export function PrayerWall() {
 
   return <Section title="Gebetswand" id="gebetswand">
     <div>
-      Schreiben Sie Ihr Anliegen an die virtuelle Gebetswand, dass auch andere dafür beten können (30 Tage
-      öffentlich sichtbar).
+      Schreiben Sie Ihr Anliegen an die virtuelle Gebetswand, dass auch andere dafür beten können.
       Oder beten Sie für ein Anliegen der Gemeinde.
     </div>
     <div className="">

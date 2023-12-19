@@ -20,7 +20,8 @@ export async function prayedFor(id: string) {
 
 
 export async function fetchPrayers() {
-  return await Cockpit.collectionGet("prayers", {filter: {blocked: false}}).then(e => e.entries)
+  return await Cockpit.collectionGet("prayers", {filter: {blocked: false}, sort: {_created: -1}})
+      .then(e => e.entries.filter((prayer, index) => index < 4 || (new Date().getTime() - new Date(prayer._created * 1000).getTime()) < 3600*1000*24*14))
 }
 
 export async function fetchPrayer(id: string) {
