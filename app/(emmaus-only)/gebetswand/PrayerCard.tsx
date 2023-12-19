@@ -9,7 +9,7 @@ export function PrayerCard(props: { prayer: Collections['prayers'] }) {
         <div className="flex justify-between gap-1 text-sm py-2">
           {props.prayer.name && <div className="">Von {props.prayer.name}</div>}
         </div>
-        <div className="text-emmaus font-bold text-lg leading-6 line-clamp-3 grow">„{props.prayer.concern}“</div>
+        <div className="text-emmaus font-bold font-serif text-lg leading-6 line-clamp-3 grow">„{props.prayer.concern}“</div>
         <div className="flex justify-between gap-1 text-sm py-2">
           <div className="">{+props.prayer.prayedCount > 0 && <>Es wurde {props.prayer.prayedCount} Mal für dieses
               Anliegen gebetet.</>}</div>

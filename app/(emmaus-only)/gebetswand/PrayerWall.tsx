@@ -14,7 +14,7 @@ export function PrayerWall() {
 
   useEffect(() => {
     fetchPrayers().then(setPrayers)
-  })
+  }, [])
 
   return <Section title="Gebetswand" id="gebetswand">
     <div>
