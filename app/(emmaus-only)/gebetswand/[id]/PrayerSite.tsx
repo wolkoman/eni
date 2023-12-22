@@ -26,7 +26,7 @@ export function PrayerSite(props: {
   return <div className="relative">
     {loading && <ThanksSplash/>}
     <DisplayField label="Anliegen">
-      {props.prayer.concern}
+      <div className="font-serif text-xl bg-black/5 rounded-lg p-4">{props.prayer.concern}</div>
     </DisplayField>
     {props.prayer.name && <DisplayField label="Von">
       {props.prayer.name}
@@ -35,7 +35,7 @@ export function PrayerSite(props: {
         {props.prayer.prayedCount} Mal
     </DisplayField>
     <DisplayField label="Gebetsvorschlag">
-      <div className="bg-black/5 rounded-lg p-4 whitespace-pre-wrap">
+      <div className="whitespace-pre-wrap font-serif bg-black/5 rounded-lg p-4">
         {props.prayer.suggestion}
       </div>
     </DisplayField>

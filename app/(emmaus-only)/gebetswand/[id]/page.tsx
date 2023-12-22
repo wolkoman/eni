@@ -4,6 +4,8 @@ import {SectionHeader} from "../../../../components/SectionHeader";
 import {PrayerSite} from "./PrayerSite";
 import {Metadata} from 'next'
 
+export const revalidate = 60;
+
 export async function generateMetadata({params}: any): Promise<Metadata> {
   const prayer = await fetchPrayer(params.id)
   return {
