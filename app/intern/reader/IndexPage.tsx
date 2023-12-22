@@ -24,22 +24,22 @@ export function ReaderSite(props: { children?: ReactNode }) {
                     className="flex lg:flex-col h-20 lg:h-auto lg:w-20 p-4 gap-2 bg-black/5 rounded-r-xl grow-0 lg:sticky top-0">
                     {belongsTo(CalendarName.EMMAUS) && <img src="/dot/edot.svg"
                          onClick={() => setParish(CalendarName.EMMAUS)}
-                         className={`${parish === CalendarName.EMMAUS ? '' : inactive}`}/>}
+                         className={`w-12 ${parish === CalendarName.EMMAUS ? '' : inactive}`}/>}
                     {belongsTo(CalendarName.INZERSDORF) && <img src="/dot/idot.svg"
                          onClick={() => setParish(CalendarName.INZERSDORF)}
-                         className={`${parish === CalendarName.INZERSDORF ? '' : inactive}`}/>}
+                         className={`w-12 ${parish === CalendarName.INZERSDORF ? '' : inactive}`}/>}
                     {belongsTo(CalendarName.NEUSTIFT) && <img src="/dot/ndot.svg"
                              onClick={() => setParish(CalendarName.NEUSTIFT)}
-                             className={`${parish === CalendarName.NEUSTIFT ? '' : inactive}`}/>}
+                             className={`w-12 ${parish === CalendarName.NEUSTIFT ? '' : inactive}`}/>}
                     <Link href={Links.DiensteÜbersicht}>
-                        <img src="/logo/persons.svg" className="cursor-pointer"/>
+                        <img src="/logo/persons.svg" className="w-12 cursor-pointer"/>
                     </Link>
                     {user?.permissions[Permission.ReaderPlanning] && <>
                         <Link href={Links.DienstePlanung}>
-                            <img src="/logo/events.svg" className="cursor-pointer"/>
+                            <img src="/logo/events.svg" className="w-12 cursor-pointer"/>
                         </Link>
                         <Link href={Links.DiensteBenachrichtigung}>
-                            <img src="/logo/notifications.svg" className="cursor-pointer"/>
+                            <img src="/logo/notifications.svg" className="w-12 cursor-pointer"/>
                         </Link>
                     </>}
                 </div>

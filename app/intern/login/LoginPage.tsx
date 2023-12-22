@@ -65,7 +65,7 @@ export function LoginPage() {
                            }}
                     />
                     <div className={`${loading ? "animate-pulse" : ""} mt-4 w-full text-center grid`}>
-                        <Button className="" onClick={() => login()} label="Anmelden"
+                        <Button onClick={() => login()} label="Anmelden"
                                 disabled={buttonDisabled()}/>
                     </div>
                 </div>
