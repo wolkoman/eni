@@ -11,7 +11,7 @@ import {motion, PanInfo, useMotionValue} from 'framer-motion';
 
 export function ComingUp(props: { eventsObject: EventsObject }) {
   const [separateMass] = usePreferenceStore(Preference.SeparateMass);
-  const groups = useMemo(() => groupEventsByGroupAndDate(props, separateMass), [props, separateMass]);
+  const groups = useMemo(() => groupEventsByGroupAndDate(props.eventsObject.events, separateMass), [props, separateMass]);
   const urlPrefix = site('', 'https://eni.wien');
 
   const [page, setPage] = useState(0)

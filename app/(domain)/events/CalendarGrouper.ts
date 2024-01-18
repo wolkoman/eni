@@ -26,10 +26,8 @@ export function groupEventsByGroup(events: CalendarEvent[], separateMass: boolea
   }), {} as any)
 }
 
-export function groupEventsByGroupAndDate(props: {
-  eventsObject: EventsObject
-}, separateMass: boolean): [string, Record<string, CalendarEvent[]>][] {
-  return Object.entries(groupEventsByGroup(props.eventsObject.events, separateMass))
+export function groupEventsByGroupAndDate(events: CalendarEvent[], separateMass: boolean): [string, Record<string, CalendarEvent[]>][] {
+  return Object.entries(groupEventsByGroup(events, separateMass))
     .sort(([group1], [group2]) => getGroupSorting(group2 as CalendarGroup) - getGroupSorting(group1 as CalendarGroup))
     .map(([group, events]) => [group,
       groupEventsByDate([CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]

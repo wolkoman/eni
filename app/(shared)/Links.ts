@@ -8,6 +8,8 @@ export const Links = {
   Pfarrzeitschriften: "/#pfarrzeitschriften",
   Status: "https://status.eni.wien",
   Termine: "/termine", ApiCalendarSuggest: "/api/calendar/suggest", ApiEditorProjects: "/api/editor/projects",
+  WochenmitteilungenEditor: "/intern/weekly-editor",
+
   Wochenmitteilungen: (parish?: CalendarName) => `/wochenmitteilungen${parish ? `/${parish}` : ""}`,
   Artikel: (artikel?: string) =>  `/artikel${artikel ? `/${artikel}` : ""}`,
   Intern: "/intern",

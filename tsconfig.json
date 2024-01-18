@@ -13,8 +13,8 @@
     ],
     "target": "es2015",
     "lib": [
-      "dom",
-      "dom.iterable",
+      "DOM",
+      "DOM.iterable",
       "es2021"
     ],
     "allowJs": true,
@@ -37,6 +37,7 @@
     ]
   },
   "include": [
+    "app",
     "src",
     "pages",
     "components",

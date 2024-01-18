@@ -39,6 +39,7 @@ export function InternPage() {
         <InternButton href={Links.Wochenmitteilungen()} label="Ansehen"/>
         <InternButton href={Links.Ankündigung} label="Ankündigung erstellen"/>
         {permissions?.[Permission.Editor] && <InternButton href={Links.WochenmitteilungenErstellen} label="Erstellen"/>}
+        {permissions?.[Permission.Editor] && <InternButton href={Links.WochenmitteilungenEditor} label="Web Editor"/>}
       </Section>
       <Section title="Pfarrzeitschriften" picture="icons/icon_papers.svg">
         <InternButton href={Links.Pfarrzeitschriften} label="Ansehen"/>

@@ -40,6 +40,10 @@ export interface CalendarEvent {
   readerInfo: Partial<Record<ReaderRole, ReaderInfo>>
 }
 
+export function hidePrivateEventDetails(value: string | null | undefined) {
+  return value?.replace(/\[.*?]/g, '') ?? '';
+}
+
 export function mapEvent(calendarName: CalendarName, options: EventLoadOptions): (event?: calendar_v3.Schema$Event) => CalendarEvent | null {
   return (event): CalendarEvent | null => {
     if (!event) return null;
@@ -50,8 +54,8 @@ export function mapEvent(calendarName: CalendarName, options: EventLoadOptions):
     return {
       id: event.id ?? "",
       mainPerson,
-      summary: privateAccess ? summary : summary.replace(/\[.*?]/g, ''),
-      description: privateAccess ? event.description ?? '' : event.description?.replace(/\[.*?]/g, '') ?? '',
+      summary: privateAccess ? summary : hidePrivateEventDetails(summary),
+      description: privateAccess ? event.description ?? '' : hidePrivateEventDetails(event.description),
       date: (event.start?.date ?? event.start?.dateTime ?? '').substring(0, 10),
       start: event.start as { dateTime: string },
       time: event.start?.dateTime ? new Date(event.start.dateTime).toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"}).substring(0, 5) : null,

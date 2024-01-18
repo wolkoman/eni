@@ -2,7 +2,7 @@ import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction} from "react";
 import {EniLoading} from "./Loading";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
-type SSProps<S> = { name: keyof S, form: [S, Dispatch<SetStateAction<S>>] };
+type SSProps<S> = { name: keyof S, form: readonly [S, Dispatch<SetStateAction<S>>] };
 type SSType = Record<string, any>;
 
 export function Field(props: { children: ReactNode, label: string }) {
@@ -29,7 +29,6 @@ export function SelfServiceInput<S extends SSType>(props: { type?: string, input
         className={`bg-white rounded focus:border-black/50 text-lg font-bold ${props.disabled ? '' : 'px-3 py-1 border border-black/20'} outline-none w-full ${props.input === "textarea" && 'h-36'}`}
     />;
 }
-
 
 export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
     const value = props.form[0][props.name];

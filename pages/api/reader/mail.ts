@@ -3,7 +3,7 @@ import {getWeekDayName} from "../../../components/calendar/Calendar";
 import {LiturgyData} from "../liturgy";
 import {sign} from "jsonwebtoken";
 import {Cockpit} from "@/util/cockpit";
-import {CalendarTag} from "@/domain/events/EventMapper";
+import {CalendarTag, hidePrivateEventDetails} from "@/domain/events/EventMapper";
 import {loadEvents} from "@/domain/events/EventsLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {User} from "@/domain/users/User";
@@ -66,8 +66,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }))
                     .map(({task, date, reading}) => ({
                         date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}, ${date.toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"})}`,
-                        summary: task.event.summary?.replace(/\[.*?]/g, ''),
-                        description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')),
+                        summary: hidePrivateEventDetails(task.event.summary),
+                        description: task.event.tags.includes(CalendarTag.private) ? '' : hidePrivateEventDetails(task.event.description),
                         info: `${{
                             reading1: "1. Lesung",
                             reading2: "2. Lesung",
