@@ -3,7 +3,7 @@ import {getWeekDayName} from "../../../components/calendar/Calendar";
 import {LiturgyData} from "../liturgy";
 import {sign} from "jsonwebtoken";
 import {Cockpit} from "@/util/cockpit";
-import {CalendarTag, hidePrivateEventDetails} from "@/domain/events/EventMapper";
+import {CalendarTag} from "@/domain/events/EventMapper";
 import {loadEvents} from "@/domain/events/EventsLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {User} from "@/domain/users/User";
