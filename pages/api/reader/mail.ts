@@ -24,8 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const events = await loadEvents({access: EventLoadAccess.PRIVATE_ACCESS}).then(x => x.events);
     const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
+    const events = await loadEvents({access: EventLoadAccess.READER, ids: Object.keys(data)}).then(x => x.events);
     const liturgy: LiturgyData = await Cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await Cockpit.collectionGet('person').then(x => x.entries);
     const person = persons.find(p => p._id === req.body.personId)!;
@@ -66,8 +66,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }))
                     .map(({task, date, reading}) => ({
                         date: `${getWeekDayName(date.getDay())}, ${date.toLocaleDateString("de-AT")}, ${date.toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"})}`,
-                        summary: task.event.summary?.replace(/\[.*?]/g, ''),
-                        description: (task.event.tags.includes(CalendarTag.private) ? '' : task.event.description?.replace(/\[.*?]/g, '')),
+                        summary: task.event.summary,
+                        description: task.event.tags.includes(CalendarTag.private) ? '' : task.event.description,
                         info: `${{
                             reading1: "1. Lesung",
                             reading2: "2. Lesung",

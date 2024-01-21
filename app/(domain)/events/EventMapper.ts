@@ -3,7 +3,7 @@ import {CalendarGroup} from "./CalendarGroup";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "./CalendarInfo";
 import {getGroupFromEvent} from "@/domain/events/CalendarGroupResolver";
-import {EventLoadOptions, EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {EventLoadAccess, EventLoadOptions} from "@/domain/events/EventLoadOptions";
 import {ReaderInfo, ReaderRole} from "@/domain/service/Service";
 
 const notInChurchRegex = /(Pfarrgarten|Pfarrheim|Pfarrhaus|Friedhof|kirchenfrei)/gi;
@@ -40,6 +40,16 @@ export interface CalendarEvent {
   readerInfo: Partial<Record<ReaderRole, ReaderInfo>>
 }
 
+function hidePrivateEventDetails(value: string | null | undefined, access: EventLoadAccess) {
+  if(access === EventLoadAccess.PRIVATE_ACCESS){
+    return value ?? '';
+  }else if(access === EventLoadAccess.WEEKLY){
+    return value?.replace(/\[.*?]/g, '')?.replace(/\{.*?}/g, '') ?? ''
+  }else{
+    return value?.replace(/\[.*?]/g, '')?.replace(/\{/g, '').replace(/}/g, '') ?? ''
+  }
+}
+
 export function mapEvent(calendarName: CalendarName, options: EventLoadOptions): (event?: calendar_v3.Schema$Event) => CalendarEvent | null {
   return (event): CalendarEvent | null => {
     if (!event) return null;
@@ -50,8 +60,8 @@ export function mapEvent(calendarName: CalendarName, options: EventLoadOptions):
     return {
       id: event.id ?? "",
       mainPerson,
-      summary: privateAccess ? summary : summary.replace(/\[.*?]/g, ''),
-      description: privateAccess ? event.description ?? '' : event.description?.replace(/\[.*?]/g, '') ?? '',
+      summary: hidePrivateEventDetails(summary, options.access),
+      description: hidePrivateEventDetails(event.description, options.access),
       date: (event.start?.date ?? event.start?.dateTime ?? '').substring(0, 10),
       start: event.start as { dateTime: string },
       time: event.start?.dateTime ? new Date(event.start.dateTime).toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"}).substring(0, 5) : null,

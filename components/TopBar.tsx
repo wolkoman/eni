@@ -19,7 +19,7 @@ function NavItem(props: { href: string, label: string }) {
 
 export default function TopBar(props: { hidePicture?: boolean, frontpage?: boolean }) {
   const user = useUserStore(state => state.user);
-  return site(<div className="py-4 lg:py-6">
+  return site(<div className="py-4 lg:py-6 print:hidden">
     <Responsive>
       <div className="flex justify-between items-center">
         <Link href={Links.Hauptseite}>

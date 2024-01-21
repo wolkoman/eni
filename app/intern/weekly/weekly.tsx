@@ -1,44 +1,42 @@
 "use client";
 
 import React from 'react';
-import {useCalendarStore} from "../../(store)/CalendarStore";
-import {CalendarEvent, CalendarTag} from "../../(domain)/events/EventMapper";
-import {CalendarGroup} from "../../(domain)/events/CalendarGroup";
+import {useCalendarStore} from "@/store/CalendarStore";
+import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import sanitize from "sanitize-html";
 import {getWeekDayName} from "../../../components/calendar/Calendar";
 import Site from "../../../components/Site";
 import Button from "../../../components/Button";
 import {useState} from "../../(shared)/use-state-util";
 import {usePermission} from "../../(shared)/UsePermission";
-import {Permission} from "../../(domain)/users/Permission";
+import {Permission} from "@/domain/users/Permission";
 import {saveFile} from "../../(shared)/BrowserBlobSaver";
 import {AnnouncementsEntries} from "./AnnouncementsEntries";
 import {WeeklyUpload} from "./WeeklyUpload";
 import {WeeklySend} from "./WeeklySend";
-import {groupEventsByDate} from "../../(domain)/events/CalendarGrouper";
+import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
+import {TemplateHandler} from "easy-template-x";
+import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
 
 export function WeeklyPage() {
     usePermission([Permission.Admin]);
     const [data, , setPartialData] = useState({start: new Date(), end: new Date()});
     const [events, loaded] = useCalendarStore(state => [state.items, state.loaded])
 
-    function pad(num: number) {
-        return `${num < 10 ? '0' : ''}${num}`
-    }
-
     function toTime(dateTime: string) {
         const date = new Date(dateTime);
-        return `${pad(date.getHours())}:${pad(date.getMinutes())}`
+        return `${date.toLocaleTimeString().substring(0,5)}`
     }
 
-    function toCalEvent(event: CalendarEvent) {
+    function toWordData(event: CalendarEvent) {
         const special = event.groups.includes(CalendarGroup.Messe);
         const isDescription = event.description.toString().trim().length > 0;
         const description = `\n${sanitize(event.description.replaceAll("<br/>", "\n").trim(), {allowedTags: []})}`
         return {
             [special ? 'specialtime' : 'time']: toTime(event.start.dateTime),
             [special ? 'specialtitle' : 'title']: event.summary,
-            description: (event.mainPerson ? `\nmit ${event.mainPerson}` : '') + (isDescription ? description : '')
+            description: (event.mainPerson ? ` (${event.mainPerson})` : '') + (isDescription ? description : '')
         };
     }
 
@@ -47,9 +45,7 @@ export function WeeklyPage() {
         const templateFile = await response.blob();
         const from = data.start.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 5);
         const to = data.end.toISOString().split("T")[0].split('-').reverse().join('.').substring(0, 10);
-        const year = new Date(data.end.getFullYear(), 0, 1);
-        const days = Math.floor((data.end.getTime() - year.getTime()) / (24 * 60 * 60 * 1000));
-        const week = Math.ceil((data.end.getDay() + days) / 7);
+        const week = getWeekOfYear(data.end);
         const wordData = {
             daterange: `${from}. - ${to}.`,
             kw: week,
@@ -63,18 +59,18 @@ export function WeeklyPage() {
                     return ({
                         sundaydate: day === 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
                         date: day !== 0 ? `${getWeekDayName(day)}, ${date.split('-').reverse().join('.').substring(0, 5)}.` : '',
-                        emmaus: events.filter(event => event.calendar === 'emmaus').map(toCalEvent),
-                        inzersdorf: events.filter(event => event.calendar === 'inzersdorf').map(toCalEvent),
-                        neustift: events.filter(event => event.calendar === 'neustift').map(toCalEvent),
+                        emmaus: events.filter(event => event.calendar === 'emmaus').map(toWordData),
+                        inzersdorf: events.filter(event => event.calendar === 'inzersdorf').map(toWordData),
+                        neustift: events.filter(event => event.calendar === 'neustift').map(toWordData),
                     });
                 }),
         };
-        /*
+
         const handler = new TemplateHandler();
         const doc = await handler.process(templateFile, wordData as any);
 
-        saveFile(`ENI_Wochenmitteilungen_KW${week.toString().padStart(2,'0')}-${year}.docx`, doc);
-        */
+        saveFile(`ENI_Wochenmitteilungen_KW${week.toString().padStart(2,'0')}-${data.end.getFullYear()}.docx`, doc);
+
     }
 
 
