@@ -20,7 +20,7 @@ export async function loadCalendar(
     [EventLoadAccess.READER]: 6,
     [EventLoadAccess.PRIVATE_ACCESS]: 6,
   }[options.access]);
-  const hasTimeframe = options.access === EventLoadAccess.PRIVATE_ACCESS && options.timeFrame;
+  const hasTimeframe = (options.access === EventLoadAccess.PRIVATE_ACCESS || options.access === EventLoadAccess.WEEKLY) && options.timeFrame;
 
   const readerData = options.access === EventLoadAccess.PRIVATE_ACCESS && options.readerData
     ? options.readerData

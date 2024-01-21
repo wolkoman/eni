@@ -1,7 +1,7 @@
 "use server"
-import {Cockpit} from "../../../util/cockpit";
+import {Cockpit} from "@/util/cockpit";
 import {resolveUserFromServer} from "../../(shared)/UserHandler";
-import {Permission} from "../../(domain)/users/Permission";
+import {Permission} from "@/domain/users/Permission";
 
 export async function loadAnnouncements() {
     const user = await resolveUserFromServer()
