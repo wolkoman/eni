@@ -1,4 +1,8 @@
 {
   "crons": [
+    {
+      "path": "/termine/google/refresh",
+      "schedule": "0 0 * * *"
+    }
   ]
 }
