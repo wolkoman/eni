@@ -31,3 +31,4 @@ yarn-error.log*
 # Sentry
 .sentryclirc
 .vercel
+.env*.local
