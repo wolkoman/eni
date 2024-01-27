@@ -1,10 +1,7 @@
 import {NextResponse} from "next/server";
+import {spotifyRedirectUri} from "@/app/(emmaus-only)/fiesta/data";
 
 export const dynamic = "force-dynamic"
-
-export const spotifyRedirectUri = "http://localhost:3000/fiesta/callback";
-export const spotifyRecordId = "65b4a27f36343452a1000163"
-export const spotifyAuthHeader = 'Basic ' + Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64');
 
 
 export async function GET(request: Request) {

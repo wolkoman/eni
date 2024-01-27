@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
-import {spotifyAuthHeader, spotifyRecordId, spotifyRedirectUri} from "@/app/(emmaus-only)/fiesta/login/route";
 import {Cockpit} from "@/util/cockpit";
+import {spotifyAuthHeader, spotifyRecordId, spotifyRedirectUri} from "@/app/(emmaus-only)/fiesta/data";
 
 export const dynamic = "force-dynamic"
 
@@ -19,7 +19,6 @@ export async function GET(request: Request) {
   const formBody = Object.entries(details).map(([key,value]) =>
     `${encodeURIComponent(key)}=${encodeURIComponent(value!)}`
   ).join("&")
-  console.log(formBody)
 
   const spotifyCredentials = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
