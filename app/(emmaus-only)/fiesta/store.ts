@@ -12,7 +12,7 @@ export interface SpotifyTrack {
 export const useSpotifyStore = create(persist(combine(
   {
     data: {} as {queue: SpotifyTrack[], currently_playing: SpotifyTrack},
-    lastUpdated: new Date().getTime(),
+    lastUpdated: 0,
     loading: false,
   }, (set, get) => ({
     initial(){
