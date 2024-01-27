@@ -11,6 +11,7 @@ export function FiestaClientPage() {
   const store = useSpotifyStore(state => state);
   useEffect(() => {
     store.initial()
+    store.load()
     const interval = setInterval(() => store.load(), 1000);
     return () => clearInterval(interval);
   }, [])
@@ -25,6 +26,10 @@ export function FiestaClientPage() {
         <Link href="fiesta/wunsch">
           <div className="bg-emmaus-sec text-black rounded px-4 py-2">Musikwunsch</div>
         </Link>
+      </div>
+
+      <div className="my-12 text-3xl font-bold">
+        {store.info.text.split("\n").map((text,index) => <div key={index} children={text}/> )}
       </div>
       {current && <>
           <div className="opacity-50 mb-2">Im Moment hören wir</div>

@@ -4,7 +4,12 @@ import {Cockpit} from "@/util/cockpit";
 import {spotifyAuthHeader, spotifyRecordId} from "@/app/(emmaus-only)/fiesta/data";
 import {SpotifyTrack} from "@/app/(emmaus-only)/fiesta/store";
 
-export default async function getSpotifyQueue(): Promise<{ queue: SpotifyTrack[], currently_playing: SpotifyTrack }> {
+export async function getBallText(): Promise<{text: string}>{
+  return await Cockpit.collectionGet("internal-data", {filter: {_id: "65b502e039656344db0003b4"}})
+    .then(x => x.entries[0]!.data)
+}
+
+export async function getSpotifyQueue(): Promise<{ queue: SpotifyTrack[], currently_playing: SpotifyTrack }> {
   const {entries: [{data: credentials}]} = await Cockpit.collectionGetCached("internal-data", {filter: {_id: spotifyRecordId}})
 
 
@@ -21,6 +26,7 @@ export default async function getSpotifyQueue(): Promise<{ queue: SpotifyTrack[]
     throw Error()
   }
   if ("error" in data) {
+    console.log("error when trying to fetch, refreshing token", data)
     const body = await fetch("https://accounts.spotify.com/api/token", {
       method: 'POST',
       headers: {
@@ -35,7 +41,10 @@ export default async function getSpotifyQueue(): Promise<{ queue: SpotifyTrack[]
         revalidate: 0
       }
     }).then(x => x.json());
-    await Cockpit.collectionSave("internal-data", {_id: spotifyRecordId, data: body});
+    if("error" in body){
+      console.log("error when trying to refresh", body)
+      await Cockpit.collectionSave("internal-data", {_id: spotifyRecordId, data: body});
+    }
     throw Error()
   }
   return {currently_playing: data.currently_playing, queue: data.queue.slice(0, 4)}
