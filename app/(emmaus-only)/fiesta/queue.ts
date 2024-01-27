@@ -4,7 +4,7 @@ import {Cockpit} from "@/util/cockpit";
 import {spotifyAuthHeader, spotifyRecordId} from "@/app/(emmaus-only)/fiesta/data";
 import {SpotifyTrack} from "@/app/(emmaus-only)/fiesta/store";
 
-export default async function getSpotifyQueue(): Promise<{queue: SpotifyTrack[], currently_playing: SpotifyTrack}>{
+export default async function getSpotifyQueue(): Promise<{ queue: SpotifyTrack[], currently_playing: SpotifyTrack }> {
   const {entries: [{data: credentials}]} = await Cockpit.collectionGetCached("internal-data", {filter: {_id: spotifyRecordId}})
 
 
@@ -17,7 +17,10 @@ export default async function getSpotifyQueue(): Promise<{queue: SpotifyTrack[],
     }
   })
     .then(response => response.json());
-  if("error" in data){
+  if ("error" in credentials) {
+    throw Error()
+  }
+  if ("error" in data) {
     const body = await fetch("https://accounts.spotify.com/api/token", {
       method: 'POST',
       headers: {
@@ -33,7 +36,7 @@ export default async function getSpotifyQueue(): Promise<{queue: SpotifyTrack[],
       }
     }).then(x => x.json());
     await Cockpit.collectionSave("internal-data", {_id: spotifyRecordId, data: body});
-   throw Error()
+    throw Error()
   }
-  return {currently_playing: data.currently_playing, queue: data.queue.slice(0,4)}
+  return {currently_playing: data.currently_playing, queue: data.queue.slice(0, 4)}
 }

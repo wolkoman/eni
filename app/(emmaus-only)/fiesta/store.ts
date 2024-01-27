@@ -22,7 +22,8 @@ export const useSpotifyStore = create(persist(combine(
       if(get().lastUpdated + 1000 * 10 > new Date().getTime()) return;
       if(get().loading) return;
       set({loading: true});
-      const data = await getSpotifyQueue().finally(() => set({loading: false}))
+      const data = await getSpotifyQueue()
+        .finally(() => set({loading: false, lastUpdated: new Date().getTime()}))
       set({loading: false, lastUpdated: new Date().getTime(), data})
     }
   })
