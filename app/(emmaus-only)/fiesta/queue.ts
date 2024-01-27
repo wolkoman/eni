@@ -10,7 +10,7 @@ export async function getBallText(): Promise<{text: string}>{
 }
 
 export async function getSpotifyQueue(): Promise<{ queue: SpotifyTrack[], currently_playing: SpotifyTrack }> {
-  const {entries: [{data: credentials}]} = await Cockpit.collectionGetCached("internal-data", {filter: {_id: spotifyRecordId}})
+  const {entries: [{data: credentials}]} = await Cockpit.collectionGet("internal-data", {filter: {_id: spotifyRecordId}})
 
 
   const data = await fetch("https://api.spotify.com/v1/me/player/queue", {
