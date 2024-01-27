@@ -1,5 +1,5 @@
 "use client"
-import {useState} from "react";
+import React, {useState} from "react";
 import {useRouter} from "next/navigation";
 import {requestSong} from "@/app/(emmaus-only)/fiesta/wunsch/requestSong";
 
@@ -18,6 +18,7 @@ export function FiestaWunsch() {
 
   return <div className="bg-black min-h-[100vh] text-white">
     <div className="p-4 max-w-2xl mx-auto">
+      <meta name="theme-color" content="black"/>
 
       <div className="text-2xl font-bold">Musikwunsch</div>
 
@@ -41,7 +42,8 @@ export function FiestaWunsch() {
         />
       </div>
       <div className="flex justify-end">
-        <div onClick={send} className="bg-emmaus-sec px-4 py-2 font-bold text-black rounded">{loading ? "lädt..." : "Abschicken"}</div>
+        <div onClick={send}
+             className="bg-emmaus-sec px-4 py-2 font-bold text-black rounded">{loading ? "lädt..." : "Abschicken"}</div>
       </div>
 
     </div>
