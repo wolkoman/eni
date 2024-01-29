@@ -21,7 +21,7 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
   ) ? today : tomorrow;
   const events = eventsByDate[date]
 
-  if (events.length === 0) return <></>;
+  if (events?.length === 0) return <></>;
 
   return <div id="termine">
     <SectionHeader>{date === today ? "Heute" : "Morgen"}</SectionHeader>
