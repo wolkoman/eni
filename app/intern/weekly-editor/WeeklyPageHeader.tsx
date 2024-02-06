@@ -6,6 +6,6 @@ export function WeeklyPageHeader(props: { lastDate: Date }) {
       Miteinder der Pfarren Emmaus, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift<br/>
       eni.wien | +43 664 886 32 680
     </div>
-    <div>KW{getWeekOfYear(props.lastDate)} {props.lastDate.getFullYear()}</div>
+    <div className="text-xl font-thin"></div>
   </div>;
 }
