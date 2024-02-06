@@ -115,7 +115,8 @@ export const useWeeklyEditorStore = create(persist(combine({
       const isEqual = (a: T) => a.id === id && a.parish === parish
       set({switchSideFor: [...list.filter(item => !isEqual(item)), ...(list.find(isEqual) ? [] : [{id, parish}])]})
     },
-    setItem(index: number, item: WeeklyParishItem) {
+    setItem(item: WeeklyParishItem) {
+      const index = get().items.findIndex(i => i.id === item.id) ?? 0
       set({items: [...get().items.slice(0, index), item, ...get().items.slice(index + 1)]})
     }
   })),

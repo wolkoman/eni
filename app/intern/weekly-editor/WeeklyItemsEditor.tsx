@@ -8,24 +8,23 @@ import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 export function WeeklyItemsEditor() {
   const store = useWeeklyEditorStore(state => state);
   return <div>
-    {store.items.map((item, index) => <WeeklyItemEditor key={item.id} index={index}/>)}
+    {store.items.map((item, index) => <WeeklyItemEditor key={item.id} item={item}/>)}
   </div>;
 }
 
 const ItemForm = createContext<[WeeklyParishItem, Dispatch<SetStateAction<WeeklyParishItem>>] | null>(null)
 
-function WeeklyItemEditor(props: { index: number }) {
+function WeeklyItemEditor({item}: { item: WeeklyParishItem }) {
   const store = useWeeklyEditorStore(state => state)
-  const item = store.items[props.index];
   const form = useState(item)
 
   useEffect(() => {
     if (JSON.stringify(form[0]) != JSON.stringify(item))
-      store.setItem(props.index, form[0]);
+      store.setItem(form[0]);
   }, [form[0]]);
 
   return <ItemForm.Provider value={form}>
-    <div className="flex justify-between items-start my-4 gap-4 p-2 bg-gray-100 border border-black/20 rounded">
+    <div className="flex justify-between items-start my-4 gap-4 p-2 bg-gray-50 border border-black/20 rounded">
       {item.type === "ARTICLE" && <WeeklyArticleEditor form={form as any}/>}
       {item.type === "TEASER" && <WeeklyTeaserEditor form={form as any}/>}
 

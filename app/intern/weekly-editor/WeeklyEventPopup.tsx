@@ -20,10 +20,11 @@ export function WeeklyEventPopup(props: { showDescription: boolean, event: Calen
     setLoading(false)
   }
 
+  const optionStyle = `px-1 py-0.5  rounded ${isLoading ? '' : 'hover:bg-black/5 cursor-pointer'}`;
   return <div
     className={`hidden group-hover:block bg-white p-2 shadow rounded absolute z-10 left-0 w-full whitespace-nowra  font-normal border border-black/20 ${positionStyle}`}>
     {!store.items.some(item => item.type === "TEASER" && item.eventId === props.event.id) && <div
-        className={`px-1 py-0.5  rounded ${isLoading ? '' : 'hover:bg-black/5 cursor-pointer'}`}
+        className={optionStyle}
         onClick={() => store.addItem({
           type: "TEASER",
           eventId: props.event.id,
@@ -35,13 +36,13 @@ export function WeeklyEventPopup(props: { showDescription: boolean, event: Calen
         Ankündigen
     </div>}
     <div
-      className={`px-1 py-0.5  rounded ${isLoading ? '' : 'hover:bg-black/5 cursor-pointer'}`}
+      className={optionStyle}
       onClick={() => store.toggleDescriptionFor(props.event.id)}
     >
       Beschreibung {props.showDescription ? "verbergen" : "anzeigen"}
     </div>
     {isCalendarAdmin && <div
-        className={`px-1 py-0.5  rounded ${isLoading ? '' : 'hover:bg-black/5 cursor-pointer'}`}
+        className={optionStyle}
         onClick={() => showInCalendar()}
     >
         Im Kalender anzeigen {isLoading && <>...</>}
