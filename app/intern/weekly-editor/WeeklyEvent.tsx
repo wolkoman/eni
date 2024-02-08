@@ -1,8 +1,6 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/WeeklyEditorStore";
-import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
-import {google} from "googleapis";
 import {WeeklyEventPopup} from "@/app/intern/weekly-editor/WeeklyEventPopup";
 
 export function WeeklyEvent(props: { event: CalendarEvent }) {
