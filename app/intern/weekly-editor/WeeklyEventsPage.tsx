@@ -43,8 +43,8 @@ export function WeeklyEventsPage(props: { events: CalendarEvent[], liturgy: Litu
 
           return <div className={`contents`} key={dateString}>
 
-            <div className={`px-2 py-0.5 border-b border-black/40 ${isSpecial ? 'bg-black/5 font-semibold' : ''}`}>
-              <div>{getWeekDayName(date.getDay())}, {date.getDate()}.{date.getMonth() + 1}.</div>
+            <div className={`px-2 py-0.5 border-b border-black/40 ${isSpecial ? 'font-semibold text-red-600' : ''}`}>
+              <div className={isSpecial ? "underline" : ""}>{getWeekDayName(date.getDay())}, {date.getDate()}.{date.getMonth() + 1}.</div>
               {showLiturgy && <div className="text-xs font-normal italic">
                 {liturgyElement?.[0].name} {liturgyElement?.[0].rank
                 ? `(${liturgyElement?.[0].rank})`
@@ -55,7 +55,7 @@ export function WeeklyEventsPage(props: { events: CalendarEvent[], liturgy: Litu
 
             {parishes.map(calendar =>
               <div
-                className={`px-2 py-0.5 border-l border-black/40 border-b ${isSpecial && 'bg-black/5'}`}
+                className={`px-2 py-0.5 border-l border-black/40 border-b`}
                 key={calendar}
               >
                 {events
