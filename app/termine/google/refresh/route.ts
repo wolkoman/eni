@@ -2,7 +2,9 @@ import {NextResponse} from "next/server";
 import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
 import {notifyAdmin} from "@/app/(shared)/Telegram";
 
-export async function GET(request: Request) {
+export const dynamic = "force-dynamic"
+
+export async function GET() {
 
 
   const client = await getGoogleAuthClient();
