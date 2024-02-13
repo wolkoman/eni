@@ -29,7 +29,8 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
       {site([CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT], [CalendarName.EMMAUS])
         .map(c => {
           const calendarEvents = (events ?? []).filter(e => e.calendar === c)
-          return <div key={c} className={`overflow-hidden rounded-2xl relative p-1 pb-6 flex flex-col border border-black/20`}>
+          return <div key={c}
+                      className={`overflow-hidden rounded-2xl relative p-1 pb-6 flex flex-col border border-black/20`}>
             <div className="text-2xl font-semibold text-center mt-4 mb-4">
               Pfarre {getCalendarInfo(c).shortName}
             </div>
@@ -41,6 +42,8 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
                 : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
               }
             </div>
+            <div className="grow"/>
+            {c === "emmaus" && <Link href="https://emmaus.wien" className="text-xs underline text-center">Nachricht aus dem Pfarrgemeinderat</Link>}
           </div>;
         })}
       {site(<></>, <div className="flex justify-end">
