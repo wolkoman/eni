@@ -43,7 +43,7 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
               }
             </div>
             <div className="grow"/>
-            {c === "emmaus" && <Link href="https://emmaus.wien" className="text-xs underline text-center">Nachricht aus dem Pfarrgemeinderat</Link>}
+            {c === "emmaus" && site(true, false) && <Link href="https://emmaus.wien" className="text-xs underline text-center">Nachricht aus dem Pfarrgemeinderat</Link>}
           </div>;
         })}
       {site(<></>, <div className="flex justify-end">

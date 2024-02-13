@@ -26,7 +26,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
                     </div>
                     <div>
                         {event && <div>
-                            <div className={`${announcements.length > 0 ? 'bg-white/70' : 'bg-emmaus-sec'} text-black text-xl inline-flex px-4 py-2 rounded mt-12`}>
+                            <div className={`${announcements.length > 0 ? 'bg-white/70' : 'bg-emmaus-sec'} text-black text-xl inline-flex flex-col px-4 py-2 rounded mt-12`}>
                                 <div className="mr-2">
                                     {getWeekDayName(new Date(event.date).getDay())}, {event.time} Uhr:
                                 </div>
@@ -34,7 +34,7 @@ export function EmmausBranding(props: { eventsObject: EventsObject }) {
                             </div>
                         </div>}
                         {announcements.map(annoucment => <div>
-                            <div className="bg-emmaus-sec text-black text-xl inline-flex px-4 py-2 rounded mt-2">
+                            <div className="bg-emmaus-sec text-black text-xl flex flex-col px-4 py-2 rounded mt-2">
                                 <div className="mr-2">
                                     {new Date(annoucment.date).toLocaleDateString("de-AT")}, {annoucment.time} Uhr:
                                 </div>

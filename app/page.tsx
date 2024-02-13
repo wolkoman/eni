@@ -51,11 +51,11 @@ export default async function HomePage() {
           <div className="my-24 flex flex-col gap-8">
             <div className="flex justify-between text-md">
               <div className="font-bold">Nachricht aus dem Pfarrgemeinderat</div>
-              <div className="">Dienstag, 13.02.2024</div>
+              <div className="text-right">Dienstag, 13.02.2024</div>
             </div>
             <div className="font-serif flex flex-col gap-2">
               <div>Liebe Pfarrgemeinde!</div>
-              <div>Zu Beginn der österlichen Bußzeit möchten wir Sie mit schwerem Herzen über Entwicklungen informieren,
+              <div>Zu Beginn der österlichen Bußzeit möchten wir Sie schweren Herzens über Entwicklungen informieren,
                 die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns: Ab dem
                 1.&nbsp;September&nbsp;2024 wird ein neues Priesterteam die Betreuung unserer Pfarre übernehmen, da
                 unser
@@ -63,7 +63,7 @@ export default async function HomePage() {
                 Unterstützung seitens der Erzdiözese für Seelsorger zu wünschen übrig lässt.
               </div>
               <div>Wir, die Mitglieder des Pfarrgemeinderates, sind zutiefst besorgt über diese Entscheidung. Es fällt uns
-                schwer zu verstehen, weshalb unsere Nachbarpfarren die Möglichkeit zum Dialog hatten, während unsere
+                schwer zu verstehen, weshalb unsere Nachbarpfarren, die Möglichkeit zum Dialog hatten, während unsere
                 Meinungen und Ansichten übergangen wurden.
                 Wir engagieren uns dafür, Gehör zu finden und wollen konstruktiv mit den Verantwortlichen Probleme lösen,
                 während wir klar auf Missstände in Entscheidungsfindung und Kommunikation hinweisen.
