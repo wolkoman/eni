@@ -74,7 +74,7 @@ export default async function HomePage() {
                 gemeinsamem Engagement angehen können.
               </div>
               <div>
-                Falls Sie Gedanken, Sorgen oder Vorschläge haben, möchten wir Sie ermutigen, sich zu melden. Der
+                Falls Sie Gedanken, die Sie teilen möchten, Sorgen oder Vorschläge haben, möchten wir Sie ermutigen, sich zu melden. Der
                 Pfarrgemeinderat steht Ihnen als Ansprechpartner zur Verfügung und ist offen für jeglichen Dialog.
               </div>
               <div className="text-right italic">
