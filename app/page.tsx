@@ -56,9 +56,8 @@ export default async function HomePage() {
             <div className="font-serif flex flex-col gap-2">
               <div>Liebe Pfarrgemeinde!</div>
               <div>Zu Beginn der österlichen Bußzeit möchten wir Sie schweren Herzens über Entwicklungen informieren,
-                die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns: Unser
-                geschätzter Pfarrer Zvonko kann seine Tätigkeit ab 1. September 2024 leider nicht weiterführen. Es
-                scheint, dass die notwendige Unterstützung seitens der Erzdiözese für Seelsorger zu wünschen übrig lässt.
+                die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns:  Die ED Wien plant ein neues Pastoral-Team ab dem 1. September 2024 für die Betreuung unserer Pfarre einzusetzen, da unser geschätzter Pfarrer Zvonko seine Tätigkeit leider nicht weiterführen kann.
+                Es scheint, dass die notwendige Unterstützung seitens der Erzdiözese für Seelsorger zu wünschen übrig lässt.
               </div>
               <div>Wir, die Mitglieder des Pfarrgemeinderates, sind zutiefst besorgt über diese Entwicklung. Es fällt uns
                 schwer zu verstehen, weshalb unsere Nachbarpfarren, die Möglichkeit zum Dialog mit der Erzdiözese hatte, während unsere
