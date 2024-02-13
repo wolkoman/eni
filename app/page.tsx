@@ -56,13 +56,12 @@ export default async function HomePage() {
             <div className="font-serif flex flex-col gap-2">
               <div>Liebe Pfarrgemeinde!</div>
               <div>Zu Beginn der österlichen Bußzeit möchten wir Sie schweren Herzens über Entwicklungen informieren,
-                die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns: Vermutlich wird ab dem
-                1.&nbsp;September&nbsp;2024 ein neues Priesterteam die Betreuung unserer Pfarre übernehmen, da
-                unser geschätzter Pfarrer Zvonko seine Tätigkeit leider nicht weiterführen kann. Es scheint, dass die notwendige
-                Unterstützung seitens der Erzdiözese für Seelsorger zu wünschen übrig lässt.
+                die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns: Unser
+                geschätzter Pfarrer Zvonko kann seine Tätigkeit ab 1. September 2024 leider nicht weiterführen. Es
+                scheint, dass die notwendige Unterstützung seitens der Erzdiözese für Seelsorger zu wünschen übrig lässt.
               </div>
               <div>Wir, die Mitglieder des Pfarrgemeinderates, sind zutiefst besorgt über diese Entwicklung. Es fällt uns
-                schwer zu verstehen, weshalb unsere Nachbarpfarren, die Möglichkeit zum Dialog hatten, während unsere
+                schwer zu verstehen, weshalb unsere Nachbarpfarren, die Möglichkeit zum Dialog mit der Erzdiözese hatte, während unsere
                 Meinungen und Ansichten übergangen wurden.
                 Wir engagieren uns dafür, Gehör zu finden und wollen konstruktiv mit den Verantwortlichen Probleme lösen,
                 während wir klar auf Missstände in Entscheidungsfindung und Kommunikation hinweisen.
@@ -73,7 +72,8 @@ export default async function HomePage() {
                 gemeinsamem Engagement angehen können.
               </div>
               <div>
-                Falls Sie Gedanken, die Sie teilen möchten, Sorgen oder Vorschläge haben, möchten wir Sie ermutigen, sich zu melden. Der
+                Falls Sie Gedanken, die Sie teilen möchten, Sorgen oder Vorschläge haben, möchten wir Sie ermutigen, sich
+                zu melden. Der
                 Pfarrgemeinderat steht Ihnen als Ansprechpartner zur Verfügung und ist offen für jeglichen Dialog.
               </div>
               <div className="text-right italic">
