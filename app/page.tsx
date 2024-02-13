@@ -56,13 +56,12 @@ export default async function HomePage() {
             <div className="font-serif flex flex-col gap-2">
               <div>Liebe Pfarrgemeinde!</div>
               <div>Zu Beginn der österlichen Bußzeit möchten wir Sie schweren Herzens über Entwicklungen informieren,
-                die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns: Ab dem
-                1.&nbsp;September&nbsp;2024 wird ein neues Priesterteam die Betreuung unserer Pfarre übernehmen, da
-                unser
-                geschätzter Pfarrer Zvonko seine Tätigkeit leider nicht weiterführen wird. Es scheint, dass die notwendige
+                die unsere Gemeinde betreffen. Konflikte in Nachbarpfarren haben nun auch Auswirkungen auf uns: Vermutlich wird ab dem
+                1.&nbsp;September&nbsp;2024 ein neues Priesterteam die Betreuung unserer Pfarre übernehmen, da
+                unser geschätzter Pfarrer Zvonko seine Tätigkeit leider nicht weiterführen kann. Es scheint, dass die notwendige
                 Unterstützung seitens der Erzdiözese für Seelsorger zu wünschen übrig lässt.
               </div>
-              <div>Wir, die Mitglieder des Pfarrgemeinderates, sind zutiefst besorgt über diese Entscheidung. Es fällt uns
+              <div>Wir, die Mitglieder des Pfarrgemeinderates, sind zutiefst besorgt über diese Entwicklung. Es fällt uns
                 schwer zu verstehen, weshalb unsere Nachbarpfarren, die Möglichkeit zum Dialog hatten, während unsere
                 Meinungen und Ansichten übergangen wurden.
                 Wir engagieren uns dafür, Gehör zu finden und wollen konstruktiv mit den Verantwortlichen Probleme lösen,
