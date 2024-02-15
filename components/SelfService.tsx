@@ -45,7 +45,7 @@ export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
 export type SelfServiceFile = { id: string, index: number, name: string, result: string, finished: boolean };
 
 
-export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
+export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S> & {accept?: string}) {
 
     const [fileList, setFileList] = [
         props.form[0][props.name] as SelfServiceFile[],
@@ -122,7 +122,7 @@ export function SelfServiceFileUpload<S extends SSType>(props: SSProps<S>) {
                 </div>
             </label>
         </div>}
-        <input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} multiple/>
+        <input id="dropzone-file" type="file" className="hidden" accept={props.accept} onChange={handleFileChange} multiple/>
     </label>;
 }
 

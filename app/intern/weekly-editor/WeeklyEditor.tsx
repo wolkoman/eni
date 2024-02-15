@@ -52,8 +52,8 @@ export function WeeklyEditor(props: { liturgy: LiturgyData }) {
               type: "ARTICLE" as const,
               title: "", id: "",
               author: announcement.byName,
-              text: announcement.description,
-              parishes: {emmaus: true, inzersdorf: false, neustift: false},
+              text: announcement.description + announcement.files.map(f => `<img src='${f}'/>`),
+              parishes: {emmaus: announcement.parish === "emmaus", inzersdorf: announcement.parish === "inzersdorf", neustift: announcement.parish === "neustift"},
             })}/>
           </div>)
           }

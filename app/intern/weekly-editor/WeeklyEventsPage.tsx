@@ -20,7 +20,7 @@ export function WeeklyEventsPage(props: { events: CalendarEvent[], liturgy: Litu
     <WeeklyPageHeader/>
 
     <div className="my-6 flex justify-center items-center gap-2">
-      <div className="text-3xl font-semibold tracking-tight">Wochenmitteilungen  </div>
+      <div className="text-3xl font-bold tracking-tight">Wochenmitteilungen  </div>
       <div className="text-xl px-2 py-0.5 border border-black/40 rounded-lg">KW{getWeekOfYear(lastDate)} {lastDate.getFullYear()}</div>
     </div>
 

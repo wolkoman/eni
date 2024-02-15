@@ -91,7 +91,6 @@ export const useWeeklyEditorStore = create(persist(combine({
             events: events,
             loaded: true,
             loading: false,
-            hideDescriptionForIds: []
           });
         })
         .catch((error) => {

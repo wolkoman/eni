@@ -59,8 +59,8 @@ export function AnnouncementPage() {
             <Field label="Pfarre">
                 <SelfServiceParish name="parish" form={form}/>
             </Field>
-            <Field label="Dateien">
-                <SelfServiceFileUpload name="files" form={form}/>
+            <Field label="Bilder">
+                <SelfServiceFileUpload name="files" form={form} accept="image/*"/>
             </Field>
             <div className={`my-8 flex flex justify-end font-bold ${state === "loading" ? 'animate-pulse' : ''}`}>
                 <Button label="Absenden" big={true} onClick={submit}

@@ -42,7 +42,7 @@ function ArticleComponent({item}: { item: Article }) {
       <div className="font-bold text-lg leading-tight">{item.title}</div>
       <div className="italic shrink-0 text-xs" dangerouslySetInnerHTML={{__html: item.author}}/>
     </div>
-    <div className="font-serif" dangerouslySetInnerHTML={{__html: item.text}}/>
+    <div className="font-serif" dangerouslySetInnerHTML={{__html: item.text.replace("\n", "<br/>")}}/>
   </div>
 }
 
