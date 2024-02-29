@@ -1,9 +1,9 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/WeeklyEditorStore";
-import {WeeklyEventPopup} from "@/app/intern/weekly-editor/WeeklyEventPopup";
+import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import {EventPopup} from "@/app/intern/weekly-editor/EventPopup";
 
-export function WeeklyEvent(props: { event: CalendarEvent }) {
+export function Event(props: { event: CalendarEvent }) {
   const special = props.event.groups.includes(CalendarGroup.Messe)
   const mainPersons = {
     "Brez": "Pfr. Z.B.",
@@ -16,23 +16,23 @@ export function WeeklyEvent(props: { event: CalendarEvent }) {
   const showDescription = !store.hideDescriptionForIds.includes(props.event.id)
 
   return <div
-    className={`flex ${special ? 'font-semibold' : ''} ${showDescription ? '' : 'border-l border-red-500 print:border-0'} mb-1 group relative`}>
+    className={`flex ${special ? 'font-semibold' : ''} ${showDescription ? '' : 'border-l border-red-500 print:border-0'} mb-0.5 group relative`}>
     <div className="w-[1cm] shrink-0">{props.event.time}</div>
     <div className="w-full">
-      <div className="flex w-full justify-between items-start">
-        <div className="overflow-hidden">{summary}</div>
+      <div className="">
+        <div className="inline">{summary}</div>
         {Object.entries(mainPersons)
           .filter(([name]) => props.event.mainPerson?.includes(name))
           .map(([_, initial]) =>
-            <div className="text-xs font-normal opacity-50 rounded pl-1 shrink-0">{initial}</div>
+            <div className="text-xs font-normal opacity-50 rounded pl-1.5 inline-block">{initial}</div>
           )}
       </div>
       {showDescription && <div>
-        {props.event.description.split("\n").map(text => <div className="text-xs font-normal">{text}</div>)}
+        {props.event.description.split("\n").map(text => <div className="text-xs font-normal leading-tight">{text}</div>)}
       </div>}
     </div>
 
-    <WeeklyEventPopup event={props.event} showDescription={showDescription}/>
+    <EventPopup event={props.event} showDescription={showDescription}/>
 
   </div>;
 }

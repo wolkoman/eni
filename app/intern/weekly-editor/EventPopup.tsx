@@ -1,11 +1,11 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/WeeklyEditorStore";
+import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import {useState} from "react";
 import {getEventUrl} from "@/domain/events/EventUrlResolver";
 
-export function WeeklyEventPopup(props: { showDescription: boolean, event: CalendarEvent }) {
+export function EventPopup(props: { showDescription: boolean, event: CalendarEvent }) {
   const store = useWeeklyEditorStore(state => state);
   const isCalendarAdmin = useUserStore(state => state.user?.permissions[Permission.CalendarAdministration])
   const [isLoading, setLoading] = useState(false)
