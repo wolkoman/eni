@@ -28,6 +28,7 @@ module.exports = {
         'gradient-mobile': "url('/bg-grad-mobile.svg')",
       },
       colors: {
+        back: '#f8f9f7',
         emmaus: "#2a6266",
         'emmaus-sec':"#FF8A44",
         inzersdorf: "#139b91",

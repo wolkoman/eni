@@ -9,10 +9,10 @@ export function EniSection(props: {
 }) {
   return <div className="flex flex-col items-center">
     <img src={props.picture} className="h-40"/>
-    <div className="text-3xl font-bold">
+    <div className="text-xl font-bold">
       {props.title}
     </div>
-    <div className="text-lg my-3 grow text-center flex flex-col items-center">
+    <div className="my-3 grow text-center flex flex-col items-center">
       {props.children}
     </div>
     {props.parish && <div className="flex justify-center flex-wrap gap-2">

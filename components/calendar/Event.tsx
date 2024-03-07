@@ -14,14 +14,12 @@ export function Event({event, suggestion, small}: {
     const cancelled = event.tags?.includes(CalendarTag.cancelled);
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
-        <div
-            className={`py-1 flex text-lg ${cancelled && 'opacity-50'} leading-6 `}
-        >
-            {site(<div className={`pr-3 pt-1.5 shrink-0 ${small ? "w-[40px]" : "w-[100px]"}`}>
+        <div className={`py-1 flex gap-2 ${cancelled && 'opacity-50'} leading-6`}>
+            {site(<div className="pt-1 shrink-0">
                 <ParishDot info={info} small={small} private={event.tags?.includes(CalendarTag.private) ?? false}/>
             </div>, <></>)}
             <div
-                className={`${small ? "w-[50px]" : "w-[50px] lg:w-[60px]"} flex-shrink-0 mr-2 font-semibold ${cancelled && 'line-through'}`}>
+                className={`flex-shrink-0 font-semibold ${cancelled && 'line-through'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">
