@@ -1,6 +1,6 @@
 import {EventDateText} from "../../../components/calendar/EventUtils";
-import {loadCachedEvents} from "../../(domain)/events/EventsLoader";
-import {EventLoadAccess} from "../../(domain)/events/EventLoadOptions";
+import {loadCachedEvents} from "@/domain/events/EventsLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 
 export const revalidate = 3000
 
@@ -9,6 +9,7 @@ export default async function EventPage() {
     const eventsObject= await loadCachedEvents({access: EventLoadAccess.PUBLIC})
 
     return <div data-testid="calendar" className="relative">
+        <style>{"body.bg-back { background: none !important; }"}</style>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"/>
