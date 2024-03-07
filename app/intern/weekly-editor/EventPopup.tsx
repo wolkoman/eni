@@ -1,15 +1,15 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/WeeklyEditorStore";
+import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import {useState} from "react";
 import {getEventUrl} from "@/domain/events/EventUrlResolver";
 
-export function WeeklyEventPopup(props: { showDescription: boolean, event: CalendarEvent }) {
+export function EventPopup(props: { event: CalendarEvent }) {
   const store = useWeeklyEditorStore(state => state);
   const isCalendarAdmin = useUserStore(state => state.user?.permissions[Permission.CalendarAdministration])
   const [isLoading, setLoading] = useState(false)
-  const showAbove = new Date(store.dateRange.end).getTime() - new Date(props.event.date).getTime() < 24 * 3600 * 1000 * 3
+  const showAbove = new  Date(store.dateRange.end).getTime() - new Date(props.event.date).getTime() < 24 * 3600 * 1000 * 3
   const positionStyle = showAbove ? "top-0 -translate-y-full" : "bottom-0 translate-y-full"
 
   async function showInCalendar() {
@@ -35,17 +35,17 @@ export function WeeklyEventPopup(props: { showDescription: boolean, event: Calen
     >
         Ankündigen
     </div>}
-    <div
-      className={optionStyle}
-      onClick={() => store.toggleDescriptionFor(props.event.id)}
-    >
-      Beschreibung {props.showDescription ? "verbergen" : "anzeigen"}
-    </div>
     {isCalendarAdmin && <div
         className={optionStyle}
         onClick={() => showInCalendar()}
     >
         Im Kalender anzeigen {isLoading && <>...</>}
+    </div>}
+    {store.customEventDescription[props.event.id] != props.event.description && <div
+        className={optionStyle}
+        onClick={() => store.setCustomDescription(props.event.id, props.event.description)}
+    >
+      {props.event.description}
     </div>}
   </div>;
 }

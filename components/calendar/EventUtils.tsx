@@ -12,7 +12,7 @@ export function Tooltip(props: { tip: string, children: ReactNode }) {
         <div className="group relative">
             {props.children}
             <div
-                className="hidden group-hover:block z-20 text-sm absolute left-0 bottom-0 translate-y-full bg-gray-200 shadow-lg rounded px-3 py-1 whitespace-nowrap">
+                className="opacity-0 group-hover:opacity-100 pointer-events-none z-20 text-sm absolute left-0 -bottom-4 group-hover:-bottom-1 translate-y-full bg-white shadow-lg rounded px-3 py-1 whitespace-nowrap transition-all">
                 {props.tip}
             </div>
         </div>
@@ -61,9 +61,9 @@ export const EventDate = (props: { date: Date, liturgies?: Liturgy[], showLiturg
     }[liturgy?.color ?? ""]) : ""
     const weekDayName = getWeekDayName(day);
     return <>
-        <div className={`text-lg font-semibold lg:hidden ${decoration}`}>{weekDayName}, {props.date.getDate()}. {getMonthName(props.date.getMonth())}</div>
+        <div className={`font-semibold lg:hidden ${decoration}`}>{weekDayName}, {props.date.getDate()}. {getMonthName(props.date.getMonth())}</div>
         <div className={`hidden lg:flex flex-col`}>
-            <div className={`text-lg font-semibold ${decoration}`}>{props.date.getDate()}. {getMonthName(props.date.getMonth())}</div>
+            <div className={`font-semibold ${decoration}`}>{props.date.getDate()}. {getMonthName(props.date.getMonth())}</div>
             <div className={`text-xs`}>{liturgy?.name.toLowerCase().includes(weekDayName.toLowerCase()) ? "" : weekDayName}</div>
             <div className="mr-1 text-xs">{liturgy?.name}</div>
             <div className="mt-1 text-xs italic">{liturgy?.rank === "H" ? "Hochfest":""}</div>

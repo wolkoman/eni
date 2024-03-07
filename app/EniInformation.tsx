@@ -43,9 +43,9 @@ function Parish(props: { name: CalendarName; index: number }) {
       <motion.div
         style={{backgroundImage: `url(${info.image})`}}
         className="w-full h-full rounded-lg bg-contain bg-no-repeat bg-bottom"
-        whileInView={{translateY: 0}}
-        transition={{delay: 0.2 * props.index, bounce: 0}}
-        initial={{translateY: 150}}
+        whileInView={{translateY: 0, scale: 1, opacity: 1}}
+        transition={{delay: 0.1 * props.index, bounce: 0}}
+        initial={{translateY: 50, opacity: .9}}
       />
     </div>
     <div className="text-xl font-bold mt-4">{info.fullName}</div>

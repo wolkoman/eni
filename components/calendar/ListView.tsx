@@ -44,7 +44,7 @@ export function ListView(props: {
                     data-date={date}
                     className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
                 >
-                    <div className="lg:w-[130px] my-1 shrink-0">
+                    <div className="lg:w-[150px] my-1 shrink-0">
                         <EventDate date={new Date(date)} liturgies={props.liturgy[date]} showLiturgyInfo={props.editable}/>
                     </div>
                     <div className="grow">
@@ -102,14 +102,20 @@ export function EditableEvent(props: {
     small?: boolean
 }) {
     return <div
-        className={props.editable ? 'cursor-pointer relative' : ''}
-        onClick={props.editable ? () => props.onEditEvent(props.id) : () => {
-        }}
+      className={props.editable ? 'cursor-pointer relative' : ''}
+      onClick={props.editable ? () => props.onEditEvent(props.id) : () => {
+      }}
     >
-        <Event key={props.id} event={props.arguments.event} suggestion={props.arguments.suggestion}
-               small={props.small}/>
-        {props.isEdited && <EventEdit parish={props.parish} eventId={props.id}
-                                      onClose={() => props.onEditEvent()}
-                                      suggestion={props.suggestionForm}/>}
+        <Event
+          key={props.id}
+          event={props.arguments.event}
+          suggestion={props.arguments.suggestion}
+          small={props.small}
+        />
+        {props.isEdited && <EventEdit
+          parish={props.parish}
+          eventId={props.id}
+          onClose={() => props.onEditEvent()}
+          suggestion={props.suggestionForm}/>}
     </div>;
 }

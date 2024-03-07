@@ -1,18 +1,17 @@
 "use client"
-import {WeeklyEventsPage} from "@/app/intern/weekly-editor/WeeklyEventsPage";
+import {PageEvents} from "@/app/intern/weekly-editor/PageEvents";
 import {LiturgyData} from "../../../pages/api/liturgy";
 import {Field, SelfServiceInput} from "../../../components/SelfService";
 import Button from "../../../components/Button";
 import {SectionHeader} from "../../../components/SectionHeader";
 import {useStoreState} from "@/app/(shared)/UseStoreState";
-import {WeeklyParishPage} from "@/app/intern/weekly-editor/WeeklyParishPage";
+import {PageParish} from "@/app/intern/weekly-editor/PageParish";
 import {useEffect} from "react";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/WeeklyEditorStore";
-import {WeeklyItemsEditor} from "@/app/intern/weekly-editor/WeeklyItemsEditor";
+import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 
 
-export function WeeklyEditor(props: { liturgy: LiturgyData }) {
+export function ClientPage(props: { liturgy: LiturgyData }) {
 
   const store = useWeeklyEditorStore(state => state);
   const dateRangeForm = useStoreState(store, "dateRange", "setDateRange");
@@ -37,7 +36,7 @@ export function WeeklyEditor(props: { liturgy: LiturgyData }) {
       <Button loading={store.loading} onClick={() => store.loadEvents()} label="Termine laden"/>
     </div>
 
-    <WeeklyEventsPage events={store.events} liturgy={props.liturgy}/>
+    <PageEvents events={store.events} liturgy={props.liturgy}/>
 
     <div className={sectionClass}>
       <SectionHeader>Pfarrseite</SectionHeader>
@@ -58,15 +57,14 @@ export function WeeklyEditor(props: { liturgy: LiturgyData }) {
           </div>)
           }
         </div>
-        <WeeklyItemsEditor/>
       </div>
     </div>
 
-    <WeeklyParishPage calendar={CalendarName.EMMAUS}/>
+    <PageParish calendar={CalendarName.EMMAUS}/>
     <div className="my-8 print:hidden"/>
-    <WeeklyParishPage calendar={CalendarName.INZERSDORF}/>
+    <PageParish calendar={CalendarName.INZERSDORF}/>
     <div className="my-8 print:hidden"/>
-    <WeeklyParishPage calendar={CalendarName.NEUSTIFT}/>
+    <PageParish calendar={CalendarName.NEUSTIFT}/>
 
   </div>;
 }

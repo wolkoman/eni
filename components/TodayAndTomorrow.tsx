@@ -10,6 +10,7 @@ import {site} from "@/app/(shared)/Instance";
 import * as React from "react";
 import Button from "./Button";
 import Link from "next/link";
+import {getWeekDayName} from "./calendar/Calendar";
 
 export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
   const today = new Date().toISOString().substring(0, 10);
@@ -29,15 +30,13 @@ export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
       {site([CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT], [CalendarName.EMMAUS])
         .map(c => {
           const calendarEvents = (events ?? []).filter(e => e.calendar === c)
-          return <div key={c} className={`overflow-hidden rounded-2xl relative p-1 pb-6 flex flex-col border border-black/20`}>
-            <div className="text-2xl font-semibold text-center mt-4 mb-4">
+          return <div key={c} className={`overflow-hidden bg-white rounded-lg relative p-1 pb-6 flex flex-col border border-black/10 shadow`}>
+            <div className="text-xl font-semibold text-center mt-4 mb-4">
               Pfarre {getCalendarInfo(c).shortName}
             </div>
             <div className="px-3">
               {calendarEvents.length > 0
-                ? <div className="my-2"><EventDateText date={new Date(date)}/>
-                  {calendarEvents.map(event => <Event key={event.id} event={event} small={true}/>)}
-                </div>
+                ? calendarEvents.map(event => <Event key={event.id} event={event} small={true}/>)
                 : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
               }
             </div>

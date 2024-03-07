@@ -8,10 +8,10 @@ export function EniHero() {
   const isChristmas = new Date().toISOString().substring(5,10) === "12-24"
 
   return isChristmas ? <ChristmasHero/> : <Responsive>
-    <div  className="bg-cover bg-gradient-mobile lg:bg-gradient rounded-2xl xl:-mx-20 flex flex-col lg:flex-row justify-between items-end text-white">
-      <div className="flex flex-col p-10 lg:p-16  gap-4">
-        <div className=" text-2xl">Miteinander der Pfarren</div>
-        <div className="font-bold text-5xl">Emmaus, St.&nbsp;Nikolaus und Neustift</div>
+    <div  className="bg-cover bg-gradient-mobile lg:bg-gradient rounded-lg flex flex-col lg:flex-row justify-between items-end text-white border border-black/20 shadow-lg">
+      <div className="flex flex-col p-16 gap-2">
+        <div className="text-xl">Miteinander der Pfarren</div>
+        <div className="text-4xl font-bold">Emmaus, St.&nbsp;Nikolaus und Neustift</div>
       </div>
       <div className="flex w-full h-28 lg:h-52">
         <div className="w-52 h-full lg:shrink-0 bg-contain bg-bottom bg-no-repeat" style={{backgroundImage: `url(${getCalendarInfo(CalendarName.EMMAUS).image})`}}/>

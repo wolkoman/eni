@@ -20,7 +20,9 @@ export async function fetchInstagramFeed(token: string) {
         )
         .then(items => Promise.all(items.map(async (item: any) => ({
             ...item,
-            title: await getInstagramTitle(item.caption)
+            title: await getInstagramTitle(item.caption),
+            children: await fetch(`/${item.id}/children?fields={fields}&access_token={access-token}/children?fields=${fields}&access_token=$
+            {access-token}`)
         }))))
         .then(async data => {
             //await Cockpit.collectionSave("internal-data", {_id: Cockpit.InternalId.InstagramCache, data});
@@ -28,7 +30,8 @@ export async function fetchInstagramFeed(token: string) {
         })
         .catch(() => {
             console.log("INSTAGRAM FAILED")
-            return Cockpit.collectionGetCached("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
+            return []
+            //return Cockpit.collectionGetCached("internal-data", {filter: {id: "instagram-cache"}}).then(x => x.entries[0].data);
         });
 
 }

@@ -1,7 +1,9 @@
-import {parishes} from "@/app/intern/weekly-editor/WeeklyEventsPage";
+import {parishes} from "@/app/intern/weekly-editor/PageEvents";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import React from "react";
+import Link from "next/link";
 
-export function WeeklyPageHeader() {
+export function Header() {
   return <div className="flex justify-between">
     <div className="opacity-70 leading-snug text-xs">
       Miteinder der Pfarren Emmaus, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift<br/>
@@ -13,23 +15,21 @@ export function WeeklyPageHeader() {
   </div>;
 }
 export function WeeklyPageHeader2(props: { parish: CalendarName }) {
-  return <div className="flex justify-between relative">
-    <div>
-      <div className="text-lg">
-        Informationen für die
-      </div>
-      <div className="text-2xl tracking-wide font-serif">
-        {getCalendarInfo(props.parish).fullName}
-      </div>
+  return <div className="flex justify-between border-b border-black/30">
+    <div className="opacity-70 leading-snug text-xs">
+      <div>{getCalendarInfo(props.parish).fullName}</div>
+      <Link href="https://eni.wien"><u>eni.wien</u></Link> | +43 664 886 32 680
     </div>
-    <img src={getCalendarInfo(props.parish).image} className="w-24 absolute bottom-0 right-0 translate-y-6"/>
+    <div className="flex">
+      <img src={getCalendarInfo(props.parish).image} className="w-14"/>
+    </div>
   </div>;
 }
 
 export function WeeklyPageFooter() {
   return <div className="flex justify-between leading-snug text-xs opacity-70 mt-2">
     <div>
-    Für den Inhalt verantwortlich: Pfarrer Dr. Zvonko Brezovski
+      Für den Inhalt verantwortlich: Pfarrer Dr. Zvonko Brezovski
     </div>
   </div>;
 }

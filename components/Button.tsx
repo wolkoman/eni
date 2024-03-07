@@ -25,7 +25,7 @@ export default function Button(props: {
   ].join(" ")
 
 
-  return <div className={`${props.className ?? ''} inline-block rounded-lg transform transition ${style}`}
+  return <div className={`${style} ${props.className ?? ''} inline-block rounded transform transition font-semibold `}
     onMouseLeave={() => setSure(false)}
     onClick={props.sure ? (sure ? props.onClick : () => setSure(x => !x)) : props.onClick}>
     {props.label}

@@ -39,7 +39,7 @@ export const useWeeklyEditorStore = create(persist(combine({
     loading: false,
     items: [] as WeeklyParishItem[],
     switchSideFor: [] as {parish: CalendarName, id: string}[],
-    hideDescriptionForIds: [] as string[],
+    customEventDescription: {} as Record<string, string|null>,
     announcements: [] as Collections["announcements"][],
     dateRange: {start: "", end: ""}
   }, (set, get) => ({
@@ -104,9 +104,9 @@ export const useWeeklyEditorStore = create(persist(combine({
     removeItem(id: string) {
       set({items: get().items.filter(item => item.id !== id)})
     },
-    toggleDescriptionFor(id: string) {
-      const list = get().hideDescriptionForIds;
-      set({hideDescriptionForIds: [...list.filter(item => item !== id), ...(list.includes(id) ? [] : [id])]})
+    setCustomDescription(eventId: string, description: string | null) {
+      const list = get().customEventDescription;
+      set({customEventDescription: {...list, [eventId]: description}})
     },
     toggleSideFor(id: string, parish: CalendarName) {
       const list = get().switchSideFor;
