@@ -40,7 +40,7 @@ export function Alpha() {
 
   return <div className="my-8">
     <SectionHeader>Alpha Kurs</SectionHeader>
-    <div className="flex">
+    <div className="flex flex-col lg:flex-row">
       <div className="flex items-center relative">
         {!play && <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
         onClick={() => {
