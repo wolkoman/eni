@@ -61,7 +61,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
         <div className={props.parish !== "all" ? 'hidden' : ''}><Field label="Pfarre">
             <SelfServiceParish name="parish" form={form}/>
         </Field></div>
-        <div className={(loading ? 'animate-pulse' : '') + "flex justify-end"}>
+        <div className={(loading ? 'animate-pulse' : '') + " flex justify-end"}>
             <Button label="Speichern" onClick={save} disabled={loading || !form[0].summary || !form[0].date || !form[0].time}></Button>
         </div>
     </div>;
