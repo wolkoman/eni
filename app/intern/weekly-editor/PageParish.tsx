@@ -14,7 +14,7 @@ export function PageParish(props: { calendar: CalendarName }) {
     : undefined;
 
   const columnStyle = "flex flex-col gap-6 h-full"
-  return <div className="w-[21cm] h-[29.7cm] border border-black/20 p-12 flex flex-col mx-auto">
+  return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/20 p-12 flex flex-col mx-auto">
     <WeeklyPageHeader2 parish={props.calendar}/>
     <div className="h-full grid grid-cols-2 gap-6 my-6">
       <div className={columnStyle}>{store.items

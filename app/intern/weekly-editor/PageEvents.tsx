@@ -15,7 +15,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
   const events = groupEventsByDate(props.events);
   const lastDate = new Date(props.events.at(-1)?.date!);
 
-  return <div className="w-[21cm] h-[29.7cm] border border-black/40/20 p-12 flex flex-col mx-auto">
+  return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/40/20 p-12 flex flex-col mx-auto">
 
     <Header/>
 
