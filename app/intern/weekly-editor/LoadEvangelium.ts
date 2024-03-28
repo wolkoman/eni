@@ -20,6 +20,7 @@ export async function loadEvangelium(date: string) {
       html = html.substring(0, html.indexOf("<h2 class=\"s_u1\">"))
       const body = new XMLParser(parsingOptions).parse(html);
 
+      console.log({date, html})
       const [{h2: [_, {span: [{"#text": place}]}]}, ...p] = body
       const text = p
         .filter((e: any) => e?.[":@"]?.["@_class"].startsWith("lb_tx"))

@@ -8,6 +8,7 @@ import {loadAnnouncements} from "@/app/intern/weekly/loadAnnouncements";
 import {Collections} from "cockpit-sdk";
 import {loadEvangelium} from "@/app/intern/weekly-editor/LoadEvangelium";
 import {CalendarName} from "@/domain/events/CalendarInfo";
+import {hideAnnouncement} from "@/app/intern/weekly/hideAnnouncement";
 
 export type WeeklyParishItem = Article | Teaser
 
@@ -41,7 +42,7 @@ export const useWeeklyEditorStore = create(persist(combine({
     switchSideFor: [] as {parish: CalendarName, id: string}[],
     customEventDescription: {} as Record<string, string|null>,
     announcements: [] as Collections["announcements"][],
-    dateRange: {start: "", end: ""}
+    dateRange: {start: "", end: "", name: ""}
   }, (set, get) => ({
     setDateRange: (dateRange: ReturnType<typeof get>["dateRange"]) => {
       set({dateRange});
@@ -103,6 +104,10 @@ export const useWeeklyEditorStore = create(persist(combine({
     },
     removeItem(id: string) {
       set({items: get().items.filter(item => item.id !== id)})
+    },
+    removeAnnouncement(id: string) {
+      set({announcements: get().announcements.filter(item => item._id !== id)})
+      hideAnnouncement(id).then()
     },
     setCustomDescription(eventId: string, description: string | null) {
       const list = get().customEventDescription;

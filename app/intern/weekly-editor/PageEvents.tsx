@@ -4,16 +4,18 @@ import {getWeekDayName} from "../../../components/calendar/Calendar";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {ElementRef, useRef} from "react";
 import {LiturgyData} from "../../../pages/api/liturgy";
-import {WeeklyPageFooter, Header} from "@/app/intern/weekly-editor/Header";
+import {Header, WeeklyPageFooter} from "@/app/intern/weekly-editor/Header";
 import {Event} from "@/app/intern/weekly-editor/Event";
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
+import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import {PiArrowCircleLeftBold, PiArrowUUpLeftBold} from "react-icons/pi";
 
 export const parishes = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
 
 export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyData }) {
   const ref = useRef<ElementRef<'div'>>(null);
   const events = groupEventsByDate(props.events);
-  const lastDate = new Date(props.events.at(-1)?.date!);
+  const dateRange = useWeeklyEditorStore(state => state.dateRange)
 
   return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/40/20 p-12 flex flex-col mx-auto">
 
@@ -21,7 +23,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
 
     <div className="my-6 flex justify-center items-center gap-2">
       <div className="text-3xl font-bold tracking-tight">Wochenmitteilungen  </div>
-      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">KW{getWeekOfYear(lastDate)} {lastDate.getFullYear()}</div>
+      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">{dateRange.name}</div>
     </div>
 
     <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm font-semibold">
@@ -44,7 +46,9 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
           return <div className={`contents`} key={dateString}>
 
             <div className={`px-2 py-0.5 border-b border-black/40 ${isSpecial ? 'font-semibold text-red-600' : ''}`}>
-              <div className={isSpecial ? "underline" : ""}>{getWeekDayName(date.getDay())}, {date.getDate()}.{date.getMonth() + 1}.</div>
+              <div
+                className={isSpecial ? "underline" : ""}>{getWeekDayName(date.getDay())}, {date.getDate()}.{date.getMonth() + 1}.
+              </div>
               {showLiturgy && <div className="text-xs font-normal italic">
                 {liturgyElement?.[0].name} {liturgyElement?.[0].rank
                 ? `(${liturgyElement?.[0].rank})`

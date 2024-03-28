@@ -3,6 +3,7 @@ import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import {EventPopup} from "@/app/intern/weekly-editor/EventPopup";
 import {useEffect, useRef} from "react";
+import {PiWarningBold, PiWarningFill} from "react-icons/pi";
 
 export function Event(props: { event: CalendarEvent }) {
   const store = useWeeklyEditorStore(state => state);
@@ -24,7 +25,8 @@ export function Event(props: { event: CalendarEvent }) {
   }, [ref.current, description]);
 
   return <div
-    className={`flex ${special ? 'font-semibold' : ''} ${description != props.event.description ? 'border-l border-red-500 print:border-0' : ''} mb-0.5 group relative`}>
+    className={`flex ${special ? 'font-semibold' : ''} mb-0.5 group relative`}>
+    {description != props.event.description && <PiWarningFill className="text-yellow-600/50 absolute top-0.5 right-0 translate-x-1/2"/>}
     <div className="w-[1cm] shrink-0">{props.event.time}</div>
     <div className="w-full">
       <div className="">
