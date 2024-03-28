@@ -3,17 +3,17 @@
 import React, {useEffect} from 'react';
 import Site from '../../../components/Site';
 import Button from '../../../components/Button';
-import {toast} from 'react-toastify';
-import {useState} from '../../(shared)/use-state-util';
+import {useState} from '@/app/(shared)/use-state-util';
 import {useRouter, useSearchParams} from 'next/navigation';
-import {useUserStore} from "../../(store)/UserStore";
+import {useUserStore} from "@/store/UserStore";
 import {Links} from "../../(shared)/Links";
 import Link from "next/link";
 
 export function LoginPage() {
     const [data, setData, setPartialData] = useState({username: '', password: ''});
+    const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(false);
-    const [user, _login, setJwt, loading] = useUserStore(state => [state.user, state.login, state.setJwt, state.loading])
+    const [user, _login, setJwt] = useUserStore(state => [state.user, state.login, state.setJwt, state])
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -32,18 +32,16 @@ export function LoginPage() {
     }
 
     function login() {
-        toast.promise(_login(data), {
-            error: 'Anmeldedaten sind nicht korrekt',
-            pending: 'Anmeldung läuft...',
-            success: 'Anmeldung erfolgreich'
-        })
+        setLoading(true)
+        _login(data)
           .then(() => onLogin())
-          .catch(() => setPartialData({password: ''}));
+          .catch(() => {
+              setPartialData({password: ''});
+              setLoading(false);
+          })
     }
 
-    function buttonDisabled() {
-        return data.username.length === 0 || data.password.length === 0;
-    }
+    const buttonDisabled = data.username.length === 0 || data.password.length === 0;
 
     return <Site navbar={false} responsive={false} footer={false} title="Login">
         <div
@@ -61,12 +59,11 @@ export function LoginPage() {
                            disabled={loading}
                            onChange={(event) => setData({...data, password: (event as any).target.value})}
                            onKeyDown={(e) => {
-                               if (e.key === "Enter" && !buttonDisabled()) login()
+                               if (e.key === "Enter" && !buttonDisabled) login()
                            }}
                     />
                     <div className={`${loading ? "animate-pulse" : ""} mt-4 w-full text-center grid`}>
-                        <Button onClick={() => login()} label="Anmelden"
-                                disabled={buttonDisabled()}/>
+                        <Button onClick={() => login()} label="Anmelden" disabled={buttonDisabled} loading={loading}/>
                     </div>
                 </div>
             </div>

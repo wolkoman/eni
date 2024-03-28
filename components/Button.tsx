@@ -1,6 +1,7 @@
 "use client"
 
 import React, {ReactNode, useState} from 'react';
+import {RiLoader4Fill} from "react-icons/ri";
 
 export default function Button(props: {
   label: ReactNode,
@@ -18,16 +19,14 @@ export default function Button(props: {
   const style = [
     props.big ? 'px-8 py-3 text-lg ' : 'px-3 py-1',
     props.secondary ? 'border border-black/20 text-black/80 hover:bg-black/10' : 'bg-black/5',
-    disabled ? 'pointer-events-none' : 'cursor-pointer',
-    props.disabled ? 'opacity-70 border-black/50' : 'hover:bg-black/10 hover:text-black',
+    disabled ? 'opacity-70 border-black/50 pointer-events-none' : 'hover:bg-black/10 hover:text-black cursor-pointer',
     sure ? 'bg-[#d00] hover:bg-[#c00] text-white scale-110 transition-all shadow-xl' : '',
-    !props.loading && 'button-loading'
   ].join(" ")
 
 
-  return <div className={`${style} ${props.className ?? ''} inline-block rounded transform transition font-semibold `}
+  return <div className={`${style} ${props.className ?? ''} inline-block rounded  transition font-semibold`}
     onMouseLeave={() => setSure(false)}
     onClick={props.sure ? (sure ? props.onClick : () => setSure(x => !x)) : props.onClick}>
-    {props.label}
+    {props.loading && <RiLoader4Fill className="animate-spin inline-block -mt-1"/>} {props.label}
   </div>;
 }
