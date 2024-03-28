@@ -26,7 +26,7 @@ export function Event(props: { event: CalendarEvent }) {
 
   return <div
     className={`flex ${special ? 'font-semibold' : ''} mb-0.5 group relative`}>
-    {description != props.event.description && <PiWarningFill className="text-yellow-600/50 absolute top-0.5 right-0 translate-x-1/2"/>}
+    {description != props.event.description && <PiWarningFill className="text-yellow-600/50 absolute top-0.5 right-0 translate-x-1/2 print:hidden"/>}
     <div className="w-[1cm] shrink-0">{props.event.time}</div>
     <div className="w-full">
       <div className="">
