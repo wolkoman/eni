@@ -1,7 +1,6 @@
 import {FilterType, getMonthName, getWeekDayName} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "@/app/(shared)/use-state-util";
-import {Settings} from "../Settings";
 import React from "react";
 import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {CalendarEvent} from "@/domain/events/EventMapper";
@@ -29,33 +28,30 @@ export function MonthView(props: {
                      onClick={() => setSelected(d => new Date(d.setMonth(month + 1)))}>➡️
                 </div>
             </div> : <div/>}
-            <div>
-                <Settings/>
-            </div>
         </div>
         <div className="grid grid-cols-7 gap-1">
             {Array.from({length: 7}).map((_, i) => <div>{getWeekDayName((i + 1) % 7)}</div>)}
             {Array.from({length: day}).map(() => <div></div>)}
             {Array.from({length: daysInMonth})
-                .map((_, i) => ({
-                    day: i + 1,
-                    events: props.items
-                        .filter(item => item.date === new Date(year, month, i + 2).toISOString().substring(0, 10))
-                }))
-                .map(({day, events}) => <div className="bg-black/5 px-1 rounded-lg overflow-hidden">
-                    <div className="text-right">{day}</div>
-                    <div className="relative overflow-auto h-32">
-                        {events.map(event => <div className=" text-sm flex gap-1">
-                            <div className="shrink-0 scale-75">
-                                <ParishDot info={getCalendarInfo(event.calendar)} private={false} small={true}/>
-                            </div>
-                            <div className="overflow-hidden">
+              .map((_, i) => ({
+                  day: i + 1,
+                  events: props.items
+                    .filter(item => item.date === new Date(year, month, i + 2).toISOString().substring(0, 10))
+              }))
+              .map(({day, events}) => <div className="bg-black/5 px-1 rounded-lg overflow-hidden">
+                  <div className="text-right">{day}</div>
+                  <div className="relative overflow-auto h-32">
+                      {events.map(event => <div className=" text-sm flex gap-1">
+                          <div className="shrink-0 scale-75">
+                              <ParishDot info={getCalendarInfo(event.calendar)} private={false} small={true}/>
+                          </div>
+                          <div className="overflow-hidden">
                                 <span title={event.summary} className="line-clamp-1 break-all visible"><span
-                                    className="text-black/50 mr-1">{event.time}</span> {event.summary}</span>
-                            </div>
-                        </div>)}
-                    </div>
-                </div>)}
+                                  className="text-black/50 mr-1">{event.time}</span> {event.summary}</span>
+                          </div>
+                      </div>)}
+                  </div>
+              </div>)}
         </div>
     </div>;
 }

@@ -20,13 +20,17 @@ export interface InstagramFeedItem {
 }
 
 function InstagramItem(props: { item: InstagramFeedItem }) {
-  return <div className="flex flex-col lg:flex-row items-start lg:items-stretch gap-2 p-4 border border-black/10 bg-white shadow rounded-lg">
-    <div
-      style={{backgroundImage: `url(${props.item?.media_url})`}}
-      className="bg-cover relative bg-center w-full lg:w-72 aspect-square rounded shrink-0"
-    />
-    {JSON.stringify(props.item)}
-    <div className="px-4 py-2 flex flex-col gap-2 grow">
+  return <div
+    className="flex flex-col lg:flex-row items-start lg:items-stretch gap-2 border border-black/10 bg-white shadow rounded-lg overflow-hidden">
+    {props.item.media_type == "VIDEO"
+      ? <video className="w-full lg:w-80 aspect-square shrink-0" autoPlay controls muted loop>
+        <source src={props.item.media_url}/>
+      </video>
+      : <div
+        style={{backgroundImage: `url(${props.item?.media_url})`}}
+        className="bg-cover relative bg-center w-full lg:w-80 aspect-square shrink-0"
+      />}
+    <div className="px-4 py-6 flex flex-col gap-2 grow">
       <div className="text-xl font-semibold">{props.item?.title}</div>
       <div className="grow">{props.item?.caption}</div>
       <div className="flex  items-end justify-end">
@@ -62,7 +66,7 @@ export function Instagram(props: { items: InstagramFeedItem[] }) {
         <InstagramItem key={index} item={item}/>)}
     </div>
     {props.items.length > length && <div className="flex justify-end my-4">
-        <Button label={<>Mehr</>} onClick={() => setLength(x => x +3)}/>
+        <Button label={<>Mehr</>} onClick={() => setLength(x => x + 3)}/>
     </div>}
   </div>;
 }

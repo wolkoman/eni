@@ -42,8 +42,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
         }).finally(() => setLoading(false))
     }
 
-    return <div
-        className={`absolute top-0 ${props.eventId ? 'left-0' : 'right-0'} bg-white rounded-lg shadow-lg p-4 px-6 z-40 w-[400px]`}>
+    return <div className={`absolute top-0 ${props.eventId ? 'left-0' : 'right-0'} bg-white rounded shadow p-4 px-6 z-40 w-[400px]`}>
         <Field label="Name">
             <SelfServiceInput name="summary" form={form}/>
         </Field>

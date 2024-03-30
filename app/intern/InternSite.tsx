@@ -15,7 +15,7 @@ export function InternButton({href, label, onClick, children}: {
   onClick?: () => any,
   children?: ReactNode
 }) {
-  const inside = <div onClick={onClick} className="rounded text-lg">
+  const inside = <div onClick={onClick} className="rounded">
     {label}{children}
   </div>;
   return href ? <Link href={href}>{inside}</Link> : <div onClick={onClick}>{inside}</div>;
@@ -68,7 +68,7 @@ function Section(props: {
   children: ReactNode
   picture?: string
 }) {
-  return <div className="border border-black/20 rounded-lg p-4 relative grid grid-cols-2">
+  return <div className="border border-black/20 rounded-lg p-4 relative grid grid-cols-2 bg-white shadow">
     <div className=" grid place-items-center">
       <img src={props.picture} className="w-36" alt={props.picture}/>
     </div>
