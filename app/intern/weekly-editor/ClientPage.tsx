@@ -7,14 +7,14 @@ import {useStoreState} from "@/app/(shared)/UseStoreState";
 import React, {useEffect} from "react";
 import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {PiArchiveBold, PiArrowCounterClockwiseBold, PiPlusBold, PiTrashBold} from "react-icons/pi";
+import {PiArchiveBold, PiArrowCounterClockwiseBold, PiPlusBold, PiShareFatBold} from "react-icons/pi";
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
 import {ParishDot} from "../../../components/calendar/ParishDot";
 import {PageEvents} from "@/app/intern/weekly-editor/(events-page)/PageEvents";
 import {PageParish} from "@/app/intern/weekly-editor/(announcements)/PageParish";
 
 
-export function ClientPage(props: { liturgy: LiturgyData }) {
+export default function ClientPage(props: { liturgy: LiturgyData }) {
 
   const store = useWeeklyEditorStore();
   const dateRangeForm = useStoreState(store, "dateRange", "setDateRange");
@@ -28,10 +28,22 @@ export function ClientPage(props: { liturgy: LiturgyData }) {
   const lastDate = new Date(store.events.at(-1)?.date!);
   const defaultName = `KW${getWeekOfYear(lastDate)} ${lastDate.getFullYear()}`
   return <div>
-
+    <div className={`print:hidden bg-white sticky top-0 z-50 shadow-lg`}>
+      <div className={"max-w-2xl mx-auto py-2 flex justify-between rounded"}>
+        <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
+        <div>
+          <Button
+            loading={store.loading}
+            icon={PiShareFatBold}
+            label="Veröffentlichen"
+            onClick={ () => store.upsert()}
+          />
+        </div>
+      </div>
+    </div>
     <div className={sectionClass}>
       <SectionHeader>Terminseite</SectionHeader>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Field label="Startdatum">
           <SelfServiceInput name="start" form={dateRangeForm} type="date"/>
         </Field>
@@ -43,17 +55,15 @@ export function ClientPage(props: { liturgy: LiturgyData }) {
             <SelfServiceInput name="name" form={dateRangeForm} type="text"/>
             {dateRangeForm[0].name != defaultName && <Button
                 onClick={() => store.setDateRange({...dateRangeForm[0], name: defaultName})}
-                label={<PiArrowCounterClockwiseBold
-                  className="mt-2"
-                />}/>}
-
+                label={<PiArrowCounterClockwiseBold className="mt-2"/>}
+            />}
           </div>
         </Field>
       </div>
       <Button loading={store.loading} onClick={() => store.loadEvents()} label="Termine laden"/>
     </div>
 
-    <PageEvents events={store.events} liturgy={props.liturgy}/>
+    <PageEvents events={store.events} liturgy={props.liturgy} storeData={store}/>
 
     <div className={sectionClass}>
       <SectionHeader>Pfarrseite</SectionHeader>
@@ -97,11 +107,11 @@ export function ClientPage(props: { liturgy: LiturgyData }) {
       </div>
     </div>
 
-    <PageParish calendar={CalendarName.EMMAUS}/>
+    <PageParish calendar={CalendarName.EMMAUS} storeData={store}/>
     <div className="my-8 print:hidden"/>
-    <PageParish calendar={CalendarName.INZERSDORF}/>
+    <PageParish calendar={CalendarName.INZERSDORF} storeData={store}/>
     <div className="my-8 print:hidden"/>
-    <PageParish calendar={CalendarName.NEUSTIFT}/>
+    <PageParish calendar={CalendarName.NEUSTIFT} storeData={store}/>
 
   </div>;
 }

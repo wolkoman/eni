@@ -3,17 +3,16 @@ import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {ElementRef, useRef} from "react";
 import {Header, WeeklyPageFooter} from "@/app/intern/weekly-editor/Header";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import {useWeeklyEditorStore, WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
 import {LiturgyData} from "../../../../pages/api/liturgy";
 import {getWeekDayName} from "../../../../components/calendar/Calendar";
 import {Event} from "./Event"
 
 export const parishes = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
 
-export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyData }) {
+export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyData, storeData: WeeklyEditorStoreData }) {
   const ref = useRef<ElementRef<'div'>>(null);
   const events = groupEventsByDate(props.events);
-  const dateRange = useWeeklyEditorStore(state => state.dateRange)
 
   return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/40/20 p-12 flex flex-col mx-auto">
 
@@ -21,7 +20,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
 
     <div className="my-6 flex justify-center items-center gap-2">
       <div className="text-3xl font-bold tracking-tight">Wochenmitteilungen  </div>
-      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">{dateRange.name}</div>
+      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">{props.storeData.dateRange.name}</div>
     </div>
 
     <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm font-semibold">
@@ -62,7 +61,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
               >
                 {events
                   .filter(event => event.calendar === calendar)
-                  .map(event => <Event event={event}/>)
+                  .map(event => <Event key={event.id} event={event} storeData={props.storeData}/>)
                 }
               </div>
             )}

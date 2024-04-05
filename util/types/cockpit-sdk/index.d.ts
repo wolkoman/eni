@@ -4,6 +4,7 @@ declare module 'cockpit-sdk' {
 
   import {Diff} from "diff-match-patch";
   import {CalendarName} from "@/domain/events/CalendarInfo";
+  import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {
     'internal-data': { data: any, id: string } & Object,
@@ -30,6 +31,12 @@ declare module 'cockpit-sdk' {
       inzersdorf: string,
       neustift: string,
       preview: { path: string },
+    } & Object,
+    'weekly_v2': {
+      name: string,
+      start: string,
+      end: string,
+      data: WeeklyEditorStoreData
     } & Object,
     'site': {
       name: string,

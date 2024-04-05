@@ -1,12 +1,11 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
 import React, {useEffect, useRef} from "react";
 import {PiWarningFill} from "react-icons/pi";
 import {EventPopup} from "@/app/intern/weekly-editor/(events-page)/EventPopup";
 
-export function Event(props: { event: CalendarEvent }) {
-  const store = useWeeklyEditorStore(state => state);
+export function Event(props: { event: CalendarEvent, storeData: WeeklyEditorStoreData }) {
   const special = props.event.groups.includes(CalendarGroup.Messe)
   const mainPersons = {
     "Brez": "Pfr. Z.B.",
@@ -16,7 +15,7 @@ export function Event(props: { event: CalendarEvent }) {
   }
   const ref = useRef<HTMLTextAreaElement>(null)
   const summary = props.event.summary.replaceAll("Sakramentenvorbereitung Versöhnung und Kommunion", "Sakramenten​vorbereitung")
-  const customDescription = store.customEventDescription[props.event.id]
+  const customDescription = props.storeData.customEventDescription[props.event.id]
   const description = customDescription ?? props.event.description;
   useEffect(() => {
     if (!ref.current) return;
@@ -34,13 +33,13 @@ export function Event(props: { event: CalendarEvent }) {
         {Object.entries(mainPersons)
           .filter(([name]) => props.event.mainPerson?.includes(name))
           .map(([_, initial]) =>
-            <div className="text-xs font-normal opacity-50 rounded pl-1.5 inline-block">{initial}</div>
+            <div key={initial} className="text-xs font-normal opacity-50 rounded pl-1.5 inline-block">{initial}</div>
           )}
       </div>
       {!!description && <textarea
           ref={ref}
           className="text-xs font-normal leading-tight resize-none h-fit overflow-y-hidden w-full"
-          onChange={event => store.setCustomDescription(
+          onChange={event => props.storeData.setCustomDescription(
             props.event.id,
             props.event.description == event.target.value ? null : event.target.value
           )}

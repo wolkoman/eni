@@ -1,41 +1,32 @@
 import React from 'react';
 import Site from "../../components/Site";
-import {Links} from "../(shared)/Links";
-import {CalendarName, getCalendarInfo} from "../(domain)/events/CalendarInfo";
+import {cockpit} from "@/util/cockpit-sdk";
+import {ItemComponent} from "@/app/intern/weekly-editor/(announcements)/ItemComponent";
+import {loadCachedEvents} from "@/domain/events/EventsLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
+import {site} from "@/app/(shared)/Instance";
 
 
 export default async function Page() {
-    return <WochenmitteilungenSite/>
-}
 
-const WochenmitteilungenSite = () => {
-    return (
-      <Site title="Wochenmitteilungen" showTitle={true}>
-          <div className="max-w-xl my-6">
-              Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu. Sie können sich auch gerne für
-              den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an
-              kanzlei@eni.wien.
-          </div>
-          <div className="grid lg:grid-cols-3 gap-2">
-              <WeeklyButton
-                href={Links.Wochenmitteilungen(CalendarName.EMMAUS)} index={0}
-                calendar={CalendarName.EMMAUS}/>
-              <WeeklyButton
-                href={Links.Wochenmitteilungen(CalendarName.INZERSDORF)} index={1}
-                calendar={CalendarName.INZERSDORF}/>
-              <WeeklyButton
-                href={Links.Wochenmitteilungen(CalendarName.NEUSTIFT)} index={2}
-                calendar={CalendarName.NEUSTIFT}/>
-          </div>
-      </Site>
-    );
-};
+  const weeklies = await cockpit.collectionGet("weekly_v2").then(response => response.entries)
+  const weekly = weeklies
+    .filter(weekly => new Date(weekly.end) > new Date() && new Date() > new Date(weekly.start))
+    .sort((a, b) => a._modified - b._modified)?.[0]
 
-function WeeklyButton(props: { index: number, href?: string, calendar: CalendarName }) {
-    const info = getCalendarInfo(props.calendar);
-    return <a
-      className={`block text-center font-bold rounded-lg ${info.className} overflow-hidden shadow-lg p-8 hover:opacity-90`}
-      href={props.href}
-    >{info.fullName}
-    </a>
+  return (
+    <Site title="Wochenmitteilungen" >
+      <div className="text-4xl font-bold my-6 lg:my-12 print:hidden">
+        Wochenmitteilungen
+      </div>
+      <div className="max-w-xl my-6 print:hidden">
+        Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu. Sie können sich auch gerne für
+        den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an
+        kanzlei@eni.wien.
+      </div>
+      {weekly?.data && <WeeklyContent events={weekly.data.events} storeData={weekly.data}/>}
+    </Site>
+  );
+
 }
