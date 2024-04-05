@@ -1,7 +1,7 @@
 import {Teaser, useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import React, {Dispatch, SetStateAction} from "react";
-import {Field, SelfServiceInput} from "../../../../components/SelfService";
-import {getWeekDayName} from "../../../../components/calendar/Calendar";
+import {Field, SelfServiceInput} from "../../../../../components/SelfService";
+import {getWeekDayName} from "../../../../../components/calendar/Calendar";
 
 export function WeeklyTeaserEditor({form}: { form: [Teaser, Dispatch<SetStateAction<Teaser>>] }) {
   const events = useWeeklyEditorStore(state => state.events)

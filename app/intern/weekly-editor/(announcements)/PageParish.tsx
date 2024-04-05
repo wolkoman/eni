@@ -1,12 +1,10 @@
 import {WeeklyPageHeader2} from "@/app/intern/weekly-editor/Header";
 import {useWeeklyEditorStore, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
 import {CalendarName} from "@/domain/events/CalendarInfo";
-import {ArticleComponent} from "./(components)/Article";
-import {TeaserComponent} from "./(components)/Teaser";
 import {useState} from "react";
-import {WeeklyItemEditor} from "@/app/intern/weekly-editor/ParishEditor";
-import {toast} from "react-toastify";
-import isActive = toast.isActive;
+import {ArticleComponent} from "@/app/intern/weekly-editor/(announcements)/(components)/Article";
+import {TeaserComponent} from "@/app/intern/weekly-editor/(announcements)/(components)/Teaser";
+import {WeeklyItemEditor} from "@/app/intern/weekly-editor/(announcements)/ParishEditor";
 
 export function PageParish(props: { calendar: CalendarName }) {
 

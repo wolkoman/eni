@@ -1,9 +1,9 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
-import {EventPopup} from "@/app/intern/weekly-editor/EventPopup";
-import {useEffect, useRef} from "react";
-import {PiWarningBold, PiWarningFill} from "react-icons/pi";
+import React, {useEffect, useRef} from "react";
+import {PiWarningFill} from "react-icons/pi";
+import {EventPopup} from "@/app/intern/weekly-editor/(events-page)/EventPopup";
 
 export function Event(props: { event: CalendarEvent }) {
   const store = useWeeklyEditorStore(state => state);

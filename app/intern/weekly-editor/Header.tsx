@@ -1,7 +1,7 @@
-import {parishes} from "@/app/intern/weekly-editor/PageEvents";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import React from "react";
 import Link from "next/link";
+import {parishes} from "@/app/intern/weekly-editor/(events-page)/PageEvents";
 
 export function Header() {
   return <div className="flex justify-between">

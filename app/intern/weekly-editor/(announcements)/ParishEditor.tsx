@@ -1,10 +1,10 @@
 import {useWeeklyEditorStore, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
-import Button from "../../../components/Button";
 import React, {createContext, Dispatch, SetStateAction, useEffect, useState} from "react";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {WeeklyArticleEditor} from "@/app/intern/weekly-editor/(components)/Article";
-import {WeeklyTeaserEditor} from "@/app/intern/weekly-editor/(components)/Teaser";
 import {PiArrowsLeftRightBold, PiTrashBold} from "react-icons/pi";
+import {WeeklyArticleEditor} from "@/app/intern/weekly-editor/(announcements)/(components)/Article";
+import {WeeklyTeaserEditor} from "@/app/intern/weekly-editor/(announcements)/(components)/Teaser";
+import Button from "../../../../components/Button";
 
 
 const ItemForm = createContext<[WeeklyParishItem, Dispatch<SetStateAction<WeeklyParishItem>>] | null>(null)

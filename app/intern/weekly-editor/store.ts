@@ -2,13 +2,13 @@
 import {v4 as uuidv4} from 'uuid';
 import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {loadWeeklyEvents} from "./LoadWeeklyEvents";
 import create from "zustand";
 import {loadAnnouncements} from "@/app/intern/weekly/loadAnnouncements";
 import {Collections} from "cockpit-sdk";
-import {loadEvangelium} from "@/app/intern/weekly-editor/LoadEvangelium";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {hideAnnouncement} from "@/app/intern/weekly/hideAnnouncement";
+import {loadEvangelium} from "@/app/intern/weekly-editor/(announcements)/LoadEvangelium";
+import {loadWeeklyEvents} from "@/app/intern/weekly-editor/(events-page)/LoadWeeklyEvents";
 
 export type WeeklyParishItem = Article | Teaser
 

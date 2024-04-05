@@ -1,17 +1,17 @@
 "use client"
-import {PageEvents} from "@/app/intern/weekly-editor/PageEvents";
 import {LiturgyData} from "../../../pages/api/liturgy";
 import {Field, SelfServiceInput} from "../../../components/SelfService";
 import Button from "../../../components/Button";
 import {SectionHeader} from "../../../components/SectionHeader";
 import {useStoreState} from "@/app/(shared)/UseStoreState";
-import {PageParish} from "@/app/intern/weekly-editor/PageParish";
 import React, {useEffect} from "react";
 import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {PiArchiveBold, PiArrowCounterClockwiseBold, PiPlusBold, PiTrashBold} from "react-icons/pi";
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
 import {ParishDot} from "../../../components/calendar/ParishDot";
+import {PageEvents} from "@/app/intern/weekly-editor/(events-page)/PageEvents";
+import {PageParish} from "@/app/intern/weekly-editor/(announcements)/PageParish";
 
 
 export function ClientPage(props: { liturgy: LiturgyData }) {
