@@ -1,11 +1,7 @@
 import React from 'react';
 import Site from "../../components/Site";
 import {cockpit} from "@/util/cockpit-sdk";
-import {ItemComponent} from "@/app/intern/weekly-editor/(announcements)/ItemComponent";
-import {loadCachedEvents} from "@/domain/events/EventsLoader";
-import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
-import {site} from "@/app/(shared)/Instance";
 
 
 export default async function Page() {
@@ -16,7 +12,7 @@ export default async function Page() {
     .sort((a, b) => a._modified - b._modified)?.[0]
 
   return (
-    <Site title="Wochenmitteilungen" >
+    <Site title="Wochenmitteilungen">
       <div className="text-4xl font-bold my-6 lg:my-12 print:hidden">
         Wochenmitteilungen
       </div>
