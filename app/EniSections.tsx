@@ -1,26 +1,16 @@
 "use client"
 import Link from "next/link";
-import {Links} from "./(shared)/Links";
 import {EniSection} from "@/app/(shared)/EniSection";
 import {ParishButton} from "./(shared)/ParishButton";
 import {SectionHeader} from "../components/SectionHeader";
+import Button from "../components/Button";
+import {PiFileFill} from "react-icons/pi";
 
 export function EniSections() {
   return <>
     <SectionHeader id="pfarrzeitschriften">Von uns, für Sie</SectionHeader>
     <div className="grid lg:grid-cols-2 my-4 gap-12 lg:gap-12 text-center" id="wochenmitteilungen">
-      <EniSection
-        picture="/icons/icon_weekly.svg"
-        title={<>Wochen&shy;mitteilungen</>}
-        parish={info =>
-          <Link href={Links.Wochenmitteilungen(info.id)} key={info.id}>
-            <ParishButton info={info}/>
-          </Link>
-        }>
-        Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu.
-        Sie können sich auch gerne für den Newsletter registrieren: Schicken Sie dazu eine Mail mit
-        der gewünschten Pfarre an kanzlei@eni.wien.
-      </EniSection>
+
       <EniSection
         picture="/icons/icon_papers.svg"
         title={<>Pfarr&shy;zeitschriften</>}
@@ -41,20 +31,16 @@ export function EniSections() {
         Ausführliche Berichte zum Pfarrleben, Diskussionen zur Weltkirche, Impulse zum Nachdenken
         und vieles mehr finden Sie in den Pfarrzeitschriften der Pfarren.
       </EniSection>
-      {false && <EniSection
+      <EniSection
         picture="/icons/icon_music.svg"
-        title={<>Messen</>}
-        parish={info => info.id === 'neustift' ? null :
-          <Link key={info.id} href={{
-            emmaus: "https://emmaus.wien/seite/emmaus-messe",
-            inzersdorf: "https://emmaus.wien/seite/emmaus-messe",
-          }[info.id as 'emmaus']}>
-            <ParishButton info={info}>{{emmaus: "Emmaus Messe",inzersdorf: "Inzersdorf Messe",}[info.id as 'emmaus']}</ParishButton>
-          </Link>
-        }>
-        Was wäre eine heilige Messe ohne Musik? Mehrere Personen aus unseren Pfarren haben zwei Gottesdienste getextet
-        und komponiert.
-      </EniSection>}
+        title="Messen"
+      >
+        Die für unsere Pfarren komponierten Messvertonungen mit ihren berührenden Texten und Melodien ermöglichen eine frohe Liturgiefeier.
+        <Link href="https://data.eni.wien/storage/uploads/2024/04/12/Emmausmesse_final_uid_66191e43633f0.pdf"
+              className="mt-3">
+          <Button label="Mess-Folder" icon={PiFileFill}/>
+        </Link>
+      </EniSection>
     </div>
   </>;
 }

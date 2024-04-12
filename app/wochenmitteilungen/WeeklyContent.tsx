@@ -1,5 +1,3 @@
-"use client"
-import {CalendarEvent} from "@/domain/events/EventMapper";
 import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
 import {PageEvents} from "@/app/intern/weekly-editor/(events-page)/PageEvents";
 import React from "react";
@@ -8,18 +6,17 @@ import {PageParish} from "@/app/intern/weekly-editor/(announcements)/PageParish"
 import {CalendarName} from "@/domain/events/CalendarInfo";
 
 export function WeeklyContent(props: {
-  events: CalendarEvent[],
   storeData: WeeklyEditorStoreData,
 }) {
   return <>
     <div className="hidden print:block">
-      <PageEvents events={props.events} liturgy={{}} storeData={props.storeData}/>
+      <PageEvents events={props.storeData.events} liturgy={{}} storeData={props.storeData}/>
       <PageParish storeData={props.storeData} calendar={CalendarName.EMMAUS}/>
       <PageParish storeData={props.storeData} calendar={CalendarName.INZERSDORF}/>
       <PageParish storeData={props.storeData} calendar={CalendarName.NEUSTIFT}/>
     </div>
-    <div className="grid lg:grid-cols-2 gap-2 print:hidden">
-      {props.storeData.items.map(item => <ItemComponent item={item} key={item.id}/>)}
+    <div className="print:hidden lg:columns-2 gap-6">
+      {props.storeData.items.map(item => <div key={item.id} className="mb-6" ><ItemComponent item={item} storeData={props.storeData}  /></div>)}
     </div>
   </>;
 }

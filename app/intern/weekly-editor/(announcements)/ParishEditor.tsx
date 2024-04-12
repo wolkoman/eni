@@ -1,3 +1,4 @@
+"use client"
 import {useWeeklyEditorStore, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
 import React, {createContext, Dispatch, SetStateAction, useEffect, useState} from "react";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";

@@ -1,7 +1,7 @@
 import {Tooltip} from "./EventUtils";
 import {CalendarInfo} from "@/domain/events/CalendarInfo";
 
-export function ParishDot({info, small, ...props}: { info: CalendarInfo, small?: boolean, private: boolean, custom?: string }) {
+export function ParishDot({info, small, ...props}: { info: CalendarInfo, small?: boolean, private?: boolean, custom?: string }) {
     return <Tooltip tip={info?.fullName}>
         <div className="flex flex-col grow text-center">
             <div className="flex grow relative">

@@ -1,3 +1,4 @@
+"use client"
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";

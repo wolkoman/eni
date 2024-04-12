@@ -2,6 +2,7 @@ import React from 'react';
 import Site from "../../components/Site";
 import {cockpit} from "@/util/cockpit-sdk";
 import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
+import {loadWeeklyEvents} from "@/app/intern/weekly-editor/(events-page)/LoadWeeklyEvents";
 
 
 export default async function Page() {
@@ -9,7 +10,9 @@ export default async function Page() {
   const weeklies = await cockpit.collectionGet("weekly_v2").then(response => response.entries)
   const weekly = weeklies
     .filter(weekly => new Date(weekly.end) > new Date() && new Date() > new Date(weekly.start))
-    .sort((a, b) => a._modified - b._modified)?.[0]
+    .sort((a, b) => b._modified - a._modified)?.[0]
+  const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
+  const storeData = {...weekly.data, events}
 
   return (
     <Site title="Wochenmitteilungen">
@@ -21,7 +24,7 @@ export default async function Page() {
         den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an
         kanzlei@eni.wien.
       </div>
-      {weekly?.data && <WeeklyContent events={weekly.data.events} storeData={weekly.data}/>}
+      {weekly?.data && <WeeklyContent storeData={storeData}/>}
     </Site>
   );
 

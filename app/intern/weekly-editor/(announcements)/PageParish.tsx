@@ -1,5 +1,6 @@
+"use client"
 import {WeeklyPageHeader2} from "@/app/intern/weekly-editor/Header";
-import {useWeeklyEditorStore, WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
+import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useState} from "react";
 import {ItemComponent} from "@/app/intern/weekly-editor/(announcements)/ItemComponent";
@@ -18,23 +19,29 @@ export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEdi
     <div className="h-full grid grid-cols-2 gap-6 my-6">
       <div className={columnStyle}>{props.storeData.items
         .filter(item => isOn(item) === false)
-        .map(item => <ItemComponent
+        .map(item => <div
           key={item.id}
-          item={item}
-          calendar={props.calendar}
-          onActive={() => setActive(active == item.id ? "" : item.id)}
-          isActive={item.id === active}
-        />)}
+          className="flex flex-col grow"
+          onClick={() => setActive(active == item.id ? "" : item.id)}>
+          <ItemComponent
+            storeData={props.storeData}
+            item={item}
+            calendar={props.calendar}
+            isActive={item.id === active}
+          /></div>)}
       </div>
       <div className={columnStyle}>{props.storeData.items
         .filter(item => isOn(item) === true)
-        .map(item => <ItemComponent
+        .map(item => <div
           key={item.id}
-          item={item}
-          calendar={props.calendar}
-          onActive={() => setActive(active == item.id ? "" : item.id)}
-          isActive={item.id === active}
-        />)}
+          className="flex flex-col grow"
+          onClick={() => setActive(active == item.id ? "" : item.id)}>
+          <ItemComponent
+            storeData={props.storeData}
+            item={item}
+            calendar={props.calendar}
+            isActive={item.id === active}
+          /></div>)}
       </div>
     </div>
   </div>;
