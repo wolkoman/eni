@@ -16,12 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const readerData = await loadReaderData()
     const {events} = await loadEvents({
-        access: EventLoadAccess.PRIVATE_ACCESS,
-        readerData,
-        timeFrame: {
-            min: new Date(new Date().getTime() - 1000 * 3600),
-            max: new Date(new Date().getTime() + 1000 * 3600 * 24 * 7)
-        }
+      access: EventLoadAccess.PRIVATE_ACCESS,
+      readerData,
+      timeFrame: {
+        min: new Date(new Date().getTime() - 1000 * 3600),
+        max: new Date(new Date().getTime() + 1000 * 3600 * 24 * 7)
+      }
     });
 
     res.json(events.filter(event => event.calendar === CalendarName.EMMAUS && event.groups.some(group => [CalendarGroup.Messe, CalendarGroup.Gottesdienst].includes(group))));
