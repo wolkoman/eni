@@ -9,6 +9,26 @@ module.exports = {
     async redirects() {
         return [
             {
+                source: '/api/weekly',
+                destination: "/wochenmitteilungen",
+                permanent: true,
+            },
+            {
+                source: '/wochenmitteilungen/emmaus',
+                destination: "/wochenmitteilungen?parish=emmaus",
+                permanent: true,
+            },
+            {
+                source: '/wochenmitteilungen/inzersdorf',
+                destination: "/wochenmitteilungen?parish=inzersdorf",
+                permanent: true,
+            },
+            {
+                source: '/wochenmitteilungen/neustift',
+                destination: "/wochenmitteilungen?parish=neustift",
+                permanent: true,
+            },
+            {
                 source: '/login',
                 destination: "/intern/login",
                 permanent: true,

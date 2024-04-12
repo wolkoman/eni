@@ -4,9 +4,12 @@ import {cockpit} from "@/util/cockpit-sdk";
 import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
 import {loadWeeklyEvents} from "@/app/intern/weekly-editor/(events-page)/LoadWeeklyEvents";
 import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
+import {NextRequest} from "next/server";
+import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 
 
-export default async function Page() {
+export default async function Page(props: {searchParams: {parish?: string}}) {
 
   const weeklies = await cockpit.collectionGet("weekly_v2").then(response => response.entries)
   const weekly = weeklies
@@ -14,6 +17,7 @@ export default async function Page() {
     .sort((a, b) => b._modified - a._modified)?.[0]
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
   const storeData = {...weekly.data, events}
+  const parish = props.searchParams.parish as CalendarName;
 
 
   return (
@@ -27,7 +31,7 @@ export default async function Page() {
         kanzlei@eni.wien.
       </div>
       <WeeklyActions storeData={storeData}/>
-      {weekly?.data && <WeeklyContent storeData={storeData}/>}
+      {weekly?.data && <WeeklyContent storeData={storeData} calendar={parish}/>}
     </Site>
   );
 

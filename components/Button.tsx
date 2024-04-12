@@ -28,7 +28,7 @@ export default function Button(props: {
 
 
   return <div
-    className={`${style} ${props.className ?? ''} inline-flex items-center gap-1 rounded transition font-semibold`}
+    className={`${style} ${props.className ?? ''} inline-flex items-center justify-center gap-1 rounded transition font-semibold`}
     onMouseLeave={() => setSure(false)}
     onClick={props.sure ? (sure ? props.onClick : () => setSure(x => !x)) : props.onClick}>
     {props.loading ? <RiLoader4Fill className="animate-spin"/> : props.icon?.({})} {props.label}

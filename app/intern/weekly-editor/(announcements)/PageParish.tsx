@@ -22,7 +22,7 @@ export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEdi
         .map(item => <div
           key={item.id}
           className="flex flex-col grow"
-          onClick={() => setActive(active == item.id ? "" : item.id)}>
+          onClick={() => setActive(item.id)}>
           <ItemComponent
             storeData={props.storeData}
             item={item}
@@ -35,7 +35,7 @@ export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEdi
         .map(item => <div
           key={item.id}
           className="flex flex-col grow"
-          onClick={() => setActive(active == item.id ? "" : item.id)}>
+          onClick={() => setActive(item.id)}>
           <ItemComponent
             storeData={props.storeData}
             item={item}
