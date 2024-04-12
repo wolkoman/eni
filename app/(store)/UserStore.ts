@@ -46,7 +46,6 @@ export const userStore = createStore(combine({
         const jwt = getCookie('jwt');
         if (typeof jwt !== "string") return undefined;
         const user = decodeJwt(jwt).user;
-        console.log("userload", user)
         set({user, loaded: true});
         return user;
     }

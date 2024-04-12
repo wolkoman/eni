@@ -12,7 +12,7 @@ import {notifyAdmin} from "@/app/(shared)/Telegram";
 import {site} from "@/app/(shared)/Instance";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
 import {unstable_cache} from "next/cache";
-import { OAuth2Client } from "google-auth-library";
+import { GoogleAuth } from "google-auth-library";
 
 export async function loadEventsFromServer(privateOnly?: boolean) {
   const user = await resolveUserFromServer();
@@ -39,7 +39,7 @@ export const loadCachedEvents = async (options: EventLoadOptions): Promise<Event
     })()
 }
 
-export const loadEvents = async (options: EventLoadOptions, authClient?: OAuth2Client): Promise<EventsObject> => {
+export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleAuth<any>): Promise<EventsObject> => {
 
   if(!authClient) authClient = await getGoogleAuthClient()
   return Promise.all(site(
