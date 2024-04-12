@@ -3,6 +3,7 @@ import Site from "../../components/Site";
 import {cockpit} from "@/util/cockpit-sdk";
 import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
 import {loadWeeklyEvents} from "@/app/intern/weekly-editor/(events-page)/LoadWeeklyEvents";
+import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
 
 
 export default async function Page() {
@@ -14,6 +15,7 @@ export default async function Page() {
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
   const storeData = {...weekly.data, events}
 
+
   return (
     <Site title="Wochenmitteilungen">
       <div className="text-4xl font-bold my-6 lg:my-12 print:hidden">
@@ -24,6 +26,7 @@ export default async function Page() {
         den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an
         kanzlei@eni.wien.
       </div>
+      <WeeklyActions storeData={storeData}/>
       {weekly?.data && <WeeklyContent storeData={storeData}/>}
     </Site>
   );

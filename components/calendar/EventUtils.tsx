@@ -8,7 +8,7 @@ import {compareLiturgy} from "@/app/intern/reader/my/MyPage";
 import {Liturgy} from "../../pages/api/liturgy";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
-    return <div>
+    return <div className="shrink-0">
         <div className="group relative">
             {props.children}
             <div
