@@ -39,10 +39,13 @@ export function getPrayerSuggestion(concern: string){
     return getCachedPrompt("Formuliere ein katholisches Gebet (max 10 Zeilen, keine Reime) für dieses aus der Sicht der Gemeinde: " + concern);
 }
 
-export function getEvangeliumSummary(evangelium: any){
-    return getCachedPrompt("Fasse das Evangelium in einem Satz zusammen. Beginne mit 'Im Evangelium...':" + JSON.stringify(evangelium));
+export function getWeeklySlogan(evangelium: any){
+    return getCachedPrompt("Formuliere einen Slogan aus wenigen Worten (soll als Betreffzeile dienen, 3-4 Worte): " + JSON.stringify(evangelium)).then(trimString);
+}
+export function getEvangeliumSummary(items: any){
+    return getCachedPrompt("Fasse die Verlautbarungen für die Pfarrgemeinde sehr kurz zusammen. Keine Listen, ganze Sätze. " + JSON.stringify(items));
 }
 
 export function getWeeklySummary(items: any){
-    return getCachedPrompt("Formuliere ein kurzes sachliches Intro für die Wochenmitteilungen. Keine Anrede oder Schluss.\n\n Wochenmitteilungen:" + JSON.stringify(items));
+    return getCachedPrompt("Fasse die Verlautbarungen für die Pfarrgemeinde kurz zusammen. Keine Listen, ganze Sätze. \n\n" + JSON.stringify(items));
 }
