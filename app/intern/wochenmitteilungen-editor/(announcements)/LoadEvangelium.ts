@@ -37,6 +37,6 @@ export async function loadEvangelium(start: Date) {
           }
         }).join(" ")
 
-      return {place, text};
+      return {place: decodeURIComponent(place), text: decodeURIComponent(text)};
     })
 }

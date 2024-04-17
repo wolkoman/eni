@@ -4,7 +4,6 @@ import Link from "next/link";
 import {PageEvents, parishes} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import React, {useState} from "react";
-import {ParishDot} from "../../components/calendar/ParishDot";
 import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
 import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import {OptionsButton} from "@/app/wochenmitteilungen/OptionsButton";
@@ -17,7 +16,7 @@ export function WeeklyActions(props: { storeData: WeeklyEditorStoreData }) {
 
   function print(calendar: CalendarName) {
     setPrintParish(calendar)
-    setTimeout(() => window.print(), 10)
+    setTimeout(() => window.print(), 100)
   }
 
   return <>
@@ -49,8 +48,10 @@ export function WeeklyActions(props: { storeData: WeeklyEditorStoreData }) {
 
     </div>
 
-    <div className="hidden print:block">
+    <div className="print:block print:static print:opacity-100 absolute opacity-0 pointer-events-none">
       <PageEvents events={props.storeData.events} liturgy={{}} storeData={props.storeData}/>
+    </div>
+    <div className="hidden print:block">
       <PageParish storeData={props.storeData} calendar={printParish}/>
     </div>
   </>;
