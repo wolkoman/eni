@@ -38,3 +38,11 @@ export async function getInstagramTitle(description: string) {
 export function getPrayerSuggestion(concern: string){
     return getCachedPrompt("Formuliere ein katholisches Gebet (max 10 Zeilen, keine Reime) für dieses aus der Sicht der Gemeinde: " + concern);
 }
+
+export function getEvangeliumSummary(evangelium: any){
+    return getCachedPrompt("Fasse das Evangelium in einem Satz zusammen. Beginne mit 'Im Evangelium...':" + JSON.stringify(evangelium));
+}
+
+export function getWeeklySummary(items: any){
+    return getCachedPrompt("Formuliere ein kurzes sachliches Intro für die Wochenmitteilungen. Keine Anrede oder Schluss.\n\n Wochenmitteilungen:" + JSON.stringify(items));
+}

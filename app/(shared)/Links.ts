@@ -8,7 +8,9 @@ export const Links = {
   Pfarrzeitschriften: "/#pfarrzeitschriften",
   Status: "https://status.eni.wien",
   Termine: "/termine", ApiCalendarSuggest: "/api/calendar/suggest", ApiEditorProjects: "/api/editor/projects",
-  WochenmitteilungenEditor: "/intern/weekly-editor",
+  WochenmitteilungenEditor: "/intern/wochenmitteilungen-editor",
+  WochenmitteilungenVersand: "/intern/wochenmitteilungen-editor/senden",
+
 
   Wochenmitteilungen: (parish?: CalendarName) => `/wochenmitteilungen${parish ? `/${parish}` : ""}`,
   Artikel: (artikel?: string) =>  `/artikel${artikel ? `/${artikel}` : ""}`,
@@ -16,7 +18,7 @@ export const Links = {
   Terminvorschläge: "/intern/event-suggestions",
   DiensteÜbersicht: "/intern/reader/my",
   Ankündigung: "/intern/announcement",
-  WochenmitteilungenErstellen: "intern/weekly",
+  WochenmitteilungenErstellen: "intern/wochenmitteilungen",
   Projektplattform: "intern/editor",
   ProjektplattformProjekt: (id: string) => `/intern/editor/project?projectId=${id}`,
   ProjektplattformVersion: (id: any) => `/intern/editor/version?articleId=${id}`,

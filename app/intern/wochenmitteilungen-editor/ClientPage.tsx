@@ -4,19 +4,24 @@ import {Field, SelfServiceInput} from "../../../components/SelfService";
 import Button from "../../../components/Button";
 import {SectionHeader} from "../../../components/SectionHeader";
 import {useStoreState} from "@/app/(shared)/UseStoreState";
-import React, {useEffect} from "react";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import React, {useEffect, useState} from "react";
+import {useWeeklyEditorStore} from "@/app/intern/wochenmitteilungen-editor/store";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {PiArchiveBold, PiArrowCounterClockwiseBold, PiPlusBold, PiShareFatBold} from "react-icons/pi";
+import {PiArchiveBold, PiArrowCounterClockwiseBold, PiEnvelopeBold, PiPlusBold, PiShareFatBold} from "react-icons/pi";
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
 import {ParishDot} from "../../../components/calendar/ParishDot";
-import {PageEvents} from "@/app/intern/weekly-editor/(events-page)/PageEvents";
-import {PageParish} from "@/app/intern/weekly-editor/(announcements)/PageParish";
+import {PageEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
+import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
+import {Collections} from "cockpit-sdk";
+import {markWeeklyAsSent} from "@/app/intern/wochenmitteilungen-editor/upsert";
+import Link from "next/link";
+import {Links} from "@/app/(shared)/Links";
 
 
-export default function ClientPage(props: { liturgy: LiturgyData }) {
+export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly: Collections["weekly_v2"] }) {
 
   const store = useWeeklyEditorStore();
+
   const dateRangeForm = useStoreState(store, "dateRange", "setDateRange");
   useEffect(function initialLoading() {
     store.loadAnnouncements()
@@ -31,13 +36,18 @@ export default function ClientPage(props: { liturgy: LiturgyData }) {
     <div className={`print:hidden bg-white sticky top-0 z-50 shadow-lg`}>
       <div className={"max-w-2xl mx-auto py-2 flex justify-between rounded"}>
         <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
-        <div>
+        <div className="flex gap-2">
           <Button
             loading={store.loading}
             icon={PiShareFatBold}
             label="Veröffentlichen"
             onClick={ () => store.upsert()}
           />
+          {!props.currentWeekly.sent && props.currentWeekly.name === dateRangeForm[0].name && <Link href={Links.WochenmitteilungenVersand}><Button
+            loading={store.loading}
+            icon={PiEnvelopeBold}
+            label="Versenden"
+          /></Link>}
         </div>
       </div>
     </div>

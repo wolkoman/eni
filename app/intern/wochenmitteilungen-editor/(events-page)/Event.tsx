@@ -1,10 +1,10 @@
 "use client"
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
+import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {useEffect, useRef} from "react";
 import {PiWarningFill} from "react-icons/pi";
-import {EventPopup} from "@/app/intern/weekly-editor/(events-page)/EventPopup";
+import {EventPopup} from "@/app/intern/wochenmitteilungen-editor/(events-page)/EventPopup";
 
 export function Event(props: { event: CalendarEvent, storeData: WeeklyEditorStoreData }) {
   const special = props.event.groups.includes(CalendarGroup.Messe)

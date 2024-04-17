@@ -11,7 +11,9 @@ const parsingOptions = {
   alwaysCreateTextNodes: true
 };
 
-export async function loadEvangelium(date: string) {
+export async function loadEvangelium(start: Date) {
+  const nextSunday = new Date(start.getTime() + (start.getDay() ? 7 - start.getDay() : 0) * 3600 * 1000 * 24)
+  const date = nextSunday.toISOString().substring(0, 10)
   const link = `https://www.erzabtei-beuron.de/schott/schott_anz/index.html?datum=${date}`;
   return await fetch(link)
     .then(response => response.text())

@@ -1,8 +1,8 @@
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {WeeklyPageHeader1, WeeklyPageFooter} from "@/app/intern/weekly-editor/Header";
-import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
+import {WeeklyPageHeader1, WeeklyPageFooter} from "@/app/intern/wochenmitteilungen-editor/Header";
+import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import {LiturgyData} from "../../../../pages/api/liturgy";
 import {getWeekDayName} from "../../../../components/calendar/Calendar";
 import {Event} from "./Event"

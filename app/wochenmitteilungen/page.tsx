@@ -1,20 +1,15 @@
 import React from 'react';
 import Site from "../../components/Site";
-import {cockpit} from "@/util/cockpit-sdk";
 import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
-import {loadWeeklyEvents} from "@/app/intern/weekly-editor/(events-page)/LoadWeeklyEvents";
+import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
 import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
-import {NextRequest} from "next/server";
-import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
 import {CalendarName} from "@/domain/events/CalendarInfo";
+import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
 
 
 export default async function Page(props: {searchParams: {parish?: string}}) {
 
-  const weeklies = await cockpit.collectionGet("weekly_v2").then(response => response.entries)
-  const weekly = weeklies
-    .filter(weekly => new Date(weekly.end) > new Date() && new Date() > new Date(weekly.start))
-    .sort((a, b) => b._modified - a._modified)?.[0]
+  const weekly = await getCurrentWeeklyData();
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
   const storeData = {...weekly.data, events}
   const parish = props.searchParams.parish as CalendarName;

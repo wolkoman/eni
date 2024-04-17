@@ -1,4 +1,4 @@
-import {Teaser, useWeeklyEditorStore, WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
+import {Teaser, useWeeklyEditorStore, WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {Dispatch, SetStateAction} from "react";
 import {Field, SelfServiceInput} from "../../../../../components/SelfService";
 import {getWeekDayName} from "../../../../../components/calendar/Calendar";

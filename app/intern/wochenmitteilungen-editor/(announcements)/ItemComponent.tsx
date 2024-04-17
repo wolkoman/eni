@@ -1,8 +1,8 @@
-import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
+import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/wochenmitteilungen-editor/store";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {ArticleComponent} from "@/app/intern/weekly-editor/(announcements)/(components)/Article";
-import {TeaserComponent} from "@/app/intern/weekly-editor/(announcements)/(components)/Teaser";
-import {WeeklyItemEditor} from "@/app/intern/weekly-editor/(announcements)/ParishEditor";
+import {ArticleComponent} from "@/app/intern/wochenmitteilungen-editor/(announcements)/(components)/Article";
+import {TeaserComponent} from "@/app/intern/wochenmitteilungen-editor/(announcements)/(components)/Teaser";
+import {WeeklyItemEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ParishEditor";
 import {ParishDot} from "../../../../components/calendar/ParishDot";
 
 export function ItemComponent({item, calendar, ...props}: {

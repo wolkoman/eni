@@ -1,12 +1,12 @@
 "use client"
 
 import Link from "next/link";
-import {PageEvents, parishes} from "@/app/intern/weekly-editor/(events-page)/PageEvents";
+import {PageEvents, parishes} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import React, {useState} from "react";
 import {ParishDot} from "../../components/calendar/ParishDot";
-import {PageParish} from "@/app/intern/weekly-editor/(announcements)/PageParish";
-import {WeeklyEditorStoreData} from "@/app/intern/weekly-editor/store";
+import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
+import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import {OptionsButton} from "@/app/wochenmitteilungen/OptionsButton";
 
 

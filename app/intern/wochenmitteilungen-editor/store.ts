@@ -3,13 +3,13 @@ import {v4 as uuidv4} from 'uuid';
 import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import create, {UseBoundStore} from "zustand";
-import {loadAnnouncements} from "@/app/intern/weekly/loadAnnouncements";
+import {loadAnnouncements} from "@/app/intern/wochenmitteilungen/loadAnnouncements";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "@/domain/events/CalendarInfo";
-import {hideAnnouncement} from "@/app/intern/weekly/hideAnnouncement";
-import {loadEvangelium} from "@/app/intern/weekly-editor/(announcements)/LoadEvangelium";
-import {loadWeeklyEvents} from "@/app/intern/weekly-editor/(events-page)/LoadWeeklyEvents";
-import {upsertWeekly} from "@/app/intern/weekly-editor/upsert";
+import {hideAnnouncement} from "@/app/intern/wochenmitteilungen/hideAnnouncement";
+import {loadEvangelium} from "@/app/intern/wochenmitteilungen-editor/(announcements)/LoadEvangelium";
+import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
+import {markWeeklyAsSent, upsertWeekly} from "@/app/intern/wochenmitteilungen-editor/upsert";
 
 export type WeeklyParishItem = Article | Teaser
 
@@ -52,10 +52,15 @@ export const useWeeklyEditorStore = create(persist(combine({
     switchSideFor: [] as { parish: CalendarName, id: string }[],
     customEventDescription: {} as Record<string, string | null>,
     announcements: [] as Collections["announcements"][],
-    dateRange: {start: "", end: "", name: ""}
+    dateRange: {start: "", end: "", name: ""},
+    send: Function,
   }, (set, get) => ({
     setDateRange: (dateRange: ReturnType<typeof get>["dateRange"]) => {
       set({dateRange});
+    },
+    send: async () => {
+      set({loading: true})
+      await markWeeklyAsSent(get().dateRange.name).finally(() => set({loading: false}))
     },
     loadAnnouncements: () => {
       if (get().loading) return;
@@ -79,9 +84,7 @@ export const useWeeklyEditorStore = create(persist(combine({
     insertEvangelium: () => {
       if (get().loading) return;
       set(state => ({...state, loading: true}));
-      const start = new Date(get().dateRange.start)
-      const nextSunday = new Date(start.getTime() + (start.getDay() ? 7 - start.getDay() : 0) * 3600 * 1000 * 24)
-      loadEvangelium(nextSunday.toISOString().substring(0, 10))
+      loadEvangelium(new Date(get().dateRange.start))
         .then(evangelium => set({
           items: [...get().items, {
             type: "ARTICLE",

@@ -1,9 +1,9 @@
 "use client"
-import {WeeklyPageHeader2} from "@/app/intern/weekly-editor/Header";
-import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
+import {WeeklyPageHeader2} from "@/app/intern/wochenmitteilungen-editor/Header";
+import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/wochenmitteilungen-editor/store";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useState} from "react";
-import {ItemComponent} from "@/app/intern/weekly-editor/(announcements)/ItemComponent";
+import {ItemComponent} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ItemComponent";
 
 export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEditorStoreData }) {
 
