@@ -13,7 +13,6 @@ import {ParishDot} from "../../../components/calendar/ParishDot";
 import {PageEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
 import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
 import {Collections} from "cockpit-sdk";
-import {markWeeklyAsSent} from "@/app/intern/wochenmitteilungen-editor/upsert";
 import Link from "next/link";
 import {Links} from "@/app/(shared)/Links";
 
@@ -26,6 +25,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
   useEffect(function initialLoading() {
     store.loadAnnouncements()
   }, []);
+  const [currentWeekly, setCurrentWeekly] = useState(props.currentWeekly)
 
 
   const sectionClass = "print:hidden max-w-2xl mx-auto py-10";
@@ -41,9 +41,12 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
             loading={store.loading}
             icon={PiShareFatBold}
             label="Veröffentlichen"
-            onClick={ () => store.upsert()}
+            onClick={ async () => {
+              await store.upsert();
+              setCurrentWeekly(JSON.parse(JSON.stringify(store)))
+            }}
           />
-          {!props.currentWeekly.sent && props.currentWeekly.name === dateRangeForm[0].name && <Link href={Links.WochenmitteilungenVersand}><Button
+          {!currentWeekly.sent && currentWeekly.name === dateRangeForm[0].name && <Link href={Links.WochenmitteilungenVersand}><Button
             loading={store.loading}
             icon={PiEnvelopeBold}
             label="Versenden"

@@ -18,7 +18,6 @@ export const Links = {
   Terminvorschläge: "/intern/event-suggestions",
   DiensteÜbersicht: "/intern/reader/my",
   Ankündigung: "/intern/announcement",
-  WochenmitteilungenErstellen: "intern/wochenmitteilungen",
   Projektplattform: "intern/editor",
   ProjektplattformProjekt: (id: string) => `/intern/editor/project?projectId=${id}`,
   ProjektplattformVersion: (id: any) => `/intern/editor/version?articleId=${id}`,
