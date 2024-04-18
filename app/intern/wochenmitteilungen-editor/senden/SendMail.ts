@@ -42,7 +42,7 @@ export default async function sendWeeklyNewsletter(title: string, slogan: string
       evangelium: evangelium,
       anrede: recipient.anrede,
       info: Object.entries(infos)
-        .filter(([parish, text]) => recipient.parish.includes(parish))
+        //.filter(([parish, text]) => recipient.parish.includes(parish))
         .map(([parish, text]) => `<b>${getCalendarInfo(parish as CalendarName).fullName}:</b> ${text}`)
         .join("<br><br>")
     }
