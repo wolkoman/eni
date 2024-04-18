@@ -25,7 +25,11 @@ export function TextEditor(props: {
   function send() {
     setLoading(true);
     setMessage(null)
-    sendWeeklyNewsletter(props.currentWeekly.name, form[0].slogan, form[0].evangelium, form[0])
+    sendWeeklyNewsletter(props.currentWeekly.name, form[0].slogan, form[0].evangelium, {
+      emmaus: form[0].emmaus,
+      inzersdorf: form[0].inzersdorf,
+      neustift: form[0].neustift,
+    })
       .then(value => setMessage((typeof value === 'number') ? `${value} Mails wurden versandt` : `${value}`))
       .finally(() => setLoading(false))
   }

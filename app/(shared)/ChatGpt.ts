@@ -43,7 +43,7 @@ export function getWeeklySlogan(evangelium: any){
     return getCachedPrompt("Formuliere einen Slogan aus wenigen Worten (soll als Betreffzeile dienen, 3-4 Worte): " + JSON.stringify(evangelium)).then(trimString);
 }
 export function getEvangeliumSummary(items: any){
-    return getCachedPrompt("Fasse die Verlautbarungen für die Pfarrgemeinde sehr kurz zusammen. Keine Listen, ganze Sätze. " + JSON.stringify(items));
+    return getCachedPrompt("Fasse die Verlautbarungen (und falls vorhanden das Evangelium) für die Pfarrgemeinde sehr kurz zusammen. Keine Listen, ganze Sätze. " + JSON.stringify(items));
 }
 
 export function getWeeklySummary(items: any){

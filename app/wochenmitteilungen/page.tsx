@@ -21,9 +21,7 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
         Wochenmitteilungen
       </div>
       <div className="max-w-xl my-6 print:hidden">
-        Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu. Sie können sich auch gerne für
-        den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an
-        kanzlei@eni.wien.
+        Gottesdienste, Veranstaltungen und Ankündigungen werden jede Woche in den Wochenmitteilungen verlautbart. Um stets informiert zu bleiben, empfehlen wir den Newsletter zu abonnieren.
       </div>
       <WeeklyActions storeData={storeData}/>
       {weekly?.data && <WeeklyContent storeData={storeData} calendar={parish}/>}

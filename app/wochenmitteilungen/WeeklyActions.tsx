@@ -21,7 +21,7 @@ export function WeeklyActions(props: { storeData: WeeklyEditorStoreData }) {
 
   return <>
     <div className="mb-8 print:hidden flex gap-2 ">
-      <OptionsButton label="Für Newsletter anmelden">
+      <OptionsButton label="Newsletter abonnieren">
         {parishes
           .map(getCalendarInfo)
           .map(calendarInfo =>
