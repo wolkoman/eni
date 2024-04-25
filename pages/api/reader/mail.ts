@@ -13,18 +13,17 @@ import {resolveUserFromRequest} from "@/domain/users/UserResolver";
 import {getTasksForPerson, getTasksFromReaderData, getUninformedTasks, ReaderData} from "@/domain/service/Service";
 import {sendMail} from "@/app/(shared)/Mailjet";
 
-const READER_ID = "637b85bc376231d51500018d";
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const user = resolveUserFromRequest(req);
 
     if (user === undefined || !user.permissions[Permission.ReaderPlanning]) {
+        console.log("No permission");
         res.status(401).json({errorMessage: 'No permission'});
         return;
     }
 
-    const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {_id: READER_ID}}).then(x => x.entries[0].data);
+    const data: ReaderData = await Cockpit.collectionGet("internal-data", {filter: {id: "reader"}}).then(x => x.entries[0].data);
     const events = await loadEvents({access: EventLoadAccess.READER, ids: Object.keys(data)}).then(x => x.events);
     const liturgy: LiturgyData = await Cockpit.collectionGet("internal-data", {filter: {id: "liturgy"}}).then(x => x.entries[0].data);
     const persons = await Cockpit.collectionGet('person').then(x => x.entries);
@@ -37,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const tasksForPerson = getTasksForPerson(tasks, req.body.personId);
     const uniformedTasks = getUninformedTasks(tasksForPerson);
     const eventIds = uniformedTasks.map(task => task.event.id);
+    console.log(events.find(d => d.id=="nvshpptfhqu36tt555hbpe8rc4"), Object.keys(data).includes("nvshpptfhqu36tt555hbpe8rc4"))
 
     const secretOrPrivateKey = Buffer.from(process.env.PRIVATE_KEY!, 'base64');
 
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const link = `https://eni.wien/intern/login?redirect=/intern/reader/my&jwt=${jwt}`
 
     if (eventIds.length !== req.body.eventIds.length || eventIds.some(eventId => !req.body.eventIds.includes(eventId)) || !person) {
-        res.status(400).json({errorMessage: 'Wrong request'});
+        res.status(400).json({errorMessage: 'Wrong request', eventIds, reqEventIds: req.body.eventIds});
         return;
     }
 
