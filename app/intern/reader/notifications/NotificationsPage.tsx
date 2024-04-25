@@ -2,12 +2,10 @@
 
 import React from 'react';
 import {toast} from "react-toastify";
-import {useCalendarStore} from "../../../(store)/CalendarStore";
 import {useReaderStore} from "../../../(store)/ReaderStore";
 import {CalendarEvent} from "../../../(domain)/events/EventMapper";
 import {ReaderSite} from "../IndexPage";
 import Button from "../../../../components/Button";
-import {LiturgyData} from "../../../../pages/api/liturgy";
 import {
   getTasksForPerson,
   getTasksFromReaderData,
@@ -17,6 +15,8 @@ import {
 } from "../../../(domain)/service/Service";
 import {fetchJson} from "../../../(shared)/FetchJson";
 import {Links} from "../../../(shared)/Links";
+import {PiWarningBold} from "react-icons/pi";
+import {getColorForStatus} from "@/app/intern/reader/GetColorForStatus";
 
 export default function NotificationsPage() {
 
@@ -59,22 +59,21 @@ export default function NotificationsPage() {
         .map(person => ({person, tasks: getTasksForPerson(tasks, person._id)}))
         .map(({person, tasks}) => ({person, tasks, uninformedTasks: getUninformedTasks(tasks)}))
         .map(({person, tasks, uninformedTasks}) =>
-          <div key={person._id} className="flex flex-col gap-2 px-4 py-2 rounded-lg bg-black/5">
+          <div key={person._id} className="flex flex-col gap-2 px-4 py-2 rounded border border-black/20">
             <div className="font-bold">{person.name}</div>
             <div>
-              {tasks.filter(({event}) => event).map(({event, data}) =>
+              {tasks.filter(({event}) => event).map(({event, data}) => <div>
                 <div key={event?.id + data.role} className="flex gap-1 items-center">
-                  <div className={`w-3 h-3 mr-1 grow-0 rounded ${{
-                    cancelled: "bg-red-600",
-                    assigned: "bg-blue-500",
-                    informed: "bg-green-600"
-                  }[data.status]}`}/>
+                  <div className={`w-3 h-3 mr-1 grow-0 rounded ${(getColorForStatus(data.status))}`}/>
                   <div>
-                    {new Date(event.date).toLocaleDateString()} {new Date(event.start.dateTime).toLocaleTimeString().substring(0, 5)}
+                    {new Date(event.date).toLocaleDateString("de-AT")} {new Date(event.start.dateTime).toLocaleTimeString().substring(0, 5)}
                   </div>
                   <div>
                     {event.summary} ({roleToString(data.role)})
                   </div>
+                </div>
+
+                {event.visibility === "private" && <div className="flex gap-1 items-center text-sm pl-4"><PiWarningBold/> Diese Termin ist vertraulich und kann nicht eingeteilt werden!</div>}
                 </div>
               )}
             </div>
