@@ -1,6 +1,6 @@
-import {Article} from "@/app/intern/weekly-editor/store";
+import {Article} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {Dispatch, SetStateAction} from "react";
-import {Field, SelfServiceInput} from "../../../../components/SelfService";
+import {Field, SelfServiceInput} from "../../../../../components/SelfService";
 
 export function ArticleComponent({item}: { item: Article }) {
   return <>

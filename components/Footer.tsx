@@ -9,13 +9,13 @@ import {site} from "@/app/(shared)/Instance";
 import {Links} from "@/app/(shared)/Links";
 
 function Title(props: { children: ReactNode }) {
-    return <div className="font-bold tracking-wider">{props.children}</div>;
+    return <div className="font-bold uppercase tracking-wide my-2">{props.children}</div>;
 }
 
 export default function Footer() {
     const user = useUserStore(state => state.user);
     return <>
-        <div className="py-6 text-neutral-600 pt-12 mt-12 print:hidden bg-black/[2%]">
+        <div className="py-6 text-neutral-600 pt-12 mt-12 print:hidden text-sm">
             <Responsive>
                 <div className="grid lg:grid-cols-3 gap-3">
                     <div>
@@ -41,14 +41,14 @@ export default function Footer() {
                               Röm.-kath. Pfarre Inzersdorf,<br/>
                               Röm.-kath. Pfarre Inzersdorf-Neustift
                               <Link href={Links.Impressum}>
-                                  <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
+                                  <div className="cursor-pointer underline hover:no-underline mt-2">Impressum & Datenschutzerklärung</div>
                               </Link>
                           </>,
                           <>
                               HerausgeberIn, Alleininhaber, Redaktion:<br/>
                               Röm.-kath. Pfarre Emmaus am Wienerberg
                               <Link href={Links.Impressum}>
-                                  <div className="cursor-pointer underline hover:no-underline mt-2">Datenschutzerklärung</div>
+                                  <div className="cursor-pointer underline hover:no-underline mt-2">Impressum & Datenschutzerklärung</div>
                               </Link>
                           </>
                         )}
@@ -57,12 +57,6 @@ export default function Footer() {
                         <Title>Interner Zugang</Title>
                         Wenn Sie Zugang zu den internen Systemen der {site(<>Pfarren</>, <>Pfarre</>)} brauchen, melden Sie sich in der
                         Pfarrkanzlei unter kanzlei@eni.wien.
-                        {site(<div className="mt-2">
-                            <Link href={user ? Links.Intern : Links.Login}>
-                                <Button label="Login"/>
-                            </Link>
-                        </div>, <></>)}
-
                     </div>
                 </div>
             </Responsive>

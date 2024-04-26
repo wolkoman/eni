@@ -2,13 +2,14 @@
 import {v4 as uuidv4} from 'uuid';
 import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {loadWeeklyEvents} from "./LoadWeeklyEvents";
-import create from "zustand";
-import {loadAnnouncements} from "@/app/intern/weekly/loadAnnouncements";
+import create, {UseBoundStore} from "zustand";
+import {loadAnnouncements} from "@/app/intern/wochenmitteilungen/loadAnnouncements";
 import {Collections} from "cockpit-sdk";
-import {loadEvangelium} from "@/app/intern/weekly-editor/LoadEvangelium";
 import {CalendarName} from "@/domain/events/CalendarInfo";
-import {hideAnnouncement} from "@/app/intern/weekly/hideAnnouncement";
+import {hideAnnouncement} from "@/app/intern/wochenmitteilungen/hideAnnouncement";
+import {loadEvangelium} from "@/app/intern/wochenmitteilungen-editor/(announcements)/LoadEvangelium";
+import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
+import {markWeeklyAsSent, upsertWeekly} from "@/app/intern/wochenmitteilungen-editor/upsert";
 
 export type WeeklyParishItem = Article | Teaser
 
@@ -34,22 +35,36 @@ export type Teaser = {
   postText: string
 } & GeneralItem
 
+export type WeeklyEditorStoreData = {
+  events: CalendarEvent[],
+  items: WeeklyParishItem[],
+  customEventDescription: Record<string, string | null>,
+  dateRange: {start: string, end: string, name: string},
+  setCustomDescription: Function,
+  switchSideFor: { parish: CalendarName, id: string }[]
+}
+
 export const useWeeklyEditorStore = create(persist(combine({
     events: [] as CalendarEvent[],
     loaded: false,
     loading: false,
     items: [] as WeeklyParishItem[],
-    switchSideFor: [] as {parish: CalendarName, id: string}[],
-    customEventDescription: {} as Record<string, string|null>,
+    switchSideFor: [] as { parish: CalendarName, id: string }[],
+    customEventDescription: {} as Record<string, string | null>,
     announcements: [] as Collections["announcements"][],
-    dateRange: {start: "", end: "", name: ""}
+    dateRange: {start: "", end: "", name: ""},
+    send: Function,
   }, (set, get) => ({
     setDateRange: (dateRange: ReturnType<typeof get>["dateRange"]) => {
       set({dateRange});
     },
+    send: async () => {
+      set({loading: true})
+      await markWeeklyAsSent(get().dateRange.name).finally(() => set({loading: false}))
+    },
     loadAnnouncements: () => {
       if (get().loading) return;
-      set(state => ({...state, loading: true}));
+      set({loading: true});
       loadAnnouncements()
         .then(announcements => {
           if (announcements === null) return;
@@ -60,12 +75,16 @@ export const useWeeklyEditorStore = create(persist(combine({
           set({loading: false});
         });
     },
+    upsert: async () => {
+      set({loading: true})
+      const data = Object.fromEntries(Object.entries(get()).filter(([key, value]) => typeof value != "function"))
+      await upsertWeekly(get().dateRange.name, get().dateRange.start, get().dateRange.end, data)
+      set({loading: false})
+    },
     insertEvangelium: () => {
       if (get().loading) return;
       set(state => ({...state, loading: true}));
-      const start = new Date(get().dateRange.start)
-      const nextSunday = new Date(start.getTime() + (start.getDay() ? 7 - start.getDay() : 0) * 3600 * 1000 * 24)
-      loadEvangelium(nextSunday.toISOString().substring(0, 10))
+      loadEvangelium(new Date(get().dateRange.start))
         .then(evangelium => set({
           items: [...get().items, {
             type: "ARTICLE",
@@ -115,7 +134,7 @@ export const useWeeklyEditorStore = create(persist(combine({
     },
     toggleSideFor(id: string, parish: CalendarName) {
       const list = get().switchSideFor;
-      type T = {parish: CalendarName, id: string}
+      type T = { parish: CalendarName, id: string }
       const isEqual = (a: T) => a.id === id && a.parish === parish
       set({switchSideFor: [...list.filter(item => !isEqual(item)), ...(list.find(isEqual) ? [] : [{id, parish}])]})
     },
@@ -127,4 +146,3 @@ export const useWeeklyEditorStore = create(persist(combine({
   {
     name: 'weekly-editor-storage',
   }));
-

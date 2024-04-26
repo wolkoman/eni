@@ -1,10 +1,11 @@
-import {useWeeklyEditorStore, WeeklyParishItem} from "@/app/intern/weekly-editor/store";
-import Button from "../../../components/Button";
+"use client"
+import {useWeeklyEditorStore, WeeklyParishItem} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {createContext, Dispatch, SetStateAction, useEffect, useState} from "react";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {WeeklyArticleEditor} from "@/app/intern/weekly-editor/(components)/Article";
-import {WeeklyTeaserEditor} from "@/app/intern/weekly-editor/(components)/Teaser";
 import {PiArrowsLeftRightBold, PiTrashBold} from "react-icons/pi";
+import {WeeklyArticleEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/(components)/Article";
+import {WeeklyTeaserEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/(components)/Teaser";
+import Button from "../../../../components/Button";
 
 
 const ItemForm = createContext<[WeeklyParishItem, Dispatch<SetStateAction<WeeklyParishItem>>] | null>(null)
@@ -21,7 +22,7 @@ export function WeeklyItemEditor({item, calendar}: { item: WeeklyParishItem, cal
   const side = store.switchSideFor.find(s => s.id === item.id && item.parishes[s.parish as CalendarName.EMMAUS]);
   return <ItemForm.Provider value={form}>
     <div
-      className={`flex-col ${(side ? "right-2 -translate-x-full" : "left-2 translate-x-full")} my-4 gap-4 p-2 bg-gray-50 border border-black/20 rounded absolute -top-4 z-20 print:hidden w-full`}>
+      className={`flex-col ${(side ? "right-2 -translate-x-full" : "left-2 translate-x-full")} my-4 gap-4 p-2 bg-white border border-black/20 rounded absolute -top-4 z-20 print:hidden w-full`}>
       {item.type === "ARTICLE" && <WeeklyArticleEditor form={form as any}/>}
       {item.type === "TEASER" && <WeeklyTeaserEditor form={form as any}/>}
 

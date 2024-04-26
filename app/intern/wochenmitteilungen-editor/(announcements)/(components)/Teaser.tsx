@@ -1,7 +1,7 @@
-import {Teaser, useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import {Teaser, useWeeklyEditorStore, WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {Dispatch, SetStateAction} from "react";
-import {Field, SelfServiceInput} from "../../../../components/SelfService";
-import {getWeekDayName} from "../../../../components/calendar/Calendar";
+import {Field, SelfServiceInput} from "../../../../../components/SelfService";
+import {getWeekDayName} from "../../../../../components/calendar/Calendar";
 
 export function WeeklyTeaserEditor({form}: { form: [Teaser, Dispatch<SetStateAction<Teaser>>] }) {
   const events = useWeeklyEditorStore(state => state.events)
@@ -17,9 +17,8 @@ export function WeeklyTeaserEditor({form}: { form: [Teaser, Dispatch<SetStateAct
   </div>;
 }
 
-export function TeaserComponent({item}: { item: Teaser }) {
-  const events = useWeeklyEditorStore(state => state.events)
-  const event = events.find(event => event.id === item.eventId)
+export function TeaserComponent({item, storeData}: { item: Teaser, storeData: WeeklyEditorStoreData }) {
+  const event = storeData.events.find(event => event.id === item.eventId)
   return <div className={`text-center h-full flex flex-col justify-center`}>
     <div className="" dangerouslySetInnerHTML={{__html: item.preText.replace("\n", "<br/>")}}/>
     <div className="flex flex-col justify-center my-6 items-center">
