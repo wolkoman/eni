@@ -15,6 +15,7 @@ import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)
 import {Collections} from "cockpit-sdk";
 import Link from "next/link";
 import {Links} from "@/app/(shared)/Links";
+import {SiteBar} from "@/app/intern/SiteBar";
 
 
 export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly: Collections["weekly_v2"] }) {
@@ -33,27 +34,26 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
   const lastDate = new Date(store.events.at(-1)?.date!);
   const defaultName = `KW${getWeekOfYear(lastDate)} ${lastDate.getFullYear()}`
   return <div>
-    <div className={`print:hidden bg-white sticky top-0 z-50 shadow-lg`}>
-      <div className={"max-w-2xl mx-auto py-2 flex justify-between rounded"}>
-        <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
-        <div className="flex gap-2">
-          <Button
+    <SiteBar>
+      <div>Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
+      <div className="flex gap-2">
+        <Button
             loading={store.loading}
             icon={PiShareFatBold}
             label="Veröffentlichen"
-            onClick={ async () => {
+            onClick={async () => {
               await store.upsert();
               setCurrentWeekly(JSON.parse(JSON.stringify(store)))
             }}
-          />
-          {!currentWeekly.sent && currentWeekly.name === dateRangeForm[0].name && <Link href={Links.WochenmitteilungenVersand}><Button
-            loading={store.loading}
-            icon={PiEnvelopeBold}
-            label="Versenden"
-          /></Link>}
-        </div>
+        />
+        {!props.currentWeekly.sent && props.currentWeekly.name === dateRangeForm[0].name &&
+            <Link href={Links.WochenmitteilungenVersand}><Button
+                loading={store.loading}
+                icon={PiEnvelopeBold}
+                label="Versenden"
+            /></Link>}
       </div>
-    </div>
+    </SiteBar>
     <div className={sectionClass}>
       <SectionHeader>Terminseite</SectionHeader>
       <div className="grid grid-cols-3 gap-4">
@@ -86,33 +86,33 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
         </div>
         <div className="flex flex-col gap-2">
           {store.announcements.map(announcement => <div
-            key={announcement._id}
-            className="flex flex-col gap-2 p-4 bg-white rounded border border-black/10 items-start"
+              key={announcement._id}
+              className="flex flex-col gap-2 p-4 bg-white rounded border border-black/10 items-start"
           >
             <div className="flex gap-2 items-center">
               <ParishDot info={getCalendarInfo(announcement.parish as any)} private={false}/>
               <div
-                className="text-sm opacity-70">{announcement.byName} {new Date(announcement._created * 1000).toLocaleString("de-AT")}</div>
+                  className="text-sm opacity-70">{announcement.byName} {new Date(announcement._created * 1000).toLocaleString("de-AT")}</div>
             </div>
             <div>{announcement.description}</div>
             <div className="flex gap-1 self-end">
               <Button
-                sure={true}
-                label={<div className="flex gap-1 items-center"><PiArchiveBold/> Verwerfen</div>}
-                onClick={() => store.removeAnnouncement(announcement._id)}/>
+                  sure={true}
+                  label={<div className="flex gap-1 items-center"><PiArchiveBold/> Verwerfen</div>}
+                  onClick={() => store.removeAnnouncement(announcement._id)}/>
               <Button
-                label={<div className="flex gap-1 items-center"><PiPlusBold/> Hinzufügen</div>}
-                onClick={() => store.addItem({
-                  type: "ARTICLE" as const,
-                  title: "", id: "",
-                  author: announcement.byName,
-                  text: announcement.description + announcement.files.map(f => `<img src='${f}'/>`),
-                  parishes: {
-                    emmaus: announcement.parish === "emmaus",
-                    inzersdorf: announcement.parish === "inzersdorf",
-                    neustift: announcement.parish === "neustift"
-                  },
-                })}/>
+                  label={<div className="flex gap-1 items-center"><PiPlusBold/> Hinzufügen</div>}
+                  onClick={() => store.addItem({
+                    type: "ARTICLE" as const,
+                    title: "", id: "",
+                    author: announcement.byName,
+                    text: announcement.description + announcement.files.map(f => `<img src='${f}'/>`),
+                    parishes: {
+                      emmaus: announcement.parish === "emmaus",
+                      inzersdorf: announcement.parish === "inzersdorf",
+                      neustift: announcement.parish === "neustift"
+                    },
+                  })}/>
             </div>
           </div>)
           }

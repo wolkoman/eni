@@ -1,6 +1,5 @@
 "use client"
 import React, {useState} from 'react';
-import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 import {LiturgyData} from "../../../../pages/api/liturgy";
 import {useReaderStore} from "@/store/ReaderStore";
@@ -53,32 +52,35 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
 
     return <ReaderSite>
         <div className="flex flex-col">
-            <div className="print:hidden">
+            <div className="print:hidden mb-4 flex items-center gap-2">
                 <input
                     type="checkbox"
                     defaultChecked={showOnlySpecial}
-                    onChange={({target}) => setShowOnlySpecial(target.checked)}/>{" "}
+                    onChange={({target}) => setShowOnlySpecial(target.checked)}/>
                 Nur Feste anzeigen
             </div>
-            {liturgyEvents.map(([date, events]) => <div className="flex flex-col lg:flex-row py-1 border-b border-black/20" key={date}>
-                <div className={`w-24 flex-shrink-0 ${new Date(date).getDay() ? '' : 'font-bold'}`}>
-                    {new Date(date).toLocaleDateString("de-AT")}
-                </div>
-                <div className="flex flex-col flex-grow">
-                    {events.map(event =>
-                        <LiturgyEvent
-                            readers={readers}
-                            communionMinisters={communionMinisters}
-                            key={event.id} event={event}
-                            readerData={readerData[event.id]}
-                            setActive={() => setCurrentEvent(event.id)}
-                            active={currentEvent === event.id}
-                            liturgies={resolveAvailableLiturgies(props.liturgy, event)}
-                            selectPerson={(...args) => selectPerson(event.id, ...args)}
-                            selectLiturgy={(...args) => selectLiturgy(event.id, ...args)}
-                        />
-                    )}</div>
-            </div>)}
+            <div className="border-t border-black/20">
+                {liturgyEvents.map(([date, events]) => <div
+                    className="flex flex-col lg:flex-row border-b border-black/20" key={date}>
+                    <div className={`w-24 flex-shrink-0 ${new Date(date).getDay() ? '' : 'font-bold'} py-1`}>
+                        {new Date(date).toLocaleDateString("de-AT")}
+                    </div>
+                    <div className="flex flex-col flex-grow">
+                        {events.map(event =>
+                            <LiturgyEvent
+                                readers={readers}
+                                communionMinisters={communionMinisters}
+                                key={event.id} event={event}
+                                readerData={readerData[event.id]}
+                                setActive={() => setCurrentEvent(event.id)}
+                                active={currentEvent === event.id}
+                                liturgies={resolveAvailableLiturgies(props.liturgy, event)}
+                                selectPerson={(...args) => selectPerson(event.id, ...args)}
+                                selectLiturgy={(...args) => selectLiturgy(event.id, ...args)}
+                            />
+                        )}</div>
+                </div>)}
+            </div>
         </div>
     </ReaderSite>
 }

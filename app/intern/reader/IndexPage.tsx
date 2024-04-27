@@ -9,6 +9,9 @@ import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import {Links} from "@/app/(shared)/Links";
+import {SiteBar} from "@/app/intern/SiteBar";
+import Button from "../../../components/Button";
+import {PiEnvelopeBold, PiListBold, PiPencilBold} from "react-icons/pi";
 
 export function ReaderSite(props: { children?: ReactNode }) {
 
@@ -18,38 +21,37 @@ export function ReaderSite(props: { children?: ReactNode }) {
 
     const inactive = 'grayscale opacity-20 contrast-50 cursor-pointer';
     return <Site title="Liturgische Dienste" responsive={false}>
-        <div className="flex flex-col lg:flex-row">
-            <div className="print:hidden">
-                <div
-                    className="flex lg:flex-col h-20 lg:h-auto lg:w-20 p-4 gap-2 bg-black/5 rounded-r-xl grow-0 lg:sticky top-0">
-                    {belongsTo(CalendarName.EMMAUS) && <img src="/dot/edot.svg"
+        <SiteBar>
+            <div className="flex gap-1">
+                {belongsTo(CalendarName.EMMAUS) &&
+                    <img src="/dot/edot.svg"
                          onClick={() => setParish(CalendarName.EMMAUS)}
-                         className={`w-12 ${parish === CalendarName.EMMAUS ? '' : inactive}`}/>}
-                    {belongsTo(CalendarName.INZERSDORF) && <img src="/dot/idot.svg"
+                         className={`w-10 ${parish === CalendarName.EMMAUS ? '' : inactive}`}
+                    />}
+                {belongsTo(CalendarName.INZERSDORF) &&
+                    <img src="/dot/idot.svg"
                          onClick={() => setParish(CalendarName.INZERSDORF)}
-                         className={`w-12 ${parish === CalendarName.INZERSDORF ? '' : inactive}`}/>}
-                    {belongsTo(CalendarName.NEUSTIFT) && <img src="/dot/ndot.svg"
-                             onClick={() => setParish(CalendarName.NEUSTIFT)}
-                             className={`w-12 ${parish === CalendarName.NEUSTIFT ? '' : inactive}`}/>}
-                    <Link href={Links.DiensteÜbersicht}>
-                        <img src="/logo/persons.svg" className="w-12 cursor-pointer"/>
-                    </Link>
-                    {user?.permissions[Permission.ReaderPlanning] && <>
-                        <Link href={Links.DienstePlanung}>
-                            <img src="/logo/events.svg" className="w-12 cursor-pointer"/>
-                        </Link>
-                        <Link href={Links.DiensteBenachrichtigung}>
-                            <img src="/logo/notifications.svg" className="w-12 cursor-pointer"/>
-                        </Link>
-                    </>}
-                </div>
+                         className={`w-10 ${parish === CalendarName.INZERSDORF ? '' : inactive}`}
+                    />}
+                {belongsTo(CalendarName.NEUSTIFT) &&
+                    <img src="/dot/ndot.svg"
+                         onClick={() => setParish(CalendarName.NEUSTIFT)}
+                         className={`w-10 ${parish === CalendarName.NEUSTIFT ? '' : inactive}`}
+                    />}
             </div>
-            <Responsive>
-                {reader.loading || reader.error
-                    ? <><EniLoading/></>
-                    : <>{props.children} </>
-                }
-            </Responsive>
-        </div>
+            <div className="flex gap-1">
+                {user?.permissions[Permission.ReaderPlanning] && <>
+                    <Link href={Links.DiensteÜbersicht}><Button label="Übersicht" icon={PiListBold}/></Link>
+                    <Link href={Links.DienstePlanung}><Button label="Planung" icon={PiPencilBold}/></Link>
+                    <Link href={Links.DiensteBenachrichtigung}><Button label="Benachrichtigung" icon={PiEnvelopeBold}/></Link>
+                </>}
+            </div>
+        </SiteBar>
+        <Responsive className="mt-8">
+            {reader.loading || reader.error
+                ? <><EniLoading/></>
+                : <>{props.children} </>
+            }
+        </Responsive>
     </Site>
 }
