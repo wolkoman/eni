@@ -8,11 +8,11 @@ import {compareLiturgy} from "@/app/intern/reader/my/MyPage";
 import {Liturgy} from "../../pages/api/liturgy";
 
 export function Tooltip(props: { tip: string, children: ReactNode }) {
-    return <div>
+    return <div className="shrink-0">
         <div className="group relative">
             {props.children}
             <div
-                className="opacity-0 group-hover:opacity-100 pointer-events-none z-20 text-sm absolute left-0 -bottom-4 group-hover:-bottom-1 translate-y-full bg-white shadow-lg rounded px-3 py-1 whitespace-nowrap transition-all">
+                className="opacity-0 group-hover:opacity-100 text-black pointer-events-none z-20 text-sm absolute left-0 -bottom-4 group-hover:-bottom-1 translate-y-full bg-white shadow-lg rounded px-3 py-1 whitespace-nowrap transition-all">
                 {props.tip}
             </div>
         </div>

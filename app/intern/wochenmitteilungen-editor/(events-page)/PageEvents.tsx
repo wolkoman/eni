@@ -1,29 +1,24 @@
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {getWeekDayName} from "../../../components/calendar/Calendar";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {ElementRef, useRef} from "react";
-import {LiturgyData} from "../../../pages/api/liturgy";
-import {Header, WeeklyPageFooter} from "@/app/intern/weekly-editor/Header";
-import {Event} from "@/app/intern/weekly-editor/Event";
-import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
-import {PiArrowCircleLeftBold, PiArrowUUpLeftBold} from "react-icons/pi";
+import {WeeklyPageHeader1, WeeklyPageFooter} from "@/app/intern/wochenmitteilungen-editor/Header";
+import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
+import {LiturgyData} from "../../../../pages/api/liturgy";
+import {getWeekDayName} from "../../../../components/calendar/Calendar";
+import {Event} from "./Event"
 
 export const parishes = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
 
-export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyData }) {
-  const ref = useRef<ElementRef<'div'>>(null);
+export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyData, storeData: WeeklyEditorStoreData }) {
   const events = groupEventsByDate(props.events);
-  const dateRange = useWeeklyEditorStore(state => state.dateRange)
 
   return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/40/20 p-12 flex flex-col mx-auto">
 
-    <Header/>
+    <WeeklyPageHeader1/>
 
     <div className="my-6 flex justify-center items-center gap-2">
       <div className="text-3xl font-bold tracking-tight">Wochenmitteilungen  </div>
-      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">{dateRange.name}</div>
+      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">{props.storeData.dateRange.name}</div>
     </div>
 
     <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm font-semibold">
@@ -36,7 +31,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
         </div>)}
     </div>
     <div className=" flex items-end text-[10pt] overflow-hidden">
-      <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] leading-tight" ref={ref}>
+      <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] leading-tight">
         {Object.entries(events).map(([dateString, events]) => {
           const date = new Date(dateString)
           const liturgyElement = props.liturgy[date.toISOString().slice(0, 10)];
@@ -64,7 +59,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
               >
                 {events
                   .filter(event => event.calendar === calendar)
-                  .map(event => <Event event={event}/>)
+                  .map(event => <Event key={event.id} event={event} storeData={props.storeData}/>)
                 }
               </div>
             )}

@@ -1,5 +1,5 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {useWeeklyEditorStore} from "@/app/intern/weekly-editor/store";
+import {useWeeklyEditorStore} from "@/app/intern/wochenmitteilungen-editor/store";
 import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import {useState} from "react";

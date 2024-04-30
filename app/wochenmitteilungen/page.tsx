@@ -1,41 +1,31 @@
 import React from 'react';
 import Site from "../../components/Site";
-import {Links} from "../(shared)/Links";
-import {CalendarName, getCalendarInfo} from "../(domain)/events/CalendarInfo";
+import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
+import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
+import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
+import {CalendarName} from "@/domain/events/CalendarInfo";
+import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
 
 
-export default async function Page() {
-    return <WochenmitteilungenSite/>
-}
+export default async function Page(props: {searchParams: {parish?: string}}) {
 
-const WochenmitteilungenSite = () => {
-    return (
-      <Site title="Wochenmitteilungen" showTitle={true}>
-          <div className="max-w-xl my-6">
-              Gottesdienste, Veranstaltungen und Ankündigungen jede Woche neu. Sie können sich auch gerne für
-              den Newsletter registrieren: Schicken Sie dazu eine Mail mit der gewünschten Pfarre an
-              kanzlei@eni.wien.
-          </div>
-          <div className="grid lg:grid-cols-3 gap-2">
-              <WeeklyButton
-                href={Links.Wochenmitteilungen(CalendarName.EMMAUS)} index={0}
-                calendar={CalendarName.EMMAUS}/>
-              <WeeklyButton
-                href={Links.Wochenmitteilungen(CalendarName.INZERSDORF)} index={1}
-                calendar={CalendarName.INZERSDORF}/>
-              <WeeklyButton
-                href={Links.Wochenmitteilungen(CalendarName.NEUSTIFT)} index={2}
-                calendar={CalendarName.NEUSTIFT}/>
-          </div>
-      </Site>
-    );
-};
+  const weekly = await getCurrentWeeklyData();
+  const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
+  const storeData = {...weekly.data, events}
+  const parish = props.searchParams.parish as CalendarName;
 
-function WeeklyButton(props: { index: number, href?: string, calendar: CalendarName }) {
-    const info = getCalendarInfo(props.calendar);
-    return <a
-      className={`block text-center font-bold rounded-lg ${info.className} overflow-hidden shadow-lg p-8 hover:opacity-90`}
-      href={props.href}
-    >{info.fullName}
-    </a>
+
+  return (
+    <Site title="Wochenmitteilungen">
+      <div className="text-4xl font-bold my-6 lg:my-12 print:hidden">
+        Wochenmitteilungen
+      </div>
+      <div className="max-w-xl my-6 print:hidden">
+        Gottesdienste, Veranstaltungen und Ankündigungen werden jede Woche in den Wochenmitteilungen verlautbart. Um stets informiert zu bleiben, empfehlen wir den Newsletter zu abonnieren.
+      </div>
+      <WeeklyActions storeData={storeData}/>
+      {weekly?.data && <WeeklyContent storeData={storeData} calendar={parish}/>}
+    </Site>
+  );
+
 }

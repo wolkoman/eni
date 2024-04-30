@@ -1,9 +1,9 @@
-import {parishes} from "@/app/intern/weekly-editor/PageEvents";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import React from "react";
 import Link from "next/link";
+import {parishes} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
 
-export function Header() {
+export function WeeklyPageHeader1() {
   return <div className="flex justify-between">
     <div className="opacity-70 leading-snug text-xs">
       Miteinder der Pfarren Emmaus, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift<br/>

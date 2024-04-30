@@ -3,15 +3,15 @@ import React, {useState} from 'react';
 import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 import {LiturgyData} from "../../../../pages/api/liturgy";
-import {useReaderStore} from "../../../(store)/ReaderStore";
-import {CalendarGroup} from "../../../(domain)/events/CalendarGroup";
+import {useReaderStore} from "@/store/ReaderStore";
+import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {ReaderSite} from "../IndexPage";
-import {ReaderRole} from "../../../(domain)/service/Service";
-import {fetchJson} from "../../../(shared)/FetchJson";
+import {ReaderRole} from "@/domain/service/Service";
+import {fetchJson} from "@/app/(shared)/FetchJson";
 import {LiturgyEvent} from "./LiturgyEvent";
 import {resolveAvailableLiturgies} from "./resolveAvailableLiturgies";
-import {Links} from "../../../(shared)/Links";
-import {groupEventsByDate} from "../../../(domain)/events/CalendarGrouper";
+import {Links} from "@/app/(shared)/Links";
+import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 
 
 export default function EventsPage(props: { liturgy: LiturgyData }) {
@@ -52,7 +52,7 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
     ));
 
     return <ReaderSite>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
             <div className="print:hidden">
                 <input
                     type="checkbox"
@@ -60,11 +60,11 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
                     onChange={({target}) => setShowOnlySpecial(target.checked)}/>{" "}
                 Nur Feste anzeigen
             </div>
-            {liturgyEvents.map(([date, events]) => <div className="flex flex-col lg:flex-row" key={date}>
+            {liturgyEvents.map(([date, events]) => <div className="flex flex-col lg:flex-row py-1 border-b border-black/20" key={date}>
                 <div className={`w-24 flex-shrink-0 ${new Date(date).getDay() ? '' : 'font-bold'}`}>
                     {new Date(date).toLocaleDateString("de-AT")}
                 </div>
-                <div className="flex flex-col gap-2 flex-grow">
+                <div className="flex flex-col flex-grow">
                     {events.map(event =>
                         <LiturgyEvent
                             readers={readers}

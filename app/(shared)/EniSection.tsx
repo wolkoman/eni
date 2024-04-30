@@ -5,7 +5,7 @@ export function EniSection(props: {
   title: ReactNode,
   children: ReactNode,
   picture: string,
-  parish?: (info: CalendarInfo) => ReactNode | null
+  parish?: (info: CalendarInfo) => ReactNode | null,
 }) {
   return <div className="flex flex-col items-center">
     <img src={props.picture} className="h-40"/>
