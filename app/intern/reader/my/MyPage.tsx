@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import {useCalendarStore} from "@/store/CalendarStore";
 import {toast} from "react-toastify";
 import {Liturgy, LiturgyData} from "../../../../pages/api/liturgy";
 import {ReaderSite} from "../IndexPage";
@@ -88,12 +87,11 @@ export function MyPage(props: { liturgy: LiturgyData }) {
             })
             }
             <div className="my-4 text-lg font-bold">Alle Dienste</div>
-            <div className="flex flex-col gap-1">
             {Object.entries(readerData)
                 .map(([eventId, data]) => ({...data, event: events.find(event => event.id === eventId)!}))
                 .filter(data => new Date(data.event?.date).getTime() > new Date().getTime() - 1000*3600*24)
                 .sort((a,b) => new Date(a.event?.date).getTime() - new Date(b.event?.date).getTime())
-                .map((data) => <div className="flex border-black/10 border-t first:border-0 py-1">
+                .map((data) => <div className="flex border-black/10 border-t py-1">
                     <div className="w-60">
                         <div className="font-bold"><EventDateText date={new Date(data.event?.date)}/></div>
                         <div><EventTime date={new Date(data.event?.start.dateTime)}/> {data.event.summary}</div>
@@ -113,7 +111,6 @@ export function MyPage(props: { liturgy: LiturgyData }) {
                         )}
                     </div>
                 </div>)}
-            </div>
         </div>
     </ReaderSite>
 }

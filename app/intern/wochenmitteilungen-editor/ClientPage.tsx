@@ -7,7 +7,14 @@ import {useStoreState} from "@/app/(shared)/UseStoreState";
 import React, {useEffect, useState} from "react";
 import {useWeeklyEditorStore} from "@/app/intern/wochenmitteilungen-editor/store";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {PiArchiveBold, PiArrowCounterClockwiseBold, PiEnvelopeBold, PiPlusBold, PiShareFatBold} from "react-icons/pi";
+import {
+  PiArchiveBold,
+  PiArrowCounterClockwiseBold,
+  PiDownloadBold,
+  PiEnvelopeBold,
+  PiPlusBold,
+  PiShareFatBold
+} from "react-icons/pi";
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
 import {ParishDot} from "../../../components/calendar/ParishDot";
 import {PageEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
@@ -37,6 +44,15 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
       <div className={"max-w-2xl mx-auto py-2 flex justify-between rounded"}>
         <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
         <div className="flex gap-2">
+          <Button
+            loading={store.loading}
+            icon={PiDownloadBold}
+            label="Letzte holen"
+            sure={true}
+            onClick={ async () => {
+              store.override(props.currentWeekly.data)
+            }}
+          />
           <Button
             loading={store.loading}
             icon={PiShareFatBold}

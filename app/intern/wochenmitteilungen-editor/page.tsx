@@ -5,6 +5,8 @@ import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyDat
 
 const ClientPage = dynamic(() => import("./ClientPage"), {ssr: false})
 
+export const revalidate = 300;
+
 export default async function WeeklyEditorPage(){
   const liturgy = await loadCachedLiturgyData()
   const currentWeekly = await getCurrentWeeklyData()

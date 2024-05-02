@@ -2,7 +2,7 @@
 import {v4 as uuidv4} from 'uuid';
 import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import create, {UseBoundStore} from "zustand";
+import create from "zustand";
 import {loadAnnouncements} from "@/app/intern/wochenmitteilungen/loadAnnouncements";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "@/domain/events/CalendarInfo";
@@ -55,6 +55,9 @@ export const useWeeklyEditorStore = create(persist(combine({
     dateRange: {start: "", end: "", name: ""},
     send: Function,
   }, (set, get) => ({
+    override: (x: any) => {
+      set({...x, loading: false})
+    },
     setDateRange: (dateRange: ReturnType<typeof get>["dateRange"]) => {
       set({dateRange});
     },
