@@ -65,7 +65,7 @@ export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleA
     })
     .catch(async err => {
       console.log('Google Calendar failed: ' + err);
-      await notifyAdmin('Google Calendar failed: ' + err);
+      //await notifyAdmin('Google Calendar failed: ' + err);
       return await Cockpit.collectionGetCached('internal-data', {filter: {_id: Cockpit.InternalId.CalendarCache}})
         .then(x => x.entries[0].data);
     });
