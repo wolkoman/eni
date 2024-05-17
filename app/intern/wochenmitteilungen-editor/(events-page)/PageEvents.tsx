@@ -12,7 +12,7 @@ export const parishes = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarN
 export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyData, storeData: WeeklyEditorStoreData }) {
   const events = groupEventsByDate(props.events);
 
-  return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/40/20 p-12 flex flex-col mx-auto">
+  return <div className="w-[21cm] h-[29.7cm] bg-white p-12 flex flex-col mx-auto">
 
     <WeeklyPageHeader1/>
 

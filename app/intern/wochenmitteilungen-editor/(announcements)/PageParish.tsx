@@ -13,7 +13,7 @@ export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEdi
   const [active, setActive] = useState("")
 
   const columnStyle = "flex flex-col gap-6 h-full"
-  return <div className="w-[21cm] h-[29.7cm] bg-white border border-black/20 p-12 flex flex-col mx-auto">
+  return <div className="w-[21cm] h-[29.7cm] bg-white p-12 flex flex-col mx-auto">
     {active && <div className="fixed top-0 left-0 w-full h-full bg-black/10 z-10" onClick={() => setActive("")}/>}
     <WeeklyPageHeader2 parish={props.calendar}/>
     <div className="h-full grid grid-cols-2 gap-6 my-6">

@@ -21,7 +21,7 @@ export default function RootLayout({children,}: { children: ReactNode }) {
       <meta property="og:description" content={metadata.description as string}/>
       <meta property="og:image" content="/social.png"/>
     </head>
-    <body className="bg-back">
+    <body className="bg-back print:bg-white">
     {children}
     <Analytics/>
     <Toasts/>
