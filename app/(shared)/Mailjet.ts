@@ -1,5 +1,3 @@
-import {response} from "msw";
-
 export function sendMail(templateId: number, toName: string, toMail: string, subject: string, variables: any, sendViaBcc = false) {
     return fetch("https://api.mailjet.com/v3.1/send", {
         method: "POST",

@@ -3,13 +3,10 @@ import {site} from "./Instance";
 import {getInstagramTitle} from "./ChatGpt";
 import {Cockpit} from "../../util/cockpit";
 import {unstable_cache} from "next/cache";
+import {InstagramFeedItem} from "../../components/InstagramFeedItem";
 
-export const fetchCachedInstagramFeed = async () => {
+export async function fetchInstagramFeed(): Promise<InstagramFeedItem[]> {
     const {token}: any = await get('instagram_config')
-    return await fetchInstagramFeed(token);
-};
-
-export async function fetchInstagramFeed(token: string) {
     const fields = "id,ig_id,media_type,media_url,permalink,timestamp,caption";
 
     return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=9&access_token=${token}`)

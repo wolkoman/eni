@@ -54,8 +54,8 @@ export function TextEditor(props: {
       </Field>
 
       <div className="flex gap-2">
-        <Button label="Generieren" icon={PiGearBold} onClick={generateWeeklyText} loading={loading}/>
-        <Button label="Senden" sure={true} icon={PiPaperPlaneBold} onClick={send} loading={loading}/>
+        <Button label="Generieren" icon={<PiGearBold/>} onClick={generateWeeklyText} loading={loading}/>
+        <Button label="Senden" sure={true} icon={<PiPaperPlaneBold/>} onClick={send} loading={loading}/>
       </div>
       {message && <div className="px-4 py-2 my-2 border border-black rounded">{message}</div>}
     </div>

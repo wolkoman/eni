@@ -2,26 +2,6 @@
 
 import {SectionHeader} from "../components/SectionHeader";
 import Link from "next/link";
-import {loadCachedEvents} from "@/domain/events/EventsLoader";
-import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
-import {site} from "@/app/(shared)/Instance";
-import Site from "../components/Site";
-import TopBar from "../components/TopBar";
-import {EniHero} from "../components/EniHero";
-import Responsive from "../components/Responsive";
-import {TodayAndTomorrow} from "../components/TodayAndTomorrow";
-import {ComingUp} from "../components/calendar/ComingUp";
-import {EniSections} from "@/app/EniSections";
-import {Instagram} from "../components/Instagram";
-import {fetchCachedInstagramFeed} from "@/app/(shared)/Instagram";
-import {EniInformation} from "@/app/EniInformation";
-import {EmmausBranding} from "../components/EmmausBranding";
-import {WorshipNotice} from "../components/WorshipNotice";
-import EmmausSections, {Articles} from "@/app/EmmausSections";
-import {fetchArticles} from "@/app/(shared)/Articles";
-import {fetchEmmausSites} from "@/app/(shared)/Sites";
-import {fetchEmmausbote} from "@/app/(shared)/Weekly";
-import {PrayerWall} from "@/app/(emmaus-only)/gebetswand/PrayerWall";
 import * as React from "react";
 import {ReactNode, useRef, useState} from "react";
 

@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link";
 import {EniSection} from "@/app/(shared)/EniSection";
 import {ParishButton} from "./(shared)/ParishButton";
@@ -38,7 +37,7 @@ export function EniSections() {
         Die für unsere Pfarren komponierten Messvertonungen mit ihren berührenden Texten und Melodien ermöglichen eine frohe Liturgiefeier.
         <Link href="https://data.eni.wien/storage/uploads/2024/04/12/Emmausmesse_final_uid_66191e43633f0.pdf"
               className="mt-3">
-          <Button label="Mess-Folder" icon={PiFileFill}/>
+          <Button label="Mess-Folder" icon={<PiFileFill/>}/>
         </Link>
       </EniSection>
     </div>

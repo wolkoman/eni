@@ -1,21 +1,19 @@
-"use client"
-
 import {Event} from './calendar/Event';
 import {SectionHeader} from "./SectionHeader";
-import {EventDateText} from "./calendar/EventUtils";
-import {EventsObject} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import {site} from "@/app/(shared)/Instance";
 import * as React from "react";
 import Button from "./Button";
 import Link from "next/link";
-import {getWeekDayName} from "./calendar/Calendar";
+import {loadCachedEvents} from "@/domain/events/EventsLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 
-export function TodayAndTomorrow(props: { eventsObject: EventsObject; }) {
+export async function TodayAndTomorrow() {
+  const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})
   const today = new Date().toISOString().substring(0, 10);
   const tomorrow = new Date(new Date().getTime() + 3_600_000 * 24).toISOString().substring(0, 10);
-  const eventsByDate = groupEventsByDate(props.eventsObject.events);
+  const eventsByDate = groupEventsByDate(eventsObject.events);
 
   const date = eventsByDate[today]?.some(event =>
     new Date(`${event.date} ${event.time}`) > new Date()

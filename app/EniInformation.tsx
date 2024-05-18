@@ -1,5 +1,3 @@
-"use client"
-
 import {Section} from "../components/Section";
 import {CalendarName, getCalendarInfo} from "./(domain)/events/CalendarInfo";
 import {motion} from "framer-motion";
