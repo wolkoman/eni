@@ -26,10 +26,7 @@ export const revalidate = 300
 
 export default async function HomePage() {
   const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})
-  return site(async () => <Site
-      responsive={false} navbar={false}
-      description="Drei Pfarren im Wiener Dekanat 23"
-      keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
+  return site(async () => <Site responsive={false} navbar={false}>
       <TopBar frontpage={true}/>
       <EniHero/>
       <Responsive size="md">
@@ -39,10 +36,7 @@ export default async function HomePage() {
         <Instagram items={await fetchCachedInstagramFeed()}/>
         <EniInformation/>
       </Responsive>
-    </Site>, async () => <Site
-      responsive={false} navbar={false}
-      description="Eine katholische Pfarre im Wiener Dekanat 23"
-      keywords={["Katholisch", "Pfarre", "Glaube", "Gemeinschaft"]}>
+    </Site>, async () => <Site responsive={false} navbar={false}>
       <div className="md:sticky inset-0 w-full">
         <TopBar frontpage={true}/>
         <EmmausBranding eventsObject={eventsObject}/>

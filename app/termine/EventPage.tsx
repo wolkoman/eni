@@ -1,7 +1,7 @@
 "use client"
 
 import {LiturgyData} from "../../pages/api/liturgy";
-import {useState} from "../(shared)/use-state-util";
+import {useState} from "@/app/(shared)/use-state-util";
 import {Preference, usePreferenceStore} from "@/store/PreferenceStore";
 import React from "react";
 import Site from "../../components/Site";
@@ -11,37 +11,16 @@ import {Settings} from "../../components/Settings";
 import {MonthView} from "../../components/calendar/MonthView";
 import {ListView} from "../../components/calendar/ListView";
 import {FilterSelector} from "../../components/calendar/FilterSelector";
-import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
 import {EventsObject} from "@/domain/events/EventMapper";
 import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {useCalendarStore} from "@/store/CalendarStore";
 import {useUserStore} from "@/store/UserStore";
-import {Permission} from "@/domain/users/Permission";
 import {useFilterState} from "@/app/termine/useFilterState";
 import {EventSearch} from "../../components/calendar/EventSearch";
 import {CalendarErrorNotice} from "../../components/calendar/CalendarErrorNotice";
 import {EniLoading} from "../../components/Loading";
 import {applyFilter} from "../../components/calendar/Calendar";
-import {PiPlusBold} from "react-icons/pi";
-import Button from "../../components/Button";
-
-export function AddEvent() {
-  const [isEditing, setIsEditing] = useState(false);
-  const user = useUserStore(state => state.user);
-  return user?.permissions[Permission.PrivateCalendarAccess] ? <>
-    <div className={`static lg:relative`}>
-      <Button
-        label={<div className="flex gap-1 items-center"><PiPlusBold/> Terminvorschlag</div>}
-        onClick={() => setIsEditing(true)}
-      />
-      {isEditing && <EventEdit
-          onClose={() => setIsEditing(false)} parish={user.parish}
-          suggestion={{date: "", time: "", description: "", summary: ""}}
-      />}
-    </div>
-    {isEditing && <EventEditBackground onClick={() => setIsEditing(false)}/>}
-  </> : <></>;
-}
+import {AddEvent} from "@/app/termine/AddEvent";
 
 export default function EventPage(props: {
   liturgy: LiturgyData,

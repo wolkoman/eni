@@ -7,12 +7,8 @@ import {site} from "@/app/(shared)/Instance";
 
 export default function Site(props: {
   title?: string,
-  description?: string,
-  keywords?: string[],
-  author?: string,
   children: ReactNode,
   responsive?: boolean,
-  narrow?: boolean,
   showTitle?: boolean,
   navbar?: boolean,
   footer?: boolean
@@ -29,7 +25,7 @@ export default function Site(props: {
               </div>
           </div>)}
         </>}
-        {(props.responsive ?? true) ? <Responsive size={props.narrow ? "sm" : "md"}>
+        {(props.responsive ?? true) ? <Responsive>
           {props.title && props.showTitle
             ? <div className="text-4xl font-bold my-6 lg:my-12">
               {site(props.title, null)}
