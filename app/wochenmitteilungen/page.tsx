@@ -6,6 +6,7 @@ import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
 
+export const revalidate = 300
 
 export default async function Page(props: {searchParams: {parish?: string}}) {
 
