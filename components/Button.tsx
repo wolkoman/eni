@@ -2,14 +2,13 @@
 
 import React, {ReactNode, useState} from 'react';
 import {RiLoader4Fill} from "react-icons/ri";
-import {IconType} from "react-icons";
 
 export default function Button(props: {
   label: ReactNode,
   sure?: true,
   onClick?: () => any,
   secondary?: boolean,
-  icon?: IconType
+  icon?: ReactNode
   disabled?: boolean,
   loading?: boolean,
   big?: boolean,
@@ -17,7 +16,6 @@ export default function Button(props: {
 }) {
     const [sure, setSure] = useState(false);
     const disabled = props.disabled || props.loading
-  const IconTag = props.icon
 
   const style = [
     props.big ? 'px-8 py-3 text-lg ' : 'px-3 py-1',
@@ -31,6 +29,6 @@ export default function Button(props: {
     className={`${style} ${props.className ?? ''} inline-flex items-center justify-center gap-1 rounded transition font-semibold`}
     onMouseLeave={() => setSure(false)}
     onClick={props.sure ? (sure ? props.onClick : () => setSure(x => !x)) : props.onClick}>
-    {props.loading ? <RiLoader4Fill className="animate-spin"/> : props.icon?.({})} {props.label}
+    {props.loading ? <RiLoader4Fill className="animate-spin"/> : props.icon} {props.label}
   </div>;
 }

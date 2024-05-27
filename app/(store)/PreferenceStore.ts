@@ -1,5 +1,5 @@
-import create from 'zustand';
 import {combine, persist} from "zustand/middleware";
+import create from "zustand";
 
 export enum Preference {
   SeparateMass = "SEPARATE_MASS",

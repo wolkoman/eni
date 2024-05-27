@@ -46,7 +46,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
         <div className="flex gap-2">
           <Button
             loading={store.loading}
-            icon={PiDownloadBold}
+            icon={<PiDownloadBold/>}
             label="Letzte holen"
             sure={true}
             onClick={ async () => {
@@ -55,7 +55,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
           />
           <Button
             loading={store.loading}
-            icon={PiShareFatBold}
+            icon={<PiShareFatBold/>}
             label="Veröffentlichen"
             onClick={ async () => {
               await store.upsert();
@@ -64,7 +64,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
           />
           {!currentWeekly.sent && currentWeekly.name === dateRangeForm[0].name && <Link href={Links.WochenmitteilungenVersand}><Button
             loading={store.loading}
-            icon={PiEnvelopeBold}
+            icon={<PiEnvelopeBold/>}
             label="Versenden"
           /></Link>}
         </div>

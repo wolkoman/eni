@@ -5,14 +5,17 @@ import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {CalendarTag, EventsObject} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
+import {loadCachedEvents} from "@/domain/events/EventsLoader";
+import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 
-export function EmmausBranding(props: { eventsObject: EventsObject }) {
+export async function EmmausBranding() {
+    const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})
 
-    const event = props.eventsObject.events
+    const event = eventsObject.events
         .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))
         .filter(event => new Date(event.start.dateTime) > new Date())
         .filter(event => event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))[0];
-    const announcements = props.eventsObject.events
+    const announcements = eventsObject.events
         .filter(event => event.tags.includes(CalendarTag.announcement))
 
     return <div className="bg-emmaus pt-16 md:pt-36 relative overflow-hidden">
