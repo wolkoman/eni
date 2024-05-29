@@ -7,9 +7,10 @@ import React, {useState} from "react";
 import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
 import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import {OptionsButton} from "@/app/wochenmitteilungen/OptionsButton";
+import {LiturgyData} from "../../pages/api/liturgy";
 
 
-export function WeeklyActions(props: { storeData: WeeklyEditorStoreData }) {
+export function WeeklyActions(props: { storeData: WeeklyEditorStoreData, liturgy: LiturgyData }) {
   const registerLink = (parish: string) => `mailto:kanzlei@eni.wien?subject=${encodeURIComponent("Wochenmitteilungen " + parish)}&body=${encodeURIComponent(`Ich würde mich gerne für die Wochenmitteilungen von ${parish} anmelden.`)}`
   const [printParish, setPrintParish] = useState(CalendarName.EMMAUS)
   const optionStyle = "bg-white px-4 py-1 flex items-center gap-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap"
@@ -49,7 +50,7 @@ export function WeeklyActions(props: { storeData: WeeklyEditorStoreData }) {
     </div>
 
     <div className="print:block print:static print:opacity-100 absolute opacity-0 pointer-events-none">
-      <PageEvents events={props.storeData.events} liturgy={{}} storeData={props.storeData}/>
+      <PageEvents events={props.storeData.events} liturgy={props.liturgy} storeData={props.storeData}/>
     </div>
     <div className="hidden print:block">
       <PageParish storeData={props.storeData} calendar={printParish}/>
