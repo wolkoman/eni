@@ -5,6 +5,7 @@ import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-p
 import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
+import {loadCachedLiturgyData} from "../../pages/api/liturgy";
 
 export const revalidate = 300
 
@@ -14,7 +15,7 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
   const storeData = {...weekly.data, events}
   const parish = props.searchParams.parish as CalendarName;
-
+  const liturgy = await loadCachedLiturgyData()
 
   return (
     <Site title="Wochenmitteilungen">
@@ -24,7 +25,7 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
       <div className="max-w-xl my-6 print:hidden">
         Gottesdienste, Veranstaltungen und Ankündigungen werden jede Woche in den Wochenmitteilungen verlautbart. Um stets informiert zu bleiben, empfehlen wir den Newsletter zu abonnieren.
       </div>
-      <WeeklyActions storeData={storeData}/>
+      <WeeklyActions storeData={storeData} liturgy={liturgy}/>
       {weekly?.data && <WeeklyContent storeData={storeData} calendar={parish}/>}
     </Site>
   );

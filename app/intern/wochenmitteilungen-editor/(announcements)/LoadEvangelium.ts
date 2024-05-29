@@ -1,42 +1,26 @@
 "use server"
-import {XMLParser} from "fast-xml-parser";
-
-const parsingOptions = {
-  ignoreAttributes: false,
-  preserveOrder: true,
-  unpairedTags: ["hr", "br", "link", "meta"],
-  stopNodes: ["*.pre", "*.script"],
-  processEntities: true,
-  htmlEntities: true,
-  alwaysCreateTextNodes: true
-};
+import { parse } from 'node-html-parser';
 
 export async function loadEvangelium(start: Date) {
   const nextSunday = new Date(start.getTime() + (start.getDay() ? 7 - start.getDay() : 0) * 3600 * 1000 * 24)
-  const date = nextSunday.toISOString().substring(0, 10)
-  const link = `https://www.erzabtei-beuron.de/schott/schott_anz/index.html?datum=${date}`;
+  const date = nextSunday.toISOString().substring(0, 10).replaceAll("-","/")
+  const link = `https://www.vaticannews.va/de/tagesevangelium-und-tagesliturgie/${date}.html`;
   return await fetch(link)
     .then(response => response.text())
     .then(html => {
-      html = html.substring(html.indexOf("<h2 class=\"lb_u1\">Evangelium"))
-      html = html.substring(0, html.indexOf("<h2 class=\"s_u1\">"))
-      const body = new XMLParser(parsingOptions).parse(html);
+      const document = parse(html);
 
-      console.log({date, html})
-      const [{h2: [_, {span: [{"#text": place}]}]}, ...p] = body
-      const text = p
-        .filter((e: any) => e?.[":@"]?.["@_class"].startsWith("lb_tx"))
-        .flatMap((e: any) => e.p).map((e: any) => {
-          if (e?.[":@"]?.["@_class"].startsWith("lb_tx")) {
-            const firstSpan: any = e.span.map((span: any) => span["#text"]).join("");
-            return firstSpan
-          } else if (e?.["#text"]) {
-            return e?.["#text"]
-          } else {
-            return ""
-          }
-        }).join(" ")
+      const h2 = Array.from(document.querySelectorAll("h2")).find(h2 => h2.innerText == "Evangelium vom Tag")
+      const sectionHead = h2?.parentNode
+      if(sectionHead?.classNames !== "section__head") return {place: "", text: "Invalid section head"}
+      const sectionWrapper = sectionHead.parentNode.querySelector(".section__content")
+      if(!sectionWrapper) return {place: "", text: "Invalid section wrapper"}
 
-      return {place: decodeURIComponent(place), text: decodeURIComponent(text)};
-    })
+      const place = Array.from(sectionWrapper.childNodes[1].childNodes)
+      console.log(sectionWrapper.childNodes)
+      const text = sectionWrapper.childNodes[3].textContent
+
+      return {place: place[2].innerText, text: text}
+    });
+
 }
