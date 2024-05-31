@@ -11,7 +11,7 @@ import {LiturgyData} from "../../pages/api/liturgy";
 
 
 export function WeeklyActions(props: { storeData: WeeklyEditorStoreData, liturgy: LiturgyData }) {
-  const registerLink = (parish: string) => `mailto:kanzlei@eni.wien?subject=${encodeURIComponent("Wochenmitteilungen " + parish)}&body=${encodeURIComponent(`Ich würde mich gerne für die Wochenmitteilungen von ${parish} anmelden.`)}`
+  const registerLink = (parish: string) => `mailto:admin@eni.wien?subject=${encodeURIComponent("Wochenmitteilungen " + parish)}&body=${encodeURIComponent(`Ich würde mich gerne für die Wochenmitteilungen von ${parish} anmelden.`)}`
   const [printParish, setPrintParish] = useState(CalendarName.EMMAUS)
   const optionStyle = "bg-white px-4 py-1 flex items-center gap-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap"
 
