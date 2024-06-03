@@ -15,6 +15,7 @@ import {fetchEmmausbote} from "@/app/(shared)/Weekly";
 import {PrayerWall} from "@/app/(emmaus-only)/gebetswand/PrayerWall";
 import * as React from "react";
 import {Alpha} from "@/app/Alpha";
+import {EniInformation} from "@/app/EniInformation";
 
 export const revalidate = 300
 
@@ -28,7 +29,7 @@ export default async function HomePage() {
      <ComingUp/>
         <EniSections/>
         <Instagram/>
-        {/**<EniInformation/>**/}
+        <EniInformation/>
       </Responsive>
     </Site>, async () => <Site responsive={false} navbar={false}>
       <div className="md:sticky inset-0 w-full">

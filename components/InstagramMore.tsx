@@ -32,7 +32,6 @@ export function InstagramMore() {
       {feed.map((item, index) =>
         <InstagramItem key={index} item={item}/>)}
     </div>
-    {JSON.stringify({data})}
     {items.length > length && <div className="flex justify-end my-4">
         <Button label={<>Mehr</>} onClick={() => setLength(x => x + 3)}/>
     </div>}
