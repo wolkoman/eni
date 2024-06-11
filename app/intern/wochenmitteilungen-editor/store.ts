@@ -3,13 +3,13 @@ import {v4 as uuidv4} from 'uuid';
 import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import create from "zustand";
-import {loadAnnouncements} from "@/app/intern/wochenmitteilungen/loadAnnouncements";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "@/domain/events/CalendarInfo";
-import {hideAnnouncement} from "@/app/intern/wochenmitteilungen/hideAnnouncement";
 import {loadEvangelium} from "@/app/intern/wochenmitteilungen-editor/(announcements)/LoadEvangelium";
 import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
 import {markWeeklyAsSent, upsertWeekly} from "@/app/intern/wochenmitteilungen-editor/upsert";
+import {hideAnnouncement} from "@/app/intern/wochenmitteilungen-editor/hideAnnouncement";
+import {loadAnnouncements} from "@/app/intern/wochenmitteilungen-editor/loadAnnouncements";
 
 export type WeeklyParishItem = Article | Teaser
 
@@ -26,13 +26,17 @@ export type Article = {
   type: "ARTICLE",
   title: string,
   author: string,
-  text: string
+  text: string,
+  image?: string,
+  imageSize?: number,
 } & GeneralItem
 export type Teaser = {
   type: "TEASER",
   eventId: string,
   preText: string,
-  postText: string
+  postText: string,
+  image?: string,
+  imageSize?: number,
 } & GeneralItem
 
 export type WeeklyEditorStoreData = {
@@ -41,7 +45,8 @@ export type WeeklyEditorStoreData = {
   customEventDescription: Record<string, string | null>,
   dateRange: {start: string, end: string, name: string},
   setCustomDescription: Function,
-  switchSideFor: { parish: CalendarName, id: string }[]
+  switchSideFor: { parish: CalendarName, id: string }[],
+  toggleSideFor: (id: string, parish: CalendarName) => void
 }
 
 export const useWeeklyEditorStore = create(persist(combine({
@@ -103,6 +108,19 @@ export const useWeeklyEditorStore = create(persist(combine({
           console.log({error})
           set({loading: false});
         });
+    },
+    insertEmpty: () => {
+        set({
+          items: [...get().items, {
+            type: "ARTICLE",
+            id: uuidv4(),
+            parishes: {emmaus: true, inzersdorf: true, neustift: true},
+            title: "Ankündigung",
+            text: "",
+            author: ""
+          }],
+          loading: false,
+        })
     },
     loadEvents: () => {
       if (get().loading) return;

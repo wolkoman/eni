@@ -10,7 +10,7 @@ import Button from "../../../../components/Button";
 
 const ItemForm = createContext<[WeeklyParishItem, Dispatch<SetStateAction<WeeklyParishItem>>] | null>(null)
 
-export function WeeklyItemEditor({item, calendar}: { item: WeeklyParishItem, calendar: CalendarName }) {
+export function WeeklyItemEditor({item}: { item: WeeklyParishItem }) {
   const store = useWeeklyEditorStore(state => state)
   const form = useState(item)
 
@@ -19,10 +19,8 @@ export function WeeklyItemEditor({item, calendar}: { item: WeeklyParishItem, cal
       store.setItem(form[0]);
   }, [form[0]]);
 
-  const side = store.switchSideFor.find(s => s.id === item.id && item.parishes[s.parish as CalendarName.EMMAUS]);
   return <ItemForm.Provider value={form}>
-    <div
-      className={`flex-col ${(side ? "right-2 -translate-x-full" : "left-2 translate-x-full")} my-4 gap-4 p-2 bg-white border border-black/20 rounded absolute -top-4 z-20 print:hidden w-full`}>
+    <div className={`flex-col gap-4 bg-white print:hidden w-full`}>
       {item.type === "ARTICLE" && <WeeklyArticleEditor form={form as any}/>}
       {item.type === "TEASER" && <WeeklyTeaserEditor form={form as any}/>}
 
@@ -32,16 +30,16 @@ export function WeeklyItemEditor({item, calendar}: { item: WeeklyParishItem, cal
             CalendarName.EMMAUS as const,
             CalendarName.INZERSDORF as const,
             CalendarName.NEUSTIFT as const
-          ].map(name => <img
-            src={getCalendarInfo(name).dot}
-            key={name}
-            className={"text-center cursor-pointer w-6 " + (item.parishes[name] ? "" : ("opacity-40 grayscale " + (item.type === "TEASER" && "hidden")))}
-            onClick={() => form[1](item => ({...item, parishes: {...item.parishes, [name]: !item.parishes[name]}}))}
-          />)}
-          <Button
-            label={<div className="flex items-center gap-1"><PiArrowsLeftRightBold/> Wechseln</div>}
-            onClick={() => store.toggleSideFor(item.id, calendar)}
-          />
+          ].map(name => {
+            const isClickable = !(Object.values(item.parishes).reduce((p,c) => p+(c?1:0), 0) == 1 && item.parishes[name])
+            return <div
+              key={name}
+              className={`rounded ${isClickable && "cursor-pointer"} ${getCalendarInfo(name).className} ${item.parishes[name] ? "" : (`opacity-20 grayscale ${item.type === "TEASER" && "hidden"}`)}`}
+              onClick={isClickable ? () => form[1](item => ({...item, parishes: {...item.parishes, [name]: !item.parishes[name]}})) : undefined}
+            >
+              <img className="w-8" src={getCalendarInfo(name).dot}/>
+            </div>;
+          })}
           <Button
             label={<div className="flex items-center gap-1"><PiTrashBold/> Löschen</div>}
             onClick={() => store.removeItem(item.id)}

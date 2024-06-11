@@ -6,8 +6,8 @@ import {parishes} from "@/app/intern/wochenmitteilungen-editor/(events-page)/Pag
 export function WeeklyPageHeader1() {
   return <div className="flex justify-between">
     <div className="opacity-70 leading-snug text-xs">
-      Miteinder der Pfarren Emmaus, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift<br/>
-      eni.wien | +43 664 886 32 680
+      Miteinander der Pfarren Emmaus, Inzersdorf (St. Nikolaus), Inzersdorf-Neustift<br/>
+      Zentralbüro: Draschestraße 105, 1230 Wien  | <u>eni.wien</u> | +43 664 886 32 680
     </div>
     <div className="flex">{parishes.map(name =>
       <img src={getCalendarInfo(name).image} key={name} className="w-14"/>
@@ -15,13 +15,14 @@ export function WeeklyPageHeader1() {
   </div>;
 }
 export function WeeklyPageHeader2(props: { parish: CalendarName }) {
-  return <div className="flex justify-between border-b border-black/30">
+  const calendarInfo = getCalendarInfo(props.parish);
+  return <div className="flex justify-between">
     <div className="opacity-70 leading-snug text-xs">
-      <div>{getCalendarInfo(props.parish).fullName}</div>
-      <Link href="https://eni.wien"><u>eni.wien</u></Link> | +43 664 886 32 680
+      <div>Röm.-kath. {calendarInfo.fullName}</div>
+      <Link href={calendarInfo.websiteUrl}><u>{calendarInfo.websiteDisplay}</u></Link> und <Link href="https://eni.wien"><u>eni.wien</u></Link>
     </div>
     <div className="flex">
-      <img src={getCalendarInfo(props.parish).image} className="w-14"/>
+      <img src={calendarInfo.image} className="w-14"/>
     </div>
   </div>;
 }

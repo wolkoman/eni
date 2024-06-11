@@ -6,6 +6,7 @@ import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
 import {loadCachedLiturgyData} from "../../pages/api/liturgy";
+import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 
 export const revalidate = 300
 
@@ -13,7 +14,7 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
 
   const weekly = await getCurrentWeeklyData();
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
-  const storeData = {...weekly.data, events}
+  const storeData: WeeklyEditorStoreData = {...weekly.data, events}
   const parish = props.searchParams.parish as CalendarName;
   const liturgy = await loadCachedLiturgyData()
 

@@ -40,14 +40,14 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
   const lastDate = new Date(store.events.at(-1)?.date!);
   const defaultName = `KW${getWeekOfYear(lastDate)} ${lastDate.getFullYear()}`
   return <div>
-    <div className={`print:hidden bg-white sticky top-0 z-50 shadow-lg`}>
-      <div className={"max-w-2xl mx-auto py-2 flex justify-between rounded"}>
+    <div className="print:hidden bg-white shadow">
+      <div className="max-w-2xl mx-auto py-2 flex justify-between rounded items-center">
         <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
         <div className="flex gap-2">
           <Button
             loading={store.loading}
             icon={<PiDownloadBold/>}
-            label="Letzte holen"
+            label="Letztstand laden"
             sure={true}
             onClick={ async () => {
               store.override(props.currentWeekly.data)
@@ -84,7 +84,8 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
             <SelfServiceInput name="name" form={dateRangeForm} type="text"/>
             {dateRangeForm[0].name != defaultName && <Button
                 onClick={() => store.setDateRange({...dateRangeForm[0], name: defaultName})}
-                label={<PiArrowCounterClockwiseBold className="mt-2"/>}
+                label={<PiArrowCounterClockwiseBold/>
+            }
             />}
           </div>
         </Field>
@@ -97,8 +98,10 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
     <div className={sectionClass}>
       <SectionHeader>Pfarrseite</SectionHeader>
       <div className="grid gap-4">
-        <div>
+        <div className="flex flex-wrap gap-2">
           <Button loading={store.loading} onClick={() => store.insertEvangelium()} label="Evangelium einfügen"/>
+          <Button onClick={() => store.insertEmpty()} label="Leere Ankündigung einfügen"/>
+
         </div>
         <div className="flex flex-col gap-2">
           {store.announcements.map(announcement => <div
@@ -136,11 +139,11 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
       </div>
     </div>
 
-    <PageParish calendar={CalendarName.EMMAUS} storeData={store}/>
+    <PageParish calendar={CalendarName.EMMAUS} storeData={store} isEditable/>
     <div className="my-8 print:hidden"/>
-    <PageParish calendar={CalendarName.INZERSDORF} storeData={store}/>
+    <PageParish calendar={CalendarName.INZERSDORF} storeData={store} isEditable/>
     <div className="my-8 print:hidden"/>
-    <PageParish calendar={CalendarName.NEUSTIFT} storeData={store}/>
+    <PageParish calendar={CalendarName.NEUSTIFT} storeData={store} isEditable/>
 
   </div>;
 }

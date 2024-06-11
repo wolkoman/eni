@@ -17,14 +17,14 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
     <WeeklyPageHeader1/>
 
     <div className="my-6 flex justify-center items-center gap-2">
-      <div className="text-3xl font-bold tracking-tight">Wochenmitteilungen  </div>
-      <div className="text-xl px-1 py-0.25 border border-black rounded-lg">{props.storeData.dateRange.name}</div>
+      <div className="text-3xl font-bold">Wochenmitteilungen</div>
+      <div className="text-xl font-light px-2 border border-black rounded">{props.storeData.dateRange.name}</div>
     </div>
 
     <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm font-semibold">
-      <div className="border-b border-black/40"/>
+      <div className="border-b border-black/20"/>
       {parishes.map(calendar =>
-        <div key={calendar} className="border-l border-b border-black/40 h-full">
+        <div key={calendar} className="border-l border-b border-black/20 h-full">
           <div className={`px-2 py-1 ${getCalendarInfo(calendar).borderColor} border-b-4 h-full leading-tight`}>
             {getCalendarInfo(calendar).fullName}
           </div>
@@ -40,7 +40,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
 
           return <div className={`contents`} key={dateString}>
 
-            <div className={`px-2 py-0.5 border-b border-black/40 ${isSpecial ? 'font-semibold text-red-600' : ''}`}>
+            <div className={`px-2 py-0.5 border-b border-black/20 ${isSpecial ? 'font-semibold text-red-600' : ''}`}>
               <div
                 className={isSpecial ? "underline" : ""}>{getWeekDayName(date.getDay())}, {date.getDate()}.{date.getMonth() + 1}.
               </div>
@@ -54,7 +54,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
 
             {parishes.map(calendar =>
               <div
-                className={`px-2 py-0.5 border-l border-black/40 border-b`}
+                className={`px-2 py-0.5 border-l border-black/20 border-b`}
                 key={calendar}
               >
                 {events
