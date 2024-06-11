@@ -9,27 +9,25 @@ export function ItemComponent({item, calendar, ...props}: {
   item: WeeklyParishItem,
   calendar?: CalendarName,
   storeData: WeeklyEditorStoreData,
-  isActive?: boolean
+  isWebview?: boolean,
+  children?: React.ReactNode,
 }) {
-  const isWebView = props.isActive === undefined;
   const isSingle = Object.values(item.parishes).filter(x => x).length === 1
   const singleParish = Object.entries(item.parishes).find(x => x[1])?.[0]
   const calendarInfo = getCalendarInfo(singleParish as CalendarName);
-  return <div className="relative grow flex flex-col">
+  return <div className="relative grow flex flex-col group">
     <div
       key={item.id}
-      className={(props.isActive ? "z-20" : isWebView ? "shadow" : "hover:bg-black/5 cursor-pointer") + " bg-white break-inside-avoid text-sm border border-black/30 float-start rounded grow flex flex-col"}
+      className={(props.isWebview ? "shadow rounded border border-black/20 bg-white pb-2" : "py-2") + " break-inside-avoid text-sm border-b first-child:border-t border-black/20 grow flex flex-col"}
     >
-      {isSingle && isWebView && <div className={calendarInfo.className + " px-4 py-2"}>
+      {isSingle && props.isWebview && <div className={calendarInfo.className + " px-4 py-2"}>
         <ParishDot info={calendarInfo}/>
       </div>}
+      {props.children}
       <div className="flex flex-col px-4 py-2 grow">
         {item.type === "ARTICLE" && <ArticleComponent item={item}/>}
         {item.type === "TEASER" && <TeaserComponent item={item} storeData={props.storeData}/>}
       </div>
     </div>
-    {props.isActive && calendar && <>
-        <WeeklyItemEditor item={item} calendar={calendar}/>
-    </>}
   </div>
 }

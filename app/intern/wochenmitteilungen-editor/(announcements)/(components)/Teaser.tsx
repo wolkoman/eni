@@ -1,6 +1,11 @@
 import {Teaser, useWeeklyEditorStore, WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {Dispatch, SetStateAction} from "react";
-import {Field, SelfServiceInput} from "../../../../../components/SelfService";
+import {
+  Field,
+  SelfServiceEditor,
+  SelfServiceImageSizeToggle,
+  SelfServiceInput
+} from "../../../../../components/SelfService";
 import {getWeekDayName} from "../../../../../components/calendar/Calendar";
 
 export function WeeklyTeaserEditor({form}: { form: [Teaser, Dispatch<SetStateAction<Teaser>>] }) {
@@ -8,12 +13,18 @@ export function WeeklyTeaserEditor({form}: { form: [Teaser, Dispatch<SetStateAct
   const event = events.find(e => e.id === form[0].eventId)
   return <div className="grid gap-2 grow">
     <div className="font-bold text-lg">Terminankündigung: {event?.summary}</div>
-      <Field label="Vor dem Veranstaltungsnamen">
-        <SelfServiceInput name="preText" form={form} input="textarea"/>
-      </Field>
-      <Field label="Nach dem Veranstaltungsnamen">
-        <SelfServiceInput name="postText" form={form} input="textarea"/>
-      </Field>
+    <Field label="Vor dem Veranstaltungsnamen">
+      <SelfServiceEditor name="preText" form={form}/>
+    </Field>
+    <Field label="Nach dem Veranstaltungsnamen">
+      <SelfServiceEditor name="postText" form={form}/>
+    </Field>
+    <Field label="Bild">
+      <div className="flex">
+        <SelfServiceInput name="image" form={form}/>
+        <SelfServiceImageSizeToggle name="imageSize" form={form}/>
+      </div>
+    </Field>
   </div>;
 }
 
@@ -27,6 +38,10 @@ export function TeaserComponent({item, storeData}: { item: Teaser, storeData: We
         den {event?.date.split("-").reverse().join(".").substring(0, 6)}<br/>um {event?.time} Uhr
       </div>
     </div>
-    <div className="" dangerouslySetInnerHTML={{__html: item.postText.replaceAll("\n", "<br/>")}}/>
+    <div className="" dangerouslySetInnerHTML={{__html: item.postText}}/>
+    {item.image && <div
+        style={{backgroundImage: `url(${item.image})`, height: item.imageSize}}
+        className="bg-contain bg-no-repeat bg-center my-4"/>
+    }
   </div>
 }

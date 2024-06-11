@@ -25,7 +25,8 @@ export default async function sendWeeklyNewsletter(title: string, slogan: string
   const weeklyWithSameName = await cockpit.collectionGet("weekly_v2", {filter: { name: title }})
       .then(({entries}) => entries?.[0])
   if(weeklyWithSameName?.sent) return "Diese Wochenmitteilungen wurden schon versandt";
-
+  await markWeeklyAsSent(title)
+  
   const recipients: {
     anrede: string,
     mail: string,

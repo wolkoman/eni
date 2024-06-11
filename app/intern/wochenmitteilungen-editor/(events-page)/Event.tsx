@@ -15,7 +15,11 @@ export function Event(props: { event: CalendarEvent, storeData: WeeklyEditorStor
     "David": "Kpl. D.",
   }
   const ref = useRef<HTMLTextAreaElement>(null)
-  const summary = props.event.summary.replaceAll("Sakramentenvorbereitung Versöhnung und Kommunion", "Sakramenten​vorbereitung")
+  const summary = props.event.summary
+    .replaceAll("Sakramentenvorbereitung Versöhnung und Kommunion", "Sakramenten​vorbereitung")
+    .replaceAll("Sakrament der Taufe für", "Taufe für")
+    .replaceAll("Sakrament der Ehe für", "Eheschließung für")
+    .replaceAll("Hl. Messe der koreanischen Gemeinde", "Hl. Messe (koreanisch)")
   const customDescription = props.storeData.customEventDescription[props.event.id]
   const description = customDescription ?? props.event.description;
   useEffect(() => {
@@ -29,12 +33,12 @@ export function Event(props: { event: CalendarEvent, storeData: WeeklyEditorStor
     {description != props.event.description && <PiWarningFill className="text-yellow-600/50 absolute top-0.5 right-0 translate-x-1/2 print:hidden"/>}
     <div className="w-[1cm] shrink-0">{props.event.time}</div>
     <div className="w-full">
-      <div className="">
+      <div className="flex flex-wrap gap-x-2">
         <div className="inline">{summary}</div>
         {Object.entries(mainPersons)
           .filter(([name]) => props.event.mainPerson?.includes(name))
           .map(([_, initial]) =>
-            <div key={initial} className="text-xs font-normal opacity-50 rounded pl-1.5 inline-block">{initial}</div>
+            <div key={initial} className="text-xs font-normal opacity-50 rounded inline-block">{initial}</div>
           )}
       </div>
       {!!description && <textarea
