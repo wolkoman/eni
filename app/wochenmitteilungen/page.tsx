@@ -29,7 +29,7 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
       </div>
       <WeeklyActions storeData={storeData} liturgy={liturgy}/>
 
-      <div className="font-semibold my-4">
+      <div className="font-semibold my-4 print:hidden">
         Aktuelle Informationen ({weekly?.name}):
       </div>
       {weekly?.data && <WeeklyContent storeData={storeData} calendar={parish}/>}
