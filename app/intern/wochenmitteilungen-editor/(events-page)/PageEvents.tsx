@@ -21,7 +21,7 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
       <div className="text-xl font-light px-2 border border-black rounded">{props.storeData.dateRange.name}</div>
     </div>
 
-    <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm ">
+    <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] text-sm">
       <div className="border-b border-black"/>
       {parishes.map(calendar =>
         <div key={calendar} className="border-l border-b border-black h-full">
@@ -30,8 +30,8 @@ export function PageEvents(props: { events: CalendarEvent[], liturgy: LiturgyDat
           </div>
         </div>)}
     </div>
-    <div className=" flex items-end text-[10pt] overflow-hidden">
-      <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] leading-tight">
+    <div className=" flex flex-col justify-end text-[10pt] overflow-hidden grow">
+      <div className="grid grid-cols-[3.5cm_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] leading-tight grow">
         {Object.entries(events).map(([dateString, events]) => {
           const date = new Date(dateString)
           const liturgyElement = props.liturgy[date.toISOString().slice(0, 10)];
