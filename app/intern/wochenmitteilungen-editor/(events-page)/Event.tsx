@@ -18,7 +18,6 @@ export function Event(props: { event: CalendarEvent, storeData: WeeklyEditorStor
   const summary = props.event.summary
     .replaceAll("Sakramentenvorbereitung Versöhnung und Kommunion", "Sakramenten​vorbereitung")
     .replaceAll("Sakrament der Taufe für", "Taufe für")
-    .replaceAll("Sakrament der Ehe für", "Eheschließung für")
     .replaceAll("Hl. Messe der koreanischen Gemeinde", "Hl. Messe (koreanisch)")
   const customDescription = props.storeData.customEventDescription[props.event.id]
   const description = customDescription ?? props.event.description;
