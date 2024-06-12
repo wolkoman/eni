@@ -34,8 +34,8 @@ export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEdi
         </div>
     </>}
     <WeeklyPageHeader2 parish={props.calendar}/>
-    <div className="h-full grid grid-cols-2 my-6 border border-black/20 border-b-0">
-      <div className={columnStyle + " border-r border-black/20"}>{props.storeData.items
+    <div className="h-full grid grid-cols-2 my-6 border border-black border-b-0">
+      <div className={columnStyle + " border-r border-black"}>{props.storeData.items
         .filter(item => isOn(item) === false)
         .map(item => <ItemComponent
           key={item.id}

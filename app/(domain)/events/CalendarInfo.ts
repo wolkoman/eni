@@ -54,7 +54,7 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     calendarId: 'occ77f3f7sderl9e3b4jdnr5ek@group.calendar.google.com',
     className: 'bg-neustift',
     borderColor: 'border-neustift',
-    fullName: 'Pfarre Inzersdorf - Neustift',
+    fullName: 'Pfarre Inzersdorf-Neustift',
     shortName: 'Neustift',
     tagName: 'Neustift',
     address: 'Don-Bosco-Gasse 14, 1230 Wien',
