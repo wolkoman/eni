@@ -37,8 +37,7 @@ export default function EventPage(props: {
       }
     };
   const [monthView] = usePreferenceStore(Preference.MonthView);
-  const [seperateMass] = usePreferenceStore(Preference.SeparateMass)
-  const items = applyFilter(calendar.items, filter, seperateMass).filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.join(" ")).toLowerCase().includes(search.toLowerCase()));
+  const items = applyFilter(calendar.items, filter, true).filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.join(" ")).toLowerCase().includes(search.toLowerCase()));
 
   return <Site
     responsive={false} showTitle={true}
@@ -46,7 +45,7 @@ export default function EventPage(props: {
     <Responsive>
       <CalendarCacheNotice/>
       <div className="flex-grow mt-4 pb-4 relative">
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex flex-col lg:flex-row justify-between items-end mb-6">
           <div className="flex flex-col gap-1">
             <EventSearch onChange={setSearch} filter={filter}/>
             <FilterSelector
@@ -57,7 +56,6 @@ export default function EventPage(props: {
           </div>
           <div className="flex gap-2 items-stretch">
             <AddEvent/>
-            <Settings/>
           </div>
         </div>
 

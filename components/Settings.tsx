@@ -30,10 +30,6 @@ export function Settings() {
     <div
       className={`absolute top-0 right-0 w-screen max-w-sm rounded-lg p-6 bg-white shadow flex flex-col gap-4 z-20 ${!open && "max-w-0 max-h-0 opacity-0 pointer-events-none"} overflow-hidden`}>
       <SettingsOption
-        name={Preference.SeparateMass}
-        title="Separate heilige Messen"
-        description="Hl. Messen und Gottesdienste getrennt anzeigen"/>
-      <SettingsOption
         name={Preference.MonthView}
         title="Monatsansicht (In-Entwicklung)"
         description="Eine Monatsansicht anstelle der Terminliste anzeigen"/>

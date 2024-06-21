@@ -2,13 +2,11 @@ import {combine, persist} from "zustand/middleware";
 import {create} from "zustand";
 
 export enum Preference {
-  SeparateMass = "SEPARATE_MASS",
   MonthView = "MONTH_VIEW_PREVIEW",
 }
 
 const _usePreferenceStore = create(persist(combine({
   preferences: {
-    [Preference.SeparateMass]: true,
     [Preference.MonthView]: false,
   }
 }, (set, get) => ({
