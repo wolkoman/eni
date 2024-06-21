@@ -2,7 +2,7 @@
 import {v4 as uuidv4} from 'uuid';
 import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import create from "zustand";
+import { create } from "zustand";
 import {Collections} from "cockpit-sdk";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {loadEvangelium} from "@/app/intern/wochenmitteilungen-editor/(announcements)/LoadEvangelium";

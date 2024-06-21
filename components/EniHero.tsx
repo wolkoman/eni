@@ -4,8 +4,8 @@ import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 export function EniHero() {
 
   return <Responsive>
-    <div  className="bg-cover bg-gradient-mobile lg:bg-gradient rounded-lg flex flex-col lg:flex-row justify-between items-end text-white border border-black/20 shadow-lg">
-      <div className="flex flex-col p-16 gap-2">
+    <div  className="bg-cover bg-[linear-gradient(135deg,#2A6266,#139B91,#F4AC11)] bg-center rounded-lg flex flex-col lg:flex-row justify-between items-end text-white shadow-lg">
+      <div className="flex flex-col p-8 pt-16 lg:p-16 gap-2">
         <div className="text-xl">Miteinander der Pfarren</div>
         <div className="text-4xl font-bold">Emmaus, St.&nbsp;Nikolaus und Neustift</div>
       </div>

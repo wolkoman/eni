@@ -10,17 +10,17 @@ export const Cockpit = {
         InstagramCache: "64956068666237420d000118"
     },
     collectionGet<T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> {
-        console.log(`GET ${collectionName} ${JSON.stringify(props)}`)
-        return cockpit.collectionGet(collectionName, props)
+      console.log(`Cockpit fetching uncached collection data from '${collectionName}' ${props ? JSON.stringify(props) : ""}`)
+      return cockpit.collectionGet(collectionName, props)
             .catch(async () => {
                 await notifyAdmin("Cockpit get " + collectionName + "failed " + JSON.stringify(props));
                 return {entries: []};
             })
     },
     collectionGetCached<T extends keyof Collections>(collectionName: T, props?: CollectionGetProps<T>): Promise<CollectionResponse<Collections[T]>> {
-        console.log(`CACHEGET ${collectionName} ${JSON.stringify(props)}`)
+        console.log(`Cockpit fetching collection data from '${collectionName}' ${props ? JSON.stringify(props) : ""}`)
         return unstable_cache(() => {
-                console.log(`CACHEGET! ${collectionName} ${JSON.stringify(props)}`)
+                console.log(`- using cache`)
                 return cockpit.collectionGet(collectionName, props)
                     .catch(async () => {
                         await notifyAdmin("Cockpit cacheGet " + collectionName + "failed " + JSON.stringify(props));
