@@ -5,7 +5,8 @@
         "@/store/*": ["app/(store)/*"],
         "@/domain/*": ["app/(domain)/*"],
         "@/app/*": ["app/*"],
-        "@/util/*": ["util/*"]
+        "@/util/*": ["util/*"],
+        "@/components/*": ["components/*"]
       },
     "typeRoots": [
       "./util/types",

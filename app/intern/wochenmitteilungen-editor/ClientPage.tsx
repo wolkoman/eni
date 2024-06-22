@@ -41,7 +41,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
   const defaultName = `KW${getWeekOfYear(lastDate)} ${lastDate.getFullYear()}`
   return <div>
     <div className="print:hidden bg-white shadow">
-      <div className="max-w-2xl mx-auto py-2 flex justify-between rounded items-center">
+      <div className="max-w-5xl mx-auto py-2 flex justify-between rounded items-center">
         <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
         <div className="flex gap-2">
           <Button

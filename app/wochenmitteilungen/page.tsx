@@ -10,12 +10,11 @@ import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/stor
 
 export const revalidate = 300
 
-export default async function Page(props: {searchParams: {parish?: string}}) {
+export default async function Page() {
 
   const weekly = await getCurrentWeeklyData();
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)
   const storeData: WeeklyEditorStoreData = {...weekly.data, events}
-  const parish = props.searchParams.parish as CalendarName;
   const liturgy = await loadCachedLiturgyData()
 
   return (
@@ -32,7 +31,7 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
       <div className="font-semibold my-4 print:hidden">
         Aktuelle Informationen ({weekly?.name}):
       </div>
-      {weekly?.data && <WeeklyContent storeData={storeData} calendar={parish}/>}
+      {weekly?.data && <WeeklyContent storeData={storeData} calendar={CalendarName.EMMAUS}/>}
     </Site>
   );
 

@@ -1,13 +1,13 @@
 import {Event} from './calendar/Event';
 import {SectionHeader} from "./SectionHeader";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import {site} from "@/app/(shared)/Instance";
 import * as React from "react";
-import Button from "./Button";
 import Link from "next/link";
 import {loadCachedEvents} from "@/domain/events/EventsLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
+import {Links} from "@/app/(shared)/Links";
 
 export async function TodayAndTomorrow() {
   const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})
@@ -23,26 +23,28 @@ export async function TodayAndTomorrow() {
   if (events?.length === 0) return <></>;
 
   return <div id="termine">
-    <SectionHeader>{date === today ? "Heute" : "Morgen"}</SectionHeader>
-    <div className={`grid gap-4 pb-4 ${site('md:grid-cols-3', '')}`}>
+    <SectionHeader>Termine</SectionHeader>
+    <div className={`grid ${site('md:grid-cols-3 gap-4 pb-4', '')}`}>
       {site([CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT], [CalendarName.EMMAUS])
-        .map(c => {
-          const calendarEvents = (events ?? []).filter(e => e.calendar === c)
-          return <div key={c} className={`overflow-hidden bg-white rounded-lg relative p-1 pb-6 flex flex-col border border-black/10 shadow`}>
+        .map(c => (events ?? []).filter(e => e.calendar === c))
+        .map(calendarEvents =>
+          <div
+            key={calendarEvents.length}
+            className="overflow-hidden bg-white rounded-lg relative flex flex-col border border-black/10 shadow"
+          >
             <div className="text-xl font-semibold text-center mt-4 mb-4">
-              Pfarre {getCalendarInfo(c).shortName}
+              {date === today ? "Heute" : "Morgen"}, {new Date(date).toLocaleDateString("de-AT", {weekday: "long"})}
             </div>
-            <div className="px-3">
+            <div className="px-3 pb-6">
               {calendarEvents.length > 0
                 ? calendarEvents.map(event => <Event key={event.id} event={event} small={true}/>)
                 : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
               }
             </div>
-          </div>;
-        })}
-      {site(<></>, <div className="flex justify-end">
-        <Link href="//eni.wien/termine?p=emmaus"><Button label="Alle Termine"/></Link>
-      </div>)}
+            {site(<></>, <Link href={Links.Termine} className="p-1 text-center hover:bg-black/5 font-semibold border-t border-black/10">
+              Alle Termine
+            </Link>)}
+          </div>)}
     </div>
   </div>;
 }

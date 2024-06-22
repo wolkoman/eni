@@ -7,12 +7,9 @@ import React from "react";
 import Site from "../../components/Site";
 import Responsive from "../../components/Responsive";
 import {CalendarCacheNotice} from "../../components/calendar/CalendarCacheNotice";
-import {Settings} from "../../components/Settings";
 import {MonthView} from "../../components/calendar/MonthView";
 import {ListView} from "../../components/calendar/ListView";
-import {FilterSelector} from "../../components/calendar/FilterSelector";
 import {EventsObject} from "@/domain/events/EventMapper";
-import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {useCalendarStore} from "@/store/CalendarStore";
 import {useUserStore} from "@/store/UserStore";
 import {useFilterState} from "@/app/termine/useFilterState";
@@ -37,22 +34,17 @@ export default function EventPage(props: {
       }
     };
   const [monthView] = usePreferenceStore(Preference.MonthView);
-  const items = applyFilter(calendar.items, filter, true).filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.join(" ")).toLowerCase().includes(search.toLowerCase()));
+  const items = applyFilter(calendar.items, filter).filter(event => !search || (event.summary + event.description + event.mainPerson + event.groups.join(" ")).toLowerCase().includes(search.toLowerCase()));
 
   return <Site
     responsive={false} showTitle={true}
-    title={`Termine${filter !== null ? ": " : ""}${filter?.filterType === "GROUP" ? filter.group : ""} ${filter?.filterType === "PARISH" ? getCalendarInfo(filter.parish).shortName : ""}`}>
+    title={`Termine${filter !== null ? ": " : ""}${filter?.filterType === "GROUP" ? filter.group : ""}`}>
     <Responsive>
       <CalendarCacheNotice/>
       <div className="flex-grow mt-4 pb-4 relative">
         <div className="flex flex-col lg:flex-row justify-between items-end mb-6">
           <div className="flex flex-col gap-1">
             <EventSearch onChange={setSearch} filter={filter}/>
-            <FilterSelector
-              filter={filter}
-              setFilter={filter => setFilter(filter)}
-              userPermissions={user?.permissions ?? {}}
-            />
           </div>
           <div className="flex gap-2 items-stretch">
             <AddEvent/>

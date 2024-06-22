@@ -1,19 +1,18 @@
 "use client"
 
 import Link from "next/link";
-import {PageEvents, parishes} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {PageEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 import React, {useState} from "react";
 import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
 import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
-import {OptionsButton} from "@/app/wochenmitteilungen/OptionsButton";
 import {LiturgyData} from "../../pages/api/liturgy";
+import Button from "@/components/Button";
 
 
 export function WeeklyActions(props: { storeData: WeeklyEditorStoreData, liturgy: LiturgyData }) {
   const registerLink = (parish: string) => `mailto:admin@eni.wien?subject=${encodeURIComponent("Wochenmitteilungen " + parish)}&body=${encodeURIComponent(`Ich würde mich gerne für die Wochenmitteilungen von ${parish} anmelden.`)}`
   const [printParish, setPrintParish] = useState(CalendarName.EMMAUS)
-  const optionStyle = "bg-white px-4 py-1 flex items-center gap-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap"
 
   function print(calendar: CalendarName) {
     setPrintParish(calendar)
@@ -22,30 +21,11 @@ export function WeeklyActions(props: { storeData: WeeklyEditorStoreData, liturgy
 
   return <>
     <div className="mb-8 print:hidden flex gap-2 ">
-      <OptionsButton label="Newsletter abonnieren">
-        {parishes
-          .map(getCalendarInfo)
-          .map(calendarInfo =>
-            <Link
-              key={calendarInfo.id}
-              className={optionStyle}
-              href={registerLink(calendarInfo.shortName)}
-            >
-              Pfarre {calendarInfo.shortName}
-            </Link>)}
-      </OptionsButton>
-      <OptionsButton label="Drucken">
-        {parishes
-          .map(getCalendarInfo)
-          .map(calendarInfo =>
-            <div
-              key={calendarInfo.id}
-              className={optionStyle}
-              onClick={() => print(calendarInfo.id)}
-            >
-              Pfarre {calendarInfo.shortName}
-            </div>)}
-      </OptionsButton>
+      <Link href={registerLink("Pfarre Emmaus")}>
+        <Button label="Newsletter abonnieren" />
+        </Link>
+      <Button label="Drucken" onClick={() => print(CalendarName.EMMAUS)}>
+      </Button>
 
     </div>
 

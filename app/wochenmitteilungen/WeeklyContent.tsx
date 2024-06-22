@@ -11,9 +11,6 @@ export function WeeklyContent(props: {
   calendar?: CalendarName
 }) {
   return <>
-    {props.calendar && <Link className="inline-flex gap-2 mb-4 print:hidden" href={Links.Wochenmitteilungen()}>
-        <PiArrowArcLeftBold/> Alle Pfarren anzeigen
-    </Link>}
     <div className="print:hidden lg:columns-2 gap-6">
       {props.storeData.items
         .filter(item => props.calendar === undefined || item.parishes[props.calendar as 'emmaus'])

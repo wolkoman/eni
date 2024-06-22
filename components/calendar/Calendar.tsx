@@ -2,14 +2,12 @@ import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 
-export type FilterType = { filterType: 'PARISH', parish: CalendarName } | { filterType: 'PERSON', person: string } | { filterType: 'GROUP', group: CalendarGroup } | null;
+export type FilterType =  { filterType: 'GROUP', group: CalendarGroup } | null;
 
-export function applyFilter<T extends CalendarEvent>(events: T[], filter: FilterType, separateMass: boolean) {
+export function applyFilter<T extends CalendarEvent>(events: T[], filter: FilterType) {
   return events
     .filter(event =>
-        ((filter?.filterType === 'PERSON' && event.mainPerson === filter.person))
-      || (filter?.filterType === 'PARISH' && (event.calendar === filter.parish || event.calendar === "all"))
-      || (filter?.filterType === 'GROUP' && event.groups?.map(group => !separateMass && group === CalendarGroup.Messe ? CalendarGroup.Gottesdienst : group).includes(filter.group))
+      (filter?.filterType === 'GROUP' && event.groups?.includes(filter.group))
       || (filter === null))
 
 }

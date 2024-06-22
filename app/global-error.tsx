@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Site from "../components/Site";
 
-export default function Error({error, reset,}: { error: Error & { digest?: string }, reset: () => void }) {
+export default function Error({error}: { error: Error & { digest?: string }, reset: () => void }) {
     return (
         <Site title="Seite nicht gefunden" footer={false}>
             <div className="h-full grow flex items-center justify-center">
