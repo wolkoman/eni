@@ -13,13 +13,11 @@ export const useFilterState = (): [FilterType, Dispatch<SetStateAction<FilterTyp
 
   useEffect(() => {
     if (searchParams.get("q")) setFilter({filterType: "GROUP", group: searchParams.get("q") as CalendarGroup})
-    if (searchParams.get("p")) setFilter({filterType: "PARISH", parish: searchParams.get("p") as CalendarName})
   }, [searchParams]);
   useEffect(() => {
     if (!firstFilterUpdate) {
       routerReplace("?" + Object.entries({
         q: filter?.filterType !== "GROUP" ? null : filter.group,
-        p: filter?.filterType !== "PARISH" ? null : filter.parish
       })
         .filter(([_, b]) => b)
         .map(([a, b]) => `${a}=${b}`)
