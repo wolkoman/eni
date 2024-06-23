@@ -49,7 +49,7 @@ export function LoginPage() {
             <div
               className={`z-10 bg-white shadow border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
-                    <div className="font-bold text-2xl mb-5">eni.wien</div>
+                    <div className="font-bold text-2xl mb-5">Emmaus Login</div>
                     <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
                            value={data.username}
                            disabled={loading}
