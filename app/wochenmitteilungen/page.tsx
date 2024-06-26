@@ -27,7 +27,6 @@ export default async function Page(props: {searchParams: {parish?: string}}) {
         Gottesdienste, Veranstaltungen und Ankündigungen werden jede Woche in den Wochenmitteilungen verlautbart. Um
         stets informiert zu bleiben, empfehlen wir den Newsletter zu abonnieren.
       </div>
-      <WeeklyActions storeData={storeData} liturgy={liturgy}/>
 
       <div className="font-semibold my-4 print:hidden">
         Aktuelle Informationen ({weekly?.name}):
