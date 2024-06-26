@@ -7,7 +7,6 @@ import {usePermission} from "../(shared)/UsePermission";
 import {Permission} from "../(domain)/users/Permission";
 import Link from "next/link";
 import {Links} from "../(shared)/Links";
-import {site} from "@/app/(shared)/Instance";
 
 
 export function InternButton({href, label, onClick, children}: {
@@ -37,6 +36,7 @@ export function InternPage() {
             <InternButton href={Links.DiensteÜbersicht} label="Liturgische Dienste"/>}
       </Section>
       <Section title="Wochenmitteilungen" picture="icons/icon_weekly.svg">
+        <InternButton href={Links.Wochenmitteilungen()} label="Ansehen"/>
         <InternButton href={Links.Ankündigung} label="Ankündigung erstellen"/>
         {permissions?.[Permission.Editor] && <InternButton href={Links.WochenmitteilungenEditor} label="Web Editor"/>}
       </Section>
