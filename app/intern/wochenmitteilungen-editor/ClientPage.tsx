@@ -18,7 +18,6 @@ import {
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
 import {ParishDot} from "../../../components/calendar/ParishDot";
 import {PageEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
-import {PageParish} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
 import {Collections} from "cockpit-sdk";
 import Link from "next/link";
 import {Links} from "@/app/(shared)/Links";
@@ -42,14 +41,14 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
   return <div>
     <div className="print:hidden bg-white shadow">
       <div className="max-w-5xl mx-auto py-2 flex justify-between rounded items-center">
-        <div >Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
+        <div>Wochenmitteilungen <b>{dateRangeForm[0].name}</b></div>
         <div className="flex gap-2">
           <Button
             loading={store.loading}
             icon={<PiDownloadBold/>}
             label="Letztstand laden"
             sure={true}
-            onClick={ async () => {
+            onClick={async () => {
               store.override(props.currentWeekly.data)
             }}
           />
@@ -57,16 +56,17 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
             loading={store.loading}
             icon={<PiShareFatBold/>}
             label="Veröffentlichen"
-            onClick={ async () => {
+            onClick={async () => {
               await store.upsert();
               setCurrentWeekly(JSON.parse(JSON.stringify(store)))
             }}
           />
-          {!currentWeekly.sent && currentWeekly.name === dateRangeForm[0].name && <Link href={Links.WochenmitteilungenVersand}><Button
-            loading={store.loading}
-            icon={<PiEnvelopeBold/>}
-            label="Versenden"
-          /></Link>}
+          {!currentWeekly.sent && currentWeekly.name === dateRangeForm[0].name &&
+              <Link href={Links.WochenmitteilungenVersand}><Button
+                  loading={store.loading}
+                  icon={<PiEnvelopeBold/>}
+                  label="Versenden"
+              /></Link>}
         </div>
       </div>
     </div>
@@ -85,7 +85,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
             {dateRangeForm[0].name != defaultName && <Button
                 onClick={() => store.setDateRange({...dateRangeForm[0], name: defaultName})}
                 label={<PiArrowCounterClockwiseBold/>
-            }
+                }
             />}
           </div>
         </Field>
@@ -93,10 +93,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
       <Button loading={store.loading} onClick={() => store.loadEvents()} label="Termine laden"/>
     </div>
 
-    <PageEvents events={store.events} liturgy={props.liturgy} storeData={store}/>
-
     <div className={sectionClass}>
-      <SectionHeader>Pfarrseite</SectionHeader>
       <div className="grid gap-4">
         <div className="flex flex-wrap gap-2">
           <Button loading={store.loading} onClick={() => store.insertEvangelium()} label="Evangelium einfügen"/>
@@ -110,8 +107,9 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
           >
             <div className="flex gap-2 items-center">
               <ParishDot info={getCalendarInfo(announcement.parish as any)} private={false}/>
-              <div
-                className="text-sm opacity-70">{announcement.byName} {new Date(announcement._created * 1000).toLocaleString("de-AT")}</div>
+              <div className="text-sm opacity-70">
+                {announcement.byName} {new Date(announcement._created * 1000).toLocaleString("de-AT")}
+              </div>
             </div>
             <div>{announcement.description}</div>
             <div className="flex gap-1 self-end">
@@ -139,12 +137,12 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
       </div>
     </div>
 
-    <PageParish calendar={CalendarName.EMMAUS} storeData={store} isEditable/>
-    <div className="my-8 print:hidden"/>
-    <PageParish calendar={CalendarName.INZERSDORF} storeData={store} isEditable/>
-    <div className="my-8 print:hidden"/>
-    <PageParish calendar={CalendarName.NEUSTIFT} storeData={store} isEditable/>
-
+    <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.EMMAUS} storeData={store}
+                isEditable/>
+     <div className="my-8 print:hidden"/>
+     <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.INZERSDORF} storeData={store} isEditable/>
+     <div className="my-8 print:hidden"/>
+     <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.NEUSTIFT} storeData={store} isEditable/>
   </div>;
 }
 

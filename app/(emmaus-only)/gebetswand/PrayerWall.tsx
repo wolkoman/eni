@@ -31,7 +31,7 @@ export function PrayerWall() {
     </div>
     <div className="flex justify-end gap-2">
       <Link href="/gebetswand/neu">
-        <Button label="Anliegen einbringen" className="bg-emmaus font-semibold text-white"/>
+        <Button label="Anliegen einbringen"/>
       </Link>
     </div>
   </Section>;

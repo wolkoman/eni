@@ -21,33 +21,34 @@ export const revalidate = 300
 
 export default async function HomePage() {
   return site(async () => <Site responsive={true} navbar={true}>
-      <div className="max-w-md mx-auto">
+      <div className="max-w-md ">
 
-        <div className="font-bold my-4">
+        <div className="font-bold my-4 motion-safe:animate-blur-in">
           Ende der Initiative &bdquo;Miteinander der Pfarren: eni.wien&ldquo;
         </div>
-        <div className="">
+        <div className="motion-safe:animate-blur-in" style={{animationDelay: "0s"}}>
           Die diözesane Vision die drei Pfarren Emmaus am Wienerberg, Inzersdorf (St. Nikolaus) und Inzersdorf-Neustift in
           eine größere Einheit zusammenzuführen konnte nicht umgesetzt werden. Für die Pfarre Emmaus am Wienerberg ist
           weiterhin Pfarrer Dr.&nbsp;Zvonko&nbsp;Brezovski tätig. Für die Pfarren Inzersdorf (St.&nbsp;Nikolaus) und
           Inzersdorf-Neustift
           wird ab 1. Juli 2024 Bernhard&nbsp;Pokorny als Pfarrprovisor tätig.
         </div>
-        <Link className="flex items-center gap-3 my-4 underline decoration-black/20 hover:decoration-black/40 transition"
-              href="https://data.eni.wien/storage/uploads/2024/06/22/2024-06-21_Information_Rucktritt_PfBrezovski_uid_667706075db6e.pdf">
+        <Link className="flex items-center gap-3 my-4 underline decoration-black/20 hover:decoration-black/40 transition motion-safe:animate-blur-in"
+              href="https://data.eni.wien/storage/uploads/2024/06/22/2024-06-21_Information_Rucktritt_PfBrezovski_uid_667706075db6e.pdf"
+              style={{animationDelay: "0.1s"}}>
           <PiArrowRight/>
           <div>Schreiben der Erzdiözese &bdquo;Pfarrerwechsel in Wien 23&ldquo;</div>
         </Link>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2" >
           {[CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
             .map(calendar => getCalendarInfo(calendar))
-            .map(calendar => <Link
+            .map((calendar, index) => <Link
               href={calendar.websiteUrl}
+              style={{animationDelay: (0.2+index*0.1)+ "s"}}
               key={calendar.id}
-              className={"relative border border-black/10 rounded-lg bg-white shadow flex px-2 -z-10 overflow-hidden cursor-pointer " + calendar.className}
+              className={"relative border border-black/10 rounded-lg bg-white shadow flex px-2 overflow-hidden cursor-pointer motion-safe:animate-blur-in " + calendar.className}
             >
-              <div className={"absolute inset-0 -z-10 bg-gradient-to-r from-white/0 to-white/20 pointer-events-none"}/>
               <div style={{backgroundImage: `url(${calendar.image})`}}
                    className="bg-contain bg-bottom w-24 bg-no-repeat pointer-events-none"/>
               <div className="p-4 flex flex-col justify-center gap-2  pointer-events-none">
@@ -61,10 +62,10 @@ export default async function HomePage() {
       </div>
     </Site>, async () => <Site responsive={false} navbar={false}>
       <div className="md:sticky inset-0 w-full">
-        <TopBar/>
+        <TopBar frontpage={true}/>
         <EmmausBranding/>
       </div>
-      <div className="relative z-10 bg-back">
+      <div className="relative z-10 bg-back-emmaus">
         <Responsive>
           <div className="grid lg:grid-cols-2 gap-8 my-8">
             <div className="flex flex-col">

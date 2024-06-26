@@ -2,6 +2,7 @@
 
 import React, {ReactNode, useState} from 'react';
 import {RiLoader4Fill} from "react-icons/ri";
+import {site} from "@/app/(shared)/Instance";
 
 export default function Button(props: {
   label: ReactNode,
@@ -19,8 +20,8 @@ export default function Button(props: {
 
   const style = [
     props.big ? 'px-8 py-3 text-lg ' : 'px-3 py-1',
-    props.secondary ? 'border border-black/20 text-black/80 hover:bg-black/10' : 'bg-black/5',
-    disabled ? 'opacity-70 border-black/50 pointer-events-none' : 'hover:bg-black/10 hover:text-black cursor-pointer',
+    props.secondary ? site('border border-black/20 text-black/80 hover:bg-black/10', 'text-base') : site('bg-black/5', "border border-emmaus  text-emmaus"),
+    disabled ? 'opacity-70 border-black/50 pointer-events-none' : site('hover:bg-black/10 hover:text-black cursor-pointer',"hover:bg-emmaus/10 cursor-pointer"),
     sure ? 'bg-[#d00] hover:bg-[#c00] text-white scale-110 transition-all shadow-xl' : '',
   ].join(" ")
 

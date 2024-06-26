@@ -40,7 +40,7 @@ export default function Footer() {
             <Title>Interner Zugang</Title>
             Wenn Sie Zugang zu den internen Systemen der {site(<>Pfarren</>, <>Pfarre</>)} brauchen, melden Sie sich in
             der
-            Pfarrkanzlei unter kanzlei@eni.wien.
+            Pfarrkanzlei unter kanzlei@emmaus.wien.
           </div>
         </div>
       </Responsive>

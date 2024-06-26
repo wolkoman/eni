@@ -8,6 +8,7 @@ import Link from "next/link";
 import {loadCachedEvents} from "@/domain/events/EventsLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {Links} from "@/app/(shared)/Links";
+import {Container} from "@/components/Container";
 
 export async function TodayAndTomorrow() {
   const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})

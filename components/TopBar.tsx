@@ -19,7 +19,7 @@ export function NavItem(props: { href: string, label: string }) {
   </Link>;
 }
 
-export default function TopBar() {
+export default function TopBar(props: {frontpage?: boolean}) {
   const user = useUserStore(state => state.user);
   const links = [
     {text: "Termine", link: Links.Termine},
@@ -30,15 +30,13 @@ export default function TopBar() {
 
   return site(<div className="py-4 lg:py-6 print:hidden">
     <Responsive>
-      <div className="flex justify-between items-center">
-        <div className="font-bold text-xl opacity-50">
+      <div className="flex justify-between items-center font-bold text-xl opacity-50">
             eni.wien
-        </div>
       </div>
     </Responsive>
   </div>, <div className="relative print:hidden">
     <div
-      className={`flex flex-row justify-between items-center p-4 lg:px-24 z-10 bg-emmaus text-white relative`}
+      className={`flex flex-row justify-between items-center p-4 lg:px-24 z-10 relative ${props.frontpage ? "bg-emmaus text-white" : "bg-back-emmaus"}`}
       data-testid="navbar">
       <Link href={Links.Hauptseite}>
         <div className="cursor-pointer flex gap-3 items-center">

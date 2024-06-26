@@ -8,11 +8,10 @@ import {EventsObject} from "./EventMapper";
 import {loadCalendar} from "./CalendarLoader";
 import {EventLoadAccess, EventLoadOptions} from "@/domain/events/EventLoadOptions";
 import {Permission} from "@/domain/users/Permission";
-import {notifyAdmin} from "@/app/(shared)/Telegram";
 import {site} from "@/app/(shared)/Instance";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
 import {unstable_cache} from "next/cache";
-import { GoogleAuth } from "google-auth-library";
+import {GoogleAuth} from "google-auth-library";
 
 export async function loadEventsFromServer(privateOnly?: boolean) {
   const user = await resolveUserFromServer();
@@ -42,10 +41,10 @@ export const loadCachedEvents = async (options: EventLoadOptions): Promise<Event
 export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleAuth<any>): Promise<EventsObject> => {
 
   if(!authClient) authClient = await getGoogleAuthClient()
-  return Promise.all(site(
-      [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT],
-      [CalendarName.ALL, CalendarName.EMMAUS]
-    ).map((name) => loadCalendar(name, options, authClient))
+  const allCalendars = [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
+  const emmausCalendars = [CalendarName.ALL, CalendarName.EMMAUS];
+  return Promise.all((options.access === EventLoadAccess.WEEKLY ? allCalendars: site(allCalendars, emmausCalendars))
+    .map((name) => loadCalendar(name, options, authClient))
   )
     .then(eventList => eventList.flat()
       .filter(event => !!event)

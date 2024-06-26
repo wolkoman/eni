@@ -18,10 +18,9 @@ export default function Site(props: {
       <div className="flex-grow flex flex-col items-stretch">
         {(props.navbar ?? true) && <>
             <TopBar/>
-          {site(<></>, props.showTitle && <div className="bg-emmaus text-6xl font-bold pt-8 mb-16 px-10">
+          {site(<></>, props.showTitle && <div className="text-4xl font-bold pt-8 mb-16 px-10">
               <div className="translate-y-6 max-w-5xl mx-auto relative">
                 {props.title}
-                  <div className="absolute inset-0 text-stroke z-[-1]">{props.title}</div>
               </div>
           </div>)}
         </>}

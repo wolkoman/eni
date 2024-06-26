@@ -10,17 +10,16 @@ export async function EmmausboteInfo() {
 
   return <div>
     <SectionHeader>Pfarrmagazin</SectionHeader>
-    <Link href={getCockpitResourceUrl(paper.file)}
-          className="flex flex-row cursor-pointer border border-black/10 bg-white rounded-lg overflow-hidden">
+    <div className="flex flex-row border border-black/10 bg-white rounded-lg shadow overflow-hidden">
       <div
-        className="w-32 aspect-square flex-shrink-0"
+        className="w-36 aspect-square flex-shrink-0"
         style={{
           backgroundImage: `url(${getCockpitResourceUrl(paper.preview.path)})`,
           backgroundSize: 'cover',
           backgroundPosition: '50% 50%',
           aspectRatio: "21/29"
         }}/>
-      <div className="flex flex-col justify-center items-start gap-2 px-6 py-2">
+      <div className="flex flex-col justify-center items-start gap-2 px-6 py-6">
         <div
           className="font-semibold text-xl line-clamp-3">
           Emmausbote {new Date(paper.date).toLocaleDateString("de-AT", {
@@ -28,12 +27,15 @@ export async function EmmausboteInfo() {
           year: "numeric"
         })}
         </div>
-        <div className="px-1 text-sm rounded">
+        <div className="">
           Ausführliche Berichte zum Pfarrleben, Diskussionen zur
           Weltkirche, Impulse zum Nachdenken und vieles mehr finden Sie im Emmausboten.
         </div>
+        <div className="">
+          Kostenlos erhältlich am Schriftenstand in der Pfarre!
+        </div>
       </div>
-    </Link>
+    </div>
 
   </div>;
 }

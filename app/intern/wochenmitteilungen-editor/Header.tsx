@@ -19,7 +19,7 @@ export function WeeklyPageHeader2(props: { parish: CalendarName }) {
   return <div className="flex justify-between">
     <div className="opacity-70 leading-snug text-xs">
       <div>Röm.-kath. {calendarInfo.fullName}</div>
-      <Link href={calendarInfo.websiteUrl}><u>{calendarInfo.websiteDisplay}</u></Link> und <Link href="https://eni.wien"><u>eni.wien</u></Link>
+      <Link href={calendarInfo.websiteUrl}><u>{calendarInfo.websiteDisplay}</u></Link>
     </div>
     <div className="flex">
       <img src={calendarInfo.image} className="w-14"/>
