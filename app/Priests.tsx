@@ -9,7 +9,7 @@ export function Priests() {
         <div className="flex flex-col items-center justify-center text-center grow">
           <div className="font-bold italic text-xl">Fürchte dich nicht,<br/>du hast Gnade bei Gott gefunden!</div>
           <div className="text-lg font-semibold mt-4">Pfarrer Dr. Zvonko Brezovski</div>
-          <a className="underline" href="mailto:pfarrer@eni.wien">pfarrer@eni.wien</a>
+          <a className="underline" href="mailto:pfarrer@emmaus.wien">pfarrer@emmaus.wien</a>
         </div>
         <div style={{backgroundImage: `url(/personal/zvonko.png)`}}
              className="bg-cover aspect-square w-full lg:w-80"/>
@@ -18,7 +18,7 @@ export function Priests() {
         <div className="grow flex flex-col justify-center">
           <div className="text-lg font-semibold">Gil Vicente Thomas</div>
           <div className="italic">Aushilfskaplan</div>
-          <a className="underline" href="mailto:kaplan.e@eni.wien">kaplan.e@eni.wien</a>
+          <a className="underline" href="mailto:kaplan@emmaus.wien">kaplan.e@eni.wien</a>
         </div>
         <div className=" aspect-square w-1/2 lg:w-52 relative bg-[url(/personal/gil.png)] bg-cover"/>
       </div>
