@@ -41,7 +41,7 @@ export function PrayerSite(props: {
     </DisplayField>
     <div className="flex justify-end gap-2">
       <Link href="/#gebetswand"><Button label="Zurück"/></Link>
-      <Button label="Ich habe dafür gebetet" className="bg-emmaus text-white" onClick={onPrayed} loading={loading}/>
+      <Button label="Ich habe dafür gebetet" onClick={onPrayed} loading={loading}/>
     </div>
   </div>;
 }

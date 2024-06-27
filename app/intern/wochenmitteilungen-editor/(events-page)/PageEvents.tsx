@@ -98,7 +98,7 @@ export function PageEvents(props: {
 
     <div className="h-full grid grid-cols-2 border border-black border-b-0">
       <div className={columnStyle + " border-r border-black"}>
-        <ParishEvents events={events} calendar={props.calendar} liturgy={{}} storeData={props.storeData}/>
+        <ParishEvents events={events} calendar={props.calendar} liturgy={props.liturgy} storeData={props.storeData}/>
         {props.storeData.items
           .filter(item => isOn(item) === false)
           .map(item => <ItemComponent
