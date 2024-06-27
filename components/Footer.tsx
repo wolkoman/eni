@@ -24,6 +24,7 @@ export default function Footer() {
             Röm.-kath. Pfarre Emmaus am Wienerberg<br/>
             Tesarekplatz 2, 1100 Wien<br/>
             Telefon: +43 1 616 34 00<br/>
+            E-Mail: <Link href="mailto:kanzlei@emmaus.wien">kanzlei@emmaus.wien</Link><br/>
             {site(<></>, <>IBAN: AT97 12000 50324795601<br/>
               BIC: BKAUATWW
             </>)}
