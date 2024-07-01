@@ -2,8 +2,9 @@ import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
 import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
+import React from "react";
 
-export function Event({event, suggestion, small}: {
+export function Event({event, suggestion}: {
     event: Partial<CalendarEvent>,
     suggestion?: Collections['eventSuggestion'],
     small?: boolean
@@ -11,13 +12,13 @@ export function Event({event, suggestion, small}: {
     const cancelled = event.tags?.includes(CalendarTag.cancelled);
     return <>
         <div className={`py-1 flex gap-2 ${cancelled && 'opacity-50'} leading-6`}>
-            <div
-                className={`flex-shrink-0 font-semibold ${cancelled && 'line-through'}`}>
+            <div className={`flex-shrink-0 font-semibold ${cancelled && 'line-through'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>
             </div>
             <div className="grow">
-                <div className={`font-semibold ${cancelled && 'line-through'} pb-0.5`}>
+                <div className={`font-semibold ${cancelled && 'line-through'} pb-0.5 flex gap-x-1 flex-wrap`}>
                     <DiffView>{suggestion?.data.summary ?? event.summary ?? ""}</DiffView>
+                    {event.visibility === "private" && <div className="text-emmaus tracking-tight">(VERTRAULICH)</div>}
                 </div>
                 <EventDescription event={event} suggestion={suggestion}/>
             </div>

@@ -2,7 +2,7 @@ import {FilterType} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "@/app/(shared)/use-state-util";
 import {useCalendarStore} from "@/store/CalendarStore";
-import React, {useRef} from "react";
+import React from "react";
 import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
 import {ViewportList} from "react-viewport-list";
@@ -31,20 +31,17 @@ export function ListView(props: {
     const items = Object.entries(groupEventsByDate(props.items));
 
     const [editEventId, setEditEventId] = useState<string | undefined>(undefined);
-    const ref = useRef<HTMLDivElement | null>(null);
     return <div>
-        <div ref={ref}>
-            <ViewportList
-                viewportRef={ref}
-                items={items}
-            >
+        <div>
+            <ViewportList items={items}>
                 {(([date, events], index, all) => <div
                     key={date + index}
                     data-date={date}
-                    className={`py-2 flex flex-col lg:flex-row border-black/10 ${index + 1 !== all.length ? 'border-b' : ''}`}
+                    className={`py-2 flex flex-row border-emmaus/20 ${index + 1 !== all.length ? 'border-b' : ''}`}
                 >
-                    <div className="lg:w-[150px] my-1 shrink-0">
-                        <EventDate date={new Date(date)} liturgies={props.liturgy[date]} showLiturgyInfo={props.editable}/>
+                    <div className="w-[90px] lg:w-[150px] my-1 shrink-0">
+                        <EventDate date={new Date(date)} liturgies={props.liturgy[date]}
+                                   showLiturgyInfo={props.editable}/>
                     </div>
                     <div className="grow">
                         {events
@@ -96,18 +93,18 @@ export function EditableEvent(props: {
     arguments: Parameters<typeof Event>[0],
 }) {
     return <div
-      className={props.editable ? 'cursor-pointer relative' : ''}
-      onClick={props.editable ? () => props.onEditEvent(props.id) : () => {
-      }}
+        className={props.editable ? 'cursor-pointer relative' : ''}
+        onClick={props.editable ? () => props.onEditEvent(props.id) : () => {
+        }}
     >
         <Event
-          key={props.id}
-          event={props.arguments.event}
-          suggestion={props.arguments.suggestion}
+            key={props.id}
+            event={props.arguments.event}
+            suggestion={props.arguments.suggestion}
         />
         {props.isEdited && <EventEdit
-          eventId={props.id}
-          onClose={() => props.onEditEvent()}
-          suggestion={props.suggestionForm}/>}
+            eventId={props.id}
+            onClose={() => props.onEditEvent()}
+            suggestion={props.suggestionForm}/>}
     </div>;
 }

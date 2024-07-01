@@ -5,7 +5,7 @@ import {useUserStore} from "@/store/UserStore";
 import {Permission} from "@/domain/users/Permission";
 import Button from "../../components/Button";
 import {PiPlusBold} from "react-icons/pi";
-import {EventEdit, EventEditBackground} from "../../components/calendar/EventEdit";
+import {EventEdit, EventEditBackground} from "@/components/calendar/EventEdit";
 import React from "react";
 
 export function AddEvent() {

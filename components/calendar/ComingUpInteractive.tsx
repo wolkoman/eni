@@ -33,10 +33,13 @@ export function ComingUpInteractive(props: {
         className={`px-8 lg:py-8 lg:px-6`}
       >
         <div className="text-xl font-semibold mb-4 mt-2">{group}</div>
-        <div>
-          <ListView search="" editable={false} items={Object.values(eventsObject).flat()} liturgy={{}}
-                    filter={null}/>
-        </div>
+          <ListView
+              search=""
+              editable={false}
+              items={Object.values(eventsObject).flat()}
+              liturgy={{}}
+              filter={null}
+          />
       </motion.div>
     </motion.div>
   </>;

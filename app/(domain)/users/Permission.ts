@@ -1,7 +1,6 @@
 export enum Permission {
     Articles = "ARTICLES",
     PrivateCalendarAccess = "PRIVATE_CALENDAR_ACCESS",
-    OrganBooking = "ORGAN_BOOKING",
     Editor = "EDITOR",
     Admin = "ADMIN",
     Reader = "READER",

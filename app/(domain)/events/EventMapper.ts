@@ -31,7 +31,7 @@ export interface CalendarEvent {
   time: string | null,
   start: { dateTime: string },
   end: { dateTime: string },
-  visibility: string,
+  visibility: "public"|"private",
   wholeday: boolean,
   groups: CalendarGroup[],
   tags: CalendarTag[],
@@ -64,7 +64,7 @@ export function mapEvent(options: EventLoadOptions): (event?: calendar_v3.Schema
       start: event.start as { dateTime: string },
       time: event.start?.dateTime ? new Date(event.start.dateTime).toLocaleTimeString("de-AT", {timeZone: "Europe/Vienna"}).substring(0, 5) : null,
       end: event.end as { dateTime: string },
-      visibility: event.visibility ?? 'public',
+      visibility: event.visibility as "private" ?? 'public',
       groups: getGroupFromEvent(event),
       tags: [
         !(event.summary + (event.description ?? '')).match(notInChurchRegex) && privateAccess && CalendarTag.inChurch,

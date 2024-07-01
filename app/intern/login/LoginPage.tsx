@@ -44,17 +44,16 @@ export function LoginPage() {
     const buttonDisabled = data.username.length === 0 || data.password.length === 0;
 
     return <Site navbar={false} responsive={false} footer={false} title="Login">
-        <div
-          className="w-full h-screen relative flex flex-col justify-center items-center ">
+        <div className="w-full h-screen relative flex flex-col justify-center items-center">
             <div
-              className={`z-10 bg-white shadow border border-black/10 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
+              className={`z-10 bg-white border border-emmaus/50 rounded-lg overflow-hidden ${loading || disabled ? 'pointer-events-none select-none' : ''}`}>
                 <div className="p-8 flex flex-col items-center">
                     <div className="font-bold text-2xl mb-5">Emmaus Login</div>
-                    <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-gray-200"
+                    <input placeholder="Benutzername" className="my-1 py-1 px-3 rounded bg-emmaus/5"
                            value={data.username}
                            disabled={loading}
                            onChange={(event) => setData({...data, username: (event as any).target.value})}/>
-                    <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-gray-200" type="password"
+                    <input placeholder="Passwort" className="my-1 py-1 px-3 rounded bg-emmaus/5" type="password"
                            value={data.password}
                            disabled={loading}
                            onChange={(event) => setData({...data, password: (event as any).target.value})}
@@ -67,8 +66,8 @@ export function LoginPage() {
                     </div>
                 </div>
             </div>
-            <Link href={Links.Status}>
-                <img src="https://api.checklyhq.com/v1/badges/groups/699811?style=for-the-badge&theme=light" alt="Status badge" className="mt-8 bg-white shadow rounded"/>
+            <Link href={Links.Status} className="mt-2 bg-white border border-emmaus/50 rounded overflow-hidden">
+                <img src="https://api.checklyhq.com/v1/badges/groups/699811?style=for-the-badge&theme=light" alt="Status badge" />
             </Link>
         </div>
     </Site>;

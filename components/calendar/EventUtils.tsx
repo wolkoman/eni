@@ -50,7 +50,6 @@ export function EventDescription(props: { event: Partial<CalendarEvent>, suggest
 }
 
 export const EventDate = (props: { date: Date, liturgies?: Liturgy[], showLiturgyInfo:boolean }) => {
-    const day = props.date.getDay();
     const liturgy = props.liturgies?.sort(compareLiturgy)?.[0]
     const decoration = props.showLiturgyInfo ? ("underline decoration-2 " + {
         v: "decoration-[#f0f]",
@@ -59,12 +58,15 @@ export const EventDate = (props: { date: Date, liturgies?: Liturgy[], showLiturg
         r: "decoration-[#f00]",
         "": ""
     }[liturgy?.color ?? ""]) : ""
-    const weekDayName = getWeekDayName(day);
+    const dayName = props.date.toLocaleDateString("de-AT", {weekday: "long"});
+    const shortDayName = props.date.toLocaleDateString("de-AT", {weekday: "short"});
     return <>
-        <div className={`font-semibold lg:hidden ${decoration}`}>{weekDayName}, {props.date.getDate()}. {getMonthName(props.date.getMonth())}</div>
+        <div className={`font-semibold lg:hidden ${decoration}`}>
+            {props.date.toLocaleDateString("de-AT", {weekday: "short", day: "2-digit", month: "2-digit"})}
+        </div>
         <div className={`hidden lg:flex flex-col`}>
-            <div className={`font-semibold ${decoration}`}>{props.date.getDate()}. {getMonthName(props.date.getMonth())}</div>
-            <div className={`text-xs`}>{liturgy?.name.toLowerCase().includes(weekDayName.toLowerCase()) ? "" : weekDayName}</div>
+            <div className={`font-semibold ${decoration}`}>{props.date.toLocaleDateString("de-AT", {day: "numeric", month:"long"})}</div>
+            <div className={`text-xs`}>{liturgy?.name.toLowerCase().includes(dayName.toLowerCase()) ? "" : dayName}</div>
             <div className="mr-1 text-xs">{liturgy?.name}</div>
             <div className="mt-1 text-xs italic">{liturgy?.rank === "H" ? "Hochfest":""}</div>
     </div></>;

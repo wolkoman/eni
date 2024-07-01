@@ -40,15 +40,9 @@ export function InternPage() {
         <InternButton href={Links.Ankündigung} label="Ankündigung erstellen"/>
         {permissions?.[Permission.Editor] && <InternButton href={Links.WochenmitteilungenEditor} label="Web Editor"/>}
       </Section>
-      <Section title="Pfarrzeitschriften" picture="icons/icon_papers.svg">
-        <InternButton href={Links.Pfarrzeitschriften} label="Ansehen"/>
-        {permissions?.[Permission.Editor] && <InternButton href={Links.Projektplattform} label="Projektplattform"/>}
-      </Section>
-      {permissions?.[Permission.OrganBooking] &&
-          <Section title="Musik in Inzersdorf" picture="icons/icon_music.svg">
-        {permissions?.[Permission.OrganBooking] && <InternButton href={Links.Orgel} label="Orgel Buchung"/>}
-      </Section>
-      }
+      {permissions?.[Permission.Editor] && <Section title="Pfarrzeitschriften" picture="icons/icon_papers.svg">
+        <InternButton href={Links.Projektplattform} label="Projektplattform"/>
+      </Section>}
       <Section title="Einstellungen" picture="icons/icon_settings.svg">
         {user?.is_person && <InternButton href={Links.PasswortÄndern} label="Passwort ändern"/>}
         {user && !user?.is_person && <InternButton href={Links.Cockpit} label="Cockpit"/>}
