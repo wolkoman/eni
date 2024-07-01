@@ -42,8 +42,8 @@ export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleA
 
   if(!authClient) authClient = await getGoogleAuthClient()
   const allCalendars = [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
-  const emmausCalendars = [CalendarName.ALL, CalendarName.EMMAUS];
-  return Promise.all((options.access === EventLoadAccess.WEEKLY ? allCalendars: site(allCalendars, emmausCalendars))
+  const emmausCalendars = [CalendarName.EMMAUS];
+  return Promise.all(emmausCalendars
     .map((name) => loadCalendar(name, options, authClient))
   )
     .then(eventList => eventList.flat()
