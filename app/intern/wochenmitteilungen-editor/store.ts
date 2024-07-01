@@ -15,11 +15,6 @@ export type WeeklyParishItem = Article | Teaser
 
 interface GeneralItem {
   id: string,
-  parishes: {
-    [CalendarName.EMMAUS]: boolean,
-    [CalendarName.INZERSDORF]: boolean,
-    [CalendarName.NEUSTIFT]: boolean,
-  }
 }
 
 export type Article = {
@@ -97,7 +92,6 @@ export const useWeeklyEditorStore = create(persist(combine({
           items: [...get().items, {
             type: "ARTICLE",
             id: uuidv4(),
-            parishes: {emmaus: true, inzersdorf: true, neustift: true},
             title: "Evangelium vom Sonntag",
             text: evangelium.text,
             author: evangelium.place
@@ -114,7 +108,6 @@ export const useWeeklyEditorStore = create(persist(combine({
           items: [...get().items, {
             type: "ARTICLE",
             id: uuidv4(),
-            parishes: {emmaus: true, inzersdorf: true, neustift: true},
             title: "Ankündigung",
             text: "",
             author: ""

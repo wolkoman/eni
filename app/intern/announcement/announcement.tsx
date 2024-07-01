@@ -6,21 +6,20 @@ import {
     SelfServiceFile,
     SelfServiceFileUpload,
     SelfServiceInput,
-    SelfServiceParish
-} from "../../../components/SelfService";
+} from "@/components/SelfService";
 import Button from "../../../components/Button";
-import {useUserStore} from "../../(store)/UserStore";
+import {useUserStore} from "@/store/UserStore";
 import {usePermission} from "../../(shared)/UsePermission";
 import {notifyAdminFromClientSide} from "../../(shared)/Telegram";
 import {saveAnnouncement} from "./saveAnnouncement";
+import {CalendarName} from "@/domain/events/CalendarInfo";
 
 
 export function AnnouncementPage() {
     usePermission([]);
     const user = useUserStore(state => state.user);
-    const emptyForm = {description: "", files: [] as SelfServiceFile[], parish: "", hidden: false};
+    const emptyForm = {description: "", files: [] as SelfServiceFile[], parish: CalendarName.EMMAUS, hidden: false};
     const form = useState(emptyForm);
-    const {parish} = form[0];
     const [state, setState] = useState<'form' | 'loading' | 'success' | 'error'>('form');
 
     async function submit() {
@@ -56,15 +55,12 @@ export function AnnouncementPage() {
             <Field label="Beschreibung">
                 <SelfServiceInput name="description" input="textarea" form={form}/>
             </Field>
-            <Field label="Pfarre">
-                <SelfServiceParish name="parish" form={form}/>
-            </Field>
             <Field label="Bilder">
                 <SelfServiceFileUpload name="files" form={form} accept="image/*"/>
             </Field>
             <div className={`my-8 flex flex justify-end font-bold ${state === "loading" ? 'animate-pulse' : ''}`}>
                 <Button label="Absenden" big={true} onClick={submit}
-                        disabled={state === "loading" || parish === "" || form[0].files.some(f => !f.finished)}/>
+                        disabled={state === "loading" || form[0].files.some(f => !f.finished)}/>
             </div>
             {state === "error" && <div className="text-red-700 font-bold my-8">
                 Die Ankündigung konnte nicht hochgeladen werden.

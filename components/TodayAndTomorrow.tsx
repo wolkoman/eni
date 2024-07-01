@@ -36,7 +36,7 @@ export async function TodayAndTomorrow() {
             </div>
             <div className="px-3 pb-6">
               {calendarEvents.length > 0
-                ? calendarEvents.map(event => <Event key={event.id} event={event} small={true}/>)
+                ? calendarEvents.map(event => <Event key={event.id} event={event}/>)
                 : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
               }
             </div>

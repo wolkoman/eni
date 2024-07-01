@@ -40,9 +40,7 @@ export const loadCachedEvents = async (options: EventLoadOptions): Promise<Event
 export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleAuth<any>): Promise<EventsObject> => {
 
   if(!authClient) authClient = await getGoogleAuthClient()
-  const allCalendars = [CalendarName.ALL, CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
-  const emmausCalendars = [CalendarName.EMMAUS];
-  return Promise.all(emmausCalendars
+  return Promise.all([CalendarName.EMMAUS]
     .map((name) => loadCalendar(name, options, authClient))
   )
     .then(eventList => eventList.flat()

@@ -60,10 +60,9 @@ export function ListView(props: {
                             .map(({event, suggestion}) =>
                                 <EditableEvent
                                     key={event.id}
-                                    small={!props.editable}
-                                    editable={!!(user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime && (user.parish === "all" || user.parish === event.calendar)) && props.editable}
+                                    editable={!!(user?.permissions[Permission.PrivateCalendarAccess] && event.start.dateTime) && props.editable}
                                     isEdited={event.id === editEventId}
-                                    id={event.id} parish={event.calendar}
+                                    id={event.id}
                                     suggestionForm={suggestion?.suggestion ? getSuggestionFromDiff(suggestion.suggestion) : getSuggestionFromEvent(event)}
                                     onEditEvent={setEditEventId}
                                     arguments={{event, suggestion: suggestion?.suggestion}}
@@ -74,11 +73,9 @@ export function ListView(props: {
                             .map((suggestion, index) =>
                                 <EditableEvent
                                     key={index}
-                                    small={!props.editable}
                                     editable={props.editable}
                                     isEdited={`suggestion_${suggestion._id}` === editEventId}
                                     id={`suggestion_${suggestion._id}`}
-                                    parish={suggestion.parish}
                                     suggestionForm={getSuggestionFromDiff(suggestion)}
                                     onEditEvent={setEditEventId}
                                     arguments={{event: {}, suggestion}}
@@ -95,11 +92,9 @@ export function EditableEvent(props: {
     editable: boolean,
     isEdited: boolean,
     id: string,
-    parish: CalendarName,
     suggestionForm: EventSuggestion,
     onEditEvent: (eventId?: string) => void,
     arguments: Parameters<typeof Event>[0],
-    small?: boolean
 }) {
     return <div
       className={props.editable ? 'cursor-pointer relative' : ''}
@@ -110,10 +105,8 @@ export function EditableEvent(props: {
           key={props.id}
           event={props.arguments.event}
           suggestion={props.arguments.suggestion}
-          small={props.small}
         />
         {props.isEdited && <EventEdit
-          parish={props.parish}
           eventId={props.id}
           onClose={() => props.onEditEvent()}
           suggestion={props.suggestionForm}/>}

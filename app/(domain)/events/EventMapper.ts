@@ -68,10 +68,7 @@ export function mapEvent(calendarName: CalendarName, options: EventLoadOptions):
       end: event.end as { dateTime: string },
       calendar: calendarName,
       visibility: event.visibility ?? 'public',
-      groups: (calendarName !== CalendarName.INZERSDORF_ORGAN
-          ? () => getGroupFromEvent(event)
-          : () => []
-      )(),
+      groups: getGroupFromEvent(event),
       tags: [
         !(event.summary + (event.description ?? '')).match(notInChurchRegex) && privateAccess && CalendarTag.inChurch,
         event.visibility === 'private' && CalendarTag.private,

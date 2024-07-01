@@ -2,7 +2,6 @@ import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
 import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 
 export function Event({event, suggestion, small}: {
     event: Partial<CalendarEvent>,
@@ -10,7 +9,6 @@ export function Event({event, suggestion, small}: {
     small?: boolean
 }) {
     const cancelled = event.tags?.includes(CalendarTag.cancelled);
-    const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div className={`py-1 flex gap-2 ${cancelled && 'opacity-50'} leading-6`}>
             <div

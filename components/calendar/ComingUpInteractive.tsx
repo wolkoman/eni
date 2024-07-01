@@ -10,7 +10,7 @@ import {EventsObject} from "@/domain/events/EventMapper";
 export function ComingUpInteractive(props: {
   eventsObject: EventsObject
 }) {
-  const groups = useMemo(() => groupEventsByGroupAndDate(props.eventsObject.events, true), [props.eventsObject, false]);
+  const groups = useMemo(() => groupEventsByGroupAndDate(props.eventsObject.events), [props.eventsObject, false]);
   const [page, setPage] = useState(0)
   const [group, eventsObject] = useMemo(() => groups[page], [groups, page])
 

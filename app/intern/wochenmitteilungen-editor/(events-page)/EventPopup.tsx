@@ -29,7 +29,6 @@ export function EventPopup(props: { event: CalendarEvent }) {
           onClick={() => store.addItem({
             type: "TEASER",
             eventId: props.event.id,
-            parishes: {emmaus: false, inzersdorf: false, neustift: false, [props.event.calendar]: true},
             preText: "", id: "",
             postText: props.event.description
           })}

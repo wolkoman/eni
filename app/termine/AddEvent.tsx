@@ -18,7 +18,7 @@ export function AddEvent() {
                 onClick={() => setIsEditing(true)}
             />
             {isEditing && <EventEdit
-                onClose={() => setIsEditing(false)} parish={user.parish}
+                onClose={() => setIsEditing(false)}
                 suggestion={{date: "", time: "", description: "", summary: ""}}
             />}
         </div>

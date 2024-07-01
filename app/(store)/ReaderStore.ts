@@ -13,12 +13,10 @@ export const useReaderStore = createLoadedStore(createStore(combine({
     communionMinisters: [] as Collections["person"][],
     readerData: {} as ReaderData,
     events: [] as CalendarEvent[],
-    parish: CalendarName.EMMAUS,
     loading: false,
     loaded: false,
     error: false,
 },(set, get) => ({
-    setParish: (parish: CalendarName) => set({parish}),
     setReaderData: (x?: any) => {
         set(data => ({
             ...data,

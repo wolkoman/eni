@@ -43,7 +43,6 @@ export default function EventsPage(props: { liturgy: LiturgyData }) {
 
     const liturgyEvents = Object.entries(groupEventsByDate(events
         .filter(event => event.groups.includes(CalendarGroup.Messe) || event.groups.includes(CalendarGroup.Gottesdienst))
-        .filter(event => event.calendar === reader.parish)
         .filter(event =>
             !showOnlySpecial
             || props.liturgy[event.date]?.some(liturgy => ["F", "H"].includes(liturgy.rank))

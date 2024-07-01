@@ -21,7 +21,7 @@ export function MyPage(props: { liturgy: LiturgyData }) {
     const {readers, readerData, setReaderData, events,  ...reader} = useReaderStore(state => state);
     const [user] = useUserStore(state => [state.user]);
     const myTasks = getTasksFromReaderData(readerData, eventId => events.find(e => e.id === eventId)!)
-        .filter(task => task.data.userId === user?._id && task.event.calendar === reader.parish)
+        .filter(task => task.data.userId === user?._id)
         .sort((a, b) => new Date(a.event.date).getTime() - new Date(b.event.date).getTime());
 
     function cancel(eventId: string, role: ReaderRole) {

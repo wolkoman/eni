@@ -73,18 +73,6 @@ export function SelfServiceEditor<S extends SSType>(props: {
     ;
 }
 
-export function SelfServiceParish<S extends SSType>(props: SSProps<S>) {
-  const value = props.form[0][props.name];
-  return <div className="grid grid-cols-3 gap-3 text-center">
-    {[CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT]
-      .map(name => getCalendarInfo(name))
-      .map(info => <div
-        onClick={() => props.form[1](rest => ({...rest, [props.name]: info.id}))}
-        className={(value === info.id ? info.className : "bg-black/10 opacity-50") + " p-2 rounded cursor-pointer"}>
-        {info.shortName}</div>)
-    }</div>;
-}
-
 export type SelfServiceFile = { id: string, index: number, name: string, result: string, finished: boolean };
 
 

@@ -2,7 +2,6 @@
 // @ts-ignore
 import Aesthetically from "./../node_modules/aesthetically/aesthetically.js";
 import React, {useState} from "react";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import Button from "./Button";
 import {fetchInstagramFeed} from "@/app/(shared)/Instagram";
 import {InstagramItem} from "./InstagramItem";
@@ -15,16 +14,6 @@ export function InstagramMore() {
   const feed = items.slice(3, length).map(item => ({
     ...item,
     caption: Aesthetically.unformat(item?.caption.normalize() ?? ''),
-  })).map(item => ({
-    ...item,
-    calendar: item.caption.includes("Emmaus")
-      ? getCalendarInfo(CalendarName.EMMAUS)
-      : (item.caption.includes("Nikolaus")
-        ? getCalendarInfo(CalendarName.INZERSDORF)
-        : (item.caption.includes("Neustift")
-            ? getCalendarInfo(CalendarName.NEUSTIFT)
-            : null
-        ))
   }));
 
   return <div>

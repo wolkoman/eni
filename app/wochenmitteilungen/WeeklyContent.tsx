@@ -13,7 +13,6 @@ export function WeeklyContent(props: {
   return <>
     <div className="print:hidden lg:columns-2 gap-6">
       {props.storeData.items
-        .filter(item => props.calendar === undefined || item.parishes[props.calendar as 'emmaus'])
         .map(item => <div key={item.id} className="mb-6">
           <ItemComponent item={item} storeData={props.storeData} isWebview={true}/>
         </div>)}

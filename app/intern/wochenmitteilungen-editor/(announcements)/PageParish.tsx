@@ -16,9 +16,7 @@ export function ItemToolbar(props: { onEdit: () => void, onSwapSides: () => void
 
 export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEditorStoreData, isEditable?: boolean }) {
 
-  const isOn = (item: WeeklyParishItem) => item.parishes[props.calendar as 'emmaus']
-    ? !!props.storeData.switchSideFor.find(a => a.parish === props.calendar && a.id === item.id)
-    : undefined;
+  const isOn = (item: WeeklyParishItem) => !!props.storeData.switchSideFor.find(a => a.parish === props.calendar && a.id === item.id);
   const [active, setActive] = useState("")
   const activeItem = useMemo(() => props.storeData.items.find(item => item.id === active), [active, props])
 
@@ -36,7 +34,7 @@ export function PageParish(props: { calendar: CalendarName, storeData: WeeklyEdi
     <WeeklyPageHeader2 parish={props.calendar}/>
     <div className="h-full grid grid-cols-2 my-6 border border-black border-b-0">
       <div className={columnStyle + " border-r border-black"}>{props.storeData.items
-        .filter(item => isOn(item) === false)
+        .filter(item => !isOn(item))
         .map(item => <ItemComponent
           key={item.id}
           storeData={props.storeData}

@@ -26,20 +26,6 @@ export function WeeklyItemEditor({item}: { item: WeeklyParishItem }) {
 
       <div className="flex gap-3 justify-end">
         <div className={"flex gap-1 "}>
-          {[
-            CalendarName.EMMAUS as const,
-            CalendarName.INZERSDORF as const,
-            CalendarName.NEUSTIFT as const
-          ].map(name => {
-            const isClickable = !(Object.values(item.parishes).reduce((p,c) => p+(c?1:0), 0) == 1 && item.parishes[name])
-            return <div
-              key={name}
-              className={`rounded ${isClickable && "cursor-pointer"} ${getCalendarInfo(name).className} ${item.parishes[name] ? "" : (`opacity-20 grayscale ${item.type === "TEASER" && "hidden"}`)}`}
-              onClick={isClickable ? () => form[1](item => ({...item, parishes: {...item.parishes, [name]: !item.parishes[name]}})) : undefined}
-            >
-              <img className="w-8" src={getCalendarInfo(name).dot}/>
-            </div>;
-          })}
           <Button
             label={<div className="flex items-center gap-1"><PiTrashBold/> Löschen</div>}
             onClick={() => store.removeItem(item.id)}

@@ -124,11 +124,6 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
                   title: "", id: "",
                   author: announcement.byName,
                   text: announcement.description + announcement.files.map(f => `<img src='${f}'/>`),
-                  parishes: {
-                    emmaus: announcement.parish === "emmaus",
-                    inzersdorf: announcement.parish === "inzersdorf",
-                    neustift: announcement.parish === "neustift"
-                  },
                 })}/>
             </div>
           </div>)
@@ -139,10 +134,6 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
 
     <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.EMMAUS} storeData={store}
                 isEditable/>
-     <div className="my-8 print:hidden"/>
-     <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.INZERSDORF} storeData={store} isEditable/>
-     <div className="my-8 print:hidden"/>
-     <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.NEUSTIFT} storeData={store} isEditable/>
   </div>;
 }
 

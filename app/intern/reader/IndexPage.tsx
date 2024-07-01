@@ -13,8 +13,7 @@ import {Links} from "@/app/(shared)/Links";
 export function ReaderSite(props: { children?: ReactNode }) {
 
     const user = useUserStore(state => state.user);
-    const {parish, setParish, ...reader} = useReaderStore(state => state);
-    const belongsTo = (calendar: CalendarName) => user?.parish === CalendarName.ALL || user?.parish === calendar;
+    const reader = useReaderStore(state => state);
 
     const inactive = 'grayscale opacity-20 contrast-50 cursor-pointer';
     return <Site title="Liturgische Dienste" responsive={false}>
@@ -22,15 +21,6 @@ export function ReaderSite(props: { children?: ReactNode }) {
             <div className="print:hidden">
                 <div
                     className="flex lg:flex-col h-20 lg:h-auto lg:w-20 p-4 gap-2 bg-black/5 rounded-r-xl grow-0 lg:sticky top-0">
-                    {belongsTo(CalendarName.EMMAUS) && <img src="/dot/edot.svg"
-                         onClick={() => setParish(CalendarName.EMMAUS)}
-                         className={`w-12 ${parish === CalendarName.EMMAUS ? '' : inactive}`}/>}
-                    {belongsTo(CalendarName.INZERSDORF) && <img src="/dot/idot.svg"
-                         onClick={() => setParish(CalendarName.INZERSDORF)}
-                         className={`w-12 ${parish === CalendarName.INZERSDORF ? '' : inactive}`}/>}
-                    {belongsTo(CalendarName.NEUSTIFT) && <img src="/dot/ndot.svg"
-                             onClick={() => setParish(CalendarName.NEUSTIFT)}
-                             className={`w-12 ${parish === CalendarName.NEUSTIFT ? '' : inactive}`}/>}
                     <Link href={Links.DiensteÜbersicht}>
                         <img src="/logo/persons.svg" className="w-12 cursor-pointer"/>
                     </Link>

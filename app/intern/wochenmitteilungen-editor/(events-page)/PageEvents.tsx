@@ -4,14 +4,12 @@ import {CalendarName} from "@/domain/events/CalendarInfo";
 import {WeeklyPageFooter, WeeklyPageHeader2} from "@/app/intern/wochenmitteilungen-editor/Header";
 import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/wochenmitteilungen-editor/store";
 import {LiturgyData} from "../../../../pages/api/liturgy";
-import {getWeekDayName} from "../../../../components/calendar/Calendar";
+import {getWeekDayName} from "@/components/calendar/Calendar";
 import {Event} from "./Event"
 import {ItemComponent} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ItemComponent";
 import React, {useMemo, useState} from "react";
 import {ItemToolbar} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
 import {WeeklyItemEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ParishEditor";
-
-export const parishes = [CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT];
 
 function ParishEvents(props: {
   events: Record<string, CalendarEvent[]>,
@@ -68,9 +66,7 @@ export function PageEvents(props: {
   isEditable?: boolean
 }) {
   const events = groupEventsByDate(props.events);
-  const isOn = (item: WeeklyParishItem) => item.parishes[props.calendar as 'emmaus']
-    ? !!props.storeData.switchSideFor.find(a => a.parish === props.calendar && a.id === item.id)
-    : undefined;
+  const isOn = (item: WeeklyParishItem) => !!props.storeData.switchSideFor.find(a => a.parish === props.calendar && a.id === item.id);
   const [active, setActive] = useState("")
   const activeItem = useMemo(() => props.storeData.items.find(item => item.id === active), [active, props])
 

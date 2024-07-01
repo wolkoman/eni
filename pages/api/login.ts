@@ -34,7 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         user = {
             ...cockpitUser,
             permissions: resolvePermissionsForGroup(cockpitUser.group),
-            parish: CalendarName.ALL,
             username: cockpitUser.user,
             is_person: false
         };

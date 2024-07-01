@@ -11,7 +11,6 @@ export const Links = {
   WochenmitteilungenEditor: "/intern/wochenmitteilungen-editor",
   WochenmitteilungenVersand: "/intern/wochenmitteilungen-editor/senden",
 
-
   Wochenmitteilungen: (parish?: CalendarName) => `/wochenmitteilungen${parish ? `/${parish}` : ""}`,
   Artikel: (artikel?: string) =>  `/artikel${artikel ? `/${artikel}` : ""}`,
   Intern: "/intern",
@@ -41,8 +40,4 @@ export const Links = {
   ApiCalendarDisplay: "/api/calendar/display?code=",
   ApiChangePassword: '/api/change-password',
   ApiLogin: '/api/login',
-  ApiOrganBookingMy: `/api/organ-booking/my`,
-  ApiOrganBookingCheck: (value: string) => `/api/organ-booking/check?date=${value}`,
-  ApiOrganBookingBook: (hour: string) => `/api/organ-booking/book?slot=${hour}`,
-  ApiOrganBookingDelete: (id: string) => `/api/organ-booking/delete?id=${id}`,
 }

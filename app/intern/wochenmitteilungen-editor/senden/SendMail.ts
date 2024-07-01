@@ -12,11 +12,7 @@ const chunk = <T>(array: T[], size: number) => array.reduce<T[][]>((acc, _, i) =
   return acc
 }, [])
 
-export default async function sendWeeklyNewsletter(title: string, slogan: string, evangelium: string, infos: {
-  emmaus: string,
-  inzersdorf: string,
-  neustift: string
-}) {
+export default async function sendWeeklyNewsletter(title: string, slogan: string, evangelium: string, parish: string) {
 
   const user = await resolveUserFromServer();
 
@@ -41,10 +37,7 @@ export default async function sendWeeklyNewsletter(title: string, slogan: string
     variables: {
       evangelium: evangelium,
       anrede: recipient.anrede,
-      info: Object.entries(infos)
-        //.filter(([parish, text]) => recipient.parish.includes(parish))
-        .map(([parish, text]) => `<b>${getCalendarInfo(parish as CalendarName).fullName}:</b> ${text}`)
-        .join("<br><br>")
+      info: `${parish}`
     }
   })))))
   return recipients.length;

@@ -11,7 +11,7 @@ import sendWeeklyNewsletter from "@/app/intern/wochenmitteilungen-editor/senden/
 export function TextEditor(props: {
   currentWeekly: Collections["weekly_v2"]
 }) {
-  const form = useState({emmaus: "", inzersdorf: "", neustift: "", evangelium: "", slogan: ""})
+  const form = useState({parish: "", evangelium: "", slogan: ""})
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string|null>(null)
 
@@ -25,11 +25,7 @@ export function TextEditor(props: {
   function send() {
     setLoading(true);
     setMessage(null)
-    sendWeeklyNewsletter(props.currentWeekly.name, form[0].slogan, form[0].evangelium, {
-      emmaus: form[0].emmaus,
-      inzersdorf: form[0].inzersdorf,
-      neustift: form[0].neustift,
-    })
+    sendWeeklyNewsletter(props.currentWeekly.name, form[0].slogan, form[0].evangelium, form[0].parish)
       .then(value => setMessage((typeof value === 'number') ? `${value} Mails wurden versandt` : `${value}`))
       .finally(() => setLoading(false))
   }
@@ -43,14 +39,8 @@ export function TextEditor(props: {
       <Field label="Evangelium">
         <SelfServiceInput name="evangelium" form={form} input="textarea"/>
       </Field>
-      <Field label="Text: Emmaus">
-        <SelfServiceInput name="emmaus" form={form} input="textarea"/>
-      </Field>
-      <Field label="Text: Inzersdorf">
-        <SelfServiceInput name="inzersdorf" form={form} input="textarea"/>
-      </Field>
-      <Field label="Text: Neustift">
-        <SelfServiceInput name="neustift" form={form} input="textarea"/>
+      <Field label="Text">
+        <SelfServiceInput name="parish" form={form} input="textarea"/>
       </Field>
 
       <div className="flex gap-2">

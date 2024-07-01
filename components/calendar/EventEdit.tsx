@@ -1,6 +1,6 @@
 import {useCalendarStore} from "@/store/CalendarStore";
 import {useState} from "react";
-import {Field, SelfServiceInput, SelfServiceParish} from "../SelfService";
+import {Field, SelfServiceInput} from "../SelfService";
 import Button from "../Button";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {toast} from "react-toastify";
@@ -11,13 +11,13 @@ import {fetchJson} from "@/app/(shared)/FetchJson";
 import {Links} from "@/app/(shared)/Links";
 
 
-export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any, parish?: CalendarName }) {
+export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string, onClose: () => any }) {
     const {addSuggestion, originalItems} = useCalendarStore(state => state);
     const originalItem = originalItems.find(e => e.id === props.eventId);
     useUserStore(state => state.user);
     const form = useState<EventSuggestion & {parish?: string | null}>({
         ...props.suggestion,
-        parish: props.parish
+        parish: CalendarName.EMMAUS
     })
     const [loading, setLoading] = useState(false);
 
@@ -57,9 +57,6 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
         <Field label="Beschreibung">
             <SelfServiceInput name="description" form={form} input="textarea"/>
         </Field>
-        <div className={props.parish !== "all" ? 'hidden' : ''}><Field label="Pfarre">
-            <SelfServiceParish name="parish" form={form}/>
-        </Field></div>
         <div className={(loading ? 'animate-pulse' : '') + " flex justify-end"}>
             <Button label="Speichern" onClick={save} disabled={loading || !form[0].summary || !form[0].date || !form[0].time}></Button>
         </div>

@@ -24,7 +24,6 @@ export default function NotificationsPage() {
 
   const tasks = getTasksFromReaderData(readerData, id => events.find(event => event.id === id)!)
     .filter(task => new Date(task.event?.date) > new Date());
-  const parishReaders = readers.filter(person => person.parish === reader.parish || person.parish === "all");
 
   async function informPersonPerMail(tasks: ReaderTask<CalendarEvent>[]) {
     await toast.promise(fetchJson(Links.ApiReaderMail, {
@@ -55,7 +54,7 @@ export default function NotificationsPage() {
 
   return <ReaderSite>
     <div className="flex flex-col gap-3">
-      {parishReaders
+      {readers
         .map(person => ({person, tasks: getTasksForPerson(tasks, person._id)}))
         .map(({person, tasks}) => ({person, tasks, uninformedTasks: getUninformedTasks(tasks)}))
         .map(({person, tasks, uninformedTasks}) =>
