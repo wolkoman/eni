@@ -2,13 +2,11 @@ import {Event} from './calendar/Event';
 import {SectionHeader} from "./SectionHeader";
 import {CalendarName} from "@/domain/events/CalendarInfo";
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
-import {site} from "@/app/(shared)/Instance";
 import * as React from "react";
 import Link from "next/link";
 import {loadCachedEvents} from "@/domain/events/EventsLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {Links} from "@/app/(shared)/Links";
-import {Container} from "@/components/Container";
 
 export async function TodayAndTomorrow() {
   const eventsObject = await loadCachedEvents({access: EventLoadAccess.PUBLIC})
@@ -25,8 +23,8 @@ export async function TodayAndTomorrow() {
 
   return <div id="termine">
     <SectionHeader>Termine</SectionHeader>
-    <div className={`grid ${site('md:grid-cols-3 gap-4 pb-4', '')}`}>
-      {site([CalendarName.EMMAUS, CalendarName.INZERSDORF, CalendarName.NEUSTIFT], [CalendarName.EMMAUS])
+    <div className={`grid`}>
+      {[CalendarName.EMMAUS]
         .map(c => (events ?? []).filter(e => e.calendar === c))
         .map(calendarEvents =>
           <div
@@ -42,9 +40,9 @@ export async function TodayAndTomorrow() {
                 : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
               }
             </div>
-            {site(<></>, <Link href={Links.Termine} className="p-1 text-center hover:bg-black/5 font-semibold border-t border-black/10">
+            <Link href={Links.Termine} className="p-1 text-center hover:bg-black/5 font-semibold border-t border-black/10">
               Alle Termine
-            </Link>)}
+            </Link>
           </div>)}
     </div>
   </div>;

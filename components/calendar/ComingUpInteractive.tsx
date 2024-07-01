@@ -3,7 +3,6 @@
 import React, {useMemo, useState} from 'react';
 import {ListView} from "./ListView";
 import {SectionHeader} from "../SectionHeader";
-import {site} from "@/app/(shared)/Instance";
 import {groupEventsByGroupAndDate} from "@/domain/events/CalendarGrouper";
 import {motion} from 'framer-motion';
 import {EventsObject} from "@/domain/events/EventMapper";
@@ -12,7 +11,6 @@ export function ComingUpInteractive(props: {
   eventsObject: EventsObject
 }) {
   const groups = useMemo(() => groupEventsByGroupAndDate(props.eventsObject.events, true), [props.eventsObject, false]);
-  const urlPrefix = site('', 'https://eni.wien');
   const [page, setPage] = useState(0)
   const [group, eventsObject] = useMemo(() => groups[page], [groups, page])
 
@@ -32,7 +30,6 @@ export function ComingUpInteractive(props: {
       </div>
       <motion.div
         key={group}
-        data-link={`${urlPrefix}/termine?q=${encodeURIComponent(group)}`}
         className={`px-8 lg:py-8 lg:px-6`}
       >
         <div className="text-xl font-semibold mb-4 mt-2">{group}</div>

@@ -2,8 +2,6 @@
 
 import Link from 'next/link';
 import React from 'react';
-import Responsive from "./Responsive";
-import {site} from "@/app/(shared)/Instance";
 import {Links} from "@/app/(shared)/Links";
 import {useUserStore} from "@/store/UserStore";
 import {PiListBold} from "react-icons/pi";
@@ -28,13 +26,7 @@ export default function TopBar(props: {frontpage?: boolean}) {
   ]
   const [open, setOpen] = React.useState(false);
 
-  return site(<div className="py-4 lg:py-6 print:hidden">
-    <Responsive>
-      <div className="flex justify-between items-center font-bold text-xl opacity-50">
-            eni.wien
-      </div>
-    </Responsive>
-  </div>, <div className="relative print:hidden">
+  return <div className="relative print:hidden">
     <div
       className={`flex flex-row justify-between items-center p-4 lg:px-24 z-10 relative ${props.frontpage ? "bg-emmaus text-white" : "bg-back-emmaus"}`}
       data-testid="navbar">
@@ -61,5 +53,5 @@ export default function TopBar(props: {frontpage?: boolean}) {
         children={link.text}
       />)}
     </motion.div>
-  </div>);
+  </div>;
 }

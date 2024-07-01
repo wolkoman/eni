@@ -1,10 +1,8 @@
-import {ParishDot} from './ParishDot';
 import {EventDescription} from "./EventUtils";
 import {Diff} from "diff-match-patch";
 import {Collections} from "cockpit-sdk";
 import {CalendarEvent, CalendarTag} from "@/domain/events/EventMapper";
 import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {site} from "@/app/(shared)/Instance";
 
 export function Event({event, suggestion, small}: {
     event: Partial<CalendarEvent>,
@@ -15,9 +13,6 @@ export function Event({event, suggestion, small}: {
     const info = getCalendarInfo(suggestion?.parish ?? event.calendar ?? CalendarName.ALL);
     return <>
         <div className={`py-1 flex gap-2 ${cancelled && 'opacity-50'} leading-6`}>
-            {site(<div className="pt-1 shrink-0">
-                <ParishDot info={info} small={small} private={event.tags?.includes(CalendarTag.private) ?? false}/>
-            </div>, <></>)}
             <div
                 className={`flex-shrink-0 font-semibold ${cancelled && 'line-through'}`}>
                 <DiffView>{suggestion?.data.time ?? event.time ?? ""}</DiffView>

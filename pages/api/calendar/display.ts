@@ -5,11 +5,10 @@ import {CalendarName} from "@/domain/events/CalendarInfo";
 import {loadEvents} from "@/domain/events/EventsLoader";
 
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
-import {site} from "@/app/(shared)/Instance";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    if (site(true, false) || req.query.code !== process.env.DISPLAY_CODE) {
+    if (req.query.code !== process.env.DISPLAY_CODE) {
         res.status(500);
         return
     }

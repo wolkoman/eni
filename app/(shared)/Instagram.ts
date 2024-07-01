@@ -1,8 +1,5 @@
 import {get} from "@vercel/edge-config";
-import {site} from "./Instance";
 import {getInstagramTitle} from "./ChatGpt";
-import {Cockpit} from "../../util/cockpit";
-import {unstable_cache} from "next/cache";
 import {InstagramFeedItem} from "../../components/InstagramFeedItem";
 
 export async function fetchInstagramFeed(): Promise<InstagramFeedItem[]> {
@@ -12,7 +9,7 @@ export async function fetchInstagramFeed(): Promise<InstagramFeedItem[]> {
     return await fetch(`https://graph.instagram.com/me/media?fields=${fields}&limit=9&access_token=${token}`)
         .then(response => response.json())
         .then(response => response.data
-            ?.filter((post: any) => post.caption?.toLowerCase().includes(site('', 'emmaus')))
+            ?.filter((post: any) => post.caption?.toLowerCase())
             .slice(0, 15) ?? []
         )
         .then(items => Promise.all(items.map(async (item: any) => ({

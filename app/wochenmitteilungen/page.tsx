@@ -7,14 +7,10 @@ import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
 import {loadCachedLiturgyData} from "../../pages/api/liturgy";
 import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
-import {notFound} from "next/navigation";
-import {site} from "@/app/(shared)/Instance";
 
 export const revalidate = 300
 
 export default async function Page() {
-
-    if(site(true,false)) notFound()
 
   const weekly = await getCurrentWeeklyData();
   const events = await loadWeeklyEvents(weekly?.start, weekly?.end)

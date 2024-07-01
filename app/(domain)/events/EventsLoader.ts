@@ -8,7 +8,6 @@ import {EventsObject} from "./EventMapper";
 import {loadCalendar} from "./CalendarLoader";
 import {EventLoadAccess, EventLoadOptions} from "@/domain/events/EventLoadOptions";
 import {Permission} from "@/domain/users/Permission";
-import {site} from "@/app/(shared)/Instance";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
 import {unstable_cache} from "next/cache";
 import {GoogleAuth} from "google-auth-library";
@@ -51,7 +50,7 @@ export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleA
       .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))
     )
     .then(async events => {
-      if (options.access === EventLoadAccess.PUBLIC && site(true, false)) {
+      if (options.access === EventLoadAccess.PUBLIC) {
         Cockpit.collectionSave('internal-data', {
           _id: Cockpit.InternalId.CalendarCache,
           data: {events, cache: new Date().toISOString(), openSuggestions: []}

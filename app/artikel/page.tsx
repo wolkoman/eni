@@ -3,13 +3,12 @@ import React from 'react';
 import {getArticleLink, getCockpitResourceUrl} from '../EmmausSections';
 import {Clickable} from "../(shared)/Clickable";
 import {Cockpit} from "../../util/cockpit";
-import {site} from "../(shared)/Instance";
 
 export const revalidate = 300
 
 export default async function Events() {
 
-  const articles = await Cockpit.collectionGet('article', {filter: {platform: site('eni', 'emmaus')}, sort: {_created: -1}}).then(x => x.entries)
+  const articles = await Cockpit.collectionGet('article', {filter: {platform:'emmaus'}, sort: {_created: -1}}).then(x => x.entries)
 
   return <Site title="Alle Beiträge" showTitle={true}>
     {articles.map(article => <Clickable href={getArticleLink(article)} className="flex items-start mt-4">
