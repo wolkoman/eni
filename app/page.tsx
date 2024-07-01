@@ -14,7 +14,6 @@ import {EmmausboteInfo} from "@/app/EmmausboteInfo";
 
 export const revalidate = 300
 
-
 export default async function HomePage() {
   return <Site responsive={false} navbar={false}>
       <div className="md:sticky inset-0 w-full">
