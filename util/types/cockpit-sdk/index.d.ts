@@ -3,7 +3,6 @@
 declare module 'cockpit-sdk' {
 
   import {Diff} from "diff-match-patch";
-  import {CalendarName} from "@/domain/events/CalendarInfo";
   import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
   type Object = { _id: string, _created: number, _modified: number }
   export type Collections = {
@@ -57,7 +56,6 @@ declare module 'cockpit-sdk' {
       active: boolean,
       name: string,
       username: string,
-      parish: CalendarName,
       competences: ('calendar_administration' | 'organ' | 'calendar' | 'admin' | 'limited_event_editing' | 'editor' | 'reader' | 'reader_planning' | 'communion_minister' | 'private_document_access')[],
       code?: string,
       email?: string,
@@ -84,7 +82,6 @@ declare module 'cockpit-sdk' {
 
     eventSuggestion: {
       "eventId": string,
-      "parish": CalendarName,
       "data": { summary: Diff[], description: Diff[], date: Diff[], time: Diff[] },
       "byName": string,
       "by": string,

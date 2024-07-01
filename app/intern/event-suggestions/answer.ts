@@ -4,7 +4,7 @@ import {google} from "googleapis";
 import {Cockpit} from "@/util/cockpit";
 import {getGoogleAuthClient} from "@/app/(shared)/GoogleAuthClient";
 import {mapEvent} from "@/domain/events/EventMapper";
-import {getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {CALENDAR_INFO} from "@/domain/events/CalendarInfo";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {applySuggestionToPatch, getSuggestionFromDiff} from "@/domain/suggestions/SuggestionsMapper";
 import {Permission} from "@/domain/users/Permission";
@@ -33,7 +33,7 @@ export async function answerEventSuggestions(suggestionId: string, accept: boole
       return
     }
     const suggestion = eventSuggestions[0];
-    const suggestionParish = getCalendarInfo(suggestion.parish);
+    const suggestionParish = CALENDAR_INFO;
     const suggestionValues = getSuggestionFromDiff(suggestion);
 
     if (!accept) {
@@ -66,7 +66,7 @@ export async function answerEventSuggestions(suggestionId: string, accept: boole
         ? google.calendar('v3').events.get(eventData).then(event => event.data)
         : Promise.resolve(undefined)
     );
-    const existingEvent = mapEvent(suggestionParish.id, {access: EventLoadAccess.PRIVATE_ACCESS})(existingGoogleEvent);
+    const existingEvent = mapEvent({access: EventLoadAccess.PRIVATE_ACCESS})(existingGoogleEvent);
     const patchedSuggestion = getSuggestionFromDiff(applySuggestionToPatch(suggestion, existingEvent ?? undefined).suggestion);
 
     const patchedEvent = {

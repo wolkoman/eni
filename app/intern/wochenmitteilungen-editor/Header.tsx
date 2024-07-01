@@ -1,9 +1,9 @@
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {CALENDAR_INFO} from "@/domain/events/CalendarInfo";
 import React from "react";
 import Link from "next/link";
 
-export function WeeklyPageHeader2(props: { parish: CalendarName }) {
-  const calendarInfo = getCalendarInfo(props.parish);
+export function WeeklyPageHeader() {
+  const calendarInfo = CALENDAR_INFO;
   return <div className="flex justify-between">
     <div className="opacity-70 leading-snug text-xs">
       <div>Röm.-kath. {calendarInfo.fullName}</div>

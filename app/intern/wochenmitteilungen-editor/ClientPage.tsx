@@ -6,7 +6,6 @@ import {SectionHeader} from "../../../components/SectionHeader";
 import {useStoreState} from "@/app/(shared)/UseStoreState";
 import React, {useEffect, useState} from "react";
 import {useWeeklyEditorStore} from "@/app/intern/wochenmitteilungen-editor/store";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {
   PiArchiveBold,
   PiArrowCounterClockwiseBold,
@@ -16,7 +15,7 @@ import {
   PiShareFatBold
 } from "react-icons/pi";
 import {getWeekOfYear} from "@/app/(shared)/WeekOfYear";
-import {ParishDot} from "../../../components/calendar/ParishDot";
+import {ParishDot} from "@/components/calendar/ParishDot";
 import {PageEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/PageEvents";
 import {Collections} from "cockpit-sdk";
 import Link from "next/link";
@@ -106,7 +105,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
             className="flex flex-col gap-2 p-4 bg-white rounded border border-black/10 items-start"
           >
             <div className="flex gap-2 items-center">
-              <ParishDot info={getCalendarInfo(announcement.parish as any)} private={false}/>
+              <ParishDot private={false}/>
               <div className="text-sm opacity-70">
                 {announcement.byName} {new Date(announcement._created * 1000).toLocaleString("de-AT")}
               </div>
@@ -132,7 +131,7 @@ export default function ClientPage(props: { liturgy: LiturgyData, currentWeekly:
       </div>
     </div>
 
-    <PageEvents events={store.events} liturgy={props.liturgy} calendar={CalendarName.EMMAUS} storeData={store}
+    <PageEvents events={store.events} liturgy={props.liturgy} storeData={store}
                 isEditable/>
   </div>;
 }

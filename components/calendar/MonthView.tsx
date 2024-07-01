@@ -2,7 +2,6 @@ import {FilterType, getMonthName, getWeekDayName} from "./Calendar";
 import {LiturgyData} from "../../pages/api/liturgy";
 import {useState} from "@/app/(shared)/use-state-util";
 import React from "react";
-import {getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {ParishDot} from "./ParishDot";
 
@@ -43,7 +42,7 @@ export function MonthView(props: {
                   <div className="relative overflow-auto h-32">
                       {events.map(event => <div className=" text-sm flex gap-1">
                           <div className="shrink-0 scale-75">
-                              <ParishDot info={getCalendarInfo(event.calendar)} private={false} small={true}/>
+                              <ParishDot private={false} small={true}/>
                           </div>
                           <div className="overflow-hidden">
                                 <span title={event.summary} className="line-clamp-1 break-all visible"><span

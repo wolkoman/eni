@@ -3,7 +3,6 @@ import Site from "../../components/Site";
 import {WeeklyContent} from "@/app/wochenmitteilungen/WeeklyContent";
 import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
 import {WeeklyActions} from "@/app/wochenmitteilungen/WeeklyActions";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {getCurrentWeeklyData} from "@/app/wochenmitteilungen/getCurrentWeeklyData";
 import {loadCachedLiturgyData} from "../../pages/api/liturgy";
 import {WeeklyEditorStoreData} from "@/app/intern/wochenmitteilungen-editor/store";
@@ -31,7 +30,7 @@ export default async function Page() {
       <div className="font-semibold my-4 print:hidden">
         Aktuelle Informationen ({weekly?.name}):
       </div>
-      {weekly?.data && <WeeklyContent storeData={storeData} calendar={CalendarName.EMMAUS}/>}
+      {weekly?.data && <WeeklyContent storeData={storeData}/>}
     </Site>
   );
 

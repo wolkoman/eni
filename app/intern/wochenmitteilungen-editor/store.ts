@@ -4,7 +4,6 @@ import {combine, persist} from "zustand/middleware";
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import { create } from "zustand";
 import {Collections} from "cockpit-sdk";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {loadEvangelium} from "@/app/intern/wochenmitteilungen-editor/(announcements)/LoadEvangelium";
 import {loadWeeklyEvents} from "@/app/intern/wochenmitteilungen-editor/(events-page)/LoadWeeklyEvents";
 import {markWeeklyAsSent, upsertWeekly} from "@/app/intern/wochenmitteilungen-editor/upsert";
@@ -40,8 +39,8 @@ export type WeeklyEditorStoreData = {
   customEventDescription: Record<string, string | null>,
   dateRange: {start: string, end: string, name: string},
   setCustomDescription: Function,
-  switchSideFor: { parish: CalendarName, id: string }[],
-  toggleSideFor: (id: string, parish: CalendarName) => void
+  switchSideFor: { id: string }[],
+  toggleSideFor: (id: string) => void
 }
 
 export const useWeeklyEditorStore = create(persist(combine({
@@ -49,7 +48,7 @@ export const useWeeklyEditorStore = create(persist(combine({
     loaded: false,
     loading: false,
     items: [] as WeeklyParishItem[],
-    switchSideFor: [] as { parish: CalendarName, id: string }[],
+    switchSideFor: [] as { id: string }[],
     customEventDescription: {} as Record<string, string | null>,
     announcements: [] as Collections["announcements"][],
     dateRange: {start: "", end: "", name: ""},
@@ -146,11 +145,11 @@ export const useWeeklyEditorStore = create(persist(combine({
       const list = get().customEventDescription;
       set({customEventDescription: {...list, [eventId]: description}})
     },
-    toggleSideFor(id: string, parish: CalendarName) {
+    toggleSideFor(id: string) {
       const list = get().switchSideFor;
-      type T = { parish: CalendarName, id: string }
-      const isEqual = (a: T) => a.id === id && a.parish === parish
-      set({switchSideFor: [...list.filter(item => !isEqual(item)), ...(list.find(isEqual) ? [] : [{id, parish}])]})
+      type T = { id: string }
+      const isEqual = (a: T) => a.id === id
+      set({switchSideFor: [...list.filter(item => !isEqual(item)), ...(list.find(isEqual) ? [] : [{id}])]})
     },
     setItem(item: WeeklyParishItem) {
       const index = get().items.findIndex(i => i.id === item.id) ?? 0

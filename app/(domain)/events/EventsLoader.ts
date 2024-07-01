@@ -1,7 +1,6 @@
 "use server"
 import {getGoogleAuthClient} from "../../(shared)/GoogleAuthClient";
 import {Cockpit} from "@/util/cockpit";
-import {CalendarName} from "./CalendarInfo";
 import {resolveUserFromServer} from "@/app/(shared)/UserHandler";
 import {loadReaderData} from "../../../pages/api/reader";
 import {EventsObject} from "./EventMapper";
@@ -40,9 +39,7 @@ export const loadCachedEvents = async (options: EventLoadOptions): Promise<Event
 export const loadEvents = async (options: EventLoadOptions, authClient?: GoogleAuth<any>): Promise<EventsObject> => {
 
   if(!authClient) authClient = await getGoogleAuthClient()
-  return Promise.all([CalendarName.EMMAUS]
-    .map((name) => loadCalendar(name, options, authClient))
-  )
+  return loadCalendar(options, authClient)
     .then(eventList => eventList.flat()
       .filter(event => !!event)
       .sort((a, b) => getTimeOfEvent(a) - getTimeOfEvent(b))

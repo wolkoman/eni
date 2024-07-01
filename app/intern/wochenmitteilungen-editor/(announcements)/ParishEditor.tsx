@@ -1,8 +1,7 @@
 "use client"
 import {useWeeklyEditorStore, WeeklyParishItem} from "@/app/intern/wochenmitteilungen-editor/store";
 import React, {createContext, Dispatch, SetStateAction, useEffect, useState} from "react";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
-import {PiArrowsLeftRightBold, PiTrashBold} from "react-icons/pi";
+import {PiTrashBold} from "react-icons/pi";
 import {WeeklyArticleEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/(components)/Article";
 import {WeeklyTeaserEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/(components)/Teaser";
 import Button from "../../../../components/Button";

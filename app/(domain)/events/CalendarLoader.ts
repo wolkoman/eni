@@ -1,12 +1,11 @@
 import {getGoogleAuthClient} from "../../(shared)/GoogleAuthClient";
 import {google} from "googleapis";
 
-import {CALENDAR_INFOS, CalendarName} from "./CalendarInfo";
+import {CALENDAR_INFO} from "./CalendarInfo";
 import {CalendarEvent, mapEvent} from "./EventMapper";
 import {EventLoadAccess, EventLoadOptions} from "@/domain/events/EventLoadOptions";
 
 export async function loadCalendar(
-  calendarName: CalendarName,
   options: EventLoadOptions,
   oauth2Client: any
 ): Promise<CalendarEvent[]> {
@@ -28,7 +27,7 @@ export async function loadCalendar(
   ;
   return google.calendar('v3').events.list({
     maxResults: 1000,
-    calendarId: CALENDAR_INFOS[calendarName].calendarId,
+    calendarId: CALENDAR_INFO.calendarId,
     auth: oauth2Client,
     timeMin: (hasTimeframe ? options.timeFrame!.min : new Date(start)).toISOString(),
     timeMax: (hasTimeframe ? options.timeFrame!.max : new Date(end)).toISOString(),
@@ -36,7 +35,7 @@ export async function loadCalendar(
     timeZone: 'Europa/Vienna',
     orderBy: 'startTime'
   }).then(result => result
-    .data.items!.map(mapEvent(calendarName, options))
+    .data.items!.map(mapEvent(options))
     .filter((event): event is CalendarEvent => !!event?.summary)
     .filter(event => options.access !== EventLoadAccess.READER || options.ids.includes(event.id))
     .map(event => ({...event, readerInfo: readerData?.[event.id!] ?? {reading1: null, reading2: null}}))

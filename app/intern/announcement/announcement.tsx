@@ -1,24 +1,18 @@
 "use client"
 import React, {useState} from 'react';
 import Site from '../../../components/Site';
-import {
-    Field,
-    SelfServiceFile,
-    SelfServiceFileUpload,
-    SelfServiceInput,
-} from "@/components/SelfService";
+import {Field, SelfServiceFile, SelfServiceFileUpload, SelfServiceInput,} from "@/components/SelfService";
 import Button from "../../../components/Button";
 import {useUserStore} from "@/store/UserStore";
 import {usePermission} from "../../(shared)/UsePermission";
 import {notifyAdminFromClientSide} from "../../(shared)/Telegram";
 import {saveAnnouncement} from "./saveAnnouncement";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 
 
 export function AnnouncementPage() {
     usePermission([]);
     const user = useUserStore(state => state.user);
-    const emptyForm = {description: "", files: [] as SelfServiceFile[], parish: CalendarName.EMMAUS, hidden: false};
+    const emptyForm = {description: "", files: [] as SelfServiceFile[], hidden: false};
     const form = useState(emptyForm);
     const [state, setState] = useState<'form' | 'loading' | 'success' | 'error'>('form');
 

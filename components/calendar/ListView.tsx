@@ -7,7 +7,6 @@ import {EventDate} from "./EventUtils";
 import {Event} from "./Event";
 import {ViewportList} from "react-viewport-list";
 import {EventEdit, EventEditBackground} from "./EventEdit";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {useUserStore} from "@/store/UserStore";
 import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
 import {

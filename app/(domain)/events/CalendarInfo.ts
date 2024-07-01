@@ -1,10 +1,6 @@
-export enum CalendarName {
-  EMMAUS = 'emmaus',
-}
 
-export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
-  [CalendarName.EMMAUS]: {
-    id: CalendarName.EMMAUS,
+export const CALENDAR_INFO = {
+    id: "EMMAUS",
     borderColor: 'border-emmaus',
     calendarId: 'u08nlhov79dkit0ffi993o6tuk@group.calendar.google.com',
     className: 'bg-emmaus text-white',
@@ -16,23 +12,5 @@ export const CALENDAR_INFOS: Record<CalendarName, CalendarInfo> = {
     websiteUrl: 'https://emmaus.wien/',
     websiteDisplay: 'emmaus.wien',
     dot: '/dot/edot.svg',
-  },
-};
-export const getCalendarInfo = (calendar: CalendarName): CalendarInfo => {
-  return CALENDAR_INFOS[calendar];
 };
 
-export interface CalendarInfo {
-  id: CalendarName,
-  calendarId: string,
-  borderColor: string,
-  className: string,
-  fullName: string,
-  shortName: string,
-  tagName: string,
-  address: string,
-  image: string,
-  websiteUrl: string,
-  websiteDisplay: string,
-  dot: string,
-}

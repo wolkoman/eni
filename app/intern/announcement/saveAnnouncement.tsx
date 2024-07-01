@@ -4,7 +4,6 @@ import {resolveUserFromServer} from "../../(shared)/UserHandler";
 
 export async function saveAnnouncement(param: {
     hidden: boolean;
-    parish: string;
     by: any;
     description: string;
     files: string[];

@@ -2,10 +2,7 @@
 
 import React, {ChangeEvent, Dispatch, ReactNode, SetStateAction} from "react";
 import {EniLoading} from "./Loading";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {BtnBold, BtnItalic, BtnUnderline, Editor, EditorProvider, Toolbar} from "react-simple-wysiwyg";
-import {toast} from "react-toastify";
-import Button from "./Button";
 import {PiResizeBold} from "react-icons/pi";
 
 

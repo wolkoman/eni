@@ -1,5 +1,3 @@
-import {CalendarName} from "@/domain/events/CalendarInfo";
-
 import {Permissions} from "@/domain/users/Permission";
 
 export interface User {

@@ -1,5 +1,3 @@
-import {CalendarInfo} from "@/domain/events/CalendarInfo";
-
 export interface InstagramFeedItem {
     id: string,
     media_type: 'CAROUSEL_ALBUM' | 'VIDEO' | 'IMAGE',
@@ -9,5 +7,4 @@ export interface InstagramFeedItem {
     timestamp: string,
     caption: string,
     text: string,
-    calendar: CalendarInfo | null,
 }

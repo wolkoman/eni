@@ -1,7 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {loadReaderData} from "../reader";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {loadEvents} from "@/domain/events/EventsLoader";
 
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
@@ -23,5 +22,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
-    res.json(events.filter(event => event.calendar === CalendarName.EMMAUS && event.groups.some(group => [CalendarGroup.Messe, CalendarGroup.Gottesdienst].includes(group))));
+    res.json(events.filter(event => event.groups.some(group => [CalendarGroup.Messe, CalendarGroup.Gottesdienst].includes(group))));
 }

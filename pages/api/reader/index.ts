@@ -1,7 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {Cockpit} from "@/util/cockpit";
 import {loadCachedEvents} from "@/domain/events/EventsLoader";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
 import {Permission} from "@/domain/users/Permission";
 import {resolveUserFromRequest} from "@/domain/users/UserResolver";

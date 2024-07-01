@@ -14,7 +14,7 @@ export function EventPopup(props: { event: CalendarEvent }) {
 
   async function showInCalendar() {
     setLoading(true)
-    const url = await getEventUrl(props.event.id, props.event.calendar);
+    const url = await getEventUrl(props.event.id);
     if (url)
       window.open(url, "_blank")
     setLoading(false)

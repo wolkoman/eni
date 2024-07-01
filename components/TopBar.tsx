@@ -21,7 +21,7 @@ export default function TopBar(props: {frontpage?: boolean}) {
   const user = useUserStore(state => state.user);
   const links = [
     {text: "Termine", link: Links.Termine},
-    {text: "Wochenmitteilungen", link: Links.Wochenmitteilungen()},
+    {text: "Wochenmitteilungen", link: Links.Wochenmitteilungen},
     {text: user ? 'Intern' : 'Login', link: user ? Links.Intern : Links.Login},
   ]
   const [open, setOpen] = React.useState(false);

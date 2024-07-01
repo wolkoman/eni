@@ -1,5 +1,3 @@
-import {CalendarName} from "@/domain/events/CalendarInfo";
-
 export const Links = {
   Hauptseite: "/",
   Archiv: "/archiv",
@@ -11,7 +9,7 @@ export const Links = {
   WochenmitteilungenEditor: "/intern/wochenmitteilungen-editor",
   WochenmitteilungenVersand: "/intern/wochenmitteilungen-editor/senden",
 
-  Wochenmitteilungen: (parish?: CalendarName) => `/wochenmitteilungen${parish ? `/${parish}` : ""}`,
+  Wochenmitteilungen: `/wochenmitteilungen`,
   Artikel: (artikel?: string) =>  `/artikel${artikel ? `/${artikel}` : ""}`,
   Intern: "/intern",
   Terminvorschläge: "/intern/event-suggestions",

@@ -1,6 +1,5 @@
 import {CalendarEvent} from "@/domain/events/EventMapper";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 
 export type FilterType =  { filterType: 'GROUP', group: CalendarGroup } | null;
 

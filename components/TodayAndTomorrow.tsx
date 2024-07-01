@@ -1,6 +1,5 @@
 import {Event} from './calendar/Event';
 import {SectionHeader} from "./SectionHeader";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import * as React from "react";
 import Link from "next/link";
@@ -15,7 +14,7 @@ export async function TodayAndTomorrow() {
   const eventsByDate = groupEventsByDate(eventsObject.events);
 
   const date = eventsByDate[today]?.some(event =>
-    new Date(`${event.date} ${event.time}`) > new Date()
+      new Date(`${event.date} ${event.time}`) > new Date()
   ) ? today : tomorrow;
   const events = eventsByDate[date]
 
@@ -24,26 +23,20 @@ export async function TodayAndTomorrow() {
   return <div id="termine">
     <SectionHeader>Termine</SectionHeader>
     <div className={`grid`}>
-      {[CalendarName.EMMAUS]
-        .map(c => (events ?? []).filter(e => e.calendar === c))
-        .map(calendarEvents =>
-          <div
-            key={calendarEvents.length}
-            className="overflow-hidden bg-white rounded-lg relative flex flex-col border border-black/10 shadow"
-          >
-            <div className="text-xl font-semibold text-center mt-4 mb-4">
-              {date === today ? "Heute" : "Morgen"}, {new Date(date).toLocaleDateString("de-AT", {weekday: "long"})}
-            </div>
-            <div className="px-3 pb-6">
-              {calendarEvents.length > 0
-                ? calendarEvents.map(event => <Event key={event.id} event={event}/>)
-                : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
-              }
-            </div>
-            <Link href={Links.Termine} className="p-1 text-center hover:bg-black/5 font-semibold border-t border-black/10">
-              Alle Termine
-            </Link>
-          </div>)}
+      <div className="overflow-hidden bg-white rounded-lg relative flex flex-col border border-black/10 shadow">
+        <div className="text-xl font-semibold text-center mt-4 mb-4">
+          {date === today ? "Heute" : "Morgen"}, {new Date(date).toLocaleDateString("de-AT", {weekday: "long"})}
+        </div>
+        <div className="px-3 pb-6">
+          {events
+              ? events.map(event => <Event key={event.id} event={event}/>)
+              : <div className="text-center italic py-2 opacity-70">Heute keine Termine</div>
+          }
+        </div>
+        <Link href={Links.Termine} className="p-1 text-center hover:bg-black/5 font-semibold border-t border-black/10">
+          Alle Termine
+        </Link>
+      </div>
     </div>
   </div>;
 }

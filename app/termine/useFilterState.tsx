@@ -1,9 +1,8 @@
 import {useState} from "@/app/(shared)/use-state-util";
-import {FilterType} from "../../components/calendar/Calendar";
+import {FilterType} from "@/components/calendar/Calendar";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Dispatch, SetStateAction, useEffect} from "react";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 
 export const useFilterState = (): [FilterType, Dispatch<SetStateAction<FilterType>>] => {
   const [filter, setFilter] = useState<FilterType>(null);

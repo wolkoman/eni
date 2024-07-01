@@ -1,19 +1,17 @@
 import {groupEventsByDate} from "@/domain/events/CalendarGrouper";
 import {CalendarEvent} from "@/domain/events/EventMapper";
-import {CalendarName} from "@/domain/events/CalendarInfo";
-import {WeeklyPageFooter, WeeklyPageHeader2} from "@/app/intern/wochenmitteilungen-editor/Header";
+import {WeeklyPageFooter, WeeklyPageHeader} from "@/app/intern/wochenmitteilungen-editor/Header";
 import {WeeklyEditorStoreData, WeeklyParishItem} from "@/app/intern/wochenmitteilungen-editor/store";
 import {LiturgyData} from "../../../../pages/api/liturgy";
 import {getWeekDayName} from "@/components/calendar/Calendar";
 import {Event} from "./Event"
 import {ItemComponent} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ItemComponent";
 import React, {useMemo, useState} from "react";
-import {ItemToolbar} from "@/app/intern/wochenmitteilungen-editor/(announcements)/PageParish";
+import {ItemToolbar} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ItemToolbar";
 import {WeeklyItemEditor} from "@/app/intern/wochenmitteilungen-editor/(announcements)/ParishEditor";
 
 function ParishEvents(props: {
   events: Record<string, CalendarEvent[]>,
-  calendar: CalendarName,
   storeData: WeeklyEditorStoreData,
   liturgy: LiturgyData,
   dateMatch?: string
@@ -24,7 +22,7 @@ function ParishEvents(props: {
     </div>
     <div className="grid grid-cols-[min-content_auto] leading-tight text-[10pt] overflow-hidden gap-y-2 gap-x-2">
       {Object.entries(props.events)
-        .map(([dateString, events]) => [dateString, events.filter(e => e.calendar === props.calendar)] as [string, CalendarEvent[]])
+        .map(([dateString, events]) => [dateString, events] as [string, CalendarEvent[]])
         .filter(([dateString, events]) => !props.dateMatch || dateString.includes(props.dateMatch))
         .filter(([dateString, events]) => events.length > 0)
         .map(([dateString, events]) => {
@@ -48,7 +46,6 @@ function ParishEvents(props: {
 
             <div className={``}>
               {events
-                .filter(event => event.calendar === props.calendar)
                 .map(event => <Event key={event.id} event={event} storeData={props.storeData}/>)
               }
             </div>
@@ -62,11 +59,10 @@ export function PageEvents(props: {
   events: CalendarEvent[],
   liturgy: LiturgyData,
   storeData: WeeklyEditorStoreData,
-  calendar: CalendarName,
   isEditable?: boolean
 }) {
   const events = groupEventsByDate(props.events);
-  const isOn = (item: WeeklyParishItem) => !!props.storeData.switchSideFor.find(a => a.parish === props.calendar && a.id === item.id);
+  const isOn = (item: WeeklyParishItem) => !!props.storeData.switchSideFor.find(a => a.id === item.id);
   const [active, setActive] = useState("")
   const activeItem = useMemo(() => props.storeData.items.find(item => item.id === active), [active, props])
 
@@ -74,7 +70,7 @@ export function PageEvents(props: {
 
   return <div className="w-[21cm] h-[29.7cm] bg-white p-12 flex flex-col mx-auto">
 
-    <WeeklyPageHeader2 parish={props.calendar}/>
+    <WeeklyPageHeader/>
 
     {activeItem && props.isEditable && <>
         <div className="fixed inset-0 bg-black/10 z-10 grid place-items-center" onClick={() => setActive("")}>
@@ -94,17 +90,16 @@ export function PageEvents(props: {
 
     <div className="h-full grid grid-cols-2 border border-black border-b-0">
       <div className={columnStyle + " border-r border-black"}>
-        <ParishEvents events={events} calendar={props.calendar} liturgy={props.liturgy} storeData={props.storeData}/>
+        <ParishEvents events={events} liturgy={props.liturgy} storeData={props.storeData}/>
         {props.storeData.items
           .filter(item => isOn(item) === false)
           .map(item => <ItemComponent
             key={item.id}
             storeData={props.storeData}
-            item={item}
-            calendar={props.calendar}>
+            item={item}>
             {props.isEditable && <ItemToolbar
                 onEdit={() => setActive(item.id)}
-                onSwapSides={() => props.storeData.toggleSideFor(item.id, props.calendar)}
+                onSwapSides={() => props.storeData.toggleSideFor(item.id)}
             />}
           </ItemComponent>)}
       </div>
@@ -114,11 +109,10 @@ export function PageEvents(props: {
           .map(item => <ItemComponent
             key={item.id}
             storeData={props.storeData}
-            item={item}
-            calendar={props.calendar}>
+            item={item}>
             {props.isEditable && <ItemToolbar
                 onEdit={() => setActive(item.id)}
-                onSwapSides={() => props.storeData.toggleSideFor(item.id, props.calendar)}
+                onSwapSides={() => props.storeData.toggleSideFor(item.id)}
             />}
           </ItemComponent>)}
       </div>

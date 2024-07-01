@@ -2,7 +2,6 @@ import {useCalendarStore} from "@/store/CalendarStore";
 import {useState} from "react";
 import {Field, SelfServiceInput} from "../SelfService";
 import Button from "../Button";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {toast} from "react-toastify";
 import {useUserStore} from "@/store/UserStore";
 import {EventSuggestion} from "@/domain/suggestions/EventSuggestions";
@@ -15,10 +14,7 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
     const {addSuggestion, originalItems} = useCalendarStore(state => state);
     const originalItem = originalItems.find(e => e.id === props.eventId);
     useUserStore(state => state.user);
-    const form = useState<EventSuggestion & {parish?: string | null}>({
-        ...props.suggestion,
-        parish: CalendarName.EMMAUS
-    })
+    const form = useState<EventSuggestion>(props.suggestion)
     const [loading, setLoading] = useState(false);
 
     function save() {
@@ -30,7 +26,6 @@ export function EventEdit(props: { suggestion: EventSuggestion, eventId?: string
                     ? getSuggestionFromEvent(originalItem)
                     : {summary: "", description: "", time: "", date: ""}
                     , form[0]),
-                parish: form[0].parish
             }
         }), {
             error: "Änderung konnte nicht gespeichert werden",

@@ -1,6 +1,5 @@
 "use server"
 import {Cockpit} from "@/util/cockpit";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
 import {Permission} from "@/domain/users/Permission";
 import {sendBulkMailV2} from "@/app/(shared)/Mailjet";
 import {resolveUserFromServer} from "@/app/(shared)/UserHandler";

@@ -2,7 +2,7 @@ import React from 'react';
 import Responsive from "./Responsive";
 import {getWeekDayName} from "./calendar/Calendar";
 import {CalendarGroup} from "@/domain/events/CalendarGroup";
-import {CalendarName, getCalendarInfo} from "@/domain/events/CalendarInfo";
+import {CALENDAR_INFO} from "@/domain/events/CalendarInfo";
 import {getTimeOfEvent} from "@/domain/events/EventSorter";
 import {loadCachedEvents} from "@/domain/events/EventsLoader";
 import {EventLoadAccess} from "@/domain/events/EventLoadOptions";
@@ -34,7 +34,7 @@ export async function EmmausBranding() {
                         </div>}
                     </div>
                 </div>
-                <img className="self-end h-72 md:h-96 relative" src={getCalendarInfo(CalendarName.EMMAUS).image}/>
+                <img className="self-end h-72 md:h-96 relative" src={CALENDAR_INFO.image}/>
             </div>
         </Responsive>
     </div>;

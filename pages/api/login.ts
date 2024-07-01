@@ -4,7 +4,6 @@ import {getPerson} from './change-password';
 import {setCookie} from "cookies-next";
 import {Cockpit} from "@/util/cockpit";
 import {cockpit} from "@/util/cockpit-sdk";
-import {CalendarName} from "@/domain/events/CalendarInfo";
 import {User} from "@/domain/users/User";
 import {resolvePermissionsForCompetences, resolvePermissionsForGroup} from "@/domain/users/PermissionResolver";
 
