@@ -1,9 +1,10 @@
-# ENI Web Platform
+# Pfarre Emmaus Web Platform
 
-![Social Media Preview](https://repository-images.githubusercontent.com/278685064/c57c9fd8-7488-439e-a476-b0c231da81b5)
+![Social Media Preview](https://emmaus.wien/opengraph-image.jpg)
+
 
 ## Description
-A web-platform for a community of local parishes in Vienna. It serves a variety of functionality, including but not limited to:
+A web-platform for the catholic parish "Emmaus am Wienerberg" in Vienna, Austria. It serves a variety of functionality, including but not limited to:
 - the display of events in a Google calendar
 - suggesting changes to those events
 - upload, display and automatic sending of the weekly newsletter
